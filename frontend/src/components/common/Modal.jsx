@@ -27,34 +27,34 @@ const Modal = ({
     default: {
       icon: null,
       headerBg: 'bg-white',
-      headerText: 'text-slate-900',
-      iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600'
+      headerText: 'text-gray-900',
+      iconBg: 'bg-gray-100',
+      iconColor: 'text-gray-600'
     },
     success: {
       icon: CheckCircle,
-      headerBg: 'bg-gradient-to-r from-green-50 to-emerald-50',
-      headerText: 'text-green-900',
-      iconBg: 'bg-green-100',
-      iconColor: 'text-green-600'
+      headerBg: 'bg-emerald-50',
+      headerText: 'text-emerald-900',
+      iconBg: 'bg-emerald-100',
+      iconColor: 'text-emerald-600'
     },
     warning: {
       icon: AlertTriangle,
-      headerBg: 'bg-gradient-to-r from-yellow-50 to-orange-50',
-      headerText: 'text-yellow-900',
-      iconBg: 'bg-yellow-100',
-      iconColor: 'text-yellow-600'
+      headerBg: 'bg-amber-50',
+      headerText: 'text-amber-900',
+      iconBg: 'bg-amber-100',
+      iconColor: 'text-amber-600'
     },
     error: {
       icon: AlertCircle,
-      headerBg: 'bg-gradient-to-r from-red-50 to-pink-50',
+      headerBg: 'bg-red-50',
       headerText: 'text-red-900',
       iconBg: 'bg-red-100',
       iconColor: 'text-red-600'
     },
     info: {
       icon: Info,
-      headerBg: 'bg-gradient-to-r from-blue-50 to-indigo-50',
+      headerBg: 'bg-blue-50',
       headerText: 'text-blue-900',
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-600'
@@ -102,7 +102,7 @@ const Modal = ({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity animate-fade-in"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
         onClick={handleOverlayClick}
       >
         {/* Modal Container */}
@@ -110,17 +110,17 @@ const Modal = ({
           <div
             ref={modalRef}
             tabIndex={-1}
-            className={`relative w-full ${sizeClasses[size]} transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all animate-scale-in ${className}`}
+            className={`relative w-full ${sizeClasses[size]} transform overflow-hidden modern-card-elevated ${className}`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             {(title || showCloseButton) && (
-              <div className={`px-6 py-4 border-b border-slate-200 ${config.headerBg}`}>
+              <div className={`px-6 py-4 border-b border-gray-200 ${config.headerBg}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {Icon && (
-                      <div className={`w-10 h-10 rounded-xl ${config.iconBg} flex items-center justify-center`}>
-                        <Icon className={`w-5 h-5 ${config.iconColor}`} />
+                      <div className={`w-8 h-8 rounded-lg ${config.iconBg} flex items-center justify-center`}>
+                        <Icon className={`w-4 h-4 ${config.iconColor}`} />
                       </div>
                     )}
                     {title && (
@@ -132,10 +132,10 @@ const Modal = ({
                   {showCloseButton && (
                     <button
                       onClick={onClose}
-                      className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all duration-200 hover:scale-110"
+                      className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                       aria-label="Close modal"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="w-4 h-4" />
                     </button>
                   )}
                 </div>
@@ -173,22 +173,22 @@ export const ConfirmModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type={type} size="sm">
       <div className="space-y-4">
-        <p className="text-slate-600">{message}</p>
+        <p className="text-gray-600">{message}</p>
         <div className="flex justify-end space-x-3">
           <button
             onClick={onClose}
             disabled={loading}
-            className="px-4 py-2 text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors disabled:opacity-50"
+            className="btn-modern btn-secondary disabled:opacity-50"
           >
             {cancelText}
           </button>
           <button
             onClick={handleConfirm}
             disabled={loading}
-            className={`px-4 py-2 text-white rounded-lg transition-colors disabled:opacity-50 ${
+            className={`btn-modern disabled:opacity-50 ${
               type === 'error' 
-                ? 'bg-red-600 hover:bg-red-700' 
-                : 'bg-indigo-600 hover:bg-indigo-700'
+                ? 'bg-red-600 hover:bg-red-700 text-white' 
+                : 'btn-primary'
             }`}
           >
             {loading ? (
@@ -218,11 +218,11 @@ export const AlertModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type={type} size="sm">
       <div className="space-y-4">
-        <p className="text-slate-600">{message}</p>
+        <p className="text-gray-600">{message}</p>
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+            className="btn-modern btn-primary"
           >
             {buttonText}
           </button>

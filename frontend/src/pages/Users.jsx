@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { 
   Users as UsersIcon, Plus, Search, Filter, Edit, Trash2, 
-  Mail, Shield, CheckCircle, XCircle, MoreVertical, UserPlus,
-  Crown, Star, User, Sparkles, TrendingUp
+  Mail, Shield, CheckCircle, XCircle, UserPlus, Crown, Star, User
 } from 'lucide-react';
 import { apiClient } from '../api/http';
 import { useSystemOptionsStore } from '../store/systemOptions.store';
 import Layout from '../components/layout/Layout';
-import LoadingSpinner, { SkeletonLoader } from '../components/common/LoadingSpinner';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 import Modal, { ConfirmModal } from '../components/common/Modal';
 import { RoleGuard } from '../hooks/useAuth';
 
@@ -108,31 +107,16 @@ const Users = () => {
 
   const getRoleBadge = (role) => {
     const roleConfig = {
-      'ADMIN': { 
-        gradient: 'from-red-500 to-pink-500', 
-        bg: 'from-red-50 to-pink-50', 
-        text: 'text-red-700',
-        icon: Crown
-      },
-      'MANAGER': { 
-        gradient: 'from-blue-500 to-indigo-500', 
-        bg: 'from-blue-50 to-indigo-50', 
-        text: 'text-blue-700',
-        icon: Star
-      },
-      'USER': { 
-        gradient: 'from-green-500 to-emerald-500', 
-        bg: 'from-green-50 to-emerald-50', 
-        text: 'text-green-700',
-        icon: User
-      }
+      'ADMIN': { color: 'bg-red-100 text-red-700', icon: Crown },
+      'MANAGER': { color: 'bg-blue-100 text-blue-700', icon: Star },
+      'USER': { color: 'bg-emerald-100 text-emerald-700', icon: User }
     };
     
     const config = roleConfig[role] || roleConfig['USER'];
     const Icon = config.icon;
     
     return (
-      <div className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${config.bg} ${config.text} border border-white/20`}>
+      <div className={`inline-flex items-center space-x-1 px-2 py-1 rounded-md text-xs font-medium ${config.color}`}>
         <Icon className="w-3 h-3" />
         <span>{role}</span>
       </div>
@@ -141,12 +125,12 @@ const Users = () => {
 
   const getStatusBadge = (status) => {
     return status === 'ACTIVE' ? (
-      <div className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 border border-green-200">
-        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+      <div className="inline-flex items-center space-x-1 px-2 py-1 rounded-md text-xs font-medium bg-emerald-100 text-emerald-700">
+        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
         <span>Active</span>
       </div>
     ) : (
-      <div className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border border-red-200">
+      <div className="inline-flex items-center space-x-1 px-2 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700">
         <div className="w-2 h-2 bg-red-500 rounded-full"></div>
         <span>Inactive</span>
       </div>
@@ -160,143 +144,64 @@ const Users = () => {
     managers: users.filter(u => u.role === 'MANAGER').length
   };
 
-  if (loading && users.length === 0) {
-    return (
-      <Layout>
-        <div className="space-y-6 animate-fade-in">
-          <div className="flex justify-between items-center">
-            <div className="space-y-2">
-              <div className="skeleton h-8 w-64"></div>
-              <div className="skeleton h-4 w-96"></div>
-            </div>
-            <div className="skeleton h-10 w-32"></div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 border border-slate-200">
-                <SkeletonLoader lines={3} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
   return (
     <RoleGuard requiredRole="MANAGER" fallback={
       <Layout>
-        <div className="text-center py-12 animate-fade-in">
-          <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-2xl">
-            <Shield className="w-10 h-10 text-white" />
+        <div className="text-center py-12">
+          <div className="w-16 h-16 bg-red-100 rounded-2xl mx-auto flex items-center justify-center mb-6">
+            <Shield className="w-8 h-8 text-red-600" />
           </div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent mb-3">
-            Access Denied
-          </h2>
-          <p className="text-slate-600 max-w-md mx-auto leading-relaxed">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Access Denied</h2>
+          <p className="text-gray-600 max-w-md mx-auto">
             You don't have the required permissions to access user management. Contact your administrator for access.
           </p>
         </div>
       </Layout>
     }>
       <Layout>
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="animate-slide-right">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <UsersIcon className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
-                    User Management
-                  </h1>
-                  <p className="text-slate-600 mt-1 flex items-center space-x-2">
-                    <span>Manage system users and their roles</span>
-                    <Sparkles className="w-4 h-4" />
-                  </p>
-                </div>
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
+              <p className="text-gray-600 mt-1">Manage system users and their roles</p>
             </div>
             <button
               onClick={() => setShowModal(true)}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold flex items-center space-x-2 transition-all duration-300 hover:scale-105 hover:shadow-lg animate-slide-right"
-              style={{ animationDelay: '0.1s' }}
+              className="btn-modern btn-primary flex items-center space-x-2"
             >
-              <UserPlus className="w-5 h-5" />
+              <UserPlus className="w-4 h-4" />
               <span>Add User</span>
             </button>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-4 flex items-center space-x-3 animate-slide-up">
-              <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
-                <XCircle className="w-5 h-5 text-red-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-red-800">Error</h3>
-                <p className="text-red-700 text-sm">{error}</p>
-              </div>
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center space-x-3">
+              <XCircle className="w-5 h-5" />
+              <span>{error}</span>
             </div>
           )}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
-              { 
-                label: 'Total Users', 
-                value: stats.total, 
-                icon: UsersIcon, 
-                gradient: 'from-blue-500 to-cyan-500',
-                bgGradient: 'from-blue-50 to-cyan-50',
-                change: '+12%'
-              },
-              { 
-                label: 'Active Users', 
-                value: stats.active, 
-                icon: CheckCircle, 
-                gradient: 'from-green-500 to-emerald-500',
-                bgGradient: 'from-green-50 to-emerald-50',
-                change: '+8%'
-              },
-              { 
-                label: 'Administrators', 
-                value: stats.admins, 
-                icon: Crown, 
-                gradient: 'from-red-500 to-pink-500',
-                bgGradient: 'from-red-50 to-pink-50',
-                change: '+2%'
-              },
-              { 
-                label: 'Managers', 
-                value: stats.managers, 
-                icon: Star, 
-                gradient: 'from-purple-500 to-pink-500',
-                bgGradient: 'from-purple-50 to-pink-50',
-                change: '+5%'
-              }
+              { label: 'Total Users', value: stats.total, icon: UsersIcon, bg: 'bg-blue-50', color: 'text-blue-600' },
+              { label: 'Active Users', value: stats.active, icon: CheckCircle, bg: 'bg-emerald-50', color: 'text-emerald-600' },
+              { label: 'Administrators', value: stats.admins, icon: Crown, bg: 'bg-red-50', color: 'text-red-600' },
+              { label: 'Managers', value: stats.managers, icon: Star, bg: 'bg-purple-50', color: 'text-purple-600' }
             ].map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div 
-                  key={index} 
-                  className="group bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-slide-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 rounded-2xl bg-gradient-to-br ${stat.bgGradient} group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`w-6 h-6 bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`} />
+                <div key={index} className="modern-card-elevated p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">{stat.label}</p>
+                      <p className="text-xl font-bold text-gray-900 mt-1">{stat.value}</p>
                     </div>
-                    <div className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                      <TrendingUp className="w-3 h-3" />
-                      <span>{stat.change}</span>
+                    <div className={`p-2 rounded-lg ${stat.bg}`}>
+                      <Icon className={`w-5 h-5 ${stat.color}`} />
                     </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-slate-600 mb-1">{stat.label}</p>
-                    <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
                   </div>
                 </div>
               );
@@ -304,29 +209,29 @@ const Users = () => {
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+          <div className="modern-card-elevated p-4">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search users by email..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="input-modern pl-12 pr-4 py-3 text-sm"
+                    className="input-modern pl-10"
                   />
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 text-slate-600">
-                  <Filter className="w-5 h-5" />
+                <div className="flex items-center space-x-2 text-gray-600">
+                  <Filter className="w-4 h-4" />
                   <span className="text-sm font-medium">Filter by role:</span>
                 </div>
                 <select
                   value={roleFilter}
                   onChange={(e) => setRoleFilter(e.target.value)}
-                  className="input-modern px-4 py-3 text-sm min-w-[120px]"
+                  className="input-modern min-w-[120px]"
                 >
                   <option value="ALL">All Roles</option>
                   {Array.isArray(roleOptions) && roleOptions.map(role => (
@@ -338,54 +243,52 @@ const Users = () => {
           </div>
 
           {/* Users Table */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 animate-slide-up" style={{ animationDelay: '0.5s' }}>
-            <div className="px-6 py-4 border-b border-slate-200">
+          <div className="modern-card-elevated">
+            <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-slate-900">Users ({filteredUsers.length})</h2>
-                <div className="text-sm text-slate-500">Showing {filteredUsers.length} of {users.length} users</div>
+                <h2 className="text-lg font-semibold text-gray-900">Users ({filteredUsers.length})</h2>
+                <div className="text-sm text-gray-500">Showing {filteredUsers.length} of {users.length} users</div>
               </div>
             </div>
             <div className="overflow-x-auto">
               {loading ? (
-                <div className="p-12">
-                  <LoadingSpinner size="lg" />
+                <div className="p-8">
+                  <LoadingSpinner />
                 </div>
               ) : filteredUsers.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="w-16 h-16 bg-slate-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
-                    <UsersIcon className="w-8 h-8 text-slate-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">No users found</h3>
-                  <p className="text-slate-600 mb-6">Try adjusting your search or filter criteria</p>
+                <div className="text-center py-12">
+                  <UsersIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No users found</h3>
+                  <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
                   <button
                     onClick={() => setShowModal(true)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition-colors"
+                    className="btn-modern btn-primary"
                   >
                     Add First User
                   </button>
                 </div>
               ) : (
                 <table className="w-full">
-                  <thead className="bg-slate-50">
+                  <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">User</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Role</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Created</th>
-                      <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200">
-                    {filteredUsers.map((user, index) => (
-                      <tr key={user.id} className="hover:bg-slate-50 transition-colors group">
+                  <tbody className="divide-y divide-gray-200">
+                    {filteredUsers.map((user) => (
+                      <tr key={user.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div className="flex items-center">
-                            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform">
+                            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                               {user.email?.charAt(0).toUpperCase()}
                             </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-semibold text-slate-900">{user.email}</div>
-                              <div className="text-xs text-slate-500">ID: {user.id}</div>
+                            <div className="ml-3">
+                              <div className="text-sm font-medium text-gray-900">{user.email}</div>
+                              <div className="text-xs text-gray-500">ID: {user.id}</div>
                             </div>
                           </div>
                         </td>
@@ -395,17 +298,17 @@ const Users = () => {
                         <td className="px-6 py-4">
                           {getStatusBadge(user.status)}
                         </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
+                        <td className="px-6 py-4 text-sm text-gray-600">
                           {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end space-x-2">
-                            <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 hover:scale-110">
+                            <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                               <Edit className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={() => handleDeleteClick(user)}
-                              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 hover:scale-110"
+                              className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -428,9 +331,9 @@ const Users = () => {
           type="default"
           size="md"
         >
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
               <input
                 name="email"
                 type="email"
@@ -442,7 +345,7 @@ const Users = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
               <input
                 name="password"
                 type="password"
@@ -454,7 +357,7 @@ const Users = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Role</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
               <select
                 name="role"
                 value={formData.role}
@@ -472,23 +375,16 @@ const Users = () => {
               <button
                 type="button"
                 onClick={() => { setShowModal(false); setError(''); }}
-                className="px-6 py-2 text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors font-medium"
+                className="btn-modern btn-secondary"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg disabled:opacity-50 transition-all duration-300 font-semibold"
+                className="btn-modern btn-primary disabled:opacity-50"
               >
-                {loading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    <span>Creating...</span>
-                  </div>
-                ) : (
-                  'Create User'
-                )}
+                {loading ? 'Creating...' : 'Create User'}
               </button>
             </div>
           </form>

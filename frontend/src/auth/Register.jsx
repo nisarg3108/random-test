@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
+import { Building2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { setToken } from '../store/auth.store';
 
 const API_BASE_URL = 'http://localhost:5000/api';
@@ -93,28 +93,28 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Registration Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+        <div className="modern-card-elevated p-8 space-y-6">
           {/* Logo & Header */}
           <div className="text-center space-y-2">
-            <div className="w-12 h-12 bg-indigo-600 rounded-xl mx-auto flex items-center justify-center">
+            <div className="w-12 h-12 bg-blue-600 rounded-lg mx-auto flex items-center justify-center">
               <Building2 className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">Create Your Company</h1>
-            <p className="text-slate-600 text-sm">Set up your ERP system account</p>
+            <h1 className="text-2xl font-bold text-gray-900">Create Your Company</h1>
+            <p className="text-gray-600 text-sm">Set up your ERP system account</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Company Name */}
             <div>
-              <label htmlFor="companyName" className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-1">
                 Company Name
               </label>
               <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="companyName"
                   name="companyName"
@@ -122,26 +122,24 @@ const Register = () => {
                   value={formData.companyName}
                   onChange={handleChange}
                   required
-                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                    validationErrors.companyName
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-slate-300 focus:ring-indigo-500 focus:border-indigo-500'
+                  className={`input-modern pl-10 ${
+                    validationErrors.companyName ? 'border-red-300' : ''
                   }`}
                   placeholder="Your Company Name"
                 />
               </div>
               {validationErrors.companyName && (
-                <p className="mt-1.5 text-sm text-red-600">{validationErrors.companyName}</p>
+                <p className="mt-1 text-sm text-red-600">{validationErrors.companyName}</p>
               )}
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Admin Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="email"
                   name="email"
@@ -149,26 +147,24 @@ const Register = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                    validationErrors.email
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-slate-300 focus:ring-indigo-500 focus:border-indigo-500'
+                  className={`input-modern pl-10 ${
+                    validationErrors.email ? 'border-red-300' : ''
                   }`}
                   placeholder="admin@yourcompany.com"
                 />
               </div>
               {validationErrors.email && (
-                <p className="mt-1.5 text-sm text-red-600">{validationErrors.email}</p>
+                <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>
               )}
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="password"
                   name="password"
@@ -176,33 +172,31 @@ const Register = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className={`w-full pl-10 pr-12 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                    validationErrors.password
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-slate-300 focus:ring-indigo-500 focus:border-indigo-500'
+                  className={`input-modern pl-10 pr-10 ${
+                    validationErrors.password ? 'border-red-300' : ''
                   }`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {validationErrors.password && (
-                <p className="mt-1.5 text-sm text-red-600">{validationErrors.password}</p>
+                <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>
               )}
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -210,23 +204,21 @@ const Register = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
-                  className={`w-full pl-10 pr-12 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                    validationErrors.confirmPassword
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-slate-300 focus:ring-indigo-500 focus:border-indigo-500'
+                  className={`input-modern pl-10 pr-10 ${
+                    validationErrors.confirmPassword ? 'border-red-300' : ''
                   }`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {validationErrors.confirmPassword && (
-                <p className="mt-1.5 text-sm text-red-600">{validationErrors.confirmPassword}</p>
+                <p className="mt-1 text-sm text-red-600">{validationErrors.confirmPassword}</p>
               )}
             </div>
 
@@ -241,31 +233,31 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="btn-modern btn-primary w-full disabled:opacity-50"
             >
               {loading ? 'Creating Account...' : 'Create Company Account'}
             </button>
           </form>
 
           {/* Terms */}
-          <p className="text-xs text-slate-600 text-center">
+          <p className="text-xs text-gray-600 text-center">
             By creating an account, you agree to our{' '}
-            <a href="#" className="text-indigo-600 hover:text-indigo-700">Terms of Service</a>
+            <a href="#" className="text-blue-600 hover:text-blue-700">Terms of Service</a>
             {' '}and{' '}
-            <a href="#" className="text-indigo-600 hover:text-indigo-700">Privacy Policy</a>
+            <a href="#" className="text-blue-600 hover:text-blue-700">Privacy Policy</a>
           </p>
 
           {/* Login Link */}
-          <p className="text-center text-sm text-slate-600">
+          <p className="text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link to="/" className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
+            <Link to="/" className="text-blue-600 hover:text-blue-700 font-medium">
               Sign in
             </Link>
           </p>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-500 mt-6">
+        <p className="text-center text-xs text-gray-500 mt-6">
           © 2024 UEORMS. All rights reserved.
         </p>
       </div>

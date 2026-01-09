@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useInventoryStore } from '../../store/inventory.store';
 import { useDepartmentsStore } from '../../store/departments.store';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { Package, Building2, Clock, Zap, BarChart3, CheckCircle, Activity } from 'lucide-react';
 
 const ManagerDashboard = () => {
   const { items, loading: itemsLoading, fetchItems } = useInventoryStore();
@@ -19,77 +20,85 @@ const ManagerDashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Manager Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Manager Dashboard</h1>
         <p className="text-gray-600 mt-1">Manage operations and oversee departments</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+        <div className="modern-card-elevated p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Items</p>
-              <p className="text-3xl font-bold text-gray-900">{items.length}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{items.length}</p>
             </div>
-            <div className="p-3 rounded-full bg-blue-100 text-blue-600 text-2xl">📦</div>
+            <div className="p-3 rounded-lg bg-blue-50">
+              <Package className="w-6 h-6 text-blue-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+        <div className="modern-card-elevated p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Departments</p>
-              <p className="text-3xl font-bold text-gray-900">{departments.length}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{departments.length}</p>
             </div>
-            <div className="p-3 rounded-full bg-green-100 text-green-600 text-2xl">🏢</div>
+            <div className="p-3 rounded-lg bg-emerald-50">
+              <Building2 className="w-6 h-6 text-emerald-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+        <div className="modern-card-elevated p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Pending Approvals</p>
-              <p className="text-3xl font-bold text-gray-900">0</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">0</p>
             </div>
-            <div className="p-3 rounded-full bg-purple-100 text-purple-600 text-2xl">⏳</div>
+            <div className="p-3 rounded-lg bg-purple-50">
+              <Clock className="w-6 h-6 text-purple-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+        <div className="modern-card-elevated p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Active Workflows</p>
-              <p className="text-3xl font-bold text-gray-900">0</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">0</p>
             </div>
-            <div className="p-3 rounded-full bg-orange-100 text-orange-600 text-2xl">⚡</div>
+            <div className="p-3 rounded-lg bg-amber-50">
+              <Zap className="w-6 h-6 text-amber-600" />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Manager Actions</h2>
+      <div className="modern-card-elevated p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Manager Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link to="/departments" className="bg-indigo-600 text-white p-4 rounded-lg hover:bg-indigo-700 transition-colors text-center">
-            <div className="text-2xl mb-2">🏢</div>
-            <div className="text-sm font-medium">Manage Departments</div>
+          <Link to="/departments" className="btn-modern btn-primary text-center p-4 rounded-lg flex flex-col items-center space-y-2">
+            <Building2 className="w-6 h-6" />
+            <span className="text-sm font-medium">Manage Departments</span>
           </Link>
-          <Link to="/workflows" className="bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition-colors text-center">
-            <div className="text-2xl mb-2">⚡</div>
-            <div className="text-sm font-medium">Workflows</div>
+          <Link to="/workflows" className="btn-modern btn-secondary text-center p-4 rounded-lg flex flex-col items-center space-y-2">
+            <Zap className="w-6 h-6" />
+            <span className="text-sm font-medium">Workflows</span>
           </Link>
-          <Link to="/approvals" className="bg-orange-600 text-white p-4 rounded-lg hover:bg-orange-700 transition-colors text-center">
-            <div className="text-2xl mb-2">✅</div>
-            <div className="text-sm font-medium">Approvals</div>
+          <Link to="/approvals" className="btn-modern btn-secondary text-center p-4 rounded-lg flex flex-col items-center space-y-2">
+            <CheckCircle className="w-6 h-6" />
+            <span className="text-sm font-medium">Approvals</span>
           </Link>
-          <Link to="/reports" className="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors text-center">
-            <div className="text-2xl mb-2">📊</div>
-            <div className="text-sm font-medium">Reports</div>
+          <Link to="/reports" className="btn-modern btn-secondary text-center p-4 rounded-lg flex flex-col items-center space-y-2">
+            <BarChart3 className="w-6 h-6" />
+            <span className="text-sm font-medium">Reports</span>
           </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Departments</h2>
+        <div className="modern-card-elevated p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Departments</h2>
           {departments.length > 0 ? (
             <div className="space-y-3">
               {departments.slice(0, 5).map((dept) => (
@@ -106,11 +115,11 @@ const ManagerDashboard = () => {
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activities</h2>
+        <div className="modern-card-elevated p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activities</h2>
           <div className="space-y-3">
             <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+              <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
               <div>
                 <p className="text-sm font-medium text-gray-900">System initialized</p>
                 <p className="text-xs text-gray-500">Ready for operations</p>

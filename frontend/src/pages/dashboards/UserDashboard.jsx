@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInventoryStore } from '../../store/inventory.store';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { Package, DollarSign, AlertTriangle, Plus, Eye } from 'lucide-react';
 
 const UserDashboard = () => {
   const { items, loading, error, fetchItems } = useInventoryStore();
@@ -20,58 +21,64 @@ const UserDashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Welcome Back!</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Welcome Back!</h1>
         <p className="text-gray-600 mt-1">Here's your inventory overview</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+        <div className="modern-card-elevated p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Items</p>
-              <p className="text-3xl font-bold text-gray-900">{items.length}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{items.length}</p>
             </div>
-            <div className="p-3 rounded-full bg-blue-100 text-blue-600 text-2xl">📦</div>
+            <div className="p-3 rounded-lg bg-blue-50">
+              <Package className="w-6 h-6 text-blue-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+        <div className="modern-card-elevated p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Value</p>
-              <p className="text-3xl font-bold text-gray-900">₹{totalValue.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">₹{totalValue.toFixed(2)}</p>
             </div>
-            <div className="p-3 rounded-full bg-green-100 text-green-600 text-2xl">💰</div>
+            <div className="p-3 rounded-lg bg-emerald-50">
+              <DollarSign className="w-6 h-6 text-emerald-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+        <div className="modern-card-elevated p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Low Stock</p>
-              <p className="text-3xl font-bold text-gray-900">{lowStockItems}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{lowStockItems}</p>
             </div>
-            <div className="p-3 rounded-full bg-orange-100 text-orange-600 text-2xl">⚠️</div>
+            <div className="p-3 rounded-lg bg-amber-50">
+              <AlertTriangle className="w-6 h-6 text-amber-600" />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+      <div className="modern-card-elevated p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link to="/inventory" className="bg-indigo-600 text-white p-4 rounded-lg hover:bg-indigo-700 transition-colors text-center">
-            <div className="text-2xl mb-2">📋</div>
+          <Link to="/inventory" className="btn-modern btn-primary text-center p-4 rounded-lg">
+            <Eye className="w-5 h-5 mx-auto mb-2" />
             <div className="text-sm font-medium">View Inventory</div>
           </Link>
-          <Link to="/inventory" className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-center">
-            <div className="text-2xl mb-2">➕</div>
+          <Link to="/inventory" className="btn-modern btn-secondary text-center p-4 rounded-lg">
+            <Plus className="w-5 h-5 mx-auto mb-2" />
             <div className="text-sm font-medium">Add Item</div>
           </Link>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Items</h2>
+      <div className="modern-card-elevated p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Items</h2>
         {recentItems.length > 0 ? (
           <div className="space-y-3">
             {recentItems.map((item) => (

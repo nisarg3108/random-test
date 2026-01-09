@@ -8,7 +8,7 @@ export const createItem = async (data, tenantId) => {
     throw new Error('Missing required fields');
   }
 
-  const item = await prisma.inventoryItem.create({
+  const item = await prisma.item.create({
     data: {
       name,
       sku,
@@ -29,14 +29,14 @@ export const createItem = async (data, tenantId) => {
 };
 
 export const listItems = async (tenantId) => {
-  return prisma.inventoryItem.findMany({
+  return prisma.item.findMany({
     where: { tenantId },
     orderBy: { createdAt: 'desc' },
   });
 };
 
 export const updateItem = async (id, data, tenantId) => {
-  const item = await prisma.inventoryItem.update({
+  const item = await prisma.item.update({
     where: { id, tenantId },
     data,
   });
@@ -51,7 +51,7 @@ export const updateItem = async (id, data, tenantId) => {
 };
 
 export const deleteItem = async (id, tenantId) => {
-  const item = await prisma.inventoryItem.delete({
+  const item = await prisma.item.delete({
     where: { id, tenantId },
   });
 
