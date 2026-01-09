@@ -10,7 +10,7 @@ const LoadingSpinner = ({ size = 'md', className = '' }) => {
 
   return (
     <div className={`flex justify-center items-center ${className}`}>
-      <div className={`animate-spin rounded-full ${sizeClasses[size]} border-2 border-gray-200 border-t-blue-600`}></div>
+      <div className={`animate-spin rounded-full ${sizeClasses[size]} border-2 border-primary-200 border-t-blue-600`}></div>
     </div>
   );
 };
@@ -19,10 +19,10 @@ const LoadingSpinner = ({ size = 'md', className = '' }) => {
 export const FullPageLoader = ({ message = 'Loading...' }) => {
   return (
     <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-4 animate-fade-in">
         <LoadingSpinner size="xl" />
         <div className="space-y-2">
-          <p className="text-lg font-medium text-gray-900">{message}</p>
+          <p className="text-lg font-semibold text-primary-900">{message}</p>
           <div className="flex justify-center space-x-1">
             <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
             <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -39,7 +39,7 @@ export const SkeletonLoader = ({ className = '', lines = 3 }) => {
   return (
     <div className={`animate-pulse space-y-3 ${className}`}>
       {Array.from({ length: lines }).map((_, index) => (
-        <div key={index} className="h-4 bg-gray-200 rounded" style={{ width: `${Math.random() * 40 + 60}%` }}></div>
+        <div key={index} className="h-4 bg-primary-200 rounded" style={{ width: `${Math.random() * 40 + 60}%` }}></div>
       ))}
     </div>
   );

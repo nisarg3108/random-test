@@ -130,8 +130,8 @@ const InventoryList = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Inventory Management</h1>
-            <p className="text-gray-600 mt-1">Manage your inventory items and stock levels</p>
+            <h1 className="text-2xl font-bold text-primary-900">Inventory Management</h1>
+            <p className="text-primary-600 mt-1">Manage your inventory items and stock levels</p>
           </div>
           <button
             onClick={() => setShowModal(true)}
@@ -163,8 +163,8 @@ const InventoryList = () => {
               <div key={index} className="modern-card-elevated p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                    <p className="text-xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                    <p className="text-sm font-medium text-primary-600">{stat.label}</p>
+                    <p className="text-xl font-bold text-primary-900 mt-1">{stat.value}</p>
                   </div>
                   <div className={`p-2 rounded-lg ${stat.bg}`}>
                     <Icon className={`w-5 h-5 ${stat.color}`} />
@@ -191,8 +191,8 @@ const InventoryList = () => {
 
         {/* Inventory Table */}
         <div className="modern-card-elevated">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Items ({filteredItems.length})</h2>
+          <div className="px-6 py-4 border-b border-primary-200">
+            <h2 className="text-lg font-semibold text-primary-900">Items ({filteredItems.length})</h2>
           </div>
           <div className="overflow-x-auto">
             {loading ? (
@@ -206,55 +206,55 @@ const InventoryList = () => {
               </div>
             ) : (
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-primary-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Item</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Value</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Item</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">SKU</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Price</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Quantity</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Value</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-primary-500 uppercase">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-primary-200">
                   {filteredItems.map((item) => {
                     const status = getStockStatus(item.quantity);
                     return (
-                      <tr key={item.id} className="hover:bg-gray-50">
+                      <tr key={item.id} className="hover:bg-primary-50">
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                               <Package className="w-4 h-4 text-blue-600" />
                             </div>
                             <div className="ml-3">
-                              <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                              <div className="text-sm text-gray-500">{item.description}</div>
+                              <div className="text-sm font-medium text-primary-900">{item.name}</div>
+                              <div className="text-sm text-primary-500">{item.description}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-sm font-mono text-gray-600">{item.sku}</td>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">₹{item.price?.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{item.quantity}</td>
+                        <td className="px-6 py-4 text-sm font-mono text-primary-600">{item.sku}</td>
+                        <td className="px-6 py-4 text-sm font-medium text-primary-900">₹{item.price?.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm font-medium text-primary-900">{item.quantity}</td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${status.bg} ${status.color}`}>
                             {status.label}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 text-sm font-medium text-primary-900">
                           ₹{(item.price * item.quantity).toFixed(2)}
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end space-x-2">
                             <button 
                               onClick={() => handleEdit(item)}
-                              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-primary-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                             >
                               <Edit className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={() => handleDelete(item.id)}
-                              className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-primary-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -274,14 +274,14 @@ const InventoryList = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="modern-card-elevated max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">
+            <div className="px-6 py-4 border-b border-primary-200">
+              <h3 className="text-lg font-semibold text-primary-900">
                 {editingItem ? 'Edit Item' : 'Add New Item'}
               </h3>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Item Name</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Item Name</label>
                 <input
                   name="name"
                   type="text"
@@ -293,7 +293,7 @@ const InventoryList = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">SKU</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">SKU</label>
                 <input
                   name="sku"
                   type="text"
@@ -306,7 +306,7 @@ const InventoryList = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                  <label className="block text-sm font-medium text-primary-700 mb-1">Price</label>
                   <input
                     name="price"
                     type="number"
@@ -319,7 +319,7 @@ const InventoryList = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                  <label className="block text-sm font-medium text-primary-700 mb-1">Quantity</label>
                   <input
                     name="quantity"
                     type="number"
@@ -332,7 +332,7 @@ const InventoryList = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Category</label>
                 <input
                   name="category"
                   type="text"
@@ -343,7 +343,7 @@ const InventoryList = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Description</label>
                 <textarea
                   name="description"
                   value={formData.description}

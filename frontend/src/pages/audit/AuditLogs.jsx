@@ -9,6 +9,7 @@ const AuditLogs = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [expandedLog, setExpandedLog] = useState(null);
   const [filters, setFilters] = useState({
     action: '',
     entity: '',
@@ -24,9 +25,19 @@ const AuditLogs = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await auditAPI.getAuditLogs(filters);
-      setLogs(response.data || []);
+      // Filter out empty string values
+      const cleanFilters = Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== '')
+      );
+      console.log('Fetching audit logs with filters:', cleanFilters);
+      const response = await auditAPI.getAuditLogs(cleanFilters);
+      console.log('Audit logs response:', response);
+      console.log('Audit logs data:', response.data);
+      console.log('Logs array check:', Array.isArray(response.data.data));
+      console.log('First log item:', response.data.data?.[0]);
+      setLogs(response.data.data || []);
     } catch (err) {
+      console.error('Error fetching audit logs:', err);
       setError(err.message || 'Failed to fetch audit logs');
     } finally {
       setLoading(false);
@@ -53,6 +64,23 @@ const AuditLogs = () => {
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[action] || 'bg-gray-100 text-gray-800'}`}>
         {action}
       </span>
+    );
+  };
+
+  const toggleLogDetails = (logId) => {
+    setExpandedLog(expandedLog === logId ? null : logId);
+  };
+
+  const formatChanges = (changes) => {
+    if (!changes) return null;
+    
+    return (
+      <div className="mt-2 p-3 bg-gray-50 rounded-md">
+        <h4 className="text-sm font-medium text-gray-700 mb-2">Changes:</h4>
+        <pre className="text-xs text-gray-600 whitespace-pre-wrap">
+          {JSON.stringify(changes, null, 2)}
+        </pre>
+      </div>
     );
   };
 
@@ -148,57 +176,71 @@ const AuditLogs = () => {
                 {loading ? (
                   <LoadingSpinner />
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white border border-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            User ID
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Action
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Entity
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Entity ID
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Timestamp
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {logs && logs.length > 0 ? (
-                          logs.map((log, index) => (
-                            <tr key={index}>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {log.userId}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <div className="space-y-4">
+                    <div className="mb-4 text-sm text-gray-600">
+                      Found {logs?.length || 0} audit logs
+                    </div>
+                    {logs && logs.length > 0 ? (
+                      logs.map((log) => (
+                        <div key={log.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                              <div className="flex-shrink-0">
                                 {getActionBadge(log.action)}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {log.entity}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {log.entityId}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {new Date(log.timestamp).toLocaleString()}
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
-                              No audit logs found
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-medium text-gray-900">
+                                    {log.description || `${log.action} ${log.entity}`}
+                                  </span>
+                                  <span className="text-sm text-gray-500">
+                                    by {log.userInfo?.email || 'Unknown User'}
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-4 mt-1 text-sm text-gray-500">
+                                  <span>Entity: {log.entity}</span>
+                                  <span>ID: {log.entityId}</span>
+                                  <span>{new Date(log.timestamp).toLocaleString()}</span>
+                                  {log.ipAddress && <span>IP: {log.ipAddress}</span>}
+                                </div>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => toggleLogDetails(log.id)}
+                              className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                            >
+                              {expandedLog === log.id ? 'Hide Details' : 'Show Details'}
+                            </button>
+                          </div>
+                          
+                          {expandedLog === log.id && (
+                            <div className="mt-4 pt-4 border-t border-gray-200">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <h4 className="text-sm font-medium text-gray-700 mb-2">User Information:</h4>
+                                  <div className="text-sm text-gray-600">
+                                    <p>Email: {log.userInfo?.email || 'N/A'}</p>
+                                    <p>Role: {log.userInfo?.role || 'N/A'}</p>
+                                  </div>
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-medium text-gray-700 mb-2">Additional Info:</h4>
+                                  <div className="text-sm text-gray-600">
+                                    <p>Timestamp: {new Date(log.timestamp).toLocaleString()}</p>
+                                    <p>IP Address: {log.ipAddress || 'N/A'}</p>
+                                  </div>
+                                </div>
+                              </div>
+                              {log.changes && formatChanges(log.changes)}
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        No audit logs found
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

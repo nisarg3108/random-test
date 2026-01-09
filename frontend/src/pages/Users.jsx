@@ -48,12 +48,52 @@ const Users = () => {
         fetchOptions('USER_ROLE'),
         fetchOptions('USER_STATUS')
       ]);
-      setRoleOptions(Array.isArray(roles) ? roles : []);
-      setStatusOptions(Array.isArray(statuses) ? statuses : []);
+      
+      console.log('Fetched roles:', roles);
+      console.log('Fetched statuses:', statuses);
+      
+      // Fallback to default roles if no options are found
+      const defaultRoles = [
+        { value: 'ADMIN', label: 'Administrator' },
+        { value: 'MANAGER', label: 'Manager' },
+        { value: 'USER', label: 'User' }
+      ];
+      
+      const defaultStatuses = [
+        { value: 'ACTIVE', label: 'Active' },
+        { value: 'INACTIVE', label: 'Inactive' }
+      ];
+      
+      // Transform system options to the expected format
+      const transformedRoles = Array.isArray(roles) && roles.length > 0 
+        ? roles.map(role => ({ value: role.value, label: role.label }))
+        : defaultRoles;
+      
+      const transformedStatuses = Array.isArray(statuses) && statuses.length > 0 
+        ? statuses.map(status => ({ value: status.value, label: status.label }))
+        : defaultStatuses;
+      
+      console.log('Transformed roles:', transformedRoles);
+      console.log('Transformed statuses:', transformedStatuses);
+      
+      setRoleOptions(transformedRoles);
+      setStatusOptions(transformedStatuses);
     } catch (err) {
       console.error('Failed to load options:', err);
-      setRoleOptions([]);
-      setStatusOptions([]);
+      // Use fallback options
+      const fallbackRoles = [
+        { value: 'ADMIN', label: 'Administrator' },
+        { value: 'MANAGER', label: 'Manager' },
+        { value: 'USER', label: 'User' }
+      ];
+      const fallbackStatuses = [
+        { value: 'ACTIVE', label: 'Active' },
+        { value: 'INACTIVE', label: 'Inactive' }
+      ];
+      
+      console.log('Using fallback roles:', fallbackRoles);
+      setRoleOptions(fallbackRoles);
+      setStatusOptions(fallbackStatuses);
     }
   };
 
@@ -196,8 +236,8 @@ const Users = () => {
                 <div key={index} className="modern-card-elevated p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                      <p className="text-xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                      <p className="text-sm font-medium text-primary-600">{stat.label}</p>
+                      <p className="text-xl font-bold text-primary-900 mt-1">{stat.value}</p>
                     </div>
                     <div className={`p-2 rounded-lg ${stat.bg}`}>
                       <Icon className={`w-5 h-5 ${stat.color}`} />
@@ -244,10 +284,10 @@ const Users = () => {
 
           {/* Users Table */}
           <div className="modern-card-elevated">
-            <div className="px-6 py-4 border-b border-gray-200">
+            <div className="px-6 py-4 border-b border-primary-200">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900">Users ({filteredUsers.length})</h2>
-                <div className="text-sm text-gray-500">Showing {filteredUsers.length} of {users.length} users</div>
+                <h2 className="text-lg font-semibold text-primary-900">Users ({filteredUsers.length})</h2>
+                <div className="text-sm text-primary-500">Showing {filteredUsers.length} of {users.length} users</div>
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -269,26 +309,26 @@ const Users = () => {
                 </div>
               ) : (
                 <table className="w-full">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-primary-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">User</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Role</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Created</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-primary-500 uppercase">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-primary-200">
                     {filteredUsers.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-50">
+                      <tr key={user.id} className="hover:bg-primary-50">
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                               {user.email?.charAt(0).toUpperCase()}
                             </div>
                             <div className="ml-3">
-                              <div className="text-sm font-medium text-gray-900">{user.email}</div>
-                              <div className="text-xs text-gray-500">ID: {user.id}</div>
+                              <div className="text-sm font-medium text-primary-900">{user.email}</div>
+                              <div className="text-xs text-primary-500">ID: {user.id}</div>
                             </div>
                           </div>
                         </td>
@@ -298,17 +338,17 @@ const Users = () => {
                         <td className="px-6 py-4">
                           {getStatusBadge(user.status)}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">
+                        <td className="px-6 py-4 text-sm text-primary-600">
                           {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end space-x-2">
-                            <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                            <button className="p-2 text-primary-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                               <Edit className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={() => handleDeleteClick(user)}
-                              className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-primary-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -333,7 +373,7 @@ const Users = () => {
         >
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <label className="block text-sm font-medium text-primary-700 mb-1">Email Address</label>
               <input
                 name="email"
                 type="email"
@@ -345,7 +385,7 @@ const Users = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-primary-700 mb-1">Password</label>
               <input
                 name="password"
                 type="password"
@@ -357,7 +397,7 @@ const Users = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <label className="block text-sm font-medium text-primary-700 mb-1">Role</label>
               <select
                 name="role"
                 value={formData.role}
@@ -365,9 +405,13 @@ const Users = () => {
                 required
                 className="input-modern"
               >
-                {Array.isArray(roleOptions) && roleOptions.map(role => (
-                  <option key={role.value} value={role.value}>{role.label}</option>
-                ))}
+                {roleOptions.length === 0 ? (
+                  <option value="USER">User (Loading...)</option>
+                ) : (
+                  roleOptions.map(role => (
+                    <option key={role.value} value={role.value}>{role.label}</option>
+                  ))
+                )}
               </select>
             </div>
             

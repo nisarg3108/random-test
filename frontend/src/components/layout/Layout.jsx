@@ -17,16 +17,16 @@ const Layout = ({ children }) => {
   const token = getToken();
   if (token && !user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-primary-50 flex items-center justify-center p-4">
         <div className="text-center space-y-6 animate-fade-in">
           <div className="w-16 h-16 bg-red-100 rounded-2xl mx-auto flex items-center justify-center">
             <AlertTriangle className="w-8 h-8 text-red-600" />
           </div>
           <div className="space-y-3">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-primary-900">
               Authentication Error
             </h2>
-            <p className="text-gray-600 max-w-md mx-auto">
+            <p className="text-primary-600 max-w-md mx-auto">
               There was an issue with your session. Please sign in again to continue.
             </p>
           </div>
@@ -46,16 +46,16 @@ const Layout = ({ children }) => {
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-primary-50 flex items-center justify-center p-4">
         <div className="text-center space-y-6 animate-fade-in">
           <div className="w-16 h-16 bg-blue-100 rounded-2xl mx-auto flex items-center justify-center">
             <Shield className="w-8 h-8 text-blue-600" />
           </div>
           <div className="space-y-3">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-primary-900">
               Access Required
             </h2>
-            <p className="text-gray-600 max-w-md mx-auto">
+            <p className="text-primary-600 max-w-md mx-auto">
               Please sign in to access your workspace and continue managing your business.
             </p>
           </div>
@@ -71,10 +71,10 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-primary-50">
       <Sidebar />
       <div className="flex-1 flex flex-col">
-        <div className="bg-white sticky top-0 z-30 border-b border-gray-200">
+        <div className="bg-white sticky top-0 z-30 border-b border-primary-200">
           <RoleSwitcher />
           <Header />
         </div>

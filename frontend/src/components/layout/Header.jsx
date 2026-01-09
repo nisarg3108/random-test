@@ -70,14 +70,14 @@ const Header = () => {
   const pageInfo = getPageTitle();
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-40">
+    <header className="bg-white border-b border-primary-200 px-6 py-4 sticky top-0 z-40">
       <div className="flex justify-between items-center">
         {/* Page Title */}
         <div className="animate-fade-in">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-primary-900">
             {pageInfo.title}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">{pageInfo.subtitle}</p>
+          <p className="text-sm text-primary-500 mt-1">{pageInfo.subtitle}</p>
         </div>
 
         {/* Right Side */}
@@ -85,7 +85,7 @@ const Header = () => {
           {/* Search */}
           <div className="relative hidden md:block">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="w-4 h-4 text-gray-400" />
+              <Search className="w-4 h-4 text-primary-400" />
             </div>
             <input
               type="text"
@@ -105,7 +105,7 @@ const Header = () => {
           <div className="relative notifications-menu">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-150"
+              className="relative p-2 text-primary-500 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-150"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
@@ -157,7 +157,7 @@ const Header = () => {
           <div className="relative user-menu">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg transition-all duration-150"
+              className="flex items-center space-x-3 p-2 hover:bg-primary-100 rounded-lg transition-all duration-150"
             >
               <div className="relative">
                 <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">

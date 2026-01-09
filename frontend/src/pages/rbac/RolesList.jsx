@@ -95,7 +95,7 @@ const RolesList = () => {
                   Permissions
                 </label>
                 <div className="space-y-2 max-h-40 overflow-y-auto">
-                  {permissions.map((permission) => (
+                  {Array.isArray(permissions) && permissions.map((permission) => (
                     <label key={permission.id} className="flex items-center">
                       <input
                         type="checkbox"

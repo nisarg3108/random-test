@@ -30,11 +30,11 @@ const RoleSwitcher = () => {
 
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-sm text-gray-600">Switch Role:</span>
+      <span className="text-sm text-primary-600 font-medium">Switch Role:</span>
       <select
         value={user.role}
         onChange={(e) => switchRole(e.target.value)}
-        className="text-xs border border-gray-300 rounded px-2 py-1 bg-white"
+        className="text-xs border border-primary-300 rounded-md px-3 py-1.5 bg-white text-primary-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
       >
         <option value="USER">USER</option>
         <option value="MANAGER">MANAGER</option>
