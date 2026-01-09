@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CompanyConfig {
+  id          String   @id @default(uuid())
+  tenantId    String   @unique
+  industry    String
+  companySize String
+  country     String
+  currency    String
+  timezone    String
+  fiscalYear  String
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  role         String   @default("USER")
+  status       String @default("ACTIVE")
+
+  tenantId     String
+  departmentId String?
+  managerId    String?
+
+  tenant       Tenant     @relation(fields: [tenantId], references: [id])
+  department   Department? @relation(fields: [departmentId], references: [id])
+  roles        UserRole[]
+
+  createdAt    DateTime @default(now())
+}
+
+model Role {
+  id        String   @id @default(uuid())
+  name      String
+  tenantId  String
+
+  permissions RolePermission[]
+  users       UserRole[]
+  
+  @@unique([name, tenantId])
+}
+
+model Permission {
+  id    String @id @default(uuid())
+  code  String @unique
+  label String
+  
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role        Role       @relation(fields: [roleId], references: [id])
+  permission  Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+model UserRole {
+  userId String
+  roleId String
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+}
+
+model Department {
+  id        String @id @default(uuid())
+  name      String
+  tenantId  String
+
+  users     User[]
+}
+
+model Workflow {
+  id        String @id @default(uuid())
+  module    String
+  action    String
+  tenantId  String
+
+  steps     WorkflowStep[]
+}
+
+model WorkflowStep {
+  id         String @id @default(uuid())
+  workflowId String
+  order      Int
+  approverRole String
+  
+  workflow   Workflow @relation(fields: [workflowId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  tenantId  String
+  action    String
+  entity    String
+  entityId  String
+  meta      Json?
+  timestamp DateTime @default(now())
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  
+  users     User[]
+  config    CompanyConfig?
+  items     Item[]
+  invites   UserInvite[]
+}
+
+model Item {
+  id          String   @id @default(uuid())
+  name        String
+  sku         String   @unique
+  price       Float
+  quantity    Int      @default(0)
+  description String?
+  tenantId    String
+  createdAt   DateTime @default(now())
+  
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+model UserInvite {
+  id        String   @id @default(uuid())
+  email     String
+  role      String   @default("USER")
+  token     String   @unique
+  used      Boolean  @default(false)
+  expiresAt DateTime
+  tenantId  String
+  createdAt DateTime @default(now())
+  
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+model Approval {
+  id          String @id @default(uuid())
+  workflowId  String
+  stepOrder   Int
+  approvedBy  String?
+  status      String   // PENDING | APPROVED | REJECTED
+  createdAt   DateTime @default(now())
+}
+
+model SystemOption {
+  id        String @id @default(uuid())
+  category  String
+  key       String
+  value     String
+  label     String?
+  tenantId  String?
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now())
+  
+  @@unique([category, key, tenantId], name: "category_key_tenantId")
+}
