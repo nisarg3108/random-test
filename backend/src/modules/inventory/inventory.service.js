@@ -8,24 +8,31 @@ export const createItem = async (data, tenantId) => {
     throw new Error('Missing required fields');
   }
 
-  const item = await prisma.item.create({
-    data: {
-      name,
-      sku,
-      price,
-      quantity: quantity || 0,
-      description,
-      tenantId,
-    },
-  });
+  try {
+    const item = await prisma.item.create({
+      data: {
+        name,
+        sku,
+        price,
+        quantity: quantity || 0,
+        description,
+        tenantId,
+      },
+    });
 
-  // Broadcast real-time update
-  realTimeServer.broadcastInventoryUpdate(tenantId, {
-    type: 'ITEM_CREATED',
-    item
-  });
+    // Broadcast real-time update
+    realTimeServer.broadcastInventoryUpdate(tenantId, {
+      type: 'ITEM_CREATED',
+      item
+    });
 
-  return item;
+    return item;
+  } catch (error) {
+    if (error.code === 'P2002' && error.meta?.target?.includes('sku')) {
+      throw new Error(`Item with SKU '${sku}' already exists`);
+    }
+    throw error;
+  }
 };
 
 export const listItems = async (tenantId) => {
@@ -36,18 +43,25 @@ export const listItems = async (tenantId) => {
 };
 
 export const updateItem = async (id, data, tenantId) => {
-  const item = await prisma.item.update({
-    where: { id, tenantId },
-    data,
-  });
+  try {
+    const item = await prisma.item.update({
+      where: { id, tenantId },
+      data,
+    });
 
-  // Broadcast real-time update
-  realTimeServer.broadcastInventoryUpdate(tenantId, {
-    type: 'ITEM_UPDATED',
-    item
-  });
+    // Broadcast real-time update
+    realTimeServer.broadcastInventoryUpdate(tenantId, {
+      type: 'ITEM_UPDATED',
+      item
+    });
 
-  return item;
+    return item;
+  } catch (error) {
+    if (error.code === 'P2002' && error.meta?.target?.includes('sku')) {
+      throw new Error(`Item with SKU '${data.sku}' already exists`);
+    }
+    throw error;
+  }
 };
 
 export const deleteItem = async (id, tenantId) => {

@@ -16,13 +16,16 @@ import inventoryRoutes from './modules/inventory/inventory.routes.js';
 import departmentRoutes from './core/department/department.routes.js';
 import auditRoutes from './core/audit/audit.routes.js';
 import systemOptionsRoutes from './core/system/systemOptions.routes.js';
+import rbacRoutes from './core/rbac/rbac.routes.js';
 
 const app = express();
 
 /* Global Middlewares */
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL, 'https://your-frontend-domain.vercel.app']
+    : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(express.json());
@@ -46,6 +49,7 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/departments', departmentRoutes);
 app.use('/api/audit-logs', auditRoutes);
 app.use('/api/system-options', systemOptionsRoutes);
+app.use('/api', rbacRoutes);
 
 
 

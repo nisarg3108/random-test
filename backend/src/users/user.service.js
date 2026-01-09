@@ -5,8 +5,8 @@ import { realTimeServer } from '../core/realtime.js';
 /**
  * Create a user under the same tenant (ADMIN only)
  */
-export const createUser = async ({ email, password, firstName, lastName, roleId }, tenantId) => {
-  if (!email || !password || !firstName || !lastName || !roleId) {
+export const createUser = async ({ email, password, role }, tenantId) => {
+  if (!email || !password || !role) {
     throw new Error('Missing required fields');
   }
 
@@ -21,13 +21,8 @@ export const createUser = async ({ email, password, firstName, lastName, roleId 
     data: {
       email,
       password: hashedPassword,
-      firstName,
-      lastName,
-      roleId,
+      role,
       tenantId,
-    },
-    include: {
-      role: { select: { name: true } }
     }
   });
 
@@ -37,8 +32,6 @@ export const createUser = async ({ email, password, firstName, lastName, roleId 
     user: {
       id: user.id,
       email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
       role: user.role,
       createdAt: user.createdAt
     }
@@ -47,8 +40,6 @@ export const createUser = async ({ email, password, firstName, lastName, roleId 
   return {
     id: user.id,
     email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
     role: user.role,
     createdAt: user.createdAt
   };
@@ -63,12 +54,14 @@ export const listUsers = async (tenantId) => {
     select: {
       id: true,
       email: true,
-      firstName: true,
-      lastName: true,
-      role: { select: { name: true } },
-      lastLoginAt: true,
+      role: true,
+      status: true,
       createdAt: true,
-      updatedAt: true,
+      department: {
+        select: {
+          name: true
+        }
+      }
     },
     orderBy: { createdAt: 'desc' }
   });
@@ -80,10 +73,7 @@ export const listUsers = async (tenantId) => {
 export const updateUser = async (userId, data, tenantId) => {
   const user = await prisma.user.update({
     where: { id: userId, tenantId },
-    data,
-    include: {
-      role: { select: { name: true } }
-    }
+    data
   });
 
   // Broadcast real-time update
@@ -92,10 +82,8 @@ export const updateUser = async (userId, data, tenantId) => {
     user: {
       id: user.id,
       email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
       role: user.role,
-      updatedAt: user.updatedAt
+      status: user.status
     }
   });
 
