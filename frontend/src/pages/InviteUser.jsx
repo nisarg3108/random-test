@@ -77,7 +77,7 @@ const InviteUser = () => {
           <form onSubmit={handleInvite} className="space-y-6">
             {/* Email Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary-700 mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -96,7 +96,7 @@ const InviteUser = () => {
 
             {/* Role Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary-700 mb-2">
                 Role Assignment
               </label>
               <div className="space-y-3">
@@ -111,8 +111,8 @@ const InviteUser = () => {
                       className="mt-1 w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                     />
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{option.label}</div>
-                      <div className="text-sm text-gray-600">{option.description}</div>
+                      <div className="text-sm font-medium text-primary-900">{option.label}</div>
+                      <div className="text-sm text-primary-600">{option.description}</div>
                     </div>
                   </label>
                 ))}
@@ -161,20 +161,20 @@ const InviteUser = () => {
 
         {/* Invite Link Card */}
         {inviteLink && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Invitation Link Generated</h3>
-            <p className="text-sm text-gray-600 mb-4">
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-primary-900 mb-3">Invitation Link Generated</h3>
+            <p className="text-sm text-primary-600 mb-4">
               Share this link with the invited user. The link will expire in 24 hours.
             </p>
             
-            <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+            <div className="bg-white border border-primary-200 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
-                <code className="text-sm text-gray-700 break-all flex-1 mr-4">
+                <code className="text-sm text-primary-700 break-all flex-1 mr-4">
                   {inviteLink}
                 </code>
                 <button
                   onClick={copyToClipboard}
-                  className="flex-shrink-0 p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  className="flex-shrink-0 p-2 text-primary-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                   title="Copy to clipboard"
                 >
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}

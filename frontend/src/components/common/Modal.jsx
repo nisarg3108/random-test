@@ -27,9 +27,9 @@ const Modal = ({
     default: {
       icon: null,
       headerBg: 'bg-white',
-      headerText: 'text-gray-900',
-      iconBg: 'bg-gray-100',
-      iconColor: 'text-gray-600'
+      headerText: 'text-primary-900',
+      iconBg: 'bg-primary-100',
+      iconColor: 'text-primary-600'
     },
     success: {
       icon: CheckCircle,
@@ -115,7 +115,7 @@ const Modal = ({
           >
             {/* Header */}
             {(title || showCloseButton) && (
-              <div className={`px-6 py-4 border-b border-gray-200 ${config.headerBg}`}>
+              <div className={`px-6 py-4 border-b border-primary-200 ${config.headerBg}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {Icon && (
@@ -132,7 +132,7 @@ const Modal = ({
                   {showCloseButton && (
                     <button
                       onClick={onClose}
-                      className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-2 text-primary-400 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-colors"
                       aria-label="Close modal"
                     >
                       <X className="w-4 h-4" />
@@ -173,7 +173,7 @@ export const ConfirmModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type={type} size="sm">
       <div className="space-y-4">
-        <p className="text-gray-600">{message}</p>
+        <p className="text-primary-600">{message}</p>
         <div className="flex justify-end space-x-3">
           <button
             onClick={onClose}
@@ -218,7 +218,7 @@ export const AlertModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type={type} size="sm">
       <div className="space-y-4">
-        <p className="text-gray-600">{message}</p>
+        <p className="text-primary-600">{message}</p>
         <div className="flex justify-end">
           <button
             onClick={onClose}

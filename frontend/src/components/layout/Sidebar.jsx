@@ -4,7 +4,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { 
   LayoutDashboard, Package, Building2, Users, Mail, Shield, 
   ShieldCheck, Zap, CheckCircle, FileText, Settings, 
-  BarChart3, ChevronLeft, ChevronRight, LogOut, Menu
+  BarChart3, ChevronLeft, ChevronRight, LogOut, Menu, 
+  User, Crown, Zap as ZapIcon
 } from 'lucide-react';
 import { removeToken } from '../../store/auth.store';
 
@@ -41,57 +42,58 @@ const Sidebar = () => {
 
   const getRoleBadge = (role) => {
     const roleConfig = {
-      'ADMIN': { color: 'bg-red-100 text-red-700', icon: '👑' },
-      'MANAGER': { color: 'bg-blue-100 text-blue-700', icon: '⚡' },
-      'USER': { color: 'bg-emerald-100 text-emerald-700', icon: '👤' }
+      'ADMIN': { color: 'bg-gradient-to-r from-red-500 to-pink-500 text-white', icon: Crown },
+      'MANAGER': { color: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white', icon: ZapIcon },
+      'USER': { color: 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white', icon: User }
     };
     const config = roleConfig[role] || roleConfig['USER'];
+    const IconComponent = config.icon;
     
     return (
-      <div className={`${config.color} px-2 py-1 rounded-md text-xs font-medium flex items-center space-x-1`}>
-        <span>{config.icon}</span>
+      <div className={`${config.color} px-3 py-1.5 rounded-full text-xs font-semibold flex items-center space-x-1.5 shadow-sm`}>
+        <IconComponent className="w-3 h-3" />
         {!collapsed && <span>{role}</span>}
       </div>
     );
   };
 
   return (
-    <div className={`bg-white border-r border-gray-200 min-h-screen transition-all duration-300 ${
-      collapsed ? 'w-16' : 'w-64'
+    <div className={`bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 border-r border-slate-700 min-h-screen transition-all duration-300 shadow-2xl ${
+      collapsed ? 'w-16' : 'w-72'
     }`}>
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-6 border-b border-slate-700/50">
         <div className="flex items-center justify-between">
           {!collapsed && (
             <div className="animate-fade-in">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <Menu className="w-5 h-5 text-white" />
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Menu className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">UEORMS</h2>
-                  <p className="text-xs text-gray-500">Enterprise Suite</p>
+                  <h2 className="text-xl font-bold text-white">UEORMS</h2>
+                  <p className="text-xs text-slate-400">Enterprise Suite</p>
                 </div>
               </div>
-              <div className="mt-3">
+              <div className="flex justify-center">
                 {getRoleBadge(user.role)}
               </div>
             </div>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-xl hover:bg-slate-700/50 transition-all duration-200 hover:scale-105"
           >
             {collapsed ? 
-              <ChevronRight className="w-4 h-4 text-gray-600" /> : 
-              <ChevronLeft className="w-4 h-4 text-gray-600" />
+              <ChevronRight className="w-5 h-5 text-slate-400" /> : 
+              <ChevronLeft className="w-5 h-5 text-slate-400" />
             }
           </button>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="p-3 space-y-1">
+      <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
         {filteredMenuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -100,16 +102,22 @@ const Sidebar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center px-3 py-2 rounded-lg transition-all duration-150 ${
+              className={`group flex items-center px-4 py-3 rounded-xl transition-all duration-200 relative ${
                 isActive
-                  ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
-                  : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white shadow-lg border border-blue-500/30'
+                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:scale-105'
               }`}
               title={collapsed ? item.label : ''}
             >
-              <Icon className={`w-5 h-5 ${collapsed ? 'mx-auto' : 'mr-3'}`} />
+              {isActive && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-400 to-purple-500 rounded-r-full" />
+              )}
+              <Icon className={`w-5 h-5 ${collapsed ? 'mx-auto' : 'mr-4'} transition-transform group-hover:scale-110`} />
               {!collapsed && (
                 <span className="font-medium text-sm">{item.label}</span>
+              )}
+              {!collapsed && isActive && (
+                <div className="ml-auto w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
               )}
             </Link>
           );
@@ -117,17 +125,17 @@ const Sidebar = () => {
       </nav>
 
       {/* User Info & Logout */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
+      <div className="p-4 border-t border-slate-700/50 bg-slate-800/50">
         {!collapsed && (
-          <div className="mb-3 p-3 bg-white rounded-lg border border-gray-200">
+          <div className="mb-4 p-4 bg-slate-700/30 rounded-xl border border-slate-600/30 backdrop-blur-sm">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg">
                 {user.email?.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{user.email?.split('@')[0]}</p>
-                <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                <p className="text-xs text-gray-400">ID: {user.id}</p>
+                <p className="text-sm font-semibold text-white truncate">{user.email?.split('@')[0]}</p>
+                <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                <p className="text-xs text-slate-500">ID: {user.id}</p>
               </div>
             </div>
           </div>
@@ -135,12 +143,12 @@ const Sidebar = () => {
         
         <button
           onClick={handleLogout}
-          className={`flex items-center w-full px-3 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-150 ${
+          className={`group flex items-center w-full px-4 py-3 text-slate-300 hover:bg-red-500/20 hover:text-red-400 rounded-xl transition-all duration-200 hover:scale-105 ${
             collapsed ? 'justify-center' : ''
           }`}
           title={collapsed ? 'Logout' : ''}
         >
-          <LogOut className={`w-5 h-5 ${collapsed ? '' : 'mr-3'}`} />
+          <LogOut className={`w-5 h-5 ${collapsed ? '' : 'mr-3'} transition-transform group-hover:scale-110`} />
           {!collapsed && <span className="font-medium text-sm">Sign Out</span>}
         </button>
       </div>

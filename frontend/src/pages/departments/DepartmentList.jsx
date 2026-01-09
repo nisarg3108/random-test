@@ -115,8 +115,8 @@ const DepartmentList = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Department Management</h1>
-            <p className="text-gray-600 mt-1">Manage organizational departments and structure</p>
+            <h1 className="text-2xl font-bold text-primary-900">Department Management</h1>
+            <p className="text-primary-600 mt-1">Manage organizational departments and structure</p>
           </div>
           <button
             onClick={() => setShowModal(true)}
@@ -146,8 +146,8 @@ const DepartmentList = () => {
               <div key={index} className="modern-card-elevated p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                    <p className="text-sm font-medium text-primary-600">{stat.label}</p>
+                    <p className="text-2xl font-bold text-primary-900 mt-1">{stat.value}</p>
                   </div>
                   <div className={`p-3 rounded-lg ${stat.bg}`}>
                     <Icon className={`w-6 h-6 ${stat.color}`} />
@@ -192,8 +192,8 @@ const DepartmentList = () => {
                       <Building2 className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{dept.name}</h3>
-                      <p className="text-sm text-gray-500">ID: {dept.id}</p>
+                      <h3 className="text-lg font-semibold text-primary-900">{dept.name}</h3>
+                      <p className="text-sm text-primary-500">ID: {dept.id}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -214,39 +214,39 @@ const DepartmentList = () => {
 
                 <div className="space-y-3">
                   {dept.description && (
-                    <p className="text-sm text-gray-600">{dept.description}</p>
+                    <p className="text-sm text-primary-600">{dept.description}</p>
                   )}
                   
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Budget:</span>
-                    <span className="font-medium text-gray-900">
+                    <span className="text-primary-600">Budget:</span>
+                    <span className="font-medium text-primary-900">
                       {dept.budget ? `₹${dept.budget.toLocaleString()}` : 'Not set'}
                     </span>
                   </div>
 
                   {dept.location && (
-                    <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    <div className="flex items-center space-x-2 text-sm text-primary-600">
                       <MapPin className="w-4 h-4" />
                       <span>{dept.location}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2 text-sm text-primary-600">
                     <Users className="w-4 h-4" />
                     <span>{dept.employeeCount || 0} employees</span>
                   </div>
 
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2 text-sm text-primary-600">
                     <Calendar className="w-4 h-4" />
                     <span>Created {dept.createdAt ? new Date(dept.createdAt).toLocaleDateString() : 'N/A'}</span>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="mt-4 pt-4 border-t border-primary-200">
                   <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
                     dept.status === 'ACTIVE' 
                       ? 'bg-emerald-100 text-emerald-700' 
-                      : 'bg-gray-100 text-gray-700'
+                      : 'bg-primary-100 text-primary-700'
                   }`}>
                     {dept.status || 'Active'}
                   </span>
@@ -261,14 +261,14 @@ const DepartmentList = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="modern-card-elevated max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">
+            <div className="px-6 py-4 border-b border-primary-200">
+              <h3 className="text-lg font-semibold text-primary-900">
                 {editingDept ? 'Edit Department' : 'Add New Department'}
               </h3>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Department Name</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Department Name</label>
                 <input
                   name="name"
                   type="text"
@@ -280,7 +280,7 @@ const DepartmentList = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Description</label>
                 <textarea
                   name="description"
                   value={formData.description}
@@ -291,7 +291,7 @@ const DepartmentList = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Location</label>
                 <input
                   name="location"
                   type="text"
@@ -302,7 +302,7 @@ const DepartmentList = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Budget</label>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Budget</label>
                 <input
                   name="budget"
                   type="number"
