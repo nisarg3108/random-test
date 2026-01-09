@@ -128,7 +128,7 @@ model Tenant {
 model Item {
   id          String   @id @default(uuid())
   name        String
-  sku         String   @unique
+  sku         String
   price       Float
   quantity    Int      @default(0)
   description String?
@@ -136,6 +136,8 @@ model Item {
   createdAt   DateTime @default(now())
   
   tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  
+  @@unique([sku, tenantId])
 }
 
 model UserInvite {

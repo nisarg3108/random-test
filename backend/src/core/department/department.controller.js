@@ -2,7 +2,7 @@ import {
   createDepartment,
   listDepartments,
 } from './department.service.js';
-import { logAudit } from '../audit/audit.service.js';
+import { logCreate } from '../audit/audit.helper.js';
 
 
 
@@ -14,27 +14,21 @@ export const listDepartmentsController = async (req, res, next) => {
     next(err);
   }
 };
+
 export const createDepartmentController = async (req, res, next) => {
   try {
+    console.log('Creating department with user:', req.user);
     const dept = await createDepartment(req.body, req.user.tenantId);
     console.log('Department created:', dept);
-
-    try {
-      await logAudit({
-        userId: req.user.userId,
-        tenantId: req.user.tenantId,
-        action: 'CREATE',
-        entity: 'DEPARTMENT',
-        entityId: dept.id,
-        meta: { name: dept.name },
-      });
-      console.log('Audit log created successfully');
-    } catch (auditError) {
-      console.error('Audit log error:', auditError);
-    }
+    
+    // Log audit using helper
+    console.log('Calling audit log...');
+    const auditResult = await logCreate(req, 'DEPARTMENT', dept);
+    console.log('Audit log result:', auditResult);
 
     res.status(201).json(dept);
   } catch (err) {
+    console.error('Error in createDepartmentController:', err);
     next(err);
   }
 };
