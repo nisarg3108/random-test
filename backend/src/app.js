@@ -23,9 +23,7 @@ const app = express();
 /* Global Middlewares */
 app.use(helmet());
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, 'https://your-frontend-domain.vercel.app']
-    : ['http://localhost:5173', 'http://localhost:3000'],
+  origin: '*',
   credentials: true
 }));
 app.use(express.json());
