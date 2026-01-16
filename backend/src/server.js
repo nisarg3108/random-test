@@ -9,6 +9,9 @@ import { seedRoles } from './core/rbac/roles.seed.js';
 import { assignPermissions } from './core/rbac/rolePermission.seed.js';
 
 import { seedInventoryWorkflow } from './core/workflow/workflow.seed.js';
+
+
+
 await seedInventoryWorkflow(
   '6c48be82-3c9e-4f57-b807-c1521010c5de'
 );
@@ -24,7 +27,7 @@ const startServer = async () => {
   } else {
     for (const tenant of tenants) {
       await seedRoles(tenant.id);
-      await assignPermissions();
+      await assignPermissions(tenant.id);
     }
   }
 
