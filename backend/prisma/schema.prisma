@@ -8,8 +8,8 @@ datasource db {
 }
 
 model CompanyConfig {
-  id          String   @id @default(uuid())
-  tenantId    String   @unique
+  id          String @id @default(uuid())
+  tenantId    String @unique
   industry    String
   companySize String
   country     String
@@ -17,35 +17,35 @@ model CompanyConfig {
   timezone    String
   fiscalYear  String
 
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  password     String
-  role         String   @default("USER")
-  status       String @default("ACTIVE")
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  role     String @default("USER")
+  status   String @default("ACTIVE")
 
   tenantId     String
   departmentId String?
   managerId    String?
 
-  tenant       Tenant     @relation(fields: [tenantId], references: [id])
-  department   Department? @relation(fields: [departmentId], references: [id])
-  roles        UserRole[]
+  tenant     Tenant      @relation(fields: [tenantId], references: [id])
+  department Department? @relation(fields: [departmentId], references: [id])
+  roles      UserRole[]
 
-  createdAt    DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model Role {
-  id        String   @id @default(uuid())
-  name      String
-  tenantId  String
+  id       String @id @default(uuid())
+  name     String
+  tenantId String
 
   permissions RolePermission[]
   users       UserRole[]
-  
+
   @@unique([name, tenantId])
 }
 
@@ -53,7 +53,7 @@ model Permission {
   id    String @id @default(uuid())
   code  String @unique
   label String
-  
+
   roles RolePermission[]
 }
 
@@ -61,8 +61,8 @@ model RolePermission {
   roleId       String
   permissionId String
 
-  role        Role       @relation(fields: [roleId], references: [id])
-  permission  Permission @relation(fields: [permissionId], references: [id])
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
 
   @@id([roleId, permissionId])
 }
@@ -78,29 +78,32 @@ model UserRole {
 }
 
 model Department {
-  id        String @id @default(uuid())
-  name      String
-  tenantId  String
-
-  users     User[]
-}
-model Workflow {
   id        String   @id @default(uuid())
   tenantId  String
-  module    String   // INVENTORY, HR, FINANCE
-  action    String   // CREATE, UPDATE, DELETE
+  name      String
+  createdAt DateTime @default(now())
+
+  employees Employee[]
+  User      User[]
+}
+
+model Workflow {
+  id       String @id @default(uuid())
+  tenantId String
+  module   String // INVENTORY, HR, FINANCE
+  action   String // CREATE, UPDATE, DELETE
 
   steps     WorkflowStep[]
-  createdAt DateTime @default(now())
+  createdAt DateTime       @default(now())
 }
 
 model WorkflowStep {
-  id          String @id @default(uuid())
-  workflowId  String
-  stepOrder   Int
-  permission  String   // inventory.approve, finance.approve
+  id         String @id @default(uuid())
+  workflowId String
+  stepOrder  Int
+  permission String // inventory.approve, finance.approve
 
-  workflow    Workflow @relation(fields: [workflowId], references: [id])
+  workflow Workflow @relation(fields: [workflowId], references: [id])
 }
 
 model AuditLog {
@@ -118,11 +121,11 @@ model Tenant {
   id        String   @id @default(uuid())
   name      String
   createdAt DateTime @default(now())
-  
-  users     User[]
-  config    CompanyConfig?
-  items     Item[]
-  invites   UserInvite[]
+
+  users   User[]
+  config  CompanyConfig?
+  items   Item[]
+  invites UserInvite[]
 }
 
 model Item {
@@ -134,9 +137,9 @@ model Item {
   description String?
   tenantId    String
   createdAt   DateTime @default(now())
-  
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-  
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
   @@unique([sku, tenantId])
 }
 
@@ -149,41 +152,99 @@ model UserInvite {
   expiresAt DateTime
   tenantId  String
   createdAt DateTime @default(now())
-  
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
 }
 
 model Approval {
-  id          String @id @default(uuid())
-  workflowId  String
-  stepOrder   Int
-  permission  String
-  data        Json?
-  tenantId    String
-  approvedBy  String?
-  status      String   // PENDING | APPROVED | REJECTED
-  createdAt   DateTime @default(now())
+  id         String   @id @default(uuid())
+  workflowId String
+  stepOrder  Int
+  permission String
+  data       Json?
+  tenantId   String
+  approvedBy String?
+  status     String // PENDING | APPROVED | REJECTED
+  createdAt  DateTime @default(now())
 }
 
 model SystemOption {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   category  String
   key       String
   value     String
   label     String?
   tenantId  String?
-  isActive  Boolean @default(true)
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
-  
+
   @@unique([category, key, tenantId], name: "category_key_tenantId")
 }
+
 model WorkflowRequest {
-  id          String   @id @default(uuid())
+  id        String   @id @default(uuid())
+  tenantId  String
+  module    String
+  action    String
+  payload   Json // original request body
+  status    String // PENDING | COMPLETED | REJECTED
+  createdBy String
+  createdAt DateTime @default(now())
+}
+
+model Employee {
+  id           String  @id @default(uuid())
+  tenantId     String
+  userId       String?
+  departmentId String
+  managerId    String?
+
+  employeeCode String
+  name         String
+  email        String
+  designation  String
+  joiningDate  DateTime
+  status       String
+
+  createdAt DateTime @default(now())
+
+  department Department @relation(fields: [departmentId], references: [id])
+  manager    Employee?  @relation("EmployeeManager", fields: [managerId], references: [id])
+  reports    Employee[] @relation("EmployeeManager")
+
+  // ✅ ADD THIS
+  leaveRequests LeaveRequest[]
+}
+
+model LeaveType {
+  id       String @id @default(uuid())
+  tenantId String
+
+  name    String
+  code    String
+  maxDays Int
+  paid    Boolean
+
+  createdAt DateTime @default(now())
+
+  // ✅ ADD THIS
+  leaveRequests LeaveRequest[]
+}
+
+model LeaveRequest {
+  id          String @id @default(uuid())
   tenantId    String
-  module      String
-  action      String
-  payload     Json     // original request body
-  status      String   // PENDING | COMPLETED | REJECTED
-  createdBy   String
-  createdAt   DateTime @default(now())
+  employeeId  String
+  leaveTypeId String
+
+  startDate DateTime
+  endDate   DateTime
+  reason    String
+
+  status String // PENDING | APPROVED | REJECTED
+
+  createdAt DateTime @default(now())
+
+  employee  Employee  @relation(fields: [employeeId], references: [id])
+  leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])
 }

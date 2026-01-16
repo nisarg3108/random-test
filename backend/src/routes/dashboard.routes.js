@@ -3,6 +3,7 @@ import prisma from '../config/db.js';
 import { realTimeServer } from '../core/realtime.js';
 import { requireAuth } from '../core/auth/auth.middleware.js';
 import { requireRole } from '../core/auth/role.middleware.js';
+import { requirePermission } from '../core/rbac/permission.middleware.js';
 
 const router = express.Router();
 
@@ -173,7 +174,7 @@ router.get('/user', async (req, res) => {
 });
 
 // Get manager dashboard
-router.get('/manager', async (req, res) => {
+router.get('/manager', requirePermission('manager.dashboard'), async (req, res) => {
   try {
     const { tenantId } = req.user;
 
@@ -254,6 +255,33 @@ router.get('/admin', async (req, res) => {
   } catch (error) {
     console.error('Admin dashboard error:', error);
     res.status(500).json({ message: 'Failed to fetch admin dashboard' });
+  }
+});
+
+// Get HR dashboard
+router.get('/hr', requirePermission('hr.dashboard'), async (req, res) => {
+  try {
+    const { tenantId } = req.user;
+
+    const [
+      totalEmployees,
+      pendingLeaves,
+      activeEmployees
+    ] = await Promise.all([
+      prisma.employee.count({ where: { tenantId } }),
+      prisma.leaveRequest.count({ where: { tenantId, status: 'PENDING' } }),
+      prisma.employee.count({ where: { tenantId, status: 'ACTIVE' } })
+    ]);
+
+    res.json({
+      totalEmployees,
+      pendingLeaves,
+      activeEmployees,
+      lastUpdated: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('HR dashboard error:', error);
+    res.status(500).json({ message: 'Failed to fetch HR dashboard' });
   }
 });
 

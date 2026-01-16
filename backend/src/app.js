@@ -19,6 +19,9 @@ import systemOptionsRoutes from './core/system/systemOptions.routes.js';
 import rbacRoutes from './core/rbac/rbac.routes.js';
 import approvalRoutes from './core/workflow/approval.routes.js';
 import workflowRoutes from './core/workflow/workflow.routes.js';
+import employeeRoutes from './modules/hr/employee.routes.js';
+import leaveTypeRoutes from './modules/hr/leaveType.routes.js';
+import leaveRequestRoutes from './modules/hr/leaveRequest.routes.js';
 
 const app = express();
 
@@ -51,6 +54,9 @@ app.use('/api/departments', departmentRoutes);
 app.use('/api/audit-logs', auditRoutes);
 app.use('/api/system-options', systemOptionsRoutes);
 app.use('/api', rbacRoutes);
+app.use('/api/employees', employeeRoutes);
+app.use('/api/leave-types', leaveTypeRoutes);
+app.use('/api/leave-requests', leaveRequestRoutes);
 
 app.use('/api/workflows', workflowRoutes);
 app.use('/api/approvals', approvalRoutes);
