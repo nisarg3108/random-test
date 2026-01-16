@@ -84,23 +84,23 @@ model Department {
 
   users     User[]
 }
-
 model Workflow {
-  id        String @id @default(uuid())
-  module    String
-  action    String
+  id        String   @id @default(uuid())
   tenantId  String
+  module    String   // INVENTORY, HR, FINANCE
+  action    String   // CREATE, UPDATE, DELETE
 
   steps     WorkflowStep[]
+  createdAt DateTime @default(now())
 }
 
 model WorkflowStep {
-  id         String @id @default(uuid())
-  workflowId String
-  order      Int
-  approverRole String
-  
-  workflow   Workflow @relation(fields: [workflowId], references: [id])
+  id          String @id @default(uuid())
+  workflowId  String
+  stepOrder   Int
+  permission  String   // inventory.approve, finance.approve
+
+  workflow    Workflow @relation(fields: [workflowId], references: [id])
 }
 
 model AuditLog {
@@ -157,6 +157,9 @@ model Approval {
   id          String @id @default(uuid())
   workflowId  String
   stepOrder   Int
+  permission  String
+  data        Json?
+  tenantId    String
   approvedBy  String?
   status      String   // PENDING | APPROVED | REJECTED
   createdAt   DateTime @default(now())
@@ -173,4 +176,14 @@ model SystemOption {
   createdAt DateTime @default(now())
   
   @@unique([category, key, tenantId], name: "category_key_tenantId")
+}
+model WorkflowRequest {
+  id          String   @id @default(uuid())
+  tenantId    String
+  module      String
+  action      String
+  payload     Json     // original request body
+  status      String   // PENDING | COMPLETED | REJECTED
+  createdBy   String
+  createdAt   DateTime @default(now())
 }
