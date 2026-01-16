@@ -39,6 +39,7 @@ export const registerUser = async ({ email, password, role, companyName }) => {
   const token = signToken({
     userId: user.id,
     tenantId: tenant.id,
+    email: user.email,
     role: user.role,
   });
 
@@ -69,6 +70,7 @@ export const loginUser = async ({ email, password }) => {
   const token = signToken({
     userId: user.id,
     tenantId: user.tenantId,
+    email: user.email,
     role: user.role,
   });
 

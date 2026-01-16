@@ -9,7 +9,6 @@ export const requirePermission = (permissionCode) => {
     const tenantId = req.user.tenantId;
 
     const roles = await prisma.userRole.findMany({
-        
       where: { userId },
       include: {
         role: {
@@ -21,16 +20,16 @@ export const requirePermission = (permissionCode) => {
         },
       },
     });
-          return res.status(403).json({ message: 'Permission denied' });
-
 
     const hasPermission = roles.some(r =>
       r.role.permissions.some(p => p.permission.code === permissionCode)
     );
 
     if (!hasPermission) {
-        console.log('USER ROLES RESULT:', roles);
-
+      console.log('USER ROLES RESULT:', roles);
+      console.log('REQUIRED PERMISSION:', permissionCode);
+      console.log('USER PERMISSIONS:', roles.flatMap(r => r.role.permissions.map(p => p.permission.code)));
+      return res.status(403).json({ message: 'Permission denied' });
     }
 
     next();

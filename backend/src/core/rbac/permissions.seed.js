@@ -21,6 +21,8 @@ export const seedPermissions = async () => {
     
     // System Options
     { code: 'system.options.manage', label: 'Manage system options' },
+    { code: 'inventory.approve', label: 'Approve inventory actions' },
+
   ];
 
   for (const perm of permissions) {

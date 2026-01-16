@@ -17,6 +17,8 @@ import departmentRoutes from './core/department/department.routes.js';
 import auditRoutes from './core/audit/audit.routes.js';
 import systemOptionsRoutes from './core/system/systemOptions.routes.js';
 import rbacRoutes from './core/rbac/rbac.routes.js';
+import approvalRoutes from './core/workflow/approval.routes.js';
+import workflowRoutes from './core/workflow/workflow.routes.js';
 
 const app = express();
 
@@ -44,11 +46,14 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/invites', inviteRoutes);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/items', inventoryRoutes);
 app.use('/api/departments', departmentRoutes);
 app.use('/api/audit-logs', auditRoutes);
 app.use('/api/system-options', systemOptionsRoutes);
 app.use('/api', rbacRoutes);
 
+app.use('/api/workflows', workflowRoutes);
+app.use('/api/approvals', approvalRoutes);
 
 
 

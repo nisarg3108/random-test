@@ -27,6 +27,7 @@ import CompanySettings from './pages/company/CompanySettings';
 // Workflows
 import WorkflowList from './pages/workflows/WorkflowList';
 import ApprovalQueue from './pages/workflows/ApprovalQueue';
+import ApprovalsPage from './pages/ApprovalsPage';
 
 // Audit & Reports
 import AuditLogs from './pages/audit/AuditLogs';
@@ -105,7 +106,8 @@ function App() {
         
         {/* Workflow Routes */}
         <Route path="/workflows" element={<ProtectedRoute><WorkflowList /></ProtectedRoute>} />
-        <Route path="/approvals" element={<ProtectedRoute><ApprovalQueue /></ProtectedRoute>} />
+        <Route path="/approvals" element={<ProtectedRoute><ApprovalsPage /></ProtectedRoute>} />
+        <Route path="/approval-queue" element={<ProtectedRoute><ApprovalQueue /></ProtectedRoute>} />
         
         {/* Audit & Reports Routes */}
         <Route path="/audit" element={<ProtectedRoute><AuditLogs /></ProtectedRoute>} />
