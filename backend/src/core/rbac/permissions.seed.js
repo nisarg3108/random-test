@@ -32,6 +32,15 @@ export const seedPermissions = async () => {
     { code: 'employee.manage', label: 'Manage employee hierarchy' },
     { code: 'manager.dashboard', label: 'View manager dashboard' },
     { code: 'hr.dashboard', label: 'View HR dashboard' },
+    { code: 'expenseCategory.create', label: 'Create expense category' },
+    { code: 'expenseCategory.view', label: 'View expense categories' },
+{ code: 'expense.claim', label: 'Submit expense claim' },
+{ code: 'expense.view', label: 'View expense claims' },
+{ code: 'expense.approve', label: 'Approve expense claims' },
+{ code: 'finance.dashboard', label: 'View finance dashboard' },
+{ code: 'role.assign.finance', label: 'Assign FINANCE role' },
+{ code: 'role.assign.admin', label: 'Assign ADMIN role' },
+
     //{ code: 'payroll.manage', label: 'Manage payroll' },
     //{ code: 'payroll.view', label: 'View payroll' },
   ];

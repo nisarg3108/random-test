@@ -212,8 +212,8 @@ model Employee {
   manager    Employee?  @relation("EmployeeManager", fields: [managerId], references: [id])
   reports    Employee[] @relation("EmployeeManager")
 
-  // ✅ ADD THIS
-  leaveRequests LeaveRequest[]
+  expenseClaims ExpenseClaim[]
+  LeaveRequest  LeaveRequest[]
 }
 
 model LeaveType {
@@ -247,4 +247,34 @@ model LeaveRequest {
 
   employee  Employee  @relation(fields: [employeeId], references: [id])
   leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])
+}
+
+model ExpenseCategory {
+  id       String @id @default(uuid())
+  tenantId String
+
+  name   String
+  code   String // TRAVEL, FOOD, OFFICE
+  active Boolean @default(true)
+
+  createdAt     DateTime       @default(now())
+  expenseClaims ExpenseClaim[]
+}
+
+model ExpenseClaim {
+  id         String @id @default(uuid())
+  tenantId   String
+  employeeId String
+  categoryId String
+
+  amount      Float
+  description String
+  expenseDate DateTime
+
+  status String // PENDING | APPROVED | REJECTED
+
+  createdAt DateTime @default(now())
+
+  employee Employee        @relation(fields: [employeeId], references: [id])
+  category ExpenseCategory @relation(fields: [categoryId], references: [id])
 }

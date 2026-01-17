@@ -5,12 +5,30 @@ export const seedInventoryWorkflow = async (tenantId) => {
     data: {
       tenantId,
       module: 'INVENTORY',
-      action: 'CREATE',
+      action: 'STOCK_REQUEST',
       steps: {
         create: [
           {
             stepOrder: 1,
             permission: 'inventory.approve',
+          },
+        ],
+      },
+    },
+  });
+};
+
+export const seedFinanceExpenseWorkflow = async (tenantId) => {
+  return prisma.workflow.create({
+    data: {
+      tenantId,
+      module: 'FINANCE',
+      action: 'EXPENSE_CLAIM',
+      steps: {
+        create: [
+          {
+            stepOrder: 1,
+            permission: 'expense.approve',
           },
         ],
       },

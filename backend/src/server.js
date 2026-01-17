@@ -8,13 +8,15 @@ import { seedPermissions } from './core/rbac/permissions.seed.js';
 import { seedRoles } from './core/rbac/roles.seed.js';
 import { assignPermissions } from './core/rbac/rolePermission.seed.js';
 
-import { seedInventoryWorkflow } from './core/workflow/workflow.seed.js';
+import { seedInventoryWorkflow, seedFinanceExpenseWorkflow } from './core/workflow/workflow.seed.js';
 
 
 
 await seedInventoryWorkflow(
   '6c48be82-3c9e-4f57-b807-c1521010c5de'
 );
+
+await seedFinanceExpenseWorkflow('2ffb2a5f-6cb9-40d3-a76e-e4d62d7af033');
 const startServer = async () => {
   // 1️⃣ Seed permissions (safe upsert)
   await seedPermissions();
