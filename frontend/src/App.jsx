@@ -20,6 +20,11 @@ import EmployeeList from './pages/hr/EmployeeList';
 import LeaveRequestList from './pages/hr/LeaveRequestList';
 import LeaveTypeList from './pages/hr/LeaveTypeList';
 
+// Finance
+import FinanceDashboard from './pages/finance/FinanceDashboard';
+import ExpenseCategoryList from './pages/finance/ExpenseCategoryList';
+import ExpenseClaimList from './pages/finance/ExpenseClaimList';
+
 // Departments
 import DepartmentList from './pages/departments/DepartmentList';
 
@@ -105,6 +110,11 @@ function App() {
         <Route path="/hr/employees" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
         <Route path="/hr/leave-requests" element={<ProtectedRoute><LeaveRequestList /></ProtectedRoute>} />
         <Route path="/hr/leave-types" element={<ProtectedRoute><LeaveTypeList /></ProtectedRoute>} />
+        
+        {/* Finance Routes */}
+        <Route path="/finance" element={<ProtectedRoute><FinanceDashboard /></ProtectedRoute>} />
+        <Route path="/finance/expense-categories" element={<ProtectedRoute><ExpenseCategoryList /></ProtectedRoute>} />
+        <Route path="/finance/expense-claims" element={<ProtectedRoute><ExpenseClaimList /></ProtectedRoute>} />
         
         {/* Department Routes */}
         <Route path="/departments" element={<ProtectedRoute><DepartmentList /></ProtectedRoute>} />
