@@ -14,6 +14,12 @@ import { useInventoryStore } from './store/inventory.store';
 import InventoryList from './pages/inventory/InventoryList';
 import InventoryDashboard from './pages/inventory/InventoryDashboard';
 
+// HR
+import HRDashboard from './pages/hr/HRDashboard';
+import EmployeeList from './pages/hr/EmployeeList';
+import LeaveRequestList from './pages/hr/LeaveRequestList';
+import LeaveTypeList from './pages/hr/LeaveTypeList';
+
 // Departments
 import DepartmentList from './pages/departments/DepartmentList';
 
@@ -93,6 +99,12 @@ function App() {
         {/* Inventory Routes */}
         <Route path="/inventory" element={<ProtectedRoute><InventoryList /></ProtectedRoute>} />
         <Route path="/inventory-dashboard" element={<ProtectedRoute><InventoryDashboard /></ProtectedRoute>} />
+        
+        {/* HR Routes */}
+        <Route path="/hr" element={<ProtectedRoute><HRDashboard /></ProtectedRoute>} />
+        <Route path="/hr/employees" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
+        <Route path="/hr/leave-requests" element={<ProtectedRoute><LeaveRequestList /></ProtectedRoute>} />
+        <Route path="/hr/leave-types" element={<ProtectedRoute><LeaveTypeList /></ProtectedRoute>} />
         
         {/* Department Routes */}
         <Route path="/departments" element={<ProtectedRoute><DepartmentList /></ProtectedRoute>} />

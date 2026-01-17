@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Package, Building2, Users, Mail, Shield, 
   ShieldCheck, Zap, CheckCircle, FileText, Settings, 
   BarChart3, ChevronLeft, ChevronRight, LogOut, Menu, 
-  User, Crown, Zap as ZapIcon
+  User, Crown, Zap as ZapIcon, UserCheck, Calendar
 } from 'lucide-react';
 import { removeToken } from '../../store/auth.store';
 
@@ -20,6 +20,10 @@ const Sidebar = () => {
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, minRole: 'USER' },
     { path: '/inventory', label: 'Inventory', icon: Package, minRole: 'USER' },
     { path: '/inventory-dashboard', label: 'Analytics', icon: BarChart3, minRole: 'USER' },
+    { path: '/hr', label: 'HR Dashboard', icon: UserCheck, minRole: 'MANAGER' },
+    { path: '/hr/employees', label: 'Employees', icon: Users, minRole: 'MANAGER' },
+    { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar, minRole: 'USER' },
+    { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar, minRole: 'MANAGER' },
     { path: '/departments', label: 'Departments', icon: Building2, minRole: 'USER' },
     { path: '/users', label: 'Users', icon: Users, minRole: 'MANAGER' },
     { path: '/invite', label: 'Invite Users', icon: Mail, minRole: 'MANAGER' },
