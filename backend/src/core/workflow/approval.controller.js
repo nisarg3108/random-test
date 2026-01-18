@@ -2,6 +2,7 @@ import {
   getPendingApprovals,
   approveRequest,
   rejectRequest,
+  getUserRequests,
 } from '../../core/workflow/approval.service.js';
 
 /**
@@ -17,12 +18,25 @@ export const getPendingApprovalsController = async (req, res, next) => {
 };
 
 /**
+ * GET USER'S OWN REQUESTS
+ */
+export const getMyRequestsController = async (req, res, next) => {
+  try {
+    const requests = await getUserRequests(req.user.tenantId, req.user.userId);
+    res.json(requests);
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
  * APPROVE REQUEST
  */
 export const approveController = async (req, res, next) => {
   try {
     const { approvalId } = req.params;
-    const result = await approveRequest(approvalId, req.user.userId);
+    const { comment } = req.body;
+    const result = await approveRequest(approvalId, req.user.userId, comment);
     res.json(result);
   } catch (err) {
     next(err);

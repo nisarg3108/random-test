@@ -34,7 +34,11 @@ export const assignPermissions = async (tenantId) => {
     // USER limited permissions
     if (
       perm.code === 'inventory.view' ||
-      perm.code === 'department.view'
+      perm.code === 'department.view' ||
+      perm.code === 'employee.view' ||
+      perm.code === 'leave.view' ||
+      perm.code === 'leaveType.view' ||
+      perm.code === 'leave.request'
     ) {
       await prisma.rolePermission.upsert({
         where: {

@@ -25,11 +25,16 @@ export const createApprovalChain = async (workflowId, steps, actionData = null) 
     include: { steps: { orderBy: { stepOrder: 'asc' } } }
   });
 
+  if (!workflow || !workflow.steps || workflow.steps.length === 0) {
+    throw new Error('Workflow or workflow steps not found');
+  }
+
   // Create only the first approval step
   const firstStep = workflow.steps[0];
-  await prisma.approval.create({
+  const approval = await prisma.approval.create({
     data: {
       workflowId,
+      workflowStepId: firstStep.id, // Link to workflow step
       stepOrder: firstStep.stepOrder,
       permission: firstStep.permission,
       status: 'PENDING',
@@ -37,4 +42,7 @@ export const createApprovalChain = async (workflowId, steps, actionData = null) 
       tenantId: workflow.tenantId
     },
   });
+  
+  console.log('Created approval:', approval.id, 'for workflow:', workflowId);
+  return approval;
 };
