@@ -11,8 +11,11 @@ export const useInventoryStore = create((set, get) => ({
   // Initialize real-time connection for inventory updates
   initializeRealTime: async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
+      const token = localStorage.getItem('ueorms_token');
+      if (!token) {
+        console.warn('No authentication token found, skipping real-time connection');
+        return;
+      }
 
       await wsClient.connect(token);
       set({ isRealTimeConnected: true });
@@ -65,12 +68,21 @@ export const useInventoryStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await inventoryAPI.createItem(itemData);
-      // Real-time update will handle adding to the list
-      set({ loading: false });
-      return true;
+      
+      // If item was created successfully (not pending approval)
+      if (response.data && response.data.id) {
+        // Add to local state immediately
+        const currentItems = get().items;
+        set({ items: [response.data, ...currentItems], loading: false });
+      } else {
+        // Item is pending approval or workflow
+        set({ loading: false });
+      }
+      
+      return { success: true, data: response.data };
     } catch (error) {
       set({ error: error.message || 'Failed to add item', loading: false });
-      return false;
+      return { success: false, error: error.message };
     }
   },
 
@@ -78,12 +90,24 @@ export const useInventoryStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await inventoryAPI.updateItem(id, itemData);
-      // Real-time update will handle updating the list
-      set({ loading: false });
-      return true;
+      
+      // If item was updated successfully (not pending approval)
+      if (response.data && response.data.id) {
+        // Update local state immediately
+        const currentItems = get().items;
+        set({ 
+          items: currentItems.map(item => item.id === id ? response.data : item),
+          loading: false 
+        });
+      } else {
+        // Item update is pending approval
+        set({ loading: false });
+      }
+      
+      return { success: true, data: response.data };
     } catch (error) {
       set({ error: error.message || 'Failed to update item', loading: false });
-      return false;
+      return { success: false, error: error.message };
     }
   },
 

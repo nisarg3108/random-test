@@ -34,6 +34,7 @@ const Sidebar = () => {
     { path: '/permissions', label: 'Permissions', icon: ShieldCheck, minRole: 'ADMIN' },
     { path: '/workflows', label: 'Workflows', icon: Zap, minRole: 'USER' },
     { path: '/approvals', label: 'Approvals', icon: CheckCircle, minRole: 'USER' },
+    { path: '/approval-dashboard', label: 'Approval Center', icon: CheckCircle, minRole: 'USER' },
     { path: '/audit', label: 'Audit Logs', icon: FileText, minRole: 'MANAGER' },
     { path: '/company', label: 'Company', icon: Settings, minRole: 'ADMIN' },
     { path: '/system-options', label: 'System', icon: Settings, minRole: 'ADMIN' },

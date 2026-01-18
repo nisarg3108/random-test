@@ -39,6 +39,7 @@ import CompanySettings from './pages/company/CompanySettings';
 import WorkflowList from './pages/workflows/WorkflowList';
 import ApprovalQueue from './pages/workflows/ApprovalQueue';
 import ApprovalsPage from './pages/ApprovalsPage';
+import ApprovalDashboard from './pages/ApprovalDashboard';
 
 // Audit & Reports
 import AuditLogs from './pages/audit/AuditLogs';
@@ -55,7 +56,7 @@ function App() {
 
   useEffect(() => {
     // Initialize real-time connections when app starts
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('ueorms_token');
     if (token) {
       initializeDashboardRealTime();
       initializeInventoryRealTime();
@@ -130,6 +131,7 @@ function App() {
         <Route path="/workflows" element={<ProtectedRoute><WorkflowList /></ProtectedRoute>} />
         <Route path="/approvals" element={<ProtectedRoute><ApprovalsPage /></ProtectedRoute>} />
         <Route path="/approval-queue" element={<ProtectedRoute><ApprovalQueue /></ProtectedRoute>} />
+        <Route path="/approval-dashboard" element={<ProtectedRoute><ApprovalDashboard /></ProtectedRoute>} />
         
         {/* Audit & Reports Routes */}
         <Route path="/audit" element={<ProtectedRoute><AuditLogs /></ProtectedRoute>} />
