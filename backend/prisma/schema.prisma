@@ -92,9 +92,11 @@ model Workflow {
   tenantId String
   module   String // INVENTORY, HR, FINANCE
   action   String // CREATE, UPDATE, DELETE
+  status   String @default("ACTIVE") // ACTIVE, REJECTED
 
   steps     WorkflowStep[]
-  createdAt DateTime       @default(now())
+  approvals Approval[]
+  createdAt DateTime     @default(now())
 }
 
 model WorkflowStep {
@@ -103,7 +105,8 @@ model WorkflowStep {
   stepOrder  Int
   permission String // inventory.approve, finance.approve
 
-  workflow Workflow @relation(fields: [workflowId], references: [id])
+  workflow  Workflow   @relation(fields: [workflowId], references: [id])
+  approvals Approval[]
 }
 
 model AuditLog {
@@ -135,6 +138,7 @@ model Item {
   price       Float
   quantity    Int      @default(0)
   description String?
+  category    String?
   tenantId    String
   createdAt   DateTime @default(now())
 
@@ -157,15 +161,22 @@ model UserInvite {
 }
 
 model Approval {
-  id         String   @id @default(uuid())
-  workflowId String
-  stepOrder  Int
-  permission String
-  data       Json?
-  tenantId   String
-  approvedBy String?
-  status     String // PENDING | APPROVED | REJECTED
-  createdAt  DateTime @default(now())
+  id              String    @id @default(uuid())
+  workflowId      String
+  workflowStepId  String?
+  stepOrder       Int
+  permission      String
+  data            Json?
+  tenantId        String
+  approvedBy      String?
+  approvedAt      DateTime?
+  status          String    // PENDING | APPROVED | REJECTED
+  comment         String?
+  rejectionReason String?
+  createdAt       DateTime  @default(now())
+
+  workflow     Workflow      @relation(fields: [workflowId], references: [id])
+  workflowStep WorkflowStep? @relation(fields: [workflowStepId], references: [id])
 }
 
 model SystemOption {
@@ -182,14 +193,16 @@ model SystemOption {
 }
 
 model WorkflowRequest {
-  id        String   @id @default(uuid())
-  tenantId  String
-  module    String
-  action    String
-  payload   Json // original request body
-  status    String // PENDING | COMPLETED | REJECTED
-  createdBy String
-  createdAt DateTime @default(now())
+  id         String   @id @default(uuid())
+  tenantId   String
+  workflowId String?
+  module     String
+  action     String
+  payload    Json // original request body
+  status     String // PENDING | COMPLETED | REJECTED
+  createdBy  String // Keep old field
+  requestedBy String? // Add new optional field
+  createdAt  DateTime @default(now())
 }
 
 model Employee {

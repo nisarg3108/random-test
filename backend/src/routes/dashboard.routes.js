@@ -31,11 +31,11 @@ router.get('/stats', async (req, res) => {
           }
         }
       }),
-      prisma.inventoryItem.count({ where: { tenantId } }),
+      prisma.item.count({ where: { tenantId } }),
       prisma.auditLog.count({
         where: {
           tenantId,
-          createdAt: {
+          timestamp: {
             gte: new Date(Date.now() - 24 * 60 * 60 * 1000)
           }
         }
@@ -59,7 +59,7 @@ router.get('/stats', async (req, res) => {
       prisma.auditLog.count({
         where: {
           tenantId,
-          createdAt: { gte: twoDaysAgo, lt: yesterday }
+          timestamp: { gte: twoDaysAgo, lt: yesterday }
         }
       })
     ]);
@@ -94,22 +94,17 @@ router.get('/activities', async (req, res) => {
 
     const activities = await prisma.auditLog.findMany({
       where: { tenantId },
-      orderBy: { createdAt: 'desc' },
-      take: limit,
-      include: {
-        user: {
-          select: { firstName: true, lastName: true, email: true }
-        }
-      }
+      orderBy: { timestamp: 'desc' },
+      take: limit
     });
 
     const formattedActivities = activities.map(activity => ({
       id: activity.id,
-      description: `${activity.user?.firstName || 'System'} ${activity.action} ${activity.resource}`,
-      timestamp: activity.createdAt,
+      description: `${activity.action} ${activity.entity}`,
+      timestamp: activity.timestamp,
       action: activity.action,
-      resource: activity.resource,
-      user: activity.user
+      entity: activity.entity,
+      entityId: activity.entityId
     }));
 
     res.json(formattedActivities);
@@ -142,7 +137,7 @@ router.get('/user', async (req, res) => {
       }),
       prisma.auditLog.findMany({
         where: { userId, tenantId },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { timestamp: 'desc' },
         take: 5
       }),
       [] // Mock notifications
@@ -157,7 +152,7 @@ router.get('/user', async (req, res) => {
           where: {
             userId,
             tenantId,
-            createdAt: {
+            timestamp: {
               gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
             }
           }
@@ -185,13 +180,10 @@ router.get('/manager', requirePermission('manager.dashboard'), async (req, res) 
     ] = await Promise.all([
       prisma.department.count({ where: { tenantId } }),
       prisma.user.count({ where: { tenantId } }),
-      prisma.auditLog.count({
+      prisma.approval.count({
         where: {
           tenantId,
-          action: 'PENDING_APPROVAL',
-          createdAt: {
-            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          }
+          status: 'PENDING'
         }
       })
     ]);
@@ -231,7 +223,7 @@ router.get('/admin', async (req, res) => {
       prisma.auditLog.count({
         where: {
           tenantId,
-          createdAt: {
+          timestamp: {
             gte: new Date(Date.now() - 24 * 60 * 60 * 1000)
           }
         }
