@@ -16,10 +16,18 @@ class WebSocketClient {
     return new Promise((resolve, reject) => {
       try {
         const wsUrl = `ws://localhost:5000/ws?token=${encodeURIComponent(token)}`;
+        console.log('🔌 Attempting WebSocket connection to:', wsUrl.replace(token, '[TOKEN]'));
         this.ws = new WebSocket(wsUrl);
 
+        const connectionTimeout = setTimeout(() => {
+          console.error('❌ WebSocket connection timeout');
+          this.ws.close();
+          reject(new Error('Connection timeout'));
+        }, 10000);
+
         this.ws.onopen = () => {
-          console.log('WebSocket connected');
+          console.log('✅ WebSocket connected successfully');
+          clearTimeout(connectionTimeout);
           this.reconnectAttempts = 0;
           
           // Resubscribe to previous subscriptions
@@ -39,13 +47,15 @@ class WebSocketClient {
           }
         };
 
-        this.ws.onclose = () => {
-          console.log('WebSocket disconnected');
+        this.ws.onclose = (event) => {
+          clearTimeout(connectionTimeout);
+          console.log('🔌 WebSocket disconnected. Code:', event.code, 'Reason:', event.reason);
           this.handleReconnect();
         };
 
         this.ws.onerror = (error) => {
-          console.error('WebSocket error:', error);
+          clearTimeout(connectionTimeout);
+          console.error('❌ WebSocket error:', error);
           reject(error);
         };
 
@@ -131,7 +141,7 @@ class WebSocketClient {
       console.log(`Attempting to reconnect... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
       
       setTimeout(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('ueorms_token');
         if (token) {
           this.connect(token).catch(console.error);
         }

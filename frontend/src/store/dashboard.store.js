@@ -13,8 +13,11 @@ export const useDashboardStore = create((set, get) => ({
   // Initialize real-time connection
   initializeRealTime: async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
+      const token = localStorage.getItem('ueorms_token');
+      if (!token) {
+        console.warn('No authentication token found, skipping real-time connection');
+        return;
+      }
 
       await wsClient.connect(token);
       set({ isRealTimeConnected: true });

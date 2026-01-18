@@ -6,7 +6,9 @@ import {
   Eye, ArrowUpRight, Target, Award
 } from 'lucide-react';
 import { apiClient } from '../../api/http';
+import { dashboardAPI } from '../../api/dashboard.api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ApprovalWidget from '../../components/approvals/ApprovalWidget';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -18,6 +20,7 @@ const AdminDashboard = () => {
     managerCount: 0,
     userCount: 0
   });
+  const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,15 +31,17 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const [usersRes, inventoryRes, departmentsRes] = await Promise.allSettled([
+      const [usersRes, inventoryRes, departmentsRes, activitiesRes] = await Promise.allSettled([
         apiClient.get('/users'),
         apiClient.get('/inventory'),
-        apiClient.get('/departments')
+        apiClient.get('/departments'),
+        dashboardAPI.getRecentActivities()
       ]);
 
       const users = usersRes.status === 'fulfilled' ? usersRes.value.data : [];
       const inventory = inventoryRes.status === 'fulfilled' ? inventoryRes.value.data : [];
       const departments = departmentsRes.status === 'fulfilled' ? departmentsRes.value.data : [];
+      const activitiesData = activitiesRes.status === 'fulfilled' ? activitiesRes.value.data : [];
 
       setStats({
         users: users.length || 0,
@@ -47,6 +52,8 @@ const AdminDashboard = () => {
         managerCount: users.filter(u => u.role === 'MANAGER').length || 0,
         userCount: users.filter(u => u.role === 'USER').length || 0
       });
+
+      setActivities(activitiesData.slice(0, 4)); // Show only 4 recent activities
     } catch (err) {
       setError('Failed to load dashboard data');
       console.error('Dashboard error:', err);
@@ -129,32 +136,20 @@ const AdminDashboard = () => {
     }
   ];
 
-  const recentActivities = [
-    { 
-      action: 'New user registered', 
-      user: 'john.doe@company.com', 
-      time: '5 minutes ago',
-      type: 'user'
-    },
-    { 
-      action: 'Inventory item updated', 
-      user: 'admin@company.com', 
-      time: '15 minutes ago',
-      type: 'inventory'
-    },
-    { 
-      action: 'Department created', 
-      user: 'manager@company.com', 
-      time: '1 hour ago',
-      type: 'department'
-    },
-    { 
-      action: 'User role changed', 
-      user: 'admin@company.com', 
-      time: '2 hours ago',
-      type: 'security'
-    }
-  ];
+  const formatTimeAgo = (timestamp) => {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diffInMinutes = Math.floor((now - time) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+  };
 
   return (
     <div className="space-y-6">
@@ -240,72 +235,92 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Approval Widget */}
+        <div className="lg:col-span-1">
+          <ApprovalWidget maxItems={4} showActions={true} />
+        </div>
+
         {/* User Breakdown */}
-        <div className="modern-card-elevated p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-blue-600" />
+        <div className="lg:col-span-1">
+          <div className="modern-card-elevated p-6 h-full">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-900">User Breakdown</h2>
               </div>
-              <h2 className="text-lg font-semibold text-gray-900">User Breakdown</h2>
             </div>
-          </div>
-          <div className="space-y-4">
-            {[
-              { label: 'Active Users', value: stats.activeUsers, color: 'bg-emerald-500', percentage: 85 },
-              { label: 'Administrators', value: stats.adminCount, color: 'bg-red-500', percentage: 15 },
-              { label: 'Managers', value: stats.managerCount, color: 'bg-blue-500', percentage: 25 },
-              { label: 'Regular Users', value: stats.userCount, color: 'bg-gray-500', percentage: 60 }
-            ].map((item, index) => (
-              <div key={index}>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-700 font-medium text-sm">{item.label}</span>
-                  <span className="font-bold text-gray-900">{item.value}</span>
+            <div className="space-y-4">
+              {[
+                { label: 'Active Users', value: stats.activeUsers, color: 'bg-emerald-500', percentage: 85 },
+                { label: 'Administrators', value: stats.adminCount, color: 'bg-red-500', percentage: 15 },
+                { label: 'Managers', value: stats.managerCount, color: 'bg-blue-500', percentage: 25 },
+                { label: 'Regular Users', value: stats.userCount, color: 'bg-gray-500', percentage: 60 }
+              ].map((item, index) => (
+                <div key={index}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-700 font-medium text-sm">{item.label}</span>
+                    <span className="font-bold text-gray-900">{item.value}</span>
+                  </div>
+                  <div className="w-full bg-gray-100 rounded-full h-2">
+                    <div 
+                      className={`h-full ${item.color} rounded-full transition-all duration-1000`}
+                      style={{ width: `${item.percentage}%` }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-2">
-                  <div 
-                    className={`h-full ${item.color} rounded-full transition-all duration-1000`}
-                    style={{ width: `${item.percentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="modern-card-elevated p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Activity className="w-5 h-5 text-purple-600" />
+        <div className="lg:col-span-1">
+          <div className="modern-card-elevated p-6 h-full">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-purple-600" />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
               </div>
-              <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+              <Link to="/audit" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center space-x-1">
+                <span>View All</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>
             </div>
-            <Link to="/audit" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center space-x-1">
-              <span>View All</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <div className="space-y-4">
-            {recentActivities.map((activity, index) => (
-              <div key={index} className="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Activity className="w-4 h-4 text-gray-600" />
+            <div className="space-y-4">
+              {activities.length > 0 ? (
+                activities.map((activity, index) => (
+                  <div key={activity.id} className="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <Activity className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 text-sm">{activity.description}</p>
+                      <p className="text-sm text-gray-600">
+                        by {activity.user ? `${activity.user.firstName} ${activity.user.lastName}` : 'System'}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs text-gray-500">{formatTimeAgo(activity.timestamp)}</span>
+                      <div className={`w-2 h-2 rounded-full mt-1 ml-auto ${
+                        index < 2 ? 'bg-emerald-500' : 'bg-gray-300'
+                      }`}></div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Activity className="w-6 h-6 text-gray-400" />
+                  </div>
+                  <p className="text-gray-500 text-sm">No recent activities</p>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 text-sm">{activity.action}</p>
-                  <p className="text-sm text-gray-600">by {activity.user}</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-gray-500">{activity.time}</span>
-                  <div className={`w-2 h-2 rounded-full mt-1 ml-auto ${
-                    index < 2 ? 'bg-emerald-500' : 'bg-gray-300'
-                  }`}></div>
-                </div>
-              </div>
-            ))}
+              )}
+            </div>
           </div>
         </div>
       </div>

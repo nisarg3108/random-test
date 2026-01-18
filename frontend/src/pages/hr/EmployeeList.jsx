@@ -60,7 +60,7 @@ const EmployeeList = () => {
       const employeeData = {
         ...formData,
         salary: parseFloat(formData.salary),
-        departmentId: parseInt(formData.departmentId)
+        departmentId: formData.departmentId
       };
 
       await hrAPI.createEmployee(employeeData);

@@ -52,16 +52,28 @@ const InventoryList = () => {
         quantity: parseInt(formData.quantity)
       };
 
+      let result;
       if (editingItem) {
-        await apiClient.put(`/inventory/${editingItem.id}`, itemData);
+        result = await apiClient.put(`/inventory/${editingItem.id}`, itemData);
       } else {
-        await apiClient.post('/inventory', itemData);
+        result = await apiClient.post('/inventory', itemData);
       }
       
-      setShowModal(false);
-      resetForm();
-      loadItems();
+      // Check if the operation was successful
+      if (result.data) {
+        if (result.data.message && result.data.message.includes('Approval required')) {
+          // Item is pending approval
+          setError(`Item ${editingItem ? 'update' : 'creation'} is pending approval. It will appear once approved.`);
+        } else {
+          // Item was created/updated successfully
+          setShowModal(false);
+          resetForm();
+        }
+        // Reload items to get the latest state
+        loadItems();
+      }
     } catch (err) {
+      console.error('Submit error:', err);
       setError(err.message || 'Failed to save item');
     } finally {
       setLoading(false);
