@@ -14,7 +14,8 @@ const AuditLogs = () => {
     action: '',
     entity: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
+    userId: ''
   });
 
   useEffect(() => {
@@ -25,20 +26,29 @@ const AuditLogs = () => {
     setLoading(true);
     setError(null);
     try {
-      // Filter out empty string values
+      // Filter out empty string values and trim whitespace
       const cleanFilters = Object.fromEntries(
-        Object.entries(filters).filter(([_, value]) => value !== '')
+        Object.entries(filters)
+          .filter(([_, value]) => value && value.toString().trim() !== '')
+          .map(([key, value]) => [key, value.toString().trim()])
       );
+      
       console.log('Fetching audit logs with filters:', cleanFilters);
       const response = await auditAPI.getAuditLogs(cleanFilters);
       console.log('Audit logs response:', response);
-      console.log('Audit logs data:', response.data);
-      console.log('Logs array check:', Array.isArray(response.data.data));
-      console.log('First log item:', response.data.data?.[0]);
-      setLogs(response.data.data || []);
+      
+      if (response.data && Array.isArray(response.data.data)) {
+        setLogs(response.data.data);
+        console.log(`Loaded ${response.data.data.length} audit logs`);
+      } else {
+        console.warn('Unexpected response format:', response.data);
+        setLogs([]);
+      }
     } catch (err) {
       console.error('Error fetching audit logs:', err);
-      setError(err.message || 'Failed to fetch audit logs');
+      const errorMessage = err.response?.data?.error || err.message || 'Failed to fetch audit logs';
+      setError(errorMessage);
+      setLogs([]);
     } finally {
       setLoading(false);
     }
@@ -55,13 +65,14 @@ const AuditLogs = () => {
 
   const getActionBadge = (action) => {
     const colors = {
-      'CREATE': 'bg-green-100 text-green-800',
-      'UPDATE': 'bg-blue-100 text-blue-800',
-      'DELETE': 'bg-red-100 text-red-800',
-      'LOGIN': 'bg-purple-100 text-purple-800'
+      'CREATE': 'bg-green-100 text-green-800 border-green-200',
+      'UPDATE': 'bg-blue-100 text-blue-800 border-blue-200',
+      'DELETE': 'bg-red-100 text-red-800 border-red-200',
+      'LOGIN': 'bg-purple-100 text-purple-800 border-purple-200',
+      'LOGOUT': 'bg-gray-100 text-gray-800 border-gray-200'
     };
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[action] || 'bg-gray-100 text-gray-800'}`}>
+      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${colors[action] || 'bg-gray-100 text-gray-800 border-gray-200'}`}>
         {action}
       </span>
     );
@@ -101,15 +112,27 @@ const AuditLogs = () => {
         <div className="flex-1">
           <Header />
           <div className="p-6">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">Audit Logs</h1>
-              <p className="text-gray-600 mt-1">Track all system activities and changes</p>
+            <div className="mb-6 flex justify-between items-center">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Audit Logs</h1>
+                <p className="text-gray-600 mt-1">Track all system activities and changes</p>
+              </div>
+              <button
+                onClick={() => fetchLogs()}
+                disabled={loading}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              >
+                <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>{loading ? 'Refreshing...' : 'Refresh'}</span>
+              </button>
             </div>
 
             {/* Filters */}
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
-              <form onSubmit={handleFilterSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <form onSubmit={handleFilterSubmit} className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Action</label>
                   <select
@@ -123,6 +146,7 @@ const AuditLogs = () => {
                     <option value="UPDATE">Update</option>
                     <option value="DELETE">Delete</option>
                     <option value="LOGIN">Login</option>
+                    <option value="LOGOUT">Logout</option>
                   </select>
                 </div>
                 <div>
@@ -138,6 +162,12 @@ const AuditLogs = () => {
                     <option value="ITEM">Item</option>
                     <option value="DEPARTMENT">Department</option>
                     <option value="ROLE">Role</option>
+                    <option value="EMPLOYEE">Employee</option>
+                    <option value="EXPENSE">Expense</option>
+                    <option value="LEAVE">Leave</option>
+                    <option value="TASK">Task</option>
+                    <option value="SYSTEM">System</option>
+                    <option value="WORKFLOW">Workflow</option>
                   </select>
                 </div>
                 <div>
@@ -146,6 +176,16 @@ const AuditLogs = () => {
                     type="date"
                     name="startDate"
                     value={filters.startDate}
+                    onChange={handleFilterChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                  <input
+                    type="date"
+                    name="endDate"
+                    value={filters.endDate}
                     onChange={handleFilterChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -159,6 +199,32 @@ const AuditLogs = () => {
                   </button>
                 </div>
               </form>
+              <div className="mt-4 flex justify-between items-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFilters({ action: '', entity: '', startDate: '', endDate: '', userId: '' });
+                    setTimeout(() => fetchLogs(), 100); // Small delay to ensure state is updated
+                  }}
+                  className="text-sm text-gray-600 hover:text-gray-800"
+                >
+                  Clear Filters
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await auditAPI.createTestLog();
+                      fetchLogs(); // Refresh logs after creating test log
+                    } catch (error) {
+                      console.error('Failed to create test log:', error);
+                    }
+                  }}
+                  className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200"
+                >
+                  Create Test Log
+                </button>
+              </div>
             </div>
 
             {error && (

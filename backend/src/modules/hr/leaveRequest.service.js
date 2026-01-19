@@ -1,8 +1,19 @@
 import prisma from '../../config/db.js';
 
-export const createLeaveRequest = async (data, tenantId) => {
+export const createLeaveRequest = async (data, tenantId, userId = null) => {
+  let employeeId = data.employeeId;
+  
+  // If userId is provided (employee creating their own request), find their employee record
+  if (userId && !employeeId) {
+    const employee = await prisma.employee.findFirst({
+      where: { userId, tenantId }
+    });
+    if (!employee) throw new Error('Employee record not found');
+    employeeId = employee.id;
+  }
+  
   const employee = await prisma.employee.findFirst({
-    where: { id: data.employeeId, tenantId }
+    where: { id: employeeId, tenantId }
   });
   if (!employee) throw new Error('Employee not found');
 
@@ -13,21 +24,54 @@ export const createLeaveRequest = async (data, tenantId) => {
 
   return prisma.leaveRequest.create({
     data: {
-      ...data,
+      employeeId,
+      leaveTypeId: data.leaveTypeId,
       startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
+      reason: data.reason,
       tenantId,
       status: 'PENDING',
     },
+    include: {
+      employee: true,
+      leaveType: true,
+    }
   });
 };
 
-export const listLeaveRequests = async (tenantId) => {
+export const listLeaveRequests = async (tenantId, userId = null) => {
+  const where = { tenantId };
+  
+  // If userId provided, filter to employee's own requests
+  if (userId) {
+    const employee = await prisma.employee.findFirst({
+      where: { userId, tenantId }
+    });
+    if (employee) {
+      where.employeeId = employee.id;
+    }
+  }
+  
   return prisma.leaveRequest.findMany({
-    where: { tenantId },
+    where,
     include: {
       employee: true,
       leaveType: true,
     },
+    orderBy: { createdAt: 'desc' }
+  });
+};
+
+export const updateLeaveRequestStatus = async (requestId, status, tenantId, comment = null) => {
+  return prisma.leaveRequest.update({
+    where: { id: requestId, tenantId },
+    data: { 
+      status,
+      ...(comment && { comment })
+    },
+    include: {
+      employee: true,
+      leaveType: true,
+    }
   });
 };
