@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginApi } from '../api/auth.api';
 import { Mail, Lock, Eye, EyeOff, Github } from 'lucide-react';
 import { setToken } from '../store/auth.store';
@@ -132,12 +132,12 @@ const Login = () => {
 
             {/* Forgot Password */}
             <div className="flex justify-end">
-              <a
-                href="#"
+              <Link
+                to="/forgot-password"
                 className="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             {/* Error Message */}

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import Login from './auth/Login';
 import Register from './auth/Register';
+import ForgotPassword from './components/auth/ForgotPassword';
 import ProtectedRoute from './auth/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
@@ -19,6 +20,14 @@ import HRDashboard from './pages/hr/HRDashboard';
 import EmployeeList from './pages/hr/EmployeeList';
 import LeaveRequestList from './pages/hr/LeaveRequestList';
 import LeaveTypeList from './pages/hr/LeaveTypeList';
+
+// Employee Self-Service
+import EmployeeDashboard from './pages/employee/EmployeeDashboard';
+import EmployeeDashboardNew from './pages/employee/EmployeeDashboardNew';
+import EmployeeLeaveRequest from './pages/employee/EmployeeLeaveRequest';
+import WorkReports from './pages/employee/WorkReports';
+import TaskManagement from './pages/employee/TaskManagement';
+import SalaryManagement from './pages/employee/SalaryManagement';
 
 // Finance
 import FinanceDashboard from './pages/finance/FinanceDashboard';
@@ -74,6 +83,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route
           path="/dashboard"
@@ -111,6 +121,14 @@ function App() {
         <Route path="/hr/employees" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
         <Route path="/hr/leave-requests" element={<ProtectedRoute><LeaveRequestList /></ProtectedRoute>} />
         <Route path="/hr/leave-types" element={<ProtectedRoute><LeaveTypeList /></ProtectedRoute>} />
+        
+        {/* Employee Self-Service Routes */}
+        <Route path="/employee" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
+        <Route path="/employee/dashboard" element={<ProtectedRoute><EmployeeDashboardNew /></ProtectedRoute>} />
+        <Route path="/employee/leave-request" element={<ProtectedRoute><EmployeeLeaveRequest /></ProtectedRoute>} />
+        <Route path="/employee/work-reports" element={<ProtectedRoute><WorkReports /></ProtectedRoute>} />
+        <Route path="/employee/tasks" element={<ProtectedRoute><TaskManagement /></ProtectedRoute>} />
+        <Route path="/hr/salary-management" element={<ProtectedRoute><SalaryManagement /></ProtectedRoute>} />
         
         {/* Finance Routes */}
         <Route path="/finance" element={<ProtectedRoute><FinanceDashboard /></ProtectedRoute>} />

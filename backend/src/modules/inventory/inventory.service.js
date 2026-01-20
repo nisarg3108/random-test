@@ -118,6 +118,11 @@ export const updateItem = async (id, data, tenantId) => {
       data,
     });
 
+    // Check for low stock and create notifications for admins/managers
+    if (data.quantity !== undefined && data.quantity <= 5) {
+      await createLowStockNotifications(tenantId, item);
+    }
+
     // Broadcast real-time update
     realTimeServer.broadcastInventoryUpdate(tenantId, {
       type: 'ITEM_UPDATED',
@@ -133,6 +138,41 @@ export const updateItem = async (id, data, tenantId) => {
       throw new Error('Item not found');
     }
     throw error;
+  }
+};
+
+// Helper function to create low stock notifications
+const createLowStockNotifications = async (tenantId, item) => {
+  try {
+    // Get all admin and manager users in the tenant
+    const adminUsers = await prisma.user.findMany({
+      where: {
+        tenantId,
+        role: { in: ['ADMIN', 'MANAGER'] }
+      },
+      include: {
+        employee: true
+      }
+    });
+
+    // Create notifications for each admin/manager
+    const notifications = adminUsers
+      .filter(user => user.employee) // Only users with employee records
+      .map(user => ({
+        tenantId,
+        employeeId: user.employee.id,
+        type: 'INVENTORY_ALERT',
+        title: 'Low Stock Alert',
+        message: `${item.name} (${item.sku}) is running low with only ${item.quantity} units remaining`
+      }));
+
+    if (notifications.length > 0) {
+      await prisma.notification.createMany({
+        data: notifications
+      });
+    }
+  } catch (error) {
+    console.error('Failed to create low stock notifications:', error);
   }
 };
 

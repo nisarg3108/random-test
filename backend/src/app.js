@@ -22,9 +22,12 @@ import workflowRoutes from './core/workflow/workflow.routes.js';
 import employeeRoutes from './modules/hr/employee.routes.js';
 import leaveTypeRoutes from './modules/hr/leaveType.routes.js';
 import leaveRequestRoutes from './modules/hr/leaveRequest.routes.js';
+import employeeDashboardRoutes from './modules/hr/employee.dashboard.routes.js';
 import expenseCategoryRoutes from './modules/finance/expenseCategory.routes.js';
 import expenseClaimRoutes from './modules/finance/expenseClaim.routes.js';
 import financeDashboardRoutes from './routes/finance-dashboard.routes.js';
+import notificationRoutes from './modules/notifications/notification.routes.js';
+import passwordResetRoutes from './modules/auth/passwordReset.routes.js';
 
 const app = express();
 
@@ -60,9 +63,12 @@ app.use('/api', rbacRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/leave-types', leaveTypeRoutes);
 app.use('/api/leave-requests', leaveRequestRoutes);
+app.use('/api/employee', employeeDashboardRoutes);
 app.use('/api/expense-categories', expenseCategoryRoutes);
 app.use('/api/expense-claims', expenseClaimRoutes);
 app.use('/api/finance-dashboard', financeDashboardRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/auth', passwordResetRoutes);
 
 app.use('/api/workflows', workflowRoutes);
 app.use('/api/approvals', approvalRoutes);

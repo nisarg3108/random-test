@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { Bell, Search, User, ChevronDown, Settings, HelpCircle, LogOut } from 'lucide-react';
 import { removeToken } from '../../store/auth.store';
+import { notificationAPI } from '../../api/notifications.api';
 
 const Header = () => {
   const location = useLocation();
@@ -10,13 +11,51 @@ const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [notifications] = useState([
-    { id: 1, title: 'New user registered', message: 'john.doe@company.com joined', time: '5m ago', type: 'info', unread: true },
-    { id: 2, title: 'Inventory alert', message: 'Low stock on Product A', time: '15m ago', type: 'warning', unread: true },
-    { id: 3, title: 'System update', message: 'Maintenance completed', time: '1h ago', type: 'success', unread: false }
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const unreadCount = notifications.filter(n => n.unread).length;
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const data = await notificationAPI.getNotifications();
+      setNotifications(data.notifications || []);
+      setUnreadCount(data.unreadCount || 0);
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+      // Fallback to empty array if API fails
+      setNotifications([]);
+      setUnreadCount(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMarkAsRead = async (notificationId) => {
+    try {
+      await notificationAPI.markAsRead(notificationId);
+      setNotifications(prev => 
+        prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await notificationAPI.markAllAsRead();
+      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Failed to mark all notifications as read:', error);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -127,24 +166,46 @@ const Header = () => {
                   </div>
                 </div>
                 <div className="max-h-64 overflow-y-auto">
-                  {notifications.map((notification) => (
-                    <div key={notification.id} className={`px-4 py-3 hover:bg-gray-50 transition-colors ${
-                      notification.unread ? 'bg-blue-50/50' : ''
-                    }`}>
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">{notification.title}</p>
-                          <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                          <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
-                        </div>
-                        {notification.unread && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        )}
-                      </div>
+                  {loading ? (
+                    <div className="px-4 py-8 text-center text-gray-500">
+                      Loading notifications...
                     </div>
-                  ))}
+                  ) : notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center text-gray-500">
+                      No notifications yet
+                    </div>
+                  ) : (
+                    notifications.map((notification) => (
+                      <div 
+                        key={notification.id} 
+                        className={`px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer ${
+                          !notification.isRead ? 'bg-blue-50/50' : ''
+                        }`}
+                        onClick={() => !notification.isRead && handleMarkAsRead(notification.id)}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">{notification.title}</p>
+                            <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                            <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+                          </div>
+                          {!notification.isRead && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
                 <div className="px-4 py-2 border-t border-gray-100">
+                  {unreadCount > 0 && (
+                    <button 
+                      onClick={handleMarkAllAsRead}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium mr-4"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
                   <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                     View all notifications
                   </button>

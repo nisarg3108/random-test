@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import { useAuth } from '../../hooks/useAuth';
 import { FullPageLoader } from '../common/LoadingSpinner';
-import RoleSwitcher from '../common/RoleSwitcher';
+
 import { getToken, removeToken } from '../../store/auth.store';
 import { Shield, AlertTriangle } from 'lucide-react';
 
@@ -75,7 +75,6 @@ const Layout = ({ children }) => {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <div className="bg-white sticky top-0 z-30 border-b border-primary-200">
-          <RoleSwitcher />
           <Header />
         </div>
         <main className="flex-1 p-6 overflow-auto">
