@@ -32,7 +32,23 @@ export const authFetch = async (endpoint, options = {}) => {
 export const apiClient = {
   get: async (endpoint, config = {}) => {
     try {
-      const response = await authFetch(endpoint, { method: 'GET', ...config });
+      let url = endpoint;
+      
+      // Handle query parameters
+      if (config.params) {
+        const searchParams = new URLSearchParams();
+        Object.entries(config.params).forEach(([key, value]) => {
+          if (value !== null && value !== undefined && value !== '') {
+            searchParams.append(key, value);
+          }
+        });
+        const queryString = searchParams.toString();
+        if (queryString) {
+          url += `?${queryString}`;
+        }
+      }
+      
+      const response = await authFetch(url, { method: 'GET', ...config });
       return { data: response };
     } catch (error) {
       console.error(`GET ${endpoint}:`, error.message);

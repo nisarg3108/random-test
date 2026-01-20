@@ -5,7 +5,8 @@ import {
   LayoutDashboard, Package, Building2, Users, Mail, Shield, 
   ShieldCheck, Zap, CheckCircle, FileText, Settings, 
   BarChart3, ChevronLeft, ChevronRight, LogOut, Menu, 
-  User, Crown, Zap as ZapIcon, UserCheck, Calendar, DollarSign
+  User, Crown, Zap as ZapIcon, UserCheck, Calendar, DollarSign,
+  ClipboardList, Target, Briefcase
 } from 'lucide-react';
 import { removeToken } from '../../store/auth.store';
 
@@ -22,8 +23,12 @@ const Sidebar = () => {
     { path: '/inventory-dashboard', label: 'Analytics', icon: BarChart3, minRole: 'USER' },
     { path: '/hr', label: 'HR Dashboard', icon: UserCheck, minRole: 'MANAGER' },
     { path: '/hr/employees', label: 'Employees', icon: Users, minRole: 'MANAGER' },
+    { path: '/hr/salary-management', label: 'Salary Management', icon: DollarSign, minRole: 'MANAGER' },
     { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar, minRole: 'USER' },
     { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar, minRole: 'MANAGER' },
+    { path: '/employee/dashboard', label: 'My Dashboard', icon: User, minRole: 'EMPLOYEE', roles: ['EMPLOYEE'] },
+    { path: '/employee/tasks', label: 'Task Management', icon: Target, minRole: 'MANAGER' },
+    { path: '/employee/work-reports', label: 'Work Reports', icon: ClipboardList, minRole: 'EMPLOYEE', roles: ['EMPLOYEE'] },
     { path: '/finance', label: 'Finance Dashboard', icon: DollarSign, minRole: 'MANAGER' },
     { path: '/finance/expense-categories', label: 'Expense Categories', icon: FileText, minRole: 'MANAGER' },
     { path: '/finance/expense-claims', label: 'Expense Claims', icon: DollarSign, minRole: 'USER' },
@@ -41,7 +46,14 @@ const Sidebar = () => {
     { path: '/reports', label: 'Reports', icon: BarChart3, minRole: 'USER' }
   ];
 
-  const filteredMenuItems = menuItems.filter(item => hasRole(item.minRole));
+  const filteredMenuItems = menuItems.filter(item => {
+    // If item has specific roles, check if user has one of those roles
+    if (item.roles) {
+      return item.roles.includes(user.role);
+    }
+    // Otherwise, check minimum role requirement
+    return hasRole(item.minRole);
+  });
 
   const handleLogout = () => {
     removeToken();
