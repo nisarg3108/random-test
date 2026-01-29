@@ -3,14 +3,17 @@ import prisma from '../../config/db.js';
 export const createLeaveRequest = async (data, tenantId, userId = null) => {
   let employeeId = data.employeeId;
   
-  // If userId is provided (employee creating their own request), find their employee record
-  if (userId && !employeeId) {
+  // If no employeeId provided, try to find employee by userId
+  if (!employeeId && userId) {
     const employee = await prisma.employee.findFirst({
       where: { userId, tenantId }
     });
-    if (!employee) throw new Error('Employee record not found');
-    employeeId = employee.id;
+    if (employee) {
+      employeeId = employee.id;
+    }
   }
+  
+  if (!employeeId) throw new Error('Employee ID is required');
   
   const employee = await prisma.employee.findFirst({
     where: { id: employeeId, tenantId }

@@ -16,6 +16,7 @@ const LeaveTypeList = () => {
     description: '',
     maxDays: '',
     carryForward: false,
+    paid: true,
     requiresApproval: true
   });
 
@@ -46,7 +47,12 @@ const LeaveTypeList = () => {
         maxDays: formData.maxDays ? parseInt(formData.maxDays) : null
       };
 
-      await hrAPI.createLeaveType(typeData);
+      if (editingType) {
+        await hrAPI.updateLeaveType(editingType.id, typeData);
+      } else {
+        await hrAPI.createLeaveType(typeData);
+      }
+      
       setShowModal(false);
       resetForm();
       loadLeaveTypes();
@@ -63,6 +69,7 @@ const LeaveTypeList = () => {
       description: '',
       maxDays: '',
       carryForward: false,
+      paid: true,
       requiresApproval: true
     });
     setEditingType(null);
@@ -74,6 +81,22 @@ const LeaveTypeList = () => {
       ...formData, 
       [name]: type === 'checkbox' ? checked : value 
     });
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this leave type?')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await hrAPI.deleteLeaveType(id);
+      loadLeaveTypes();
+    } catch (err) {
+      setError(err.message || 'Failed to delete leave type');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredTypes = leaveTypes.filter(type => 
@@ -122,7 +145,7 @@ const LeaveTypeList = () => {
           <div className="modern-card-elevated p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-primary-600">Require Approval</p>
+                <p className="text-sm font-medium text-primary-600">Requires Approval</p>
                 <p className="text-xl font-bold text-primary-900 mt-1">
                   {leaveTypes.filter(type => type.requiresApproval).length}
                 </p>
@@ -204,6 +227,12 @@ const LeaveTypeList = () => {
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
+                    <span className="text-primary-600">Paid Leave:</span>
+                    <span className={`font-medium ${type.paid ? 'text-green-600' : 'text-red-600'}`}>
+                      {type.paid ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
                     <span className="text-primary-600">Carry Forward:</span>
                     <span className={`font-medium ${type.carryForward ? 'text-green-600' : 'text-red-600'}`}>
                       {type.carryForward ? 'Yes' : 'No'}
@@ -220,6 +249,7 @@ const LeaveTypeList = () => {
                         description: type.description || '',
                         maxDays: type.maxDays?.toString() || '',
                         carryForward: type.carryForward || false,
+                        paid: type.paid !== false,
                         requiresApproval: type.requiresApproval !== false
                       });
                       setShowModal(true);
@@ -228,6 +258,13 @@ const LeaveTypeList = () => {
                   >
                     <Edit className="w-3 h-3" />
                     <span>Edit</span>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(type.id)}
+                    className="flex-1 btn-modern bg-red-50 text-red-600 hover:bg-red-100 text-xs flex items-center justify-center space-x-1"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>Delete</span>
                   </button>
                 </div>
               </div>
@@ -294,6 +331,18 @@ const LeaveTypeList = () => {
                   />
                   <label className="ml-2 block text-sm text-primary-700">
                     Requires approval
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    name="paid"
+                    type="checkbox"
+                    checked={formData.paid}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label className="ml-2 block text-sm text-primary-700">
+                    Paid leave
                   </label>
                 </div>
                 <div className="flex items-center">

@@ -78,7 +78,7 @@ const EmployeeList = () => {
     try {
       await hrAPI.assignManager({
         employeeId: selectedEmployee.id,
-        managerId: parseInt(managerId)
+        managerId: managerId || null
       });
       setShowManagerModal(false);
       setSelectedEmployee(null);
@@ -105,14 +105,18 @@ const EmployeeList = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const filteredEmployees = employees.filter(emp => 
-    `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    emp.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    emp.position?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredEmployees = employees.filter(emp => {
+    const fullName = emp.name || `${emp.firstName || ''} ${emp.lastName || ''}`;
+    const position = emp.designation || emp.position || '';
+    const email = emp.email || '';
+    
+    return fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           position.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   const potentialManagers = employees.filter(emp => 
-    emp.id !== selectedEmployee?.id && emp.position?.toLowerCase().includes('manager')
+    emp.id !== selectedEmployee?.id
   );
 
   return (
@@ -227,24 +231,24 @@ const EmployeeList = () => {
                         <div className="flex items-center">
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                             <span className="text-blue-600 font-medium text-sm">
-                              {employee.firstName?.[0]}{employee.lastName?.[0]}
+                              {(employee.name || `${employee.firstName} ${employee.lastName}`).split(' ').map(n => n[0]).join('')}
                             </span>
                           </div>
                           <div className="ml-3">
                             <div className="text-sm font-medium text-primary-900">
-                              {employee.firstName} {employee.lastName}
+                              {employee.name || `${employee.firstName} ${employee.lastName}`}
                             </div>
                             <div className="text-sm text-primary-500">{employee.email}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-primary-900">{employee.position}</td>
+                      <td className="px-6 py-4 text-sm text-primary-900">{employee.designation || employee.position}</td>
                       <td className="px-6 py-4 text-sm text-primary-900">
                         {employee.department?.name || 'N/A'}
                       </td>
                       <td className="px-6 py-4 text-sm text-primary-900">
                         {employee.manager ? 
-                          `${employee.manager.firstName} ${employee.manager.lastName}` : 
+                          (employee.manager.name || `${employee.manager.firstName} ${employee.manager.lastName}`) : 
                           'No Manager'
                         }
                       </td>
@@ -399,14 +403,25 @@ const EmployeeList = () => {
           <div className="modern-card-elevated max-w-md w-full">
             <div className="px-6 py-4 border-b border-primary-200">
               <h3 className="text-lg font-semibold text-primary-900">
-                Assign Manager to {selectedEmployee.firstName} {selectedEmployee.lastName}
+                Assign Manager to {selectedEmployee.name || `${selectedEmployee.firstName} ${selectedEmployee.lastName}`}
               </h3>
             </div>
             <div className="p-6">
               {potentialManagers.length === 0 ? (
-                <p className="text-gray-600">No potential managers found</p>
+                <p className="text-gray-600">No other employees available</p>
               ) : (
                 <div className="space-y-2">
+                  {selectedEmployee.managerId && (
+                    <button
+                      onClick={() => handleAssignManager(null)}
+                      className="w-full text-left p-3 rounded-lg border border-red-200 hover:bg-red-50 transition-colors"
+                    >
+                      <div className="font-medium text-red-700">
+                        Remove Current Manager
+                      </div>
+                      <div className="text-sm text-red-600">Unassign manager from this employee</div>
+                    </button>
+                  )}
                   {potentialManagers.map(manager => (
                     <button
                       key={manager.id}
@@ -414,9 +429,9 @@ const EmployeeList = () => {
                       className="w-full text-left p-3 rounded-lg border border-primary-200 hover:bg-primary-50 transition-colors"
                     >
                       <div className="font-medium text-primary-900">
-                        {manager.firstName} {manager.lastName}
+                        {manager.name || `${manager.firstName} ${manager.lastName}`}
                       </div>
-                      <div className="text-sm text-primary-600">{manager.position}</div>
+                      <div className="text-sm text-primary-600">{manager.designation || manager.position}</div>
                     </button>
                   ))}
                 </div>

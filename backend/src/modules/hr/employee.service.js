@@ -101,6 +101,7 @@ export const listEmployees = async (tenantId) => {
     include: {
       department: true,
       manager: true,
+      salaryStructure: true,
       user: {
         select: {
           email: true,
@@ -130,13 +131,15 @@ export const getEmployeeByUserId = async (userId, tenantId) => {
 };
 
 export const assignManager = async (employeeId, managerId, tenantId) => {
-  // Validate manager exists
-  const manager = await prisma.employee.findFirst({
-    where: { id: managerId, tenantId },
-  });
-  
-  if (!manager) {
-    throw new Error('Manager not found');
+  // If managerId is provided, validate manager exists
+  if (managerId) {
+    const manager = await prisma.employee.findFirst({
+      where: { id: managerId, tenantId },
+    });
+    
+    if (!manager) {
+      throw new Error('Manager not found');
+    }
   }
 
   return prisma.employee.update({

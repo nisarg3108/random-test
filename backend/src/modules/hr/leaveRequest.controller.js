@@ -7,7 +7,7 @@ export const createLeaveRequestController = async (req, res, next) => {
   try {
     const { tenantId, userId, role } = req.user;
     // 1️⃣ Create leave request
-    const leave = await createLeaveRequest(req.body, tenantId, role === 'EMPLOYEE' ? userId : null);
+    const leave = await createLeaveRequest(req.body, tenantId, userId);
 
     // 2️⃣ Check workflow
     const workflow = await getWorkflowForAction(

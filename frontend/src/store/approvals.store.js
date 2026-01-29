@@ -93,5 +93,45 @@ export const useApprovalsStore = create((set, get) => ({
     }
   },
 
-  clearError: () => set({ error: null })
+  clearError: () => set({ error: null }),
+
+  // Create test workflow for testing
+  createTestWorkflow: async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${API_BASE}/approvals/create-test-workflow`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (!response.ok) throw new Error('Failed to create test workflow');
+      
+      const data = await response.json();
+      // Refresh approvals after creating test
+      get().fetchApprovals();
+      return data;
+    } catch (error) {
+      set({ error: error.message });
+      return null;
+    }
+  },
+
+  // Seed workflows for tenant
+  seedWorkflows: async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${API_BASE}/approvals/seed-workflows`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (!response.ok) throw new Error('Failed to seed workflows');
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      set({ error: error.message });
+      return null;
+    }
+  }
 }));

@@ -43,12 +43,13 @@ import PermissionMatrix from './pages/rbac/PermissionMatrix';
 
 // Company
 import CompanySettings from './pages/company/CompanySettings';
+import CompanySetupWizard from './components/CompanySetupWizard';
 
 // Workflows
 import WorkflowList from './pages/workflows/WorkflowList';
 import ApprovalQueue from './pages/workflows/ApprovalQueue';
 import ApprovalsPage from './pages/ApprovalsPage';
-import ApprovalDashboard from './pages/ApprovalDashboard';
+import ApprovalDashboardSimple from './pages/ApprovalDashboardSimple';
 
 // Audit & Reports
 import AuditLogs from './pages/audit/AuditLogs';
@@ -144,12 +145,13 @@ function App() {
         
         {/* Company Routes */}
         <Route path="/company" element={<ProtectedRoute><CompanySettings /></ProtectedRoute>} />
+        <Route path="/company/setup" element={<ProtectedRoute><CompanySetupWizard onComplete={() => window.location.href = '/dashboard'} /></ProtectedRoute>} />
         
         {/* Workflow Routes */}
         <Route path="/workflows" element={<ProtectedRoute><WorkflowList /></ProtectedRoute>} />
         <Route path="/approvals" element={<ProtectedRoute><ApprovalsPage /></ProtectedRoute>} />
         <Route path="/approval-queue" element={<ProtectedRoute><ApprovalQueue /></ProtectedRoute>} />
-        <Route path="/approval-dashboard" element={<ProtectedRoute><ApprovalDashboard /></ProtectedRoute>} />
+        <Route path="/approval-dashboard" element={<ProtectedRoute><ApprovalDashboardSimple /></ProtectedRoute>} />
         
         {/* Audit & Reports Routes */}
         <Route path="/audit" element={<ProtectedRoute><AuditLogs /></ProtectedRoute>} />

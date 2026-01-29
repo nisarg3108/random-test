@@ -1,13 +1,37 @@
 import prisma from '../../config/db.js';
 
 export const createTask = async (data, assignerId, tenantId) => {
-  const assigner = await prisma.employee.findFirst({
+  let assigner = await prisma.employee.findFirst({
     where: { userId: assignerId, tenantId },
     select: { id: true }
   });
 
+  // If no employee record exists, create one for the user
   if (!assigner) {
-    throw new Error('Assigner not found');
+    const user = await prisma.user.findUnique({
+      where: { id: assignerId },
+      select: { email: true, departmentId: true }
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Create employee record for the user
+    assigner = await prisma.employee.create({
+      data: {
+        tenantId,
+        userId: assignerId,
+        departmentId: user.departmentId || (await getDefaultDepartment(tenantId)),
+        employeeCode: `EMP${Date.now()}`,
+        name: user.email.split('@')[0],
+        email: user.email,
+        designation: 'Manager',
+        joiningDate: new Date(),
+        status: 'ACTIVE'
+      },
+      select: { id: true }
+    });
   }
 
   const task = await prisma.task.create({
@@ -117,6 +141,25 @@ export const getTeamTasks = async (managerId, tenantId) => {
     },
     orderBy: { createdAt: 'desc' }
   });
+};
+
+const getDefaultDepartment = async (tenantId) => {
+  let department = await prisma.department.findFirst({
+    where: { tenantId },
+    select: { id: true }
+  });
+
+  if (!department) {
+    department = await prisma.department.create({
+      data: {
+        tenantId,
+        name: 'General'
+      },
+      select: { id: true }
+    });
+  }
+
+  return department.id;
 };
 
 export const createNotification = async (data, tenantId) => {

@@ -46,7 +46,7 @@ const ApprovalQueue = () => {
 
   const handleReject = async (approval) => {
     try {
-      await workflowsAPI.rejectRequest(approval.id, { comment: 'Rejected' });
+      await workflowsAPI.rejectRequest(approval.id, { reason: 'Rejected' });
       fetchApprovals();
     } catch (err) {
       setError(err.message || 'Failed to reject request');
