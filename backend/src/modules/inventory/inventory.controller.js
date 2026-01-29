@@ -36,7 +36,7 @@ export const createItemController = async (req, res, next) => {
       if (!workflow.steps || workflow.steps.length === 0) {
         console.log('Workflow has no steps, proceeding with direct creation');
         // If workflow exists but has no steps, create directly
-        const item = await createItem(req.body, req.user.tenantId);
+        const item = await createItem(req.body, req.user.tenantId, req.user.userId);
         return res.status(201).json(item);
       }
 
@@ -66,7 +66,7 @@ export const createItemController = async (req, res, next) => {
 
     // 3️⃣ No workflow → create immediately
     console.log('No workflow found, creating item directly');
-    const item = await createItem(req.body, req.user.tenantId);
+    const item = await createItem(req.body, req.user.tenantId, req.user.userId);
     console.log('Item created successfully:', item.id);
     res.status(201).json(item);
   } catch (err) {
@@ -122,7 +122,7 @@ export const updateItemController = async (req, res, next) => {
         console.log('Workflow has no steps, proceeding with direct update');
         // If workflow exists but has no steps, update directly
         const { id } = req.params;
-        const item = await updateItem(id, req.body, req.user.tenantId);
+        const item = await updateItem(id, req.body, req.user.tenantId, req.user.userId);
         return res.json(item);
       }
 
@@ -139,7 +139,7 @@ export const updateItemController = async (req, res, next) => {
     }
 
     const { id } = req.params;
-    const item = await updateItem(id, req.body, req.user.tenantId);
+    const item = await updateItem(id, req.body, req.user.tenantId, req.user.userId);
     console.log('Item updated successfully:', item.id);
     res.json(item);
   } catch (err) {
@@ -177,7 +177,7 @@ export const deleteItemController = async (req, res, next) => {
     }
 
     const { id } = req.params;
-    await deleteItem(id, req.user.tenantId);
+    await deleteItem(id, req.user.tenantId, req.user.userId);
     res.status(204).send();
   } catch (err) {
     next(err);

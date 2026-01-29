@@ -1,18 +1,19 @@
-import { apiClient } from './http';
+import { authFetch } from './http.js';
 
 export const notificationAPI = {
   getNotifications: async () => {
-    const response = await apiClient.get('/notifications');
-    return response.data;
+    return await authFetch('/notifications');
   },
 
   markAsRead: async (notificationId) => {
-    const response = await apiClient.put(`/notifications/${notificationId}/read`);
-    return response.data;
+    return await authFetch(`/notifications/${notificationId}/read`, {
+      method: 'PUT'
+    });
   },
 
   markAllAsRead: async () => {
-    const response = await apiClient.put('/notifications/mark-all-read');
-    return response.data;
+    return await authFetch('/notifications/mark-all-read', {
+      method: 'PUT'
+    });
   }
 };

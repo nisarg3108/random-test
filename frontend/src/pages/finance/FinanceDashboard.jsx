@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useFinanceStore } from '../../store/finance.store.js';
 import { DollarSign, TrendingUp, FileText, AlertCircle } from 'lucide-react';
+import Layout from '../../components/layout/Layout.jsx';
 import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 
 const FinanceDashboard = () => {
@@ -10,8 +11,21 @@ const FinanceDashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <div className="text-red-600">Error: {error}</div>;
+  if (loading) return (
+    <Layout>
+      <div className="flex justify-center items-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    </Layout>
+  );
+  
+  if (error) return (
+    <Layout>
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        Error: {error}
+      </div>
+    </Layout>
+  );
 
   const stats = dashboardData || {
     totalExpenseClaims: 0,
@@ -21,96 +35,99 @@ const FinanceDashboard = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Finance Dashboard</h1>
-        <p className="text-gray-600">Overview of financial activities and expense management</p>
+    <Layout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-primary-900">Finance Dashboard</h1>
+          <p className="text-primary-600 mt-1">Overview of financial activities and expense management</p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="modern-card-elevated p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-primary-600">Total Claims</p>
+                <p className="text-xl font-bold text-primary-900 mt-1">{stats.totalExpenseClaims}</p>
+              </div>
+              <div className="p-2 rounded-lg bg-blue-50">
+                <FileText className="w-5 h-5 text-blue-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="modern-card-elevated p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-primary-600">Pending Claims</p>
+                <p className="text-xl font-bold text-primary-900 mt-1">{stats.pendingClaims}</p>
+              </div>
+              <div className="p-2 rounded-lg bg-yellow-50">
+                <AlertCircle className="w-5 h-5 text-yellow-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="modern-card-elevated p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-primary-600">Total Amount</p>
+                <p className="text-xl font-bold text-primary-900 mt-1">${stats.totalAmount}</p>
+              </div>
+              <div className="p-2 rounded-lg bg-green-50">
+                <DollarSign className="w-5 h-5 text-green-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="modern-card-elevated p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-primary-600">Categories</p>
+                <p className="text-xl font-bold text-primary-900 mt-1">{stats.categoriesCount}</p>
+              </div>
+              <div className="p-2 rounded-lg bg-purple-50">
+                <TrendingUp className="w-5 h-5 text-purple-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="modern-card-elevated p-6">
+          <h2 className="text-lg font-semibold text-primary-900 mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button
+              onClick={() => window.location.href = '/finance/expense-claims'}
+              className="p-4 text-left border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors interactive-lift"
+            >
+              <FileText className="w-8 h-8 text-blue-600 mb-2" />
+              <h3 className="font-medium text-primary-900">Manage Claims</h3>
+              <p className="text-sm text-primary-600">View and create expense claims</p>
+            </button>
+
+            <button
+              onClick={() => window.location.href = '/finance/expense-categories'}
+              className="p-4 text-left border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors interactive-lift"
+            >
+              <TrendingUp className="w-8 h-8 text-green-600 mb-2" />
+              <h3 className="font-medium text-primary-900">Categories</h3>
+              <p className="text-sm text-primary-600">Manage expense categories</p>
+            </button>
+
+            <button
+              onClick={() => window.location.href = '/workflows/approvals'}
+              className="p-4 text-left border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors interactive-lift"
+            >
+              <AlertCircle className="w-8 h-8 text-yellow-600 mb-2" />
+              <h3 className="font-medium text-primary-900">Approvals</h3>
+              <p className="text-sm text-primary-600">Review pending approvals</p>
+            </button>
+          </div>
+        </div>
       </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <FileText className="h-6 w-6 text-blue-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Claims</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalExpenseClaims}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center">
-            <div className="p-2 bg-yellow-100 rounded-lg">
-              <AlertCircle className="h-6 w-6 text-yellow-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Pending Claims</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.pendingClaims}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <DollarSign className="h-6 w-6 text-green-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Amount</p>
-              <p className="text-2xl font-bold text-gray-900">${stats.totalAmount}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <TrendingUp className="h-6 w-6 text-purple-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Categories</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.categoriesCount}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button
-            onClick={() => window.location.href = '/finance/expense-claims'}
-            className="p-4 text-left border rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <FileText className="h-8 w-8 text-blue-600 mb-2" />
-            <h3 className="font-medium text-gray-900">Manage Claims</h3>
-            <p className="text-sm text-gray-600">View and create expense claims</p>
-          </button>
-
-          <button
-            onClick={() => window.location.href = '/finance/expense-categories'}
-            className="p-4 text-left border rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <TrendingUp className="h-8 w-8 text-green-600 mb-2" />
-            <h3 className="font-medium text-gray-900">Categories</h3>
-            <p className="text-sm text-gray-600">Manage expense categories</p>
-          </button>
-
-          <button
-            onClick={() => window.location.href = '/workflows/approvals'}
-            className="p-4 text-left border rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <AlertCircle className="h-8 w-8 text-yellow-600 mb-2" />
-            <h3 className="font-medium text-gray-900">Approvals</h3>
-            <p className="text-sm text-gray-600">Review pending approvals</p>
-          </button>
-        </div>
-      </div>
-    </div>
+    </Layout>
   );
 };
 

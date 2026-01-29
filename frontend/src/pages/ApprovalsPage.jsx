@@ -1,69 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { Check, X, Clock, AlertCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Check, X, Clock, AlertCircle, Plus } from 'lucide-react';
+import { useApprovalsStore } from '../store/approvals.store';
+import Layout from '../components/layout/Layout';
 
 const ApprovalsPage = () => {
-  const [approvals, setApprovals] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    approvals,
+    loading,
+    error,
+    fetchApprovals,
+    approveRequest,
+    rejectRequest,
+    clearError,
+    createTestWorkflow
+  } = useApprovalsStore();
+  
   const [processing, setProcessing] = useState(null);
 
   useEffect(() => {
     fetchApprovals();
-  }, []);
-
-  const fetchApprovals = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/approvals', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      setApprovals(data);
-    } catch (error) {
-      console.error('Error fetching approvals:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [fetchApprovals]);
 
   const handleApprove = async (approvalId) => {
     setProcessing(approvalId);
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/approvals/${approvalId}/approve`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      if (response.ok) {
-        await fetchApprovals();
-      }
-    } catch (error) {
-      console.error('Error approving:', error);
-    } finally {
-      setProcessing(null);
+    const success = await approveRequest(approvalId);
+    if (!success) {
+      alert('Failed to approve request');
     }
+    setProcessing(null);
   };
 
-  const handleReject = async (approvalId, reason) => {
+  const handleReject = async (approvalId) => {
+    const reason = prompt('Rejection reason (optional):');
+    if (reason === null) return;
+    
     setProcessing(approvalId);
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/approvals/${approvalId}/reject`, {
-        method: 'POST',
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ reason })
-      });
-      
-      if (response.ok) {
-        await fetchApprovals();
-      }
-    } catch (error) {
-      console.error('Error rejecting:', error);
-    } finally {
-      setProcessing(null);
+    const success = await rejectRequest(approvalId, reason);
+    if (!success) {
+      alert('Failed to reject request');
+    }
+    setProcessing(null);
+  };
+
+  const handleCreateTest = async () => {
+    const result = await createTestWorkflow();
+    if (result) {
+      alert('Test workflow created successfully!');
     }
   };
 
@@ -86,18 +68,41 @@ const ApprovalsPage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Pending Approvals</h1>
-        <p className="text-gray-600">Review and approve pending requests</p>
+    <Layout>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Pending Approvals</h1>
+          <p className="text-gray-600">Review and approve pending requests</p>
+        </div>
+        <button
+          onClick={handleCreateTest}
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Create Test Workflow
+        </button>
       </div>
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-red-800">{error}</p>
+          <button
+            onClick={clearError}
+            className="mt-2 text-sm text-red-600 hover:text-red-800"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
 
       {approvals.length === 0 ? (
         <div className="text-center py-12">
@@ -145,12 +150,7 @@ const ApprovalsPage = () => {
                   </button>
                   
                   <button
-                    onClick={() => {
-                      const reason = prompt('Rejection reason (optional):');
-                      if (reason !== null) {
-                        handleReject(approval.id, reason);
-                      }
-                    }}
+                    onClick={() => handleReject(approval.id)}
                     disabled={processing === approval.id}
                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 disabled:opacity-50"
                   >
@@ -163,7 +163,7 @@ const ApprovalsPage = () => {
           ))}
         </div>
       )}
-    </div>
+    </Layout>
   );
 };
 

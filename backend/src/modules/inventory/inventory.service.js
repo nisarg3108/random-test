@@ -1,5 +1,6 @@
 import prisma from '../../config/db.js';
 import { realTimeServer } from '../../core/realtime.js';
+import { logAudit } from '../../core/audit/audit.service.js';
 
 // Input validation helper
 const validateItemData = (data) => {
@@ -20,7 +21,7 @@ const validateItemData = (data) => {
   return true;
 };
 
-export const createItem = async (data, tenantId) => {
+export const createItem = async (data, tenantId, userId = null) => {
   validateItemData(data);
   
   const { name, sku, price, quantity, description, category } = data;
@@ -37,6 +38,23 @@ export const createItem = async (data, tenantId) => {
         tenantId,
       },
     });
+
+    // Log audit
+    if (userId) {
+      await logAudit({
+        userId,
+        tenantId,
+        action: 'CREATE',
+        entity: 'INVENTORY_ITEM',
+        entityId: item.id,
+        meta: {
+          name: item.name,
+          sku: item.sku,
+          price: item.price,
+          quantity: item.quantity
+        }
+      });
+    }
 
     // Broadcast real-time update
     realTimeServer.broadcastInventoryUpdate(tenantId, {
@@ -70,7 +88,7 @@ export const getItem = async (id, tenantId) => {
   });
 };
 
-export const updateItem = async (id, data, tenantId) => {
+export const updateItem = async (id, data, tenantId, userId = null) => {
   if (!id || typeof id !== 'string') {
     throw new Error('Valid item ID is required');
   }
@@ -117,6 +135,22 @@ export const updateItem = async (id, data, tenantId) => {
       where: { id, tenantId },
       data,
     });
+
+    // Log audit
+    if (userId) {
+      await logAudit({
+        userId,
+        tenantId,
+        action: 'UPDATE',
+        entity: 'INVENTORY_ITEM',
+        entityId: item.id,
+        meta: {
+          name: item.name,
+          sku: item.sku,
+          updatedFields: Object.keys(data)
+        }
+      });
+    }
 
     // Check for low stock and create notifications for admins/managers
     if (data.quantity !== undefined && data.quantity <= 5) {
@@ -176,15 +210,35 @@ const createLowStockNotifications = async (tenantId, item) => {
   }
 };
 
-export const deleteItem = async (id, tenantId) => {
+export const deleteItem = async (id, tenantId, userId = null) => {
   if (!id || typeof id !== 'string') {
     throw new Error('Valid item ID is required');
   }
   
   try {
+    // Get item details before deletion for audit log
+    const existingItem = await prisma.item.findFirst({
+      where: { id, tenantId }
+    });
+
     const item = await prisma.item.delete({
       where: { id, tenantId },
     });
+
+    // Log audit
+    if (userId && existingItem) {
+      await logAudit({
+        userId,
+        tenantId,
+        action: 'DELETE',
+        entity: 'INVENTORY_ITEM',
+        entityId: id,
+        meta: {
+          name: existingItem.name,
+          sku: existingItem.sku
+        }
+      });
+    }
 
     // Broadcast real-time update
     realTimeServer.broadcastInventoryUpdate(tenantId, {

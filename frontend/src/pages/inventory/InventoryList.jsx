@@ -64,11 +64,10 @@ const InventoryList = () => {
         if (result.data.message && result.data.message.includes('Approval required')) {
           // Item is pending approval
           setError(`Item ${editingItem ? 'update' : 'creation'} is pending approval. It will appear once approved.`);
-        } else {
-          // Item was created/updated successfully
-          setShowModal(false);
-          resetForm();
         }
+        // Close modal and reset form for both success and approval cases
+        setShowModal(false);
+        resetForm();
         // Reload items to get the latest state
         loadItems();
       }

@@ -18,7 +18,9 @@ const ApprovalDashboard = () => {
     fetchMyRequests,
     approveRequest,
     rejectRequest,
-    clearError
+    clearError,
+    createTestWorkflow,
+    seedWorkflows
   } = useApprovalsStore();
 
   const [activeTab, setActiveTab] = useState('pending');
@@ -124,9 +126,39 @@ const ApprovalDashboard = () => {
         <Header />
         <div className="p-6">
           {/* Header */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Approval Center</h1>
-            <p className="text-gray-600">Manage approvals and track request status</p>
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Approval Center</h1>
+              <p className="text-gray-600">Manage approvals and track request status</p>
+            </div>
+            
+            {/* Test Actions */}
+            {canApprove && (
+              <div className="flex space-x-2">
+                <button
+                  onClick={async () => {
+                    const result = await seedWorkflows();
+                    if (result) {
+                      alert('Workflows seeded successfully!');
+                    }
+                  }}
+                  className="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  Seed Workflows
+                </button>
+                <button
+                  onClick={async () => {
+                    const result = await createTestWorkflow();
+                    if (result) {
+                      alert('Test approval created!');
+                    }
+                  }}
+                  className="px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700"
+                >
+                  Create Test Approval
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Error Alert */}

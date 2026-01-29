@@ -38,7 +38,7 @@ export const deleteUserController = async (req, res, next) => {
   try {
     const { id } = req.params;
     await deleteUser(id, req.user.tenantId);
-    res.status(204).send();
+    res.json({ message: 'User deleted successfully' });
   } catch (err) {
     next(err);
   }

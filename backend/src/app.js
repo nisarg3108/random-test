@@ -26,8 +26,10 @@ import employeeDashboardRoutes from './modules/hr/employee.dashboard.routes.js';
 import expenseCategoryRoutes from './modules/finance/expenseCategory.routes.js';
 import expenseClaimRoutes from './modules/finance/expenseClaim.routes.js';
 import financeDashboardRoutes from './routes/finance-dashboard.routes.js';
+import financeRoutes from './modules/finance/finance.routes.js';
 import notificationRoutes from './modules/notifications/notification.routes.js';
 import passwordResetRoutes from './modules/auth/passwordReset.routes.js';
+import companyRoutes from './modules/company/companyRoutes.js';
 
 const app = express();
 
@@ -67,8 +69,10 @@ app.use('/api/employee', employeeDashboardRoutes);
 app.use('/api/expense-categories', expenseCategoryRoutes);
 app.use('/api/expense-claims', expenseClaimRoutes);
 app.use('/api/finance-dashboard', financeDashboardRoutes);
+app.use('/api/finance', financeRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/auth', passwordResetRoutes);
+app.use('/api/company', companyRoutes);
 
 app.use('/api/workflows', workflowRoutes);
 app.use('/api/approvals', approvalRoutes);

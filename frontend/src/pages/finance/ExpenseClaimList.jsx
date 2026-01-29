@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useFinanceStore } from '../../store/finance.store.js';
 import { Plus, Receipt, Calendar, DollarSign, Filter } from 'lucide-react';
+import Layout from '../../components/layout/Layout.jsx';
 import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import Modal from '../../components/common/Modal.jsx';
 
@@ -66,210 +67,219 @@ const ExpenseClaimList = () => {
     }
   };
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return (
+    <Layout>
+      <div className="flex justify-center items-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    </Layout>
+  );
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Expense Claims</h1>
-          <p className="text-gray-600">Submit and track your expense claims</p>
-        </div>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          New Claim
-        </button>
-      </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border mb-6">
-        <div className="flex items-center gap-4">
-          <Filter className="h-5 w-5 text-gray-400" />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="ALL">All Status</option>
-            <option value="PENDING">Pending</option>
-            <option value="APPROVED">Approved</option>
-            <option value="REJECTED">Rejected</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Claims List */}
-      <div className="space-y-4">
-        {filteredClaims.map((claim) => (
-          <div key={claim.id} className="bg-white p-6 rounded-lg shadow-sm border">
-            <div className="flex items-start justify-between">
-              <div className="flex items-start space-x-4">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Receipt className="h-6 w-6 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">{claim.title}</h3>
-                  {claim.description && (
-                    <p className="text-gray-600 mt-1">{claim.description}</p>
-                  )}
-                  <div className="flex items-center space-x-4 mt-3 text-sm text-gray-500">
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      {new Date(claim.expenseDate).toLocaleDateString()}
-                    </div>
-                    <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1" />
-                      ${claim.amount}
-                    </div>
-                    {claim.category && (
-                      <span className="bg-gray-100 px-2 py-1 rounded text-xs">
-                        {claim.category.name}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(claim.status)}`}>
-                {claim.status}
-              </span>
-            </div>
+    <Layout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-primary-900">Expense Claims</h1>
+            <p className="text-primary-600 mt-1">Submit and track your expense claims</p>
           </div>
-        ))}
-      </div>
-
-      {filteredClaims.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <Receipt className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No expense claims found</h3>
-          <p className="text-gray-600 mb-4">Submit your first expense claim to get started</p>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="btn-modern btn-primary flex items-center gap-2 interactive-lift"
           >
+            <Plus className="h-4 w-4" />
             New Claim
           </button>
         </div>
-      )}
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="New Expense Claim">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Title *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Brief description of the expense"
-            />
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            {error}
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows="3"
-              placeholder="Detailed description of the expense"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Amount *
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                required
-                value={formData.amount}
-                onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0.00"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Expense Date *
-              </label>
-              <input
-                type="date"
-                required
-                value={formData.expenseDate}
-                onChange={(e) => setFormData({ ...formData, expenseDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category *
-            </label>
+        {/* Filters */}
+        <div className="modern-card-elevated p-4">
+          <div className="flex items-center gap-4">
+            <Filter className="h-5 w-5 text-primary-400" />
             <select
-              required
-              value={formData.categoryId}
-              onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="input-modern"
             >
-              <option value="">Select a category</option>
-              {expenseCategories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+              <option value="ALL">All Status</option>
+              <option value="PENDING">Pending</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
             </select>
           </div>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Receipt URL (Optional)
-            </label>
-            <input
-              type="url"
-              value={formData.receiptUrl}
-              onChange={(e) => setFormData({ ...formData, receiptUrl: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/receipt.pdf"
-            />
-          </div>
+        {/* Claims List */}
+        <div className="space-y-4">
+          {filteredClaims.map((claim) => (
+            <div key={claim.id} className="modern-card-elevated p-6 interactive-lift">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start space-x-4">
+                  <div className="p-2 bg-blue-50 rounded-lg">
+                    <Receipt className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-primary-900">{claim.title}</h3>
+                    {claim.description && (
+                      <p className="text-primary-600 mt-1">{claim.description}</p>
+                    )}
+                    <div className="flex items-center space-x-4 mt-3 text-sm text-primary-500">
+                      <div className="flex items-center">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        {new Date(claim.expenseDate).toLocaleDateString()}
+                      </div>
+                      <div className="flex items-center">
+                        <DollarSign className="h-4 w-4 mr-1" />
+                        ${claim.amount}
+                      </div>
+                      {claim.category && (
+                        <span className="bg-primary-100 px-2 py-1 rounded text-xs text-primary-700">
+                          {claim.category.name}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(claim.status)}`}>
+                  {claim.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
 
-          <div className="flex justify-end space-x-3 pt-4">
+        {filteredClaims.length === 0 && !loading && (
+          <div className="modern-card-elevated p-12 text-center">
+            <Receipt className="h-12 w-12 text-primary-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-primary-900 mb-2">No expense claims found</h3>
+            <p className="text-primary-600 mb-4">Submit your first expense claim to get started</p>
             <button
-              type="button"
-              onClick={() => setShowModal(false)}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
+              onClick={() => setShowModal(true)}
+              className="btn-modern btn-primary"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? 'Submitting...' : 'Submit Claim'}
+              New Claim
             </button>
           </div>
-        </form>
-      </Modal>
-    </div>
+        )}
+
+        <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="New Expense Claim">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-primary-700 mb-1">
+                Title *
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="input-modern"
+                placeholder="Brief description of the expense"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-primary-700 mb-1">
+                Description
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="input-modern"
+                rows="3"
+                placeholder="Detailed description of the expense"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">
+                  Amount *
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  required
+                  value={formData.amount}
+                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                  className="input-modern"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">
+                  Expense Date *
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={formData.expenseDate}
+                  onChange={(e) => setFormData({ ...formData, expenseDate: e.target.value })}
+                  className="input-modern"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-primary-700 mb-1">
+                Category *
+              </label>
+              <select
+                required
+                value={formData.categoryId}
+                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                className="input-modern"
+              >
+                <option value="">Select a category</option>
+                {expenseCategories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-primary-700 mb-1">
+                Receipt URL (Optional)
+              </label>
+              <input
+                type="url"
+                value={formData.receiptUrl}
+                onChange={(e) => setFormData({ ...formData, receiptUrl: e.target.value })}
+                className="input-modern"
+                placeholder="https://example.com/receipt.pdf"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="btn-modern btn-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-modern btn-primary disabled:opacity-50"
+              >
+                {loading ? 'Submitting...' : 'Submit Claim'}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      </div>
+    </Layout>
   );
 };
 

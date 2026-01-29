@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useCompanyStore } from '../../store/company.store';
-import { useSystemOptionsStore } from '../../store/systemOptions.store';
 import FormField from '../../components/forms/FormField';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Sidebar from '../../components/layout/Sidebar';
@@ -9,47 +8,62 @@ import { RoleGuard } from '../../hooks/useAuth';
 
 const CompanySettings = () => {
   const { config, loading, error, fetchConfig, updateConfig } = useCompanyStore();
-  const { fetchOptions } = useSystemOptionsStore();
   const [formData, setFormData] = useState({
+    companyName: '',
     industry: '',
-    companySize: '',
+    size: '',
     country: '',
     currency: '',
     timezone: '',
     fiscalYear: ''
   });
   const [options, setOptions] = useState({
-    industry: [],
-    companySize: [],
-    currency: []
+    industry: [
+      { value: 'MANUFACTURING', label: 'Manufacturing' },
+      { value: 'IT', label: 'Information Technology' },
+      { value: 'RETAIL', label: 'Retail' },
+      { value: 'HEALTHCARE', label: 'Healthcare' }
+    ],
+    companySize: [
+      { value: 'SMALL', label: 'Small (1-50 employees)' },
+      { value: 'MEDIUM', label: 'Medium (51-200 employees)' },
+      { value: 'LARGE', label: 'Large (200+ employees)' }
+    ],
+    currency: [
+      { value: 'USD', label: 'US Dollar' },
+      { value: 'EUR', label: 'Euro' },
+      { value: 'INR', label: 'Indian Rupee' }
+    ],
+    timezone: []
   });
   const [isEditing, setIsEditing] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     fetchConfig();
-    loadOptions();
+    loadTimezones();
   }, [fetchConfig]);
 
-  const loadOptions = async () => {
-    const [industryOpts, companySizeOpts, currencyOpts] = await Promise.all([
-      fetchOptions('INDUSTRY'),
-      fetchOptions('COMPANY_SIZE'),
-      fetchOptions('CURRENCY')
-    ]);
-    
-    setOptions({
-      industry: industryOpts.map(opt => ({ value: opt.value, label: opt.label })),
-      companySize: companySizeOpts.map(opt => ({ value: opt.value, label: opt.label })),
-      currency: currencyOpts.map(opt => ({ value: opt.value, label: opt.label }))
-    });
+  const loadTimezones = async () => {
+    try {
+      const timezones = Intl.supportedValuesOf('timeZone');
+      const timezoneOptions = timezones.map(tz => ({
+        value: tz,
+        label: tz.replace(/_/g, ' ')
+      }));
+      
+      setOptions(prev => ({ ...prev, timezone: timezoneOptions }));
+    } catch (error) {
+      console.error('Failed to load timezones:', error);
+    }
   };
 
   useEffect(() => {
     if (config) {
       setFormData({
+        companyName: config.companyName || '',
         industry: config.industry || '',
-        companySize: config.companySize || '',
+        size: config.size || '',
         country: config.country || '',
         currency: config.currency || '',
         timezone: config.timezone || '',
@@ -94,14 +108,22 @@ const CompanySettings = () => {
                 <h1 className="text-3xl font-bold text-gray-900">Company Settings</h1>
                 <p className="text-gray-600 mt-1">Configure your company information and preferences</p>
               </div>
-              {!isEditing && (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+              <div className="flex space-x-3">
+                <a
+                  href="/company/setup"
+                  className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
                 >
-                  Edit Settings
-                </button>
-              )}
+                  Setup Wizard
+                </a>
+                {!isEditing && (
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+                  >
+                    Edit Settings
+                  </button>
+                )}
+              </div>
             </div>
 
             {error && (
@@ -129,6 +151,15 @@ const CompanySettings = () => {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
+                        label="Company Name"
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleChange}
+                        required
+                        disabled={!isEditing}
+                      />
+                      
+                      <FormField
                         label="Industry Type"
                         name="industry"
                         type="select"
@@ -141,9 +172,9 @@ const CompanySettings = () => {
                       
                       <FormField
                         label="Company Size"
-                        name="companySize"
+                        name="size"
                         type="select"
-                        value={formData.companySize}
+                        value={formData.size}
                         onChange={handleChange}
                         options={options.companySize}
                         required
@@ -173,17 +204,10 @@ const CompanySettings = () => {
                       <FormField
                         label="Timezone"
                         name="timezone"
+                        type="select"
                         value={formData.timezone}
                         onChange={handleChange}
-                        required
-                        disabled={!isEditing}
-                      />
-                      
-                      <FormField
-                        label="Fiscal Year Start"
-                        name="fiscalYear"
-                        value={formData.fiscalYear}
-                        onChange={handleChange}
+                        options={options.timezone}
                         required
                         disabled={!isEditing}
                       />
@@ -197,8 +221,9 @@ const CompanySettings = () => {
                             setIsEditing(false);
                             if (config) {
                               setFormData({
+                                companyName: config.companyName || '',
                                 industry: config.industry || '',
-                                companySize: config.companySize || '',
+                                size: config.size || '',
                                 country: config.country || '',
                                 currency: config.currency || '',
                                 timezone: config.timezone || '',

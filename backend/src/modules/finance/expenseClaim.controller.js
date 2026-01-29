@@ -11,7 +11,7 @@ import { logAudit } from '../../core/audit/audit.service.js';
 
 export const createExpenseClaimController = async (req, res, next) => {
   try {
-    const claim = await createExpenseClaim(req.body, req.user.tenantId);
+    const claim = await createExpenseClaim(req.body, req.user.tenantId, req.user.userId);
 
     const workflow = await getWorkflowForAction(
       req.user.tenantId,

@@ -8,15 +8,36 @@ datasource db {
 }
 
 model CompanyConfig {
-  id          String @id @default(uuid())
-  tenantId    String @unique
+  id       String @id @default(uuid())
+  tenantId String @unique
+  
+  // Company Details
+  companyName String
   industry    String
-  companySize String
-  country     String
-  currency    String
-  timezone    String
-  fiscalYear  String
-
+  size        String // SMALL | MEDIUM | LARGE
+  country     String?
+  currency    String?
+  timezone    String?
+  fiscalYear  String?
+  
+  // Workflow Configuration
+  workflowConfig Json? // Custom workflow rules per module
+  
+  // Module Settings
+  enabledModules Json? // ["INVENTORY", "HR", "FINANCE"]
+  
+  // Approval Settings
+  approvalLevels Json? // {"inventory": 2, "expense": 3, "leave": 1}
+  
+  // Custom Fields
+  customFields Json? // Module-specific custom fields
+  
+  // Business Rules
+  businessRules Json? // Custom validation rules
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
   tenant Tenant @relation(fields: [tenantId], references: [id])
 }
 
@@ -240,10 +261,11 @@ model LeaveType {
   id       String @id @default(uuid())
   tenantId String
 
-  name    String
-  code    String
-  maxDays Int
-  paid    Boolean
+  name            String
+  code            String
+  maxDays         Int
+  paid            Boolean
+  requiresApproval Boolean @default(true)
 
   createdAt DateTime @default(now())
 
@@ -287,8 +309,10 @@ model ExpenseClaim {
   employeeId String
   categoryId String
 
+  title       String
   amount      Float
-  description String
+  description String?
+  receiptUrl  String?
   expenseDate DateTime
 
   status String // PENDING | APPROVED | REJECTED
@@ -378,4 +402,41 @@ model PasswordReset {
   createdAt DateTime @default(now())
   
   @@index([email, otp])
+}
+
+model WorkflowTemplate {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  industry    String // MANUFACTURING | IT | RETAIL | HEALTHCARE
+  module      String // INVENTORY | HR | FINANCE
+  
+  steps       Json   // Predefined workflow steps
+  isDefault   Boolean @default(false)
+  
+  createdAt   DateTime @default(now())
+}
+
+model CustomField {
+  id       String @id @default(uuid())
+  tenantId String
+  module   String // EMPLOYEE | INVENTORY | EXPENSE
+  
+  fieldName String
+  fieldType String // TEXT | NUMBER | DATE | DROPDOWN | BOOLEAN
+  options   Json?  // For dropdown fields
+  required  Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+}
+
+model ApprovalMatrix {
+  id       String @id @default(uuid())
+  tenantId String
+  module   String // INVENTORY | EXPENSE | LEAVE
+  
+  conditions Json // Amount ranges, department rules
+  approvers  Json // Role-based approver hierarchy
+  
+  createdAt DateTime @default(now())
 }

@@ -5,15 +5,19 @@ const prisma = new PrismaClient();
 class NotificationController {
   async getNotifications(req, res) {
     try {
-      const { tenantId } = req.user;
+      const { tenantId, userId } = req.user;
       
       // Get employee record for the user
       const employee = await prisma.employee.findUnique({
-        where: { userId: req.user.id }
+        where: { userId: userId }
       });
 
       if (!employee) {
-        return res.status(404).json({ error: 'Employee record not found' });
+        // Return empty notifications if no employee record exists
+        return res.json({
+          notifications: [],
+          unreadCount: 0
+        });
       }
 
       const notifications = await notificationService.getUserNotifications(employee.id, tenantId);
@@ -33,7 +37,11 @@ class NotificationController {
       });
     } catch (error) {
       console.error('Get notifications error:', error);
-      res.status(500).json({ error: 'Failed to fetch notifications' });
+      // Return empty notifications instead of error to prevent UI issues
+      res.json({
+        notifications: [],
+        unreadCount: 0
+      });
     }
   }
 
@@ -43,11 +51,11 @@ class NotificationController {
       const { tenantId } = req.user;
 
       const employee = await prisma.employee.findUnique({
-        where: { userId: req.user.id }
+        where: { userId: req.user.userId }
       });
 
       if (!employee) {
-        return res.status(404).json({ error: 'Employee record not found' });
+        return res.json({ success: false, message: 'No employee record found' });
       }
 
       await notificationService.markAsRead(id, employee.id);
@@ -63,11 +71,11 @@ class NotificationController {
       const { tenantId } = req.user;
 
       const employee = await prisma.employee.findUnique({
-        where: { userId: req.user.id }
+        where: { userId: req.user.userId }
       });
 
       if (!employee) {
-        return res.status(404).json({ error: 'Employee record not found' });
+        return res.json({ success: false, message: 'No employee record found' });
       }
 
       await notificationService.markAllAsRead(employee.id, tenantId);
