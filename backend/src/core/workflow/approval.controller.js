@@ -33,13 +33,48 @@ export const getMyRequestsController = async (req, res, next) => {
  * APPROVE REQUEST
  */
 export const approveController = async (req, res, next) => {
+  console.log('\n=== APPROVE CONTROLLER CALLED ===');
+  console.log('Params:', req.params);
+  console.log('Body:', req.body);
+  console.log('User:', req.user);
+  
   try {
     const { approvalId } = req.params;
     const { comment } = req.body;
+    
+    if (!approvalId) {
+      console.log('ERROR: No approval ID');
+      return res.status(400).json({ success: false, message: 'Approval ID is required' });
+    }
+    
+    if (!req.user || !req.user.userId) {
+      console.log('ERROR: No user in request');
+      return res.status(401).json({ success: false, message: 'User not authenticated' });
+    }
+    
+    console.log('Calling approveRequest service...');
     const result = await approveRequest(approvalId, req.user.userId, comment);
-    res.json(result);
+    console.log('Service returned:', result);
+    
+    // Return 200 even if there's a warning (item already exists)
+    if (result.warning) {
+      return res.status(200).json({ 
+        success: true, 
+        ...result,
+        message: result.message || 'Approved with warnings'
+      });
+    }
+    
+    res.json({ success: true, ...result });
   } catch (err) {
-    next(err);
+    console.error('\n=== APPROVE CONTROLLER ERROR ===');
+    console.error('Error message:', err.message);
+    
+    // Don't expose full stack trace to client in production
+    res.status(500).json({ 
+      success: false, 
+      message: err.message || 'Failed to approve request'
+    });
   }
 };
 

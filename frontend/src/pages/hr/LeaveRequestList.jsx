@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, Plus, Search, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, Plus, Search, Clock, CheckCircle, XCircle, Check, X } from 'lucide-react';
 import { hrAPI } from '../../api/hr.api';
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -118,8 +118,8 @@ const LeaveRequestList = () => {
 
   const filteredRequests = leaveRequests.filter(request => {
     const matchesSearch = 
-      request.employee?.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      request.employee?.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.employee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.employee?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.leaveType?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.reason?.toLowerCase().includes(searchTerm.toLowerCase());
     
@@ -133,6 +133,19 @@ const LeaveRequestList = () => {
     pending: leaveRequests.filter(req => req.status === 'PENDING').length,
     approved: leaveRequests.filter(req => req.status === 'APPROVED').length,
     rejected: leaveRequests.filter(req => req.status === 'REJECTED').length
+  };
+
+  const handleStatusUpdate = async (requestId, status) => {
+    if (!window.confirm(`Are you sure you want to ${status.toLowerCase()} this leave request?`)) {
+      return;
+    }
+
+    try {
+      await hrAPI.updateLeaveRequestStatus(requestId, { status });
+      loadLeaveRequests();
+    } catch (err) {
+      setError(err.message || `Failed to ${status.toLowerCase()} leave request`);
+    }
   };
 
   const calculateDays = (startDate, endDate) => {
@@ -245,7 +258,7 @@ const LeaveRequestList = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Duration</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Days</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Reason</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-primary-200">
@@ -255,14 +268,14 @@ const LeaveRequestList = () => {
                         <div className="flex items-center">
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                             <span className="text-blue-600 font-medium text-sm">
-                              {request.employee?.firstName?.[0]}{request.employee?.lastName?.[0]}
+                              {request.employee?.name?.substring(0, 2).toUpperCase() || 'NA'}
                             </span>
                           </div>
                           <div className="ml-3">
                             <div className="text-sm font-medium text-primary-900">
-                              {request.employee?.firstName} {request.employee?.lastName}
+                              {request.employee?.name || 'N/A'}
                             </div>
-                            <div className="text-sm text-primary-500">{request.employee?.position}</div>
+                            <div className="text-sm text-primary-500">{request.employee?.designation || 'N/A'}</div>
                           </div>
                         </div>
                       </td>
@@ -290,6 +303,28 @@ const LeaveRequestList = () => {
                       </td>
                       <td className="px-6 py-4 text-sm text-primary-900 max-w-xs truncate">
                         {request.reason}
+                      </td>
+                      <td className="px-6 py-4">
+                        {request.status === 'PENDING' ? (
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() => handleStatusUpdate(request.id, 'APPROVED')}
+                              className="p-1.5 rounded-lg bg-green-100 hover:bg-green-200 text-green-700 transition-colors"
+                              title="Approve"
+                            >
+                              <Check className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleStatusUpdate(request.id, 'REJECTED')}
+                              className="p-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 transition-colors"
+                              title="Reject"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-sm text-gray-500">-</span>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -320,7 +355,7 @@ const LeaveRequestList = () => {
                   <option value="">Select Employee</option>
                   {employees.map(emp => (
                     <option key={emp.id} value={emp.id}>
-                      {emp.firstName} {emp.lastName} - {emp.position}
+                      {emp.name} - {emp.designation}
                     </option>
                   ))}
                 </select>
