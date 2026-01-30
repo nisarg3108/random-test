@@ -1,4 +1,5 @@
 import prisma from '../../config/db.js';
+import notificationService from '../notifications/notification.service.js';
 
 export const createLeaveRequest = async (data, tenantId, userId = null) => {
   let employeeId = data.employeeId;
@@ -25,7 +26,7 @@ export const createLeaveRequest = async (data, tenantId, userId = null) => {
   });
   if (!leaveType) throw new Error('Leave type not found');
 
-  return prisma.leaveRequest.create({
+  const leaveRequest = await prisma.leaveRequest.create({
     data: {
       employeeId,
       leaveTypeId: data.leaveTypeId,
@@ -36,10 +37,39 @@ export const createLeaveRequest = async (data, tenantId, userId = null) => {
       status: 'PENDING',
     },
     include: {
-      employee: true,
+      employee: {
+        include: {
+          user: true,
+          department: true
+        }
+      },
       leaveType: true,
     }
   });
+
+  // Notify managers/admins about new leave request
+  try {
+    const managers = await prisma.employee.findMany({
+      where: {
+        tenantId,
+        user: { role: { in: ['MANAGER', 'ADMIN'] } }
+      }
+    });
+
+    for (const manager of managers) {
+      await notificationService.createNotification({
+        tenantId,
+        employeeId: manager.id,
+        type: 'LEAVE_REQUEST',
+        title: 'New Leave Request',
+        message: `${employee.name} has requested ${leaveType.name} leave`
+      });
+    }
+  } catch (error) {
+    console.error('Failed to create leave request notifications:', error);
+  }
+
+  return leaveRequest;
 };
 
 export const listLeaveRequests = async (tenantId, userId = null) => {
@@ -58,7 +88,12 @@ export const listLeaveRequests = async (tenantId, userId = null) => {
   return prisma.leaveRequest.findMany({
     where,
     include: {
-      employee: true,
+      employee: {
+        include: {
+          user: true,
+          department: true
+        }
+      },
       leaveType: true,
     },
     orderBy: { createdAt: 'desc' }
@@ -66,15 +101,35 @@ export const listLeaveRequests = async (tenantId, userId = null) => {
 };
 
 export const updateLeaveRequestStatus = async (requestId, status, tenantId, comment = null) => {
-  return prisma.leaveRequest.update({
+  const leaveRequest = await prisma.leaveRequest.update({
     where: { id: requestId, tenantId },
     data: { 
       status,
       ...(comment && { comment })
     },
     include: {
-      employee: true,
+      employee: {
+        include: {
+          user: true,
+          department: true
+        }
+      },
       leaveType: true,
     }
   });
+
+  // Notify employee about status change
+  try {
+    await notificationService.createNotification({
+      tenantId,
+      employeeId: leaveRequest.employeeId,
+      type: status === 'APPROVED' ? 'LEAVE_APPROVED' : 'LEAVE_REJECTED',
+      title: `Leave Request ${status}`,
+      message: `Your ${leaveRequest.leaveType.name} leave request has been ${status.toLowerCase()}${comment ? `: ${comment}` : ''}`
+    });
+  } catch (error) {
+    console.error('Failed to create leave status notification:', error);
+  }
+
+  return leaveRequest;
 };

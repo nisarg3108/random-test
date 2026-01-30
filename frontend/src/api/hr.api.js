@@ -13,6 +13,7 @@ export const hrAPI = {
   // Leave Request APIs
   getLeaveRequests: () => apiClient.get('/leave-requests'),
   createLeaveRequest: (data) => apiClient.post('/leave-requests', data),
+  updateLeaveRequestStatus: (id, data) => apiClient.put(`/leave-requests/${id}`, data),
 
   // Leave Type APIs
   getLeaveTypes: () => apiClient.get('/leave-types'),
