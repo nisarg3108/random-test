@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Bell, Check, Trash2, Filter } from 'lucide-react';
-import { notificationAPI } from '../../api/notifications.api';
-import Layout from '../../components/layout/Layout';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { notificationAPI } from '../api/notifications.api';
+import Layout from '../components/layout/Layout';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);

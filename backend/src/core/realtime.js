@@ -164,6 +164,87 @@ class RealTimeServer {
   broadcastUserUpdate(tenantId, user) {
     this.broadcast('/users/updates', user, tenantId);
   }
+
+  // ==================== COMMUNICATION MODULE ====================
+
+  // Broadcast new message to all participants in a conversation
+  broadcastMessage(conversationId, message, tenantId) {
+    this.broadcast(`/conversation/${conversationId}/messages`, message, tenantId);
+  }
+
+  // Broadcast typing indicator
+  broadcastTyping(conversationId, userId, isTyping, tenantId) {
+    this.broadcast(`/conversation/${conversationId}/typing`, {
+      userId,
+      isTyping,
+      timestamp: new Date().toISOString()
+    }, tenantId);
+  }
+
+  // Broadcast message read status
+  broadcastMessageRead(conversationId, messageId, userId, tenantId) {
+    this.broadcast(`/conversation/${conversationId}/read`, {
+      messageId,
+      userId,
+      readAt: new Date().toISOString()
+    }, tenantId);
+  }
+
+  // Broadcast message reaction
+  broadcastReaction(conversationId, messageId, reaction, tenantId) {
+    this.broadcast(`/conversation/${conversationId}/reactions`, {
+      messageId,
+      ...reaction
+    }, tenantId);
+  }
+
+  // Broadcast message update (edit/delete)
+  broadcastMessageUpdate(conversationId, message, tenantId) {
+    this.broadcast(`/conversation/${conversationId}/message-update`, message, tenantId);
+  }
+
+  // Broadcast new announcement
+  broadcastAnnouncement(announcement, tenantId) {
+    this.broadcast('/announcements/new', announcement, tenantId);
+  }
+
+  // Broadcast user online status
+  broadcastUserOnlineStatus(userId, tenantId, isOnline) {
+    this.broadcast('/users/online-status', {
+      userId,
+      isOnline,
+      lastSeen: new Date().toISOString()
+    }, tenantId);
+  }
+
+  // Get online users for a tenant
+  getOnlineUsers(tenantId) {
+    const onlineUsers = new Set();
+    this.clients.forEach((client) => {
+      if (client.tenantId === tenantId) {
+        onlineUsers.add(client.userId);
+      }
+    });
+    return Array.from(onlineUsers);
+  }
+
+  // Send direct message to specific user
+  sendToUser(userId, tenantId, data) {
+    this.clients.forEach((client, clientId) => {
+      if (client.userId === userId && client.tenantId === tenantId) {
+        if (client.ws.readyState === 1) {
+          client.ws.send(JSON.stringify(data));
+        }
+      }
+    });
+  }
+
+  // Broadcast to all participants of a conversation
+  broadcastToConversationParticipants(participantIds, tenantId, data) {
+    participantIds.forEach(userId => {
+      this.sendToUser(userId, tenantId, data);
+    });
+  }
 }
 
 export const realTimeServer = new RealTimeServer();

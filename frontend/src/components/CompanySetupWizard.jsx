@@ -162,7 +162,9 @@ const CompanySetupWizard = ({ onComplete }) => {
               {[
                 { key: 'INVENTORY', label: 'Inventory Management', desc: 'Track stock, orders, and suppliers' },
                 { key: 'HR', label: 'Human Resources', desc: 'Employee management and payroll' },
-                { key: 'FINANCE', label: 'Finance & Accounting', desc: 'Financial reporting and accounting' }
+                { key: 'FINANCE', label: 'Finance & Accounting', desc: 'Financial reporting and accounting' },
+                { key: 'CRM', label: 'CRM', desc: 'Leads, customers, and sales pipeline' },
+                { key: 'SALES', label: 'Sales & Orders', desc: 'Quotations, orders, invoices, and tracking' }
               ].map(module => (
                 <div key={module.key} className={`border rounded-lg p-4 cursor-pointer transition-colors ${
                   config.enabledModules.includes(module.key) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'

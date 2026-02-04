@@ -1,5 +1,6 @@
 import prisma from '../../config/db.js';
 import notificationService from '../notifications/notification.service.js';
+import attendanceService from './attendance.service.js';
 
 export const createLeaveRequest = async (data, tenantId, userId = null) => {
   let employeeId = data.employeeId;
@@ -127,6 +128,15 @@ export const updateLeaveRequestStatus = async (requestId, status, tenantId, comm
       title: `Leave Request ${status}`,
       message: `Your ${leaveRequest.leaveType.name} leave request has been ${status.toLowerCase()}${comment ? `: ${comment}` : ''}`
     });
+
+    // If approved, integrate with attendance system
+    if (status === 'APPROVED') {
+      try {
+        await attendanceService.integrateLeaveWithAttendance(requestId, tenantId);
+      } catch (error) {
+        console.error('Failed to integrate leave with attendance:', error);
+      }
+    }
   } catch (error) {
     console.error('Failed to create leave status notification:', error);
   }

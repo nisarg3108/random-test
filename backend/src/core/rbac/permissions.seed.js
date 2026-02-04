@@ -41,6 +41,36 @@ export const seedPermissions = async () => {
 { code: 'role.assign.finance', label: 'Assign FINANCE role' },
 { code: 'role.assign.admin', label: 'Assign ADMIN role' },
 
+  // CRM
+  { code: 'crm.customer.create', label: 'Create customers' },
+  { code: 'crm.customer.view', label: 'View customers' },
+  { code: 'crm.customer.update', label: 'Update customers' },
+  { code: 'crm.customer.delete', label: 'Delete customers' },
+  { code: 'crm.contact.create', label: 'Create contacts' },
+  { code: 'crm.contact.view', label: 'View contacts' },
+  { code: 'crm.contact.update', label: 'Update contacts' },
+  { code: 'crm.contact.delete', label: 'Delete contacts' },
+  { code: 'crm.lead.create', label: 'Create leads' },
+  { code: 'crm.lead.view', label: 'View leads' },
+  { code: 'crm.lead.update', label: 'Update leads' },
+  { code: 'crm.lead.convert', label: 'Convert leads' },
+  { code: 'crm.deal.create', label: 'Create deals' },
+  { code: 'crm.deal.view', label: 'View deals' },
+  { code: 'crm.deal.update', label: 'Update deals' },
+  { code: 'crm.deal.delete', label: 'Delete deals' },
+  { code: 'crm.communication.create', label: 'Create communications' },
+  { code: 'crm.communication.view', label: 'View communications' },
+
+  // Reports & Analytics
+  { code: 'reports.view', label: 'View reports' },
+  { code: 'reports.export', label: 'Export reports' },
+  { code: 'reports.financial.view', label: 'View financial reports' },
+  { code: 'reports.hr.view', label: 'View HR analytics reports' },
+  { code: 'reports.inventory.view', label: 'View inventory reports' },
+  { code: 'reports.custom.create', label: 'Create custom reports' },
+  { code: 'reports.templates.create', label: 'Create report templates' },
+  { code: 'reports.templates.view', label: 'View report templates' },
+
     //{ code: 'payroll.manage', label: 'Manage payroll' },
     //{ code: 'payroll.view', label: 'View payroll' },
   ];
