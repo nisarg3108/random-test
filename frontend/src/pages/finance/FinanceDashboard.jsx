@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFinanceStore } from '../../store/finance.store.js';
-import { DollarSign, TrendingUp, FileText, AlertCircle } from 'lucide-react';
+import { DollarSign, TrendingUp, FileText, AlertCircle, CheckCircle } from 'lucide-react';
 import Layout from '../../components/layout/Layout.jsx';
 import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 
 const FinanceDashboard = () => {
+  const navigate = useNavigate();
   const { dashboardData, loading, error, fetchDashboardData } = useFinanceStore();
 
   useEffect(() => {
@@ -97,9 +99,9 @@ const FinanceDashboard = () => {
         {/* Quick Actions */}
         <div className="modern-card-elevated p-6">
           <h2 className="text-lg font-semibold text-primary-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <button
-              onClick={() => window.location.href = '/finance/expense-claims'}
+              onClick={() => navigate('/finance/expense-claims')}
               className="p-4 text-left border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors interactive-lift"
             >
               <FileText className="w-8 h-8 text-blue-600 mb-2" />
@@ -108,7 +110,7 @@ const FinanceDashboard = () => {
             </button>
 
             <button
-              onClick={() => window.location.href = '/finance/expense-categories'}
+              onClick={() => navigate('/finance/expense-categories')}
               className="p-4 text-left border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors interactive-lift"
             >
               <TrendingUp className="w-8 h-8 text-green-600 mb-2" />
@@ -117,12 +119,21 @@ const FinanceDashboard = () => {
             </button>
 
             <button
-              onClick={() => window.location.href = '/workflows/approvals'}
+              onClick={() => navigate('/finance/approvals')}
+              className="p-4 text-left border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors interactive-lift"
+            >
+              <CheckCircle className="w-8 h-8 text-orange-600 mb-2" />
+              <h3 className="font-medium text-primary-900">Finance Approvals</h3>
+              <p className="text-sm text-primary-600">Review pending expense claims</p>
+            </button>
+
+            <button
+              onClick={() => navigate('/approvals')}
               className="p-4 text-left border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors interactive-lift"
             >
               <AlertCircle className="w-8 h-8 text-yellow-600 mb-2" />
-              <h3 className="font-medium text-primary-900">Approvals</h3>
-              <p className="text-sm text-primary-600">Review pending approvals</p>
+              <h3 className="font-medium text-primary-900">All Approvals</h3>
+              <p className="text-sm text-primary-600">View all pending approvals</p>
             </button>
           </div>
         </div>

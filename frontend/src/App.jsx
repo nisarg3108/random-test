@@ -14,12 +14,37 @@ import { useInventoryStore } from './store/inventory.store';
 // Inventory
 import InventoryList from './pages/inventory/InventoryList';
 import InventoryDashboard from './pages/inventory/InventoryDashboard';
+import WarehouseList from './pages/inventory/WarehouseList';
+import WarehouseDashboard from './pages/inventory/WarehouseDashboard';
+import StockMovements from './pages/inventory/StockMovements';
+
+// Manufacturing
+import BOMList from './pages/manufacturing/BOMList';
+import WorkOrderList from './pages/manufacturing/WorkOrderList';
+
+// Accounting
+import ChartOfAccounts from './pages/accounting/ChartOfAccounts';
+import GeneralLedger from './pages/accounting/GeneralLedger';
+import JournalEntry from './pages/accounting/JournalEntry';
 
 // HR
 import HRDashboard from './pages/hr/HRDashboard';
 import EmployeeList from './pages/hr/EmployeeList';
 import LeaveRequestList from './pages/hr/LeaveRequestList';
 import LeaveTypeList from './pages/hr/LeaveTypeList';
+import AttendanceDashboard from './pages/hr/AttendanceDashboard';
+import AttendanceReports from './pages/hr/AttendanceReports';
+import ClockInOut from './pages/hr/ClockInOut';
+import ShiftManagement from './pages/hr/ShiftManagement';
+import OvertimeTracking from './pages/hr/OvertimeTracking';
+
+// Payroll
+import { 
+  PayrollDashboard, 
+  PayrollCyclesList, 
+  PayrollCycleDetails, 
+  PayslipDetails 
+} from './pages/hr/payroll';
 
 // Employee Self-Service
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
@@ -33,6 +58,50 @@ import SalaryManagement from './pages/employee/SalaryManagement';
 import FinanceDashboard from './pages/finance/FinanceDashboard';
 import ExpenseCategoryList from './pages/finance/ExpenseCategoryList';
 import ExpenseClaimList from './pages/finance/ExpenseClaimList';
+import FinanceApprovals from './pages/finance/FinanceApprovals';
+
+// CRM
+import Customers from './pages/crm/Customers';
+import Contacts from './pages/crm/Contacts';
+import Leads from './pages/crm/Leads';
+import SalesPipeline from './pages/crm/SalesPipeline';
+import Communications from './pages/crm/Communications';
+import CRMDashboard from './pages/crm/CRMDashboard';
+
+// Sales
+import QuotationsList from './pages/sales/QuotationsList';
+import SalesOrdersList from './pages/sales/SalesOrdersList';
+import InvoicesList from './pages/sales/InvoicesList';
+import OrderTracking from './pages/sales/OrderTracking';
+import SalesAnalytics from './pages/sales/SalesAnalytics';
+
+// Purchase
+import {
+  VendorsList,
+  PurchaseOrdersList,
+  PurchaseRequisitions,
+  SupplierEvaluation,
+  PurchaseAnalytics
+} from './pages/purchase';
+
+// Projects
+import { ProjectList, ProjectDetails } from './pages/projects';
+
+// Assets
+import AssetDashboard from './pages/assets/AssetDashboard';
+import AssetList from './pages/assets/AssetList';
+import AssetForm from './pages/assets/AssetForm';
+import AssetAllocations from './pages/assets/AssetAllocations';
+import AssetMaintenance from './pages/assets/AssetMaintenance';
+import AssetDepreciation from './pages/assets/AssetDepreciation';
+
+// Documents
+import DocumentsPage from './pages/Documents/DocumentsPage';
+
+// Communication
+import MessagingPage from './pages/communication/MessagingPage';
+import AnnouncementsPage from './pages/communication/AnnouncementsPage';
+import ChannelsPage from './pages/communication/ChannelsPage';
 
 // Departments
 import DepartmentList from './pages/departments/DepartmentList';
@@ -53,10 +122,20 @@ import ApprovalDashboardSimple from './pages/ApprovalDashboardSimple';
 
 // Audit & Reports
 import AuditLogs from './pages/audit/AuditLogs';
-import ReportsDashboard from './pages/reports/ReportsDashboard';
+import {
+  ReportsDashboard,
+  ProfitLossReport,
+  BalanceSheetReport,
+  HRAnalyticsReport,
+  InventoryReport,
+} from './pages/reports';
 
 // System
 import SystemOptions from './pages/SystemOptions';
+import NotificationsPage from './pages/NotificationsPage';
+
+// Theme Demo
+import ThemeDemo from './pages/ThemeDemo';
 
 function App() {
   const initializeDashboardRealTime = useDashboardStore(state => state.initializeRealTime);
@@ -95,33 +174,56 @@ function App() {
           }
         />
         <Route
-  path="/users"
-  element={
-    <ProtectedRoute>
-      <Users />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/invite"
-  element={
-    <ProtectedRoute>
-      <InviteUser />
-    </ProtectedRoute>
-  }
-/>
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/invite"
+          element={
+            <ProtectedRoute>
+              <InviteUser />
+            </ProtectedRoute>
+          }
+        />
 
-<Route path="/accept-invite" element={<AcceptInvite />} />
+        <Route path="/accept-invite" element={<AcceptInvite />} />
 
         {/* Inventory Routes */}
         <Route path="/inventory" element={<ProtectedRoute><InventoryList /></ProtectedRoute>} />
         <Route path="/inventory-dashboard" element={<ProtectedRoute><InventoryDashboard /></ProtectedRoute>} />
+        <Route path="/warehouses" element={<ProtectedRoute><WarehouseList /></ProtectedRoute>} />
+        <Route path="/warehouses/dashboard" element={<ProtectedRoute><WarehouseDashboard /></ProtectedRoute>} />
+        <Route path="/stock-movements" element={<ProtectedRoute><StockMovements /></ProtectedRoute>} />
+        
+        {/* Manufacturing Routes */}
+        <Route path="/manufacturing/boms" element={<ProtectedRoute><BOMList /></ProtectedRoute>} />
+        <Route path="/manufacturing/work-orders" element={<ProtectedRoute><WorkOrderList /></ProtectedRoute>} />
+        
+        {/* Accounting Routes */}
+        <Route path="/accounting/chart-of-accounts" element={<ProtectedRoute><ChartOfAccounts /></ProtectedRoute>} />
+        <Route path="/accounting/general-ledger" element={<ProtectedRoute><GeneralLedger /></ProtectedRoute>} />
+        <Route path="/accounting/journal-entry" element={<ProtectedRoute><JournalEntry /></ProtectedRoute>} />
         
         {/* HR Routes */}
         <Route path="/hr" element={<ProtectedRoute><HRDashboard /></ProtectedRoute>} />
         <Route path="/hr/employees" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
         <Route path="/hr/leave-requests" element={<ProtectedRoute><LeaveRequestList /></ProtectedRoute>} />
         <Route path="/hr/leave-types" element={<ProtectedRoute><LeaveTypeList /></ProtectedRoute>} />
+        <Route path="/hr/attendance" element={<ProtectedRoute><AttendanceDashboard /></ProtectedRoute>} />
+        <Route path="/hr/attendance/reports" element={<ProtectedRoute><AttendanceReports /></ProtectedRoute>} />
+        <Route path="/hr/attendance/clock" element={<ProtectedRoute><ClockInOut /></ProtectedRoute>} />
+        <Route path="/hr/shifts" element={<ProtectedRoute><ShiftManagement /></ProtectedRoute>} />
+        <Route path="/hr/overtime" element={<ProtectedRoute><OvertimeTracking /></ProtectedRoute>} />
+        
+        {/* Payroll Routes */}
+        <Route path="/hr/payroll" element={<ProtectedRoute><PayrollDashboard /></ProtectedRoute>} />
+        <Route path="/hr/payroll/cycles" element={<ProtectedRoute><PayrollCyclesList /></ProtectedRoute>} />
+        <Route path="/hr/payroll/cycles/:id" element={<ProtectedRoute><PayrollCycleDetails /></ProtectedRoute>} />
+        <Route path="/hr/payroll/payslips/:id" element={<ProtectedRoute><PayslipDetails /></ProtectedRoute>} />
         
         {/* Employee Self-Service Routes */}
         <Route path="/employee" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
@@ -135,6 +237,50 @@ function App() {
         <Route path="/finance" element={<ProtectedRoute><FinanceDashboard /></ProtectedRoute>} />
         <Route path="/finance/expense-categories" element={<ProtectedRoute><ExpenseCategoryList /></ProtectedRoute>} />
         <Route path="/finance/expense-claims" element={<ProtectedRoute><ExpenseClaimList /></ProtectedRoute>} />
+        <Route path="/finance/approvals" element={<ProtectedRoute><FinanceApprovals /></ProtectedRoute>} />
+
+        {/* CRM Routes */}
+        <Route path="/crm" element={<ProtectedRoute><CRMDashboard /></ProtectedRoute>} />
+        <Route path="/crm/customers" element={<ProtectedRoute><Customers /></ProtectedRoute>} />
+        <Route path="/crm/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
+        <Route path="/crm/leads" element={<ProtectedRoute><Leads /></ProtectedRoute>} />
+        <Route path="/crm/pipeline" element={<ProtectedRoute><SalesPipeline /></ProtectedRoute>} />
+        <Route path="/crm/communications" element={<ProtectedRoute><Communications /></ProtectedRoute>} />
+
+        {/* Sales Routes */}
+        <Route path="/sales/quotations" element={<ProtectedRoute><QuotationsList /></ProtectedRoute>} />
+        <Route path="/sales/orders" element={<ProtectedRoute><SalesOrdersList /></ProtectedRoute>} />
+        <Route path="/sales/invoices" element={<ProtectedRoute><InvoicesList /></ProtectedRoute>} />
+        <Route path="/sales/tracking" element={<ProtectedRoute><OrderTracking /></ProtectedRoute>} />
+        <Route path="/sales/analytics" element={<ProtectedRoute><SalesAnalytics /></ProtectedRoute>} />
+        
+        {/* Purchase Routes */}
+        <Route path="/purchase/vendors" element={<ProtectedRoute><VendorsList /></ProtectedRoute>} />
+        <Route path="/purchase/orders" element={<ProtectedRoute><PurchaseOrdersList /></ProtectedRoute>} />
+        <Route path="/purchase/requisitions" element={<ProtectedRoute><PurchaseRequisitions /></ProtectedRoute>} />
+        <Route path="/purchase/evaluations" element={<ProtectedRoute><SupplierEvaluation /></ProtectedRoute>} />
+        <Route path="/purchase/analytics" element={<ProtectedRoute><PurchaseAnalytics /></ProtectedRoute>} />
+        
+        {/* Project Management Routes */}
+        <Route path="/projects" element={<ProtectedRoute><ProjectList /></ProtectedRoute>} />
+        <Route path="/projects/:id" element={<ProtectedRoute><ProjectDetails /></ProtectedRoute>} />
+        
+        {/* Asset Management Routes */}
+        <Route path="/assets" element={<ProtectedRoute><AssetDashboard /></ProtectedRoute>} />
+        <Route path="/assets/list" element={<ProtectedRoute><AssetList /></ProtectedRoute>} />
+        <Route path="/assets/new" element={<ProtectedRoute><AssetForm /></ProtectedRoute>} />
+        <Route path="/assets/:id/edit" element={<ProtectedRoute><AssetForm /></ProtectedRoute>} />
+        <Route path="/assets/allocations" element={<ProtectedRoute><AssetAllocations /></ProtectedRoute>} />
+        <Route path="/assets/maintenance" element={<ProtectedRoute><AssetMaintenance /></ProtectedRoute>} />
+        <Route path="/assets/depreciation" element={<ProtectedRoute><AssetDepreciation /></ProtectedRoute>} />
+        
+        {/* Document Management Routes */}
+        <Route path="/documents" element={<ProtectedRoute><DocumentsPage /></ProtectedRoute>} />
+        
+        {/* Communication Routes */}
+        <Route path="/communication/messages" element={<ProtectedRoute><MessagingPage /></ProtectedRoute>} />
+        <Route path="/communication/announcements" element={<ProtectedRoute><AnnouncementsPage /></ProtectedRoute>} />
+        <Route path="/communication/channels" element={<ProtectedRoute><ChannelsPage /></ProtectedRoute>} />
         
         {/* Department Routes */}
         <Route path="/departments" element={<ProtectedRoute><DepartmentList /></ProtectedRoute>} />
@@ -145,7 +291,7 @@ function App() {
         
         {/* Company Routes */}
         <Route path="/company" element={<ProtectedRoute><CompanySettings /></ProtectedRoute>} />
-        <Route path="/company/setup" element={<ProtectedRoute><CompanySetupWizard onComplete={() => window.location.href = '/dashboard'} /></ProtectedRoute>} />
+        <Route path="/company/setup" element={<ProtectedRoute><CompanySetupWizard onComplete={() => (window.location.href = '/dashboard')} /></ProtectedRoute>} />
         
         {/* Workflow Routes */}
         <Route path="/workflows" element={<ProtectedRoute><WorkflowList /></ProtectedRoute>} />
@@ -156,9 +302,17 @@ function App() {
         {/* Audit & Reports Routes */}
         <Route path="/audit" element={<ProtectedRoute><AuditLogs /></ProtectedRoute>} />
         <Route path="/reports" element={<ProtectedRoute><ReportsDashboard /></ProtectedRoute>} />
+        <Route path="/reports/financial/profit-loss" element={<ProtectedRoute><ProfitLossReport /></ProtectedRoute>} />
+        <Route path="/reports/financial/balance-sheet" element={<ProtectedRoute><BalanceSheetReport /></ProtectedRoute>} />
+        <Route path="/reports/hr/analytics" element={<ProtectedRoute><HRAnalyticsReport /></ProtectedRoute>} />
+        <Route path="/reports/inventory" element={<ProtectedRoute><InventoryReport /></ProtectedRoute>} />
         
         {/* System Routes */}
         <Route path="/system-options" element={<ProtectedRoute><SystemOptions /></ProtectedRoute>} />
+        <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+        
+        {/* Theme Demo */}
+        <Route path="/theme-demo" element={<ThemeDemo />} />
 
       </Routes>
     </BrowserRouter>

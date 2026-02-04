@@ -20,7 +20,7 @@ export const createExpenseClaimController = async (req, res, next) => {
     );
 
     if (workflow) {
-      await prisma.workflowRequest.create({
+      const workflowRequest = await prisma.workflowRequest.create({
         data: {
           tenantId: req.user.tenantId,
           module: 'FINANCE',
@@ -28,14 +28,20 @@ export const createExpenseClaimController = async (req, res, next) => {
           payload: { expenseClaimId: claim.id },
           status: 'PENDING',
           createdBy: req.user.userId,
+          workflowId: workflow.id, // Link to the workflow
         },
       });
 
-      await createApprovalChain(workflow.id, workflow.steps);
+      await createApprovalChain(workflow.id, workflow.steps, {
+        payload: { expenseClaimId: claim.id },
+        action: 'EXPENSE_CLAIM',
+        data: req.body
+      });
 
       return res.status(202).json({
         message: 'Expense claim sent for approval',
         expenseClaimId: claim.id,
+        workflowRequestId: workflowRequest.id,
       });
     }
 

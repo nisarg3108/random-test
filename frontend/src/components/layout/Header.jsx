@@ -85,7 +85,12 @@ const Header = () => {
       '/audit': { title: 'Audit Logs', subtitle: 'Track system activities' },
       '/company': { title: 'Company Settings', subtitle: 'Configure your organization' },
       '/system-options': { title: 'System Options', subtitle: 'Advanced configurations' },
-      '/reports': { title: 'Reports', subtitle: 'Business intelligence' }
+      '/reports': { title: 'Reports', subtitle: 'Business intelligence' },
+      '/sales/quotations': { title: 'Quotations', subtitle: 'Proposals and quote management' },
+      '/sales/orders': { title: 'Sales Orders', subtitle: 'Track confirmed orders' },
+      '/sales/invoices': { title: 'Invoicing', subtitle: 'Billing and collections' },
+      '/sales/tracking': { title: 'Order Tracking', subtitle: 'Shipment status and updates' },
+      '/sales/analytics': { title: 'Sales Analytics', subtitle: 'Performance and revenue insights' }
     };
     return pathMap[location.pathname] || { title: 'ERP System', subtitle: 'Enterprise Resource Planning' };
   };

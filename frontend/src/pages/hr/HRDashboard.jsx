@@ -239,12 +239,12 @@ const HRDashboard = () => {
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-blue-600 font-medium text-xs">
-                            {request.employee?.firstName?.[0]}{request.employee?.lastName?.[0]}
+                            {request.employee?.name?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'NA'}
                           </span>
                         </div>
                         <div>
                           <p className="text-sm font-medium text-primary-900">
-                            {request.employee?.firstName} {request.employee?.lastName}
+                            {request.employee?.name || 'Unknown'}
                           </p>
                           <p className="text-xs text-primary-600">
                             {request.leaveType?.name} • {new Date(request.startDate).toLocaleDateString()}

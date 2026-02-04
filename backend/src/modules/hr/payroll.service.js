@@ -1,0 +1,673 @@
+import prisma from '../../config/db.js';
+
+class PayrollService {
+  // ==========================================
+  // ATTENDANCE MANAGEMENT
+  // ==========================================
+
+  async markAttendance(data) {
+    const { tenantId, employeeId, date, checkIn, checkOut, status, notes } = data;
+    
+    // Calculate work hours
+    let workHours = 0;
+    let overtimeHours = 0;
+    
+    if (checkIn && checkOut) {
+      const checkInTime = new Date(checkIn);
+      const checkOutTime = new Date(checkOut);
+      const totalHours = (checkOutTime - checkInTime) / (1000 * 60 * 60);
+      
+      const standardHours = 8;
+      workHours = Math.min(totalHours, standardHours);
+      overtimeHours = Math.max(0, totalHours - standardHours);
+    } else if (status === 'HALF_DAY') {
+      workHours = 4;
+    } else if (status === 'PRESENT') {
+      workHours = 8;
+    }
+
+    return prisma.attendance.upsert({
+      where: {
+        tenantId_employeeId_date: {
+          tenantId,
+          employeeId,
+          date: new Date(date)
+        }
+      },
+      update: {
+        checkIn: checkIn ? new Date(checkIn) : undefined,
+        checkOut: checkOut ? new Date(checkOut) : undefined,
+        status,
+        workHours,
+        overtimeHours,
+        notes
+      },
+      create: {
+        tenantId,
+        employeeId,
+        date: new Date(date),
+        checkIn: checkIn ? new Date(checkIn) : null,
+        checkOut: checkOut ? new Date(checkOut) : null,
+        status,
+        workHours,
+        overtimeHours,
+        notes
+      },
+      include: {
+        employee: {
+          select: {
+            id: true,
+            name: true,
+            employeeCode: true
+          }
+        }
+      }
+    });
+  }
+
+  async getAttendance(tenantId, filters) {
+    const { employeeId, startDate, endDate, status } = filters;
+    
+    const where = { tenantId };
+    if (employeeId) where.employeeId = employeeId;
+    if (status) where.status = status;
+    if (startDate || endDate) {
+      where.date = {};
+      if (startDate) where.date.gte = new Date(startDate);
+      if (endDate) where.date.lte = new Date(endDate);
+    }
+
+    return prisma.attendance.findMany({
+      where,
+      include: {
+        employee: {
+          select: {
+            id: true,
+            name: true,
+            employeeCode: true,
+            designation: true
+          }
+        }
+      },
+      orderBy: { date: 'desc' }
+    });
+  }
+
+  async getAttendanceSummary(tenantId, employeeId, startDate, endDate) {
+    const attendance = await prisma.attendance.findMany({
+      where: {
+        tenantId,
+        employeeId,
+        date: {
+          gte: new Date(startDate),
+          lte: new Date(endDate)
+        }
+      }
+    });
+
+    const summary = {
+      totalDays: attendance.length,
+      presentDays: attendance.filter(a => a.status === 'PRESENT').length,
+      absentDays: attendance.filter(a => a.status === 'ABSENT').length,
+      leaveDays: attendance.filter(a => a.status === 'LEAVE').length,
+      halfDays: attendance.filter(a => a.status === 'HALF_DAY').length,
+      workFromHome: attendance.filter(a => a.status === 'WORK_FROM_HOME').length,
+      totalWorkHours: attendance.reduce((sum, a) => sum + a.workHours, 0),
+      totalOvertimeHours: attendance.reduce((sum, a) => sum + a.overtimeHours, 0)
+    };
+
+    return summary;
+  }
+
+  // ==========================================
+  // SALARY COMPONENTS
+  // ==========================================
+
+  async createSalaryComponent(data) {
+    const { tenantId, name, code, type, calculationType, value, formula, isTaxable, description } = data;
+    
+    return prisma.salaryComponent.create({
+      data: {
+        tenantId,
+        name,
+        code: code.toUpperCase(),
+        type,
+        calculationType,
+        value,
+        formula,
+        isTaxable,
+        description
+      }
+    });
+  }
+
+  async getSalaryComponents(tenantId, filters = {}) {
+    const { type, isActive } = filters;
+    const where = { tenantId };
+    if (type) where.type = type;
+    if (isActive !== undefined) where.isActive = isActive;
+
+    return prisma.salaryComponent.findMany({
+      where,
+      orderBy: { name: 'asc' }
+    });
+  }
+
+  async updateSalaryComponent(id, tenantId, data) {
+    return prisma.salaryComponent.update({
+      where: { id, tenantId },
+      data
+    });
+  }
+
+  // ==========================================
+  // TAX CONFIGURATION
+  // ==========================================
+
+  async createTaxConfiguration(data) {
+    const { tenantId, name, taxType, slabs, deductionRules, effectiveFrom, effectiveTo } = data;
+    
+    return prisma.taxConfiguration.create({
+      data: {
+        tenantId,
+        name,
+        taxType,
+        slabs,
+        deductionRules,
+        effectiveFrom: new Date(effectiveFrom),
+        effectiveTo: effectiveTo ? new Date(effectiveTo) : null
+      }
+    });
+  }
+
+  async getTaxConfigurations(tenantId) {
+    return prisma.taxConfiguration.findMany({
+      where: { tenantId, isActive: true },
+      orderBy: { effectiveFrom: 'desc' }
+    });
+  }
+
+  async calculateTax(annualIncome, taxType, tenantId) {
+    const taxConfig = await prisma.taxConfiguration.findFirst({
+      where: {
+        tenantId,
+        taxType,
+        isActive: true,
+        effectiveFrom: { lte: new Date() },
+        OR: [
+          { effectiveTo: null },
+          { effectiveTo: { gte: new Date() } }
+        ]
+      }
+    });
+
+    if (!taxConfig) {
+      return { tax: 0, effectiveRate: 0, breakdown: [] };
+    }
+
+    const slabs = taxConfig.slabs;
+    let totalTax = 0;
+    const breakdown = [];
+
+    for (const slab of slabs) {
+      const { min, max, rate } = slab;
+      
+      if (annualIncome > min) {
+        const taxableAmount = Math.min(annualIncome, max || annualIncome) - min;
+        const slabTax = (taxableAmount * rate) / 100;
+        totalTax += slabTax;
+        
+        breakdown.push({
+          range: `${min} - ${max || 'Above'}`,
+          rate: `${rate}%`,
+          taxableAmount,
+          tax: slabTax
+        });
+        
+        if (max && annualIncome <= max) break;
+      }
+    }
+
+    return {
+      tax: Math.round(totalTax),
+      effectiveRate: annualIncome > 0 ? ((totalTax / annualIncome) * 100).toFixed(2) : 0,
+      breakdown
+    };
+  }
+
+  // ==========================================
+  // PAYROLL CYCLE
+  // ==========================================
+
+  async createPayrollCycle(data) {
+    const { tenantId, name, startDate, endDate, paymentDate, notes } = data;
+    
+    return prisma.payrollCycle.create({
+      data: {
+        tenantId,
+        name,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        paymentDate: new Date(paymentDate),
+        notes
+      }
+    });
+  }
+
+  async getPayrollCycles(tenantId, filters = {}) {
+    const { status } = filters;
+    const where = { tenantId };
+    if (status) where.status = status;
+
+    return prisma.payrollCycle.findMany({
+      where,
+      include: {
+        _count: {
+          select: {
+            payslips: true,
+            disbursements: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  async getPayrollCycleById(id, tenantId) {
+    return prisma.payrollCycle.findFirst({
+      where: { id, tenantId },
+      include: {
+        payslips: {
+          include: {
+            employee: {
+              select: {
+                id: true,
+                name: true,
+                employeeCode: true,
+                designation: true
+              }
+            }
+          }
+        },
+        disbursements: {
+          include: {
+            employee: {
+              select: {
+                id: true,
+                name: true,
+                employeeCode: true
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ==========================================
+  // PAYSLIP GENERATION
+  // ==========================================
+
+  async generatePayslips(cycleId, tenantId, processedBy) {
+    const cycle = await prisma.payrollCycle.findFirst({
+      where: { id: cycleId, tenantId }
+    });
+
+    if (!cycle) {
+      throw new Error('Payroll cycle not found');
+    }
+
+    if (cycle.status !== 'DRAFT') {
+      throw new Error('Payroll cycle is not in DRAFT status');
+    }
+
+    // Get all active employees
+    const employees = await prisma.employee.findMany({
+      where: {
+        tenantId,
+        status: 'ACTIVE'
+      },
+      include: {
+        salaryStructure: true
+      }
+    });
+
+    const payslips = [];
+    let totalGross = 0;
+    let totalDeductions = 0;
+    let totalNet = 0;
+
+    for (const employee of employees) {
+      if (!employee.salaryStructure) continue;
+
+      // Get attendance summary
+      const attendanceSummary = await this.getAttendanceSummary(
+        tenantId,
+        employee.id,
+        cycle.startDate,
+        cycle.endDate
+      );
+
+      // Calculate working days
+      const workingDays = Math.ceil(
+        (cycle.endDate - cycle.startDate) / (1000 * 60 * 60 * 24)
+      );
+
+      // Calculate salary based on attendance
+      const { basicSalary, allowances, deductions } = employee.salaryStructure;
+      
+      const dailyBasic = basicSalary / 30;
+      const calculatedBasic = dailyBasic * attendanceSummary.presentDays;
+      
+      // Calculate allowances
+      const allowancesObj = typeof allowances === 'object' ? allowances : {};
+      const allowancesTotal = Object.values(allowancesObj).reduce((sum, val) => sum + val, 0);
+      
+      // Calculate overtime
+      const overtimeRate = (basicSalary / 30 / 8) * 2; // Double rate
+      const overtimePay = attendanceSummary.totalOvertimeHours * overtimeRate;
+      
+      const grossSalary = calculatedBasic + allowancesTotal + overtimePay;
+      
+      // Calculate deductions
+      const deductionsObj = typeof deductions === 'object' ? deductions : {};
+      const pfDeduction = deductionsObj.pf || 0;
+      const insuranceDeduction = deductionsObj.insurance || 0;
+      
+      // Calculate tax
+      const annualIncome = grossSalary * 12;
+      const taxResult = await this.calculateTax(annualIncome, 'INCOME_TAX', tenantId);
+      const monthlyTax = taxResult.tax / 12;
+      
+      const totalDeduction = pfDeduction + insuranceDeduction + monthlyTax;
+      const netSalary = grossSalary - totalDeduction;
+      
+      // Generate payslip number
+      const payslipNumber = `PAY-${cycle.name.replace(/\s/g, '-')}-${employee.employeeCode}`;
+      
+      const payslip = await prisma.payslip.create({
+        data: {
+          tenantId,
+          employeeId: employee.id,
+          payrollCycleId: cycleId,
+          payslipNumber,
+          basicSalary: calculatedBasic,
+          allowances: allowancesObj,
+          bonuses: 0,
+          overtime: overtimePay,
+          grossSalary,
+          taxDeductions: monthlyTax,
+          providentFund: pfDeduction,
+          insurance: insuranceDeduction,
+          otherDeductions: {},
+          totalDeductions: totalDeduction,
+          netSalary,
+          workingDays,
+          presentDays: attendanceSummary.presentDays,
+          absentDays: attendanceSummary.absentDays,
+          leaveDays: attendanceSummary.leaveDays
+        },
+        include: {
+          employee: {
+            select: {
+              id: true,
+              name: true,
+              employeeCode: true,
+              designation: true
+            }
+          }
+        }
+      });
+      
+      payslips.push(payslip);
+      totalGross += grossSalary;
+      totalDeductions += totalDeduction;
+      totalNet += netSalary;
+    }
+
+    // Update payroll cycle
+    await prisma.payrollCycle.update({
+      where: { id: cycleId },
+      data: {
+        status: 'PROCESSING',
+        totalGross,
+        totalDeductions,
+        totalNet,
+        processedBy,
+        processedAt: new Date()
+      }
+    });
+
+    return {
+      cycle: await this.getPayrollCycleById(cycleId, tenantId),
+      payslips,
+      summary: {
+        totalEmployees: payslips.length,
+        totalGross,
+        totalDeductions,
+        totalNet
+      }
+    };
+  }
+
+  async getPayslips(tenantId, filters = {}) {
+    const { employeeId, payrollCycleId, status } = filters;
+    const where = { tenantId };
+    if (employeeId) where.employeeId = employeeId;
+    if (payrollCycleId) where.payrollCycleId = payrollCycleId;
+    if (status) where.status = status;
+
+    return prisma.payslip.findMany({
+      where,
+      include: {
+        employee: {
+          select: {
+            id: true,
+            name: true,
+            employeeCode: true,
+            designation: true,
+            email: true
+          }
+        },
+        payrollCycle: {
+          select: {
+            id: true,
+            name: true,
+            paymentDate: true
+          }
+        }
+      },
+      orderBy: { generatedAt: 'desc' }
+    });
+  }
+
+  async getPayslipById(id, tenantId) {
+    return prisma.payslip.findFirst({
+      where: { id, tenantId },
+      include: {
+        employee: {
+          select: {
+            id: true,
+            name: true,
+            employeeCode: true,
+            designation: true,
+            email: true,
+            department: {
+              select: {
+                name: true
+              }
+            }
+          }
+        },
+        payrollCycle: {
+          select: {
+            id: true,
+            name: true,
+            startDate: true,
+            endDate: true,
+            paymentDate: true
+          }
+        }
+      }
+    });
+  }
+
+  async approvePayslip(id, tenantId, approvedBy) {
+    return prisma.payslip.update({
+      where: { id, tenantId },
+      data: {
+        status: 'APPROVED',
+        approvedBy,
+        approvedAt: new Date()
+      }
+    });
+  }
+
+  // ==========================================
+  // SALARY DISBURSEMENT
+  // ==========================================
+
+  async createDisbursements(cycleId, tenantId) {
+    const cycle = await prisma.payrollCycle.findFirst({
+      where: { id: cycleId, tenantId },
+      include: {
+        payslips: {
+          where: { status: 'APPROVED' },
+          include: {
+            employee: true
+          }
+        }
+      }
+    });
+
+    if (!cycle) {
+      throw new Error('Payroll cycle not found');
+    }
+
+    const disbursements = [];
+
+    for (const payslip of cycle.payslips) {
+      const disbursement = await prisma.salaryDisbursement.create({
+        data: {
+          tenantId,
+          payrollCycleId: cycleId,
+          employeeId: payslip.employeeId,
+          amount: payslip.netSalary,
+          paymentMethod: 'BANK_TRANSFER',
+          paymentDate: cycle.paymentDate
+        },
+        include: {
+          employee: {
+            select: {
+              id: true,
+              name: true,
+              employeeCode: true,
+              email: true
+            }
+          }
+        }
+      });
+      
+      disbursements.push(disbursement);
+    }
+
+    return disbursements;
+  }
+
+  async getDisbursements(tenantId, filters = {}) {
+    const { payrollCycleId, employeeId, status } = filters;
+    const where = { tenantId };
+    if (payrollCycleId) where.payrollCycleId = payrollCycleId;
+    if (employeeId) where.employeeId = employeeId;
+    if (status) where.status = status;
+
+    return prisma.salaryDisbursement.findMany({
+      where,
+      include: {
+        employee: {
+          select: {
+            id: true,
+            name: true,
+            employeeCode: true,
+            email: true
+          }
+        },
+        payrollCycle: {
+          select: {
+            id: true,
+            name: true,
+            paymentDate: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  async updateDisbursementStatus(id, tenantId, data) {
+    const { status, transactionRef, bankAccount, failureReason } = data;
+    
+    const updateData = { status };
+    if (transactionRef) updateData.transactionRef = transactionRef;
+    if (bankAccount) updateData.bankAccount = bankAccount;
+    if (failureReason) updateData.failureReason = failureReason;
+    
+    if (status === 'COMPLETED') {
+      updateData.completedAt = new Date();
+      
+      // Update payslip status
+      const disbursement = await prisma.salaryDisbursement.findFirst({
+        where: { id, tenantId },
+        include: { payrollCycle: { include: { payslips: true } } }
+      });
+      
+      if (disbursement) {
+        const payslip = disbursement.payrollCycle.payslips.find(
+          p => p.employeeId === disbursement.employeeId
+        );
+        
+        if (payslip) {
+          await prisma.payslip.update({
+            where: { id: payslip.id },
+            data: { status: 'PAID' }
+          });
+        }
+      }
+    }
+    
+    return prisma.salaryDisbursement.update({
+      where: { id, tenantId },
+      data: updateData
+    });
+  }
+
+  // ==========================================
+  // REPORTS & ANALYTICS
+  // ==========================================
+
+  async getPayrollSummary(tenantId, startDate, endDate) {
+    const payslips = await prisma.payslip.findMany({
+      where: {
+        tenantId,
+        generatedAt: {
+          gte: new Date(startDate),
+          lte: new Date(endDate)
+        }
+      }
+    });
+
+    return {
+      totalEmployees: payslips.length,
+      totalGrossSalary: payslips.reduce((sum, p) => sum + p.grossSalary, 0),
+      totalDeductions: payslips.reduce((sum, p) => sum + p.totalDeductions, 0),
+      totalNetSalary: payslips.reduce((sum, p) => sum + p.netSalary, 0),
+      totalTax: payslips.reduce((sum, p) => sum + p.taxDeductions, 0),
+      totalPF: payslips.reduce((sum, p) => sum + p.providentFund, 0),
+      averageSalary: payslips.length > 0 
+        ? payslips.reduce((sum, p) => sum + p.netSalary, 0) / payslips.length 
+        : 0
+    };
+  }
+}
+
+export default new PayrollService();

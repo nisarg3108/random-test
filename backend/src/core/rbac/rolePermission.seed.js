@@ -38,7 +38,14 @@ export const assignPermissions = async (tenantId) => {
       perm.code === 'employee.view' ||
       perm.code === 'leave.view' ||
       perm.code === 'leaveType.view' ||
-      perm.code === 'leave.request'
+      perm.code === 'leave.request' ||
+      perm.code === 'crm.customer.view' ||
+      perm.code === 'crm.contact.view' ||
+      perm.code === 'crm.lead.create' ||
+      perm.code === 'crm.lead.view' ||
+      perm.code === 'crm.deal.view' ||
+      perm.code === 'crm.communication.create' ||
+      perm.code === 'crm.communication.view'
     ) {
       await prisma.rolePermission.upsert({
         where: {

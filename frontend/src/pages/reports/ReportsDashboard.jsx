@@ -1,105 +1,209 @@
-import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/layout/Sidebar';
-import Header from '../../components/layout/Header';
-import { RoleGuard } from '../../hooks/useAuth';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  FileText,
+  TrendingUp,
+  Users,
+  Package,
+  BarChart3,
+  Download,
+  Plus,
+  Clock,
+} from 'lucide-react';
+import Layout from '../../components/layout/Layout.jsx';
+import { useReportsStore } from '../../store/reports.store.js';
 
 const ReportsDashboard = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const { savedReports, fetchSavedReports, loading } = useReportsStore();
 
-  const defaultReports = [
-    { name: 'Inventory Report', description: 'Current inventory status and valuation', type: 'inventory' },
-    { name: 'User Activity Report', description: 'User login and activity tracking', type: 'user_activity' },
-    { name: 'Department Report', description: 'Department-wise user distribution', type: 'department' },
-    { name: 'System Report', description: 'System health and performance metrics', type: 'system' }
+  useEffect(() => {
+    fetchSavedReports();
+  }, [fetchSavedReports]);
+
+  const reportCategories = [
+    {
+      title: 'Financial Reports',
+      icon: TrendingUp,
+      color: 'blue',
+      reports: [
+        {
+          name: 'Profit & Loss Statement',
+          path: '/reports/financial/profit-loss',
+          description: 'View revenue and expenses',
+        },
+        {
+          name: 'Balance Sheet',
+          path: '/reports/financial/balance-sheet',
+          description: 'Assets, liabilities, and equity',
+        },
+      ],
+    },
+    {
+      title: 'HR Analytics',
+      icon: Users,
+      color: 'green',
+      reports: [
+        {
+          name: 'HR Analytics',
+          path: '/reports/hr/analytics',
+          description: 'Employee, leave, and payroll data',
+        },
+      ],
+    },
+    {
+      title: 'Inventory Reports',
+      icon: Package,
+      color: 'purple',
+      reports: [
+        {
+          name: 'Inventory Report',
+          path: '/reports/inventory',
+          description: 'Stock levels and valuations',
+        },
+      ],
+    },
+    {
+      title: 'Custom Reports',
+      icon: BarChart3,
+      color: 'orange',
+      reports: [
+        {
+          name: 'Custom Report Builder',
+          path: '/reports/custom',
+          description: 'Create your own reports',
+        },
+      ],
+    },
   ];
 
-  const handleGenerateReport = async (reportType) => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Simulate report generation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert(`${reportType} report generated successfully!`);
-    } catch (err) {
-      setError('Failed to generate report');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <RoleGuard requiredRole="MANAGER" fallback={
-      <div className="flex min-h-screen bg-gray-50">
-        <Sidebar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
-            <p className="text-gray-600">You don't have permission to access this page.</p>
-          </div>
+    <Layout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-primary-900">
+            Reports & Analytics
+          </h1>
+          <p className="text-primary-600 mt-1">
+            Generate insights and export data from your ERP system
+          </p>
         </div>
-      </div>
-    }>
-      <div className="flex min-h-screen bg-gray-50">
-        <Sidebar />
-        <div className="flex-1">
-          <Header />
-          <div className="p-6">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">Reports Dashboard</h1>
-              <p className="text-gray-600 mt-1">Generate and view system reports</p>
-            </div>
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-                {error}
+        {/* Report Categories */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {reportCategories.map((category) => (
+            <div key={category.title} className="modern-card-elevated p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div
+                  className={`p-3 rounded-lg bg-${category.color}-50`}
+                >
+                  <category.icon className={`w-6 h-6 text-${category.color}-600`} />
+                </div>
+                <h3 className="font-semibold text-primary-900">
+                  {category.title}
+                </h3>
               </div>
-            )}
-            
+              <div className="space-y-2">
+                {category.reports.map((report) => (
+                  <button
+                    key={report.name}
+                    onClick={() => navigate(report.path)}
+                    className="w-full text-left p-3 rounded-lg hover:bg-primary-50 transition-colors"
+                  >
+                    <p className="text-sm font-medium text-primary-900">
+                      {report.name}
+                    </p>
+                    <p className="text-xs text-primary-600 mt-1">
+                      {report.description}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Recent Reports */}
+        <div className="modern-card-elevated">
+          <div className="p-6 border-b border-primary-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Clock className="w-5 h-5 text-primary-600" />
+                <h2 className="text-lg font-semibold text-primary-900">
+                  Recent Reports
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6">
             {loading ? (
               <div className="flex justify-center py-8">
-                <LoadingSpinner />
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              </div>
+            ) : savedReports.length === 0 ? (
+              <div className="text-center py-8">
+                <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-600">No reports generated yet</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Start by generating a report from the categories above
+                </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {defaultReports.map((report, index) => (
-                  <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                    <div className="flex items-start justify-between mb-4">
+              <div className="space-y-3">
+                {savedReports.slice(0, 5).map((report) => (
+                  <div
+                    key={report.id}
+                    className="flex items-center justify-between p-4 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors cursor-pointer"
+                    onClick={() => navigate(`/reports/saved/${report.id}`)}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <FileText className="w-5 h-5 text-primary-600" />
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{report.name}</h3>
-                        <p className="text-gray-600 text-sm">{report.description}</p>
+                        <p className="font-medium text-primary-900">
+                          {report.name}
+                        </p>
+                        <p className="text-sm text-primary-600">
+                          {report.type} •{' '}
+                          {new Date(report.generatedAt).toLocaleDateString()}
+                        </p>
                       </div>
-                      <div className="text-2xl">📊</div>
                     </div>
-                    <button
-                      onClick={() => handleGenerateReport(report.name)}
-                      disabled={loading}
-                      className="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50 transition-colors font-medium"
-                    >
-                      {loading ? 'Generating...' : 'Generate Report'}
-                    </button>
+                    <Download className="w-4 h-4 text-primary-600" />
                   </div>
                 ))}
               </div>
             )}
-
-            <div className="mt-8 bg-white rounded-lg shadow-md">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Recent Reports</h2>
-              </div>
-              <div className="p-6">
-                <div className="text-center text-gray-500 py-8">
-                  <div className="text-4xl mb-2">📄</div>
-                  <p>No reports generated yet</p>
-                  <p className="text-sm">Generate your first report to see it here</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button
+            onClick={() => navigate('/reports/custom')}
+            className="btn-modern btn-primary flex items-center justify-center space-x-2 p-4"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Create Custom Report</span>
+          </button>
+          <button
+            onClick={() => navigate('/reports/financial/profit-loss')}
+            className="btn-modern btn-secondary flex items-center justify-center space-x-2 p-4"
+          >
+            <TrendingUp className="w-5 h-5" />
+            <span>P&L Report</span>
+          </button>
+          <button
+            onClick={() => navigate('/reports/hr/analytics')}
+            className="btn-modern btn-secondary flex items-center justify-center space-x-2 p-4"
+          >
+            <Users className="w-5 h-5" />
+            <span>HR Analytics</span>
+          </button>
+        </div>
       </div>
-    </RoleGuard>
+    </Layout>
   );
 };
 
