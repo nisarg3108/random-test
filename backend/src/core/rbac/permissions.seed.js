@@ -1,85 +1,140 @@
 import prisma from '../../config/db.js';
 import { SystemOptionsService } from '../system/systemOptions.service.js';
+import { getAllPermissions, ROLE_PERMISSIONS } from './permissions.config.js';
 
+/**
+ * Seeds all permissions and roles with their mappings
+ */
 export const seedPermissions = async () => {
+  console.log('🌱 Starting permission and role seeding...');
+  
   // Seed system options first
   await SystemOptionsService.seedDefaultOptions();
   
-  const permissions = [
-    // Inventory
-    { code: 'inventory.create', label: 'Create inventory item' },
-    { code: 'inventory.view', label: 'View inventory' },
-    { code: 'inventory.update', label: 'Update inventory' },
-
-    // Users
-    { code: 'user.invite', label: 'Invite users' },
-    { code: 'user.manage', label: 'Manage users' },
-    // Departments
-    { code: 'department.create', label: 'Create department' },
-    { code: 'department.view', label: 'View departments' },
-    { code: 'audit.view', label: 'View audit logs' },
+  // 1. Seed all permissions from config
+  const allPermissions = getAllPermissions();
+  console.log(`📝 Seeding ${allPermissions.length} permissions...`);
+  
+  const permissionMap = {};
+  for (const permCode of allPermissions) {
+    // Generate label from code (e.g., 'user.create' -> 'Create User')
+    const label = permCode
+      .split('.')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .reverse()
+      .join(' ');
     
-    // System Options
-    { code: 'system.options.manage', label: 'Manage system options' },
-    { code: 'inventory.approve', label: 'Approve inventory actions' },
-    { code: 'employee.create', label: 'Create employee' },
-    { code: 'employee.view', label: 'View employees' },
-    { code: 'leaveType.create', label: 'Create leave type' },
-    { code: 'leaveType.view', label: 'View leave types' },
-    { code: 'leave.request', label: 'Request leave' },
-    { code: 'leave.view', label: 'View leave requests' },
-    { code: 'leave.approve', label: 'Approve leave requests' },
-    { code: 'employee.manage', label: 'Manage employee hierarchy' },
-    { code: 'manager.dashboard', label: 'View manager dashboard' },
-    { code: 'hr.dashboard', label: 'View HR dashboard' },
-    { code: 'expenseCategory.create', label: 'Create expense category' },
-    { code: 'expenseCategory.view', label: 'View expense categories' },
-{ code: 'expense.claim', label: 'Submit expense claim' },
-{ code: 'expense.view', label: 'View expense claims' },
-{ code: 'expense.approve', label: 'Approve expense claims' },
-{ code: 'finance.dashboard', label: 'View finance dashboard' },
-{ code: 'role.assign.finance', label: 'Assign FINANCE role' },
-{ code: 'role.assign.admin', label: 'Assign ADMIN role' },
+    const permission = await prisma.permission.upsert({
+      where: { code: permCode },
+      update: { label },
+      create: { code: permCode, label },
+    });
+    permissionMap[permCode] = permission.id;
+  }
+  
+  console.log('✅ Permissions seeded successfully');
+  
+  // 2. Seed roles for each tenant that exists
+  const tenants = await prisma.tenant.findMany();
+  console.log(`🏢 Found ${tenants.length} tenants`);
+  
+  for (const tenant of tenants) {
+    console.log(`\n🔄 Seeding roles for tenant: ${tenant.companyName}`);
+    await seedRolesForTenant(tenant.id, permissionMap);
+  }
+  
+  console.log('\n🎉 All permissions and roles seeded successfully!');
+};
 
-  // CRM
-  { code: 'crm.customer.create', label: 'Create customers' },
-  { code: 'crm.customer.view', label: 'View customers' },
-  { code: 'crm.customer.update', label: 'Update customers' },
-  { code: 'crm.customer.delete', label: 'Delete customers' },
-  { code: 'crm.contact.create', label: 'Create contacts' },
-  { code: 'crm.contact.view', label: 'View contacts' },
-  { code: 'crm.contact.update', label: 'Update contacts' },
-  { code: 'crm.contact.delete', label: 'Delete contacts' },
-  { code: 'crm.lead.create', label: 'Create leads' },
-  { code: 'crm.lead.view', label: 'View leads' },
-  { code: 'crm.lead.update', label: 'Update leads' },
-  { code: 'crm.lead.convert', label: 'Convert leads' },
-  { code: 'crm.deal.create', label: 'Create deals' },
-  { code: 'crm.deal.view', label: 'View deals' },
-  { code: 'crm.deal.update', label: 'Update deals' },
-  { code: 'crm.deal.delete', label: 'Delete deals' },
-  { code: 'crm.communication.create', label: 'Create communications' },
-  { code: 'crm.communication.view', label: 'View communications' },
-
-  // Reports & Analytics
-  { code: 'reports.view', label: 'View reports' },
-  { code: 'reports.export', label: 'Export reports' },
-  { code: 'reports.financial.view', label: 'View financial reports' },
-  { code: 'reports.hr.view', label: 'View HR analytics reports' },
-  { code: 'reports.inventory.view', label: 'View inventory reports' },
-  { code: 'reports.custom.create', label: 'Create custom reports' },
-  { code: 'reports.templates.create', label: 'Create report templates' },
-  { code: 'reports.templates.view', label: 'View report templates' },
-
-    //{ code: 'payroll.manage', label: 'Manage payroll' },
-    //{ code: 'payroll.view', label: 'View payroll' },
-  ];
-
-  for (const perm of permissions) {
-    await prisma.permission.upsert({
-      where: { code: perm.code },
-      update: {},
-      create: perm,
+/**
+ * Seeds roles for a specific tenant
+ */
+export const seedRolesForTenant = async (tenantId, permissionMap = null) => {
+  // If permission map not provided, fetch it
+  if (!permissionMap) {
+    const permissions = await prisma.permission.findMany();
+    permissionMap = {};
+    permissions.forEach(p => {
+      permissionMap[p.code] = p.id;
     });
   }
+  
+  // Create roles with their permissions
+  for (const [roleKey, roleConfig] of Object.entries(ROLE_PERMISSIONS)) {
+    console.log(`  📋 Creating role: ${roleConfig.label}`);
+    
+    // Create or update role
+    const role = await prisma.role.upsert({
+      where: {
+        name_tenantId: {
+          name: roleConfig.name,
+          tenantId: tenantId,
+        },
+      },
+      update: {},
+      create: {
+        name: roleConfig.name,
+        tenantId: tenantId,
+      },
+    });
+    
+    // Map permissions to this role
+    for (const permCode of roleConfig.permissions) {
+      const permissionId = permissionMap[permCode];
+      if (permissionId) {
+        await prisma.rolePermission.upsert({
+          where: {
+            roleId_permissionId: {
+              roleId: role.id,
+              permissionId: permissionId,
+            },
+          },
+          update: {},
+          create: {
+            roleId: role.id,
+            permissionId: permissionId,
+          },
+        });
+      }
+    }
+    
+    console.log(`    ✓ ${roleConfig.permissions.length} permissions assigned`);
+  }
 };
+
+/**
+ * Assigns a role to a user
+ */
+export const assignRoleToUser = async (userId, roleName, tenantId) => {
+  const role = await prisma.role.findFirst({
+    where: {
+      name: roleName,
+      tenantId: tenantId,
+    },
+  });
+  
+  if (!role) {
+    throw new Error(`Role ${roleName} not found for tenant ${tenantId}`);
+  }
+  
+  await prisma.userRole.upsert({
+    where: {
+      userId_roleId: {
+        userId: userId,
+        roleId: role.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: userId,
+      roleId: role.id,
+    },
+  });
+  
+  // Also update the legacy role field on User for backward compatibility
+  await prisma.user.update({
+    where: { id: userId },
+    data: { role: roleName },
+  });
+};
+
