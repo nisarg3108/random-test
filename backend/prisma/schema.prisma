@@ -269,22 +269,24 @@ model UserInvite {
 }
 
 model Approval {
-  id              String    @id @default(uuid())
-  workflowId      String
-  workflowStepId  String?
-  stepOrder       Int
-  permission      String
-  data            Json?
-  tenantId        String
-  approvedBy      String?
-  approvedAt      DateTime?
-  status          String    // PENDING | APPROVED | REJECTED
-  comment         String?
-  rejectionReason String?
-  createdAt       DateTime  @default(now())
+  id                String    @id @default(uuid())
+  workflowId        String
+  workflowRequestId String?
+  workflowStepId    String?
+  stepOrder         Int
+  permission        String
+  data              Json?
+  tenantId          String
+  approvedBy        String?
+  approvedAt        DateTime?
+  status            String    // PENDING | APPROVED | REJECTED
+  comment           String?
+  rejectionReason   String?
+  createdAt         DateTime  @default(now())
 
-  workflow     Workflow      @relation(fields: [workflowId], references: [id])
-  workflowStep WorkflowStep? @relation(fields: [workflowStepId], references: [id])
+  workflow        Workflow       @relation(fields: [workflowId], references: [id])
+  workflowRequest WorkflowRequest? @relation(fields: [workflowRequestId], references: [id])
+  workflowStep    WorkflowStep?  @relation(fields: [workflowStepId], references: [id])
 }
 
 model SystemOption {
@@ -311,6 +313,8 @@ model WorkflowRequest {
   createdBy  String // Keep old field
   requestedBy String? // Add new optional field
   createdAt  DateTime @default(now())
+  
+  approvals  Approval[]
 }
 
 model Employee {

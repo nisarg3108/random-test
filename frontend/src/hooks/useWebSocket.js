@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { getToken } from '../store/auth.store';
+import { getOnlineUsers } from '../api/communication';
 
 const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
 
@@ -10,7 +12,7 @@ export const useWebSocket = () => {
   const messageHandlers = useRef(new Map());
 
   const connect = useCallback(() => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     if (!token) {
       console.log('No token found, skipping WebSocket connection');
       return;
@@ -232,10 +234,34 @@ export const useOnlineUsersWebSocket = () => {
   const { isConnected, subscribe, unsubscribe, registerHandler } = useWebSocket();
   const [onlineUsers, setOnlineUsers] = useState([]);
 
+  const normalizeOnlineUsers = (data) => {
+    if (!Array.isArray(data)) return [];
+    return data
+      .map((item) => (typeof item === 'string' ? item : item?.id))
+      .filter(Boolean);
+  };
+
   useEffect(() => {
     if (!isConnected) return;
 
     subscribe('/users/online-status');
+
+    let isMounted = true;
+
+    const fetchOnlineUsers = () => {
+      getOnlineUsers()
+        .then((response) => {
+          if (isMounted) {
+            setOnlineUsers(normalizeOnlineUsers(response.data));
+          }
+        })
+        .catch((error) => {
+          console.error('Error loading online users:', error);
+        });
+    };
+
+    fetchOnlineUsers();
+    const intervalId = setInterval(fetchOnlineUsers, 10000);
 
     const unregister = registerHandler('/users/online-status', (data) => {
       const { userId, isOnline } = data.data;
@@ -249,6 +275,8 @@ export const useOnlineUsersWebSocket = () => {
     });
 
     return () => {
+      isMounted = false;
+      clearInterval(intervalId);
       unsubscribe('/users/online-status');
       unregister();
     };

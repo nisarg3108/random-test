@@ -34,8 +34,9 @@ class RealTimeServer {
       }
 
       const decoded = jwt.verify(token, env.jwtSecret);
+      const resolvedUserId = decoded.userId || decoded.id;
       const user = await prisma.user.findUnique({
-        where: { id: decoded.userId },
+        where: { id: resolvedUserId },
         include: { tenant: true }
       });
 
@@ -51,6 +52,9 @@ class RealTimeServer {
         tenantId: user.tenantId,
         subscriptions: new Set()
       });
+
+      // Broadcast online status
+      this.broadcastUserOnlineStatus(user.id, user.tenantId, true);
 
       ws.on('message', (data) => {
         this.handleMessage(clientId, data);
@@ -127,6 +131,14 @@ class RealTimeServer {
     });
 
     this.clients.delete(clientId);
+
+    const stillOnline = Array.from(this.clients.values()).some(
+      c => c.userId === client.userId && c.tenantId === client.tenantId
+    );
+
+    if (!stillOnline) {
+      this.broadcastUserOnlineStatus(client.userId, client.tenantId, false);
+    }
   }
 
   broadcast(endpoint, data, tenantId = null) {

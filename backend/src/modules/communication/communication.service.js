@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../config/db.js';
 import { realTimeServer } from '../../core/realtime.js';
-const prisma = new PrismaClient();
 
 class CommunicationService {
   // ==================== CONVERSATIONS ====================

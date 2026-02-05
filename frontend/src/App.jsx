@@ -128,6 +128,8 @@ import {
   BalanceSheetReport,
   HRAnalyticsReport,
   InventoryReport,
+  CustomReportBuilder,
+  SavedReportDetails,
 } from './pages/reports';
 
 // System
@@ -306,6 +308,8 @@ function App() {
         <Route path="/reports/financial/balance-sheet" element={<ProtectedRoute><BalanceSheetReport /></ProtectedRoute>} />
         <Route path="/reports/hr/analytics" element={<ProtectedRoute><HRAnalyticsReport /></ProtectedRoute>} />
         <Route path="/reports/inventory" element={<ProtectedRoute><InventoryReport /></ProtectedRoute>} />
+        <Route path="/reports/custom" element={<ProtectedRoute><CustomReportBuilder /></ProtectedRoute>} />
+        <Route path="/reports/saved/:id" element={<ProtectedRoute><SavedReportDetails /></ProtectedRoute>} />
         
         {/* System Routes */}
         <Route path="/system-options" element={<ProtectedRoute><SystemOptions /></ProtectedRoute>} />

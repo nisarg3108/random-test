@@ -13,8 +13,10 @@ export const requireAuth = (req, res, next) => {
     const decoded = jwt.verify(token, env.jwtSecret);
 
     // ✅ NORMALIZE USER CONTEXT (CRITICAL)
+    const resolvedUserId = decoded.userId || decoded.id;
     req.user = {
-      userId: decoded.userId || decoded.id,
+      id: resolvedUserId,
+      userId: resolvedUserId,
       tenantId: decoded.tenantId,
       email: decoded.email,
       role: decoded.role,

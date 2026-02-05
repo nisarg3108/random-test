@@ -31,6 +31,12 @@ export const markConversationAsRead = (conversationId) => {
   return apiClient.put(`/communication/conversations/${conversationId}/read`);
 };
 
+// ==================== USERS (FOR MESSAGING) ====================
+
+export const getMessagingUsers = () => {
+  return apiClient.get('/communication/users');
+};
+
 // ==================== MESSAGES ====================
 
 export const getMessages = (conversationId, params = {}) => {

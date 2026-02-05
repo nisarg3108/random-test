@@ -56,7 +56,7 @@ export const createItemController = async (req, res, next) => {
       await createApprovalChain(workflow.id, workflow.steps, {
         action: 'CREATE',
         data: req.body
-      });
+      }, request.id);
 
       return res.status(202).json({
         message: 'Approval required',
@@ -126,15 +126,27 @@ export const updateItemController = async (req, res, next) => {
         return res.json(item);
       }
 
+      const request = await prisma.workflowRequest.create({
+        data: {
+          tenantId: req.user.tenantId,
+          workflowId: workflow.id,
+          module: 'INVENTORY',
+          action: 'UPDATE',
+          payload: { itemId: req.params.id, data: req.body },
+          status: 'PENDING',
+          createdBy: req.user.userId,
+        },
+      });
+
       await createApprovalChain(workflow.id, workflow.steps, {
         action: 'UPDATE',
         itemId: req.params.id,
         data: req.body
-      });
+      }, request.id);
 
       return res.status(202).json({
         message: 'Update approval required',
-        workflowId: workflow.id,
+        requestId: request.id,
       });
     }
 
@@ -165,14 +177,26 @@ export const deleteItemController = async (req, res, next) => {
         throw new Error('Workflow has no steps configured');
       }
 
+      const request = await prisma.workflowRequest.create({
+        data: {
+          tenantId: req.user.tenantId,
+          workflowId: workflow.id,
+          module: 'INVENTORY',
+          action: 'DELETE',
+          payload: { itemId: req.params.id },
+          status: 'PENDING',
+          createdBy: req.user.userId,
+        },
+      });
+
       await createApprovalChain(workflow.id, workflow.steps, {
         action: 'DELETE',
         itemId: req.params.id
-      });
+      }, request.id);
 
       return res.status(202).json({
         message: 'Delete approval required',
-        workflowId: workflow.id,
+        requestId: request.id,
       });
     }
 

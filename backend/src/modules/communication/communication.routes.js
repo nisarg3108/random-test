@@ -16,6 +16,9 @@ router.post('/conversations/:id/participants', communicationController.addPartic
 router.delete('/conversations/:id/participants/:participantId', communicationController.removeParticipant);
 router.put('/conversations/:conversationId/read', communicationController.markConversationAsRead);
 
+// ==================== USERS (FOR MESSAGING) ====================
+router.get('/users', communicationController.getMessagingUsers);
+
 // ==================== MESSAGES ====================
 router.get('/conversations/:conversationId/messages', communicationController.getMessages);
 router.post('/conversations/:conversationId/messages', communicationController.sendMessage);

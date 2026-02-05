@@ -130,15 +130,28 @@ export const approveRequest = async (approvalId, userId, comment = '') => {
       });
       console.log('Workflow marked as COMPLETED');
       
-      // Find workflow request
+      // Find workflow request using the direct relationship
       console.log('Finding workflow request...');
-      let request = await prisma.workflowRequest.findFirst({
-        where: {
-          workflowId: approval.workflowId,
-          status: 'PENDING',
-        },
-      });
-      console.log('Request found by workflowId:', request ? 'YES' : 'NO');
+      let request = null;
+      
+      // First, try to get it from the approval's workflowRequestId
+      if (approval.workflowRequestId) {
+        request = await prisma.workflowRequest.findUnique({
+          where: { id: approval.workflowRequestId }
+        });
+        console.log('Request found by workflowRequestId:', request ? 'YES' : 'NO');
+      }
+      
+      // Fallback to old search method if not found
+      if (!request) {
+        request = await prisma.workflowRequest.findFirst({
+          where: {
+            workflowId: approval.workflowId,
+            status: 'PENDING',
+          },
+        });
+        console.log('Request found by workflowId:', request ? 'YES' : 'NO');
+      }
 
       if (!request) {
         request = await prisma.workflowRequest.findFirst({

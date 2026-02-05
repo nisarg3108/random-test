@@ -36,7 +36,7 @@ export const createExpenseClaimController = async (req, res, next) => {
         payload: { expenseClaimId: claim.id },
         action: 'EXPENSE_CLAIM',
         data: req.body
-      });
+      }, workflowRequest.id);
 
       return res.status(202).json({
         message: 'Expense claim sent for approval',
