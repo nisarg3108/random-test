@@ -109,6 +109,7 @@ import DepartmentList from './pages/departments/DepartmentList';
 // RBAC
 import RolesList from './pages/rbac/RolesList';
 import PermissionMatrix from './pages/rbac/PermissionMatrix';
+import RoleManagement from './pages/RoleManagement';
 
 // Company
 import CompanySettings from './pages/company/CompanySettings';
@@ -289,6 +290,7 @@ function App() {
         
         {/* RBAC Routes */}
         <Route path="/roles" element={<ProtectedRoute><RolesList /></ProtectedRoute>} />
+        <Route path="/role-management" element={<ProtectedRoute><RoleManagement /></ProtectedRoute>} />
         <Route path="/permissions" element={<ProtectedRoute><PermissionMatrix /></ProtectedRoute>} />
         
         {/* Company Routes */}

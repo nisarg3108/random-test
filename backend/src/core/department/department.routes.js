@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { requireAuth } from '../auth/auth.middleware.js';
-import { requireRole } from '../auth/role.middleware.js';
+import { requirePermission } from '../rbac/permission.middleware.js';
 import {
   createDepartmentController,
   listDepartmentsController,
@@ -11,14 +11,16 @@ const router = Router();
 router.post(
   '/',
   requireAuth,
-  requireRole(['ADMIN']),
+  requirePermission('department.create'),
   createDepartmentController
 );
 
 router.get(
   '/',
   requireAuth,
+  requirePermission('department.view'),
   listDepartmentsController
 );
 
 export default router;
+
