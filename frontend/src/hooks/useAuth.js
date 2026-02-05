@@ -12,41 +12,55 @@ export const useAuth = () => {
     const initAuth = async () => {
       const token = getToken();
       
-      if (token) {
-        try {
-          const userData = getUserFromToken();
-          if (userData) {
-            setUser({
-              id: userData.userId || userData.id,
-              email: userData.email,
-              role: userData.role || 'USER',
-              companyId: userData.companyId
-            });
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
-            // Fetch user's actual permissions from backend
-            try {
-              const response = await api.get('/rbac/my-permissions');
-              if (response.data.success) {
-                setPermissions(response.data.data.permissions || []);
-                setRoles(response.data.data.roles || []);
-              }
-            } catch (error) {
-              console.error('Failed to fetch permissions:', error);
-              // Continue with basic auth even if permission fetch fails
-            }
-          } else {
-            removeToken();
+      try {
+        const userData = getUserFromToken();
+        if (!userData) {
+          console.error('Invalid token - could not decode');
+          setLoading(false);
+          return;
+        }
+
+        // Set user from token
+        setUser({
+          id: userData.userId || userData.id,
+          email: userData.email,
+          role: userData.role || 'USER',
+          companyId: userData.companyId
+        });
+
+        // Try to fetch permissions (optional - don't block on failure)
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 2000);
+          
+          const response = await api.get('/rbac/my-permissions', {
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (response?.success) {
+            setPermissions(response.data?.permissions || []);
+            setRoles(response.data?.roles || []);
           }
         } catch (error) {
-          console.error('Token decode failed:', error);
-          removeToken();
+          // Permissions fetch failed - continue with basic auth
+          console.warn('Permissions API not available:', error.message);
         }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     initAuth();
-  }, []);
+  }, []); // Empty dependency array - run once on mount
 
   const hasRole = (requiredRole) => {
     if (!user) return false;
