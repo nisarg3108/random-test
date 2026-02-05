@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Building2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { setToken } from '../store/auth.store';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const Register = () => {
   const [formData, setFormData] = useState({
