@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import api from '../utils/api';
+import api from '../api/api';
 import { 
-  UserGroupIcon, 
-  ShieldCheckIcon, 
-  UserPlusIcon,
-  XMarkIcon,
-  CheckIcon
-} from '@heroicons/react/24/outline';
+  Users as UserGroupIcon, 
+  ShieldCheck as ShieldCheckIcon, 
+  UserPlus as UserPlusIcon,
+  X as XMarkIcon,
+  Check as CheckIcon
+} from 'lucide-react';
 
 const RoleManagement = () => {
   const [users, setUsers] = useState([]);

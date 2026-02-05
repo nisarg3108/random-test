@@ -1,6 +1,6 @@
 import { useState, useEffect, createElement } from 'react';
 import { getToken, getUserFromToken, removeToken } from '../store/auth.store';
-import api from '../utils/api';
+import api from '../api/api';
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
