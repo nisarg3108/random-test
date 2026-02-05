@@ -4,7 +4,7 @@ import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
 
 const statusStyles = {
   ACTIVE: { label: 'Active', color: 'text-emerald-700', bg: 'bg-emerald-100' },

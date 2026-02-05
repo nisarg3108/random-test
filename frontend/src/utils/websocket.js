@@ -15,7 +15,8 @@ class WebSocketClient {
 
     return new Promise((resolve, reject) => {
       try {
-        const wsUrl = `ws://localhost:5000/ws?token=${encodeURIComponent(token)}`;
+        const baseWsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
+        const wsUrl = `${baseWsUrl}?token=${encodeURIComponent(token)}`;
         console.log('🔌 Attempting WebSocket connection to:', wsUrl.replace(token, '[TOKEN]'));
         this.ws = new WebSocket(wsUrl);
 
