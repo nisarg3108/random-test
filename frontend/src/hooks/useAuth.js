@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createElement } from 'react';
 import { getToken, getUserFromToken, removeToken } from '../store/auth.store';
 import api from '../utils/api';
 
@@ -129,10 +129,8 @@ export const RoleGuard = ({ children, requiredRole, fallback = null }) => {
   const { hasRole, loading } = useAuth();
   
   if (loading) {
-    return (
-      <div className="flex items-center justify-center p-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
+    return createElement('div', { className: 'flex items-center justify-center p-4' },
+      createElement('div', { className: 'animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600' })
     );
   }
   
@@ -143,10 +141,8 @@ export const PermissionGuard = ({ children, permission, requireAll = false, fall
   const { hasPermission, hasAllPermissions, loading } = useAuth();
   
   if (loading) {
-    return (
-      <div className="flex items-center justify-center p-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
+    return createElement('div', { className: 'flex items-center justify-center p-4' },
+      createElement('div', { className: 'animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600' })
     );
   }
   
@@ -161,10 +157,8 @@ export const MultiRoleGuard = ({ children, roles, fallback = null }) => {
   const { hasAnyRole, loading } = useAuth();
   
   if (loading) {
-    return (
-      <div className="flex items-center justify-center p-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
+    return createElement('div', { className: 'flex items-center justify-center p-4' },
+      createElement('div', { className: 'animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600' })
     );
   }
   
