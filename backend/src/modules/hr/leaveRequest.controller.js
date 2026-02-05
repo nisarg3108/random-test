@@ -18,9 +18,10 @@ export const createLeaveRequestController = async (req, res, next) => {
 
     if (workflow) {
       // Save workflow request (reuse Phase 4.4 pattern)
-      await prisma.workflowRequest.create({
+      const workflowRequest = await prisma.workflowRequest.create({
         data: {
           tenantId,
+          workflowId: workflow.id,
           module: 'HR',
           action: 'LEAVE_REQUEST',
           payload: { leaveRequestId: leave.id },
@@ -29,7 +30,9 @@ export const createLeaveRequestController = async (req, res, next) => {
         },
       });
 
-      await createApprovalChain(workflow.id, workflow.steps);
+      await createApprovalChain(workflow.id, workflow.steps, {
+        leaveRequestId: leave.id
+      }, workflowRequest.id);
 
       return res.status(202).json({
         message: 'Leave request sent for approval',

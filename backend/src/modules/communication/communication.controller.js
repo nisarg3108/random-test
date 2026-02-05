@@ -1,4 +1,5 @@
 import communicationService from './communication.service.js';
+import { listUsers } from '../../users/user.service.js';
 
 class CommunicationController {
   // ==================== CONVERSATIONS ====================
@@ -105,6 +106,18 @@ class CommunicationController {
       console.error('Error removing participant:', error);
       res.status(error.message === 'Unauthorized' ? 403 : 500)
         .json({ error: error.message });
+    }
+  }
+
+  // ==================== USERS (FOR MESSAGING) ====================
+
+  async getMessagingUsers(req, res) {
+    try {
+      const users = await listUsers(req.user.tenantId);
+      res.json(users);
+    } catch (error) {
+      console.error('Error getting messaging users:', error);
+      res.status(500).json({ error: error.message });
     }
   }
   

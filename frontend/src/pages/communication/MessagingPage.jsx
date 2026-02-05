@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo, useDeferredValue } from 'react';
 import {
   Box,
   Paper,
@@ -22,7 +22,9 @@ import {
   MenuItem,
   Divider,
   Tooltip,
-  CircularProgress
+  CircularProgress,
+  Checkbox,
+  ListItemButton
 } from '@mui/material';
 import {
   Send as SendIcon,
@@ -36,8 +38,7 @@ import {
   Delete as DeleteIcon,
   Group as GroupIcon,
   Person as PersonIcon,
-  Tag as TagIcon,
-  FiberManualRecord as OnlineIcon
+  Tag as TagIcon
 } from '@mui/icons-material';
 import {
   getConversations,
@@ -48,9 +49,12 @@ import {
   addReaction,
   updateMessage,
   deleteMessage,
-  setTypingStatus
+  setTypingStatus,
+  getMessagingUsers
 } from '../../api/communication';
 import { useMessagingWebSocket, useOnlineUsersWebSocket } from '../../hooks/useWebSocket';
+import { getUserFromToken } from '../../store/auth.store';
+import Layout from '../../components/layout/Layout';
 
 const MessagingPage = () => {
   const [conversations, setConversations] = useState([]);
@@ -60,10 +64,19 @@ const MessagingPage = () => {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [openNewChat, setOpenNewChat] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [usersSearch, setUsersSearch] = useState('');
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [conversationName, setConversationName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const currentUserId = getUserFromToken()?.userId || getUserFromToken()?.id || null;
+  const effectiveUserId = currentUserId || localStorage.getItem('userId');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const deferredUsersSearch = useDeferredValue(usersSearch);
   
   // WebSocket hooks for real-time updates
   const { 
@@ -78,6 +91,15 @@ const MessagingPage = () => {
 
   useEffect(() => {
     loadConversations();
+    loadMessagingUsers();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -90,6 +112,15 @@ const MessagingPage = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (!openNewChat) return;
+
+    setUsersSearch('');
+    setSelectedUserIds([]);
+    setConversationName('');
+    loadMessagingUsers();
+  }, [openNewChat]);
   
   // Handle incoming real-time messages
   useEffect(() => {
@@ -141,6 +172,19 @@ const MessagingPage = () => {
       setMessages(response.data.messages);
     } catch (error) {
       console.error('Error loading messages:', error);
+    }
+  };
+
+  const loadMessagingUsers = async () => {
+    try {
+      setUsersLoading(true);
+      const response = await getMessagingUsers();
+      const fetchedUsers = response.data || [];
+      setUsers(currentUserId ? fetchedUsers.filter(u => u.id !== currentUserId) : fetchedUsers);
+    } catch (error) {
+      console.error('Error loading messaging users:', error);
+    } finally {
+      setUsersLoading(false);
     }
   };
   
@@ -218,14 +262,69 @@ const MessagingPage = () => {
     }
   };
 
+  const handleToggleUser = (userId) => {
+    setSelectedUserIds(prev =>
+      prev.includes(userId) ? prev.filter(id => id !== userId) : [...prev, userId]
+    );
+  };
+
+  const handleCreateConversation = async () => {
+    if (selectedUserIds.length === 0) return;
+
+    const isGroup = selectedUserIds.length > 1;
+    const payload = {
+      type: isGroup ? 'GROUP' : 'DIRECT',
+      participantIds: selectedUserIds,
+      ...(isGroup && conversationName.trim() ? { name: conversationName.trim() } : {})
+    };
+
+    await handleNewConversation(payload);
+  };
+
+  const getUserLabel = (user) => {
+    if (!user) return 'Unknown User';
+    if (user.email) return user.email.split('@')[0];
+    return 'User';
+  };
+
+  const getConversationInitials = (conversation) => {
+    const name = getConversationName(conversation);
+    return name
+      .split(' ')
+      .map(part => part.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('');
+  };
+
+  const getDirectParticipantUser = (conversation) => {
+    const otherParticipant = conversation?.participants?.find(
+      (p) => p.userId !== currentUserId
+    );
+    return users.find((u) => u.id === otherParticipant?.userId) || null;
+  };
+
+  const getDirectParticipantId = (conversation) => {
+    const otherParticipant = conversation?.participants?.find(
+      (p) => p.userId !== currentUserId
+    );
+    return otherParticipant?.userId || getDirectParticipantUser(conversation)?.id || null;
+  };
+
   const getConversationName = (conversation) => {
     if (conversation.name) return conversation.name;
     if (conversation.type === 'DIRECT') {
-      // Get other participant's name
-      return 'Direct Message';
+      const otherParticipant = conversation.participants?.find(
+        (p) => p.userId !== currentUserId
+      );
+      const matchedUser = users.find((u) => u.id === otherParticipant?.userId);
+      return getUserLabel(matchedUser);
     }
     return 'Conversation';
   };
+
+  const getUserById = (userId) => users.find((u) => u.id === userId) || null;
+
+  const getSenderLabel = (senderId) => getUserLabel(getUserById(senderId));
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -242,28 +341,34 @@ const MessagingPage = () => {
     return date.toLocaleDateString();
   };
 
-  const filteredConversations = conversations.filter(conv =>
-    getConversationName(conv).toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredConversations = useMemo(() => (
+    conversations.filter((conv) =>
+      getConversationName(conv).toLowerCase().includes(deferredSearchQuery.toLowerCase())
+    )
+  ), [conversations, deferredSearchQuery, users]);
+
+  const filteredUsers = useMemo(() => (
+    users.filter((user) =>
+      user.email?.toLowerCase().includes(deferredUsersSearch.toLowerCase())
+    )
+  ), [users, deferredUsersSearch]);
 
   return (
-    <Box sx={{ height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
-      <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider', bgcolor: 'white' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h5" sx={{ fontWeight: 600 }}>
-            Messages
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setOpenNewChat(true)}
-          >
-            New Chat
-          </Button>
-        </Box>
-      </Box>
-
-      <Grid container sx={{ flexGrow: 1, overflow: 'hidden' }}>
+    <Layout>
+      <Paper
+        elevation={0}
+        sx={{
+          border: 1,
+          borderColor: 'divider',
+          borderRadius: 2,
+          overflow: 'hidden',
+          height: 'calc(100vh - 220px)',
+          display: 'flex',
+          flexDirection: 'column',
+          bgcolor: 'background.paper'
+        }}
+      >
+        <Grid container sx={{ flexGrow: 1, overflow: 'hidden' }}>
         {/* Conversations List */}
         <Grid
           item
@@ -277,6 +382,28 @@ const MessagingPage = () => {
             height: '100%'
           }}
         >
+          <Box
+            sx={{
+              p: 2,
+              borderBottom: 1,
+              borderColor: 'divider',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+              Conversations
+            </Typography>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<AddIcon />}
+              onClick={() => setOpenNewChat(true)}
+            >
+              New Chat
+            </Button>
+          </Box>
           <Box sx={{ p: 2 }}>
             <TextField
               fullWidth
@@ -295,7 +422,7 @@ const MessagingPage = () => {
               <CircularProgress />
             </Box>
           ) : (
-            <List>
+            <List sx={{ px: 1 }}>
               {filteredConversations.map((conversation) => (
                 <ListItem
                   key={conversation.id}
@@ -303,21 +430,33 @@ const MessagingPage = () => {
                   selected={selectedConversation?.id === conversation.id}
                   onClick={() => handleSelectConversation(conversation)}
                   sx={{
-                    borderLeft: 4,
-                    borderColor:
-                      selectedConversation?.id === conversation.id
-                        ? 'primary.main'
-                        : 'transparent'
+                    borderRadius: 2,
+                    mb: 0.5,
+                    border: '1px solid',
+                    borderColor: selectedConversation?.id === conversation.id
+                      ? 'primary.main'
+                      : 'divider',
+                    bgcolor: selectedConversation?.id === conversation.id
+                      ? 'primary.50'
+                      : 'transparent',
+                    '&:hover': {
+                      bgcolor: selectedConversation?.id === conversation.id
+                        ? 'primary.50'
+                        : 'action.hover'
+                    }
                   }}
                 >
                   <ListItemAvatar>
                     <Badge
                       color="success"
                       variant="dot"
+                      overlap="circular"
                       invisible={conversation.type !== 'DIRECT'}
                     >
-                      <Avatar>
-                        {conversation.type === 'GROUP' ? <GroupIcon /> : <PersonIcon />}
+                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                        {conversation.type === 'GROUP'
+                          ? <GroupIcon />
+                          : getConversationInitials(conversation)}
                       </Avatar>
                     </Badge>
                   </ListItemAvatar>
@@ -370,15 +509,21 @@ const MessagingPage = () => {
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar sx={{ mr: 2 }}>
-                    {selectedConversation.type === 'GROUP' ? <GroupIcon /> : <PersonIcon />}
+                  <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
+                    {selectedConversation.type === 'GROUP'
+                      ? <GroupIcon />
+                      : getConversationInitials(selectedConversation)}
                   </Avatar>
                   <Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                       {getConversationName(selectedConversation)}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {selectedConversation.participants?.length || 0} participants
+                      {selectedConversation.type === 'DIRECT'
+                        ? (onlineUsers.includes(getDirectParticipantId(selectedConversation))
+                          ? 'Online'
+                          : 'Offline')
+                        : `${selectedConversation.participants?.length || 0} participants`}
                     </Typography>
                   </Box>
                 </Box>
@@ -393,13 +538,29 @@ const MessagingPage = () => {
                   flexGrow: 1,
                   overflow: 'auto',
                   p: 2,
-                  bgcolor: 'grey.50',
+                  bgcolor: 'background.default',
                   display: 'flex',
                   flexDirection: 'column'
                 }}
               >
+                {messages.length === 0 && (
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'column',
+                      color: 'text.secondary',
+                      py: 6
+                    }}
+                  >
+                    <SendIcon sx={{ fontSize: 48, mb: 1, opacity: 0.4 }} />
+                    <Typography variant="body2">No messages yet. Say hello!</Typography>
+                  </Box>
+                )}
                 {messages.map((message, index) => {
-                  const isOwnMessage = message.senderId === localStorage.getItem('userId');
+                  const isOwnMessage = message.senderId === effectiveUserId;
                   const showDate =
                     index === 0 ||
                     new Date(messages[index - 1].createdAt).toDateString() !==
@@ -412,6 +573,7 @@ const MessagingPage = () => {
                           <Chip
                             label={new Date(message.createdAt).toLocaleDateString()}
                             size="small"
+                            sx={{ bgcolor: 'white' }}
                           />
                         </Box>
                       )}
@@ -425,11 +587,21 @@ const MessagingPage = () => {
                         <Paper
                           sx={{
                             maxWidth: '70%',
-                            p: 1.5,
-                            bgcolor: isOwnMessage ? 'primary.main' : 'white',
-                            color: isOwnMessage ? 'white' : 'text.primary'
+                            p: 1.25,
+                            bgcolor: isOwnMessage ? 'grey.100' : 'background.paper',
+                            color: 'text.primary',
+                            borderRadius: 2,
+                            boxShadow: 1
                           }}
                         >
+                          {selectedConversation?.type === 'GROUP' && !isOwnMessage && (
+                            <Typography
+                              variant="caption"
+                              sx={{ display: 'block', opacity: 0.8, mb: 0.5 }}
+                            >
+                              {getSenderLabel(message.senderId)}
+                            </Typography>
+                          )}
                           <Typography variant="body1">{message.content}</Typography>
                           <Typography
                             variant="caption"
@@ -473,7 +645,10 @@ const MessagingPage = () => {
                   p: 2,
                   display: 'flex',
                   gap: 1,
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  borderTop: 1,
+                  borderColor: 'divider',
+                  bgcolor: 'background.paper'
                 }}
               >
                 <IconButton size="small">
@@ -489,6 +664,12 @@ const MessagingPage = () => {
                   value={messageInput}
                   onChange={handleTyping}
                   disabled={sending}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      bgcolor: 'primary.50'
+                    }
+                  }}
                 />
                 <IconButton
                   type="submit"
@@ -521,18 +702,68 @@ const MessagingPage = () => {
       <Dialog open={openNewChat} onClose={() => setOpenNewChat(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Start New Conversation</DialogTitle>
         <DialogContent>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Feature coming soon: Select users to start a conversation
-          </Typography>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Search users..."
+            value={usersSearch}
+            onChange={(e) => setUsersSearch(e.target.value)}
+            sx={{ mb: 2, mt: 1 }}
+          />
+
+          {usersLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+              <CircularProgress size={24} />
+            </Box>
+          ) : (
+            <List sx={{ maxHeight: 280, overflow: 'auto', border: 1, borderColor: 'divider', borderRadius: 1 }}>
+              {filteredUsers.length === 0 ? (
+                <ListItem>
+                  <ListItemText primary="No users found" />
+                </ListItem>
+              ) : (
+                filteredUsers.map((user) => (
+                  <ListItem disablePadding key={user.id}>
+                    <ListItemButton onClick={() => handleToggleUser(user.id)}>
+                      <ListItemAvatar>
+                        <Avatar>{user.email?.charAt(0)?.toUpperCase() || 'U'}</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={user.email}
+                        secondary={user.department?.name || user.role}
+                      />
+                      <Checkbox edge="end" checked={selectedUserIds.includes(user.id)} />
+                    </ListItemButton>
+                  </ListItem>
+                ))
+              )}
+            </List>
+          )}
+
+          {selectedUserIds.length > 1 && (
+            <TextField
+              fullWidth
+              size="small"
+              label="Group name (optional)"
+              value={conversationName}
+              onChange={(e) => setConversationName(e.target.value)}
+              sx={{ mt: 2 }}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenNewChat(false)}>Cancel</Button>
-          <Button variant="contained" onClick={() => setOpenNewChat(false)}>
+          <Button
+            variant="contained"
+            onClick={handleCreateConversation}
+            disabled={selectedUserIds.length === 0}
+          >
             Create
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+      </Paper>
+    </Layout>
   );
 };
 
