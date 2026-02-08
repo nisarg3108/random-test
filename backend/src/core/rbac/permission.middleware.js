@@ -36,7 +36,6 @@ export const requirePermission = (permissionCode, options = {}) => {
         where: { userId },
         include: {
           role: {
-            where: { tenantId },
             include: {
               permissions: {
                 include: { permission: true },
@@ -46,12 +45,15 @@ export const requirePermission = (permissionCode, options = {}) => {
         },
       });
 
-      // Extract all permission codes the user has
+      // Extract all permission codes the user has (filter by tenant)
       const userPermissions = new Set();
       userRoles.forEach(userRole => {
-        userRole.role.permissions.forEach(rp => {
-          userPermissions.add(rp.permission.code);
-        });
+        // Only include permissions from roles that match the user's tenant
+        if (userRole.role && userRole.role.tenantId === tenantId) {
+          userRole.role.permissions.forEach(rp => {
+            userPermissions.add(rp.permission.code);
+          });
+        }
       });
 
       // Handle array of permissions

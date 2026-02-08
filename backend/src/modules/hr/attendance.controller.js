@@ -1,4 +1,5 @@
 import attendanceService from './attendance.service.js';
+import { getEmployeeByUserId } from './employee.service.js';
 
 // ==========================================
 // CLOCK IN/OUT ENDPOINTS
@@ -6,8 +7,21 @@ import attendanceService from './attendance.service.js';
 
 export const clockIn = async (req, res) => {
   try {
-    const { employeeId, location } = req.body;
+    let { employeeId, location } = req.body;
     const tenantId = req.user.tenantId;
+    const userId = req.user.userId;
+
+    // If employeeId not provided, get it from current user
+    if (!employeeId) {
+      const employee = await getEmployeeByUserId(userId, tenantId);
+      if (!employee) {
+        return res.status(404).json({
+          success: false,
+          message: 'Employee profile not found for current user'
+        });
+      }
+      employeeId = employee.id;
+    }
 
     const result = await attendanceService.clockIn(employeeId, tenantId, location);
     
@@ -26,8 +40,21 @@ export const clockIn = async (req, res) => {
 
 export const clockOut = async (req, res) => {
   try {
-    const { employeeId, location } = req.body;
+    let { employeeId, location } = req.body;
     const tenantId = req.user.tenantId;
+    const userId = req.user.userId;
+
+    // If employeeId not provided, get it from current user
+    if (!employeeId) {
+      const employee = await getEmployeeByUserId(userId, tenantId);
+      if (!employee) {
+        return res.status(404).json({
+          success: false,
+          message: 'Employee profile not found for current user'
+        });
+      }
+      employeeId = employee.id;
+    }
 
     const result = await attendanceService.clockOut(employeeId, tenantId, location);
     
@@ -366,20 +393,24 @@ export const integrateLeave = async (req, res) => {
   }
 };
 
-export default {
-  clockIn,
-  clockOut,
-  getClockStatus,
-  createShift,
-  assignShift,
-  getEmployeeShift,
-  getShifts,
-  createOvertimePolicy,
-  getOvertimeHours,
-  recordOvertimeManual,
-  approveOvertimeRecord,
-  generateMonthlyReport,
-  getMonthlyReport,
-  getTeamReport,
-  integrateLeave
+// ==========================================
+// DASHBOARD STATISTICS ENDPOINT
+// ==========================================
+
+export const getDashboardStats = async (req, res) => {
+  try {
+    const tenantId = req.user.tenantId;
+
+    const stats = await attendanceService.getDashboardStatistics(tenantId);
+    
+    res.status(200).json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 };

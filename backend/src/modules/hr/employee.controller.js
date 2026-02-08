@@ -1,4 +1,4 @@
-import { createEmployee, listEmployees, assignManager, getEmployeeByUserId } from './employee.service.js';
+import { createEmployee, listEmployees, assignManager, getEmployeeByUserId, updateEmployee, deleteEmployee } from './employee.service.js';
 import { logAudit } from '../../core/audit/audit.service.js';
 
 export const createEmployeeController = async (req, res, next) => {
@@ -33,11 +33,7 @@ export const listEmployeesController = async (req, res, next) => {
 
 export const getMyProfileController = async (req, res, next) => {
   try {
-    const { userId, tenantId, role } = req.user;
-    
-    if (role !== 'EMPLOYEE') {
-      return res.status(403).json({ error: 'Access denied. Employee role required.' });
-    }
+    const { userId, tenantId } = req.user;
 
     const employee = await getEmployeeByUserId(userId, tenantId);
     if (!employee) {
@@ -73,3 +69,42 @@ export const assignManagerController = async (req, res, next) => {
     next(err);
   }
 };
+
+export const updateEmployeeController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const employee = await updateEmployee(id, req.body, req.user.tenantId);
+
+    await logAudit({
+      userId: req.user.userId,
+      tenantId: req.user.tenantId,
+      action: 'UPDATE',
+      entity: 'EMPLOYEE',
+      entityId: employee.id,
+    });
+
+    res.json(employee);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteEmployeeController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    
+    await logAudit({
+      userId: req.user.userId,
+      tenantId: req.user.tenantId,
+      action: 'DELETE',
+      entity: 'EMPLOYEE',
+      entityId: id,
+    });
+
+    const result = await deleteEmployee(id, req.user.tenantId);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+

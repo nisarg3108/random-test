@@ -1,21 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Briefcase, Clock, Users, Plus, Edit2, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
 import { apiClient } from '../../api/http';
+import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
-const ShiftManagement = ({ employeeId }) => {
+const ShiftManagement = ({ employeeId: propEmployeeId }) => {
   const [shifts, setShifts] = useState([]);
   const [employeeShift, setEmployeeShift] = useState(null);
   const [shiftHistory, setShiftHistory] = useState([]);
+  const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showAssignForm, setShowAssignForm] = useState(false);
   const [selectedShiftId, setSelectedShiftId] = useState('');
 
+  // If no employeeId prop, this is a standalone page - fetch current employee
+  const isStandalone = !propEmployeeId;
+  const employeeId = propEmployeeId || employee?.id;
+
   useEffect(() => {
-    loadShiftData();
+    if (isStandalone) {
+      loadEmployee();
+    }
+  }, [isStandalone]);
+
+  useEffect(() => {
+    if (employeeId) {
+      loadShiftData();
+    }
   }, [employeeId]);
+
+  const loadEmployee = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.get('/employees/my-profile');
+      setEmployee(res.data?.data);
+    } catch (err) {
+      setError('Failed to load employee data');
+      console.error('Error loading employee:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadShiftData = async () => {
     setLoading(true);
@@ -60,76 +87,91 @@ const ShiftManagement = ({ employeeId }) => {
     }
   };
 
-  if (loading) {
-    return <LoadingSpinner />;
+  if (loading && !employeeId) {
+    return isStandalone ? (
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    ) : <LoadingSpinner />;
   }
 
-  return (
+  const content = (
     <div className="space-y-6">
+      {isStandalone && (
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-primary-900">Shift Management</h1>
+            <p className="text-primary-600 mt-1">Manage work shifts and assignments</p>
+          </div>
+        </div>
+      )}
+
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-red-600" />
-          <span className="text-red-700">{error}</span>
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
+          <AlertCircle className="w-5 h-5" />
+          <span>{error}</span>
         </div>
       )}
 
       {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 text-green-600" />
-          <span className="text-green-700">{success}</span>
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
+          <CheckCircle className="w-5 h-5" />
+          <span>{success}</span>
         </div>
       )}
 
       {/* Current Shift */}
       {employeeShift && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-md p-6 border border-blue-200">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <div className="modern-card-elevated p-6">
+          <h3 className="text-lg font-bold text-primary-900 mb-4 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-blue-600" />
             Your Current Shift
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-gray-600 text-sm mb-1">Shift Name</p>
-              <p className="text-lg font-semibold text-gray-800">{employeeShift.name}</p>
+              <p className="text-primary-600 text-sm mb-1">Shift Name</p>
+              <p className="text-lg font-semibold text-primary-900">{employeeShift.name}</p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm mb-1">Start Time</p>
-              <p className="text-lg font-semibold text-gray-800">{employeeShift.startTime}</p>
+              <p className="text-primary-600 text-sm mb-1">Start Time</p>
+              <p className="text-lg font-semibold text-primary-900">{employeeShift.startTime}</p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm mb-1">End Time</p>
-              <p className="text-lg font-semibold text-gray-800">{employeeShift.endTime}</p>
+              <p className="text-primary-600 text-sm mb-1">End Time</p>
+              <p className="text-lg font-semibold text-primary-900">{employeeShift.endTime}</p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm mb-1">Break Duration</p>
-              <p className="text-lg font-semibold text-gray-800">{employeeShift.breakDuration} mins</p>
+              <p className="text-primary-600 text-sm mb-1">Break Duration</p>
+              <p className="text-lg font-semibold text-primary-900">{employeeShift.breakDuration} mins</p>
             </div>
           </div>
         </div>
       )}
 
       {/* Assign Shift Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">Available Shifts</h3>
+      <div className="modern-card-elevated">
+        <div className="px-6 py-4 border-b border-primary-200 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-primary-900">Available Shifts</h2>
           <button
             onClick={() => setShowAssignForm(!showAssignForm)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+            className="btn-modern btn-primary flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            Assign Shift
+            <span>Assign Shift</span>
           </button>
         </div>
 
         {showAssignForm && (
-          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="p-6 bg-blue-50 border-b border-blue-200">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Select Shift</label>
+                <label className="block text-sm font-semibold text-primary-900 mb-2">Select Shift</label>
                 <select
                   value={selectedShiftId}
                   onChange={(e) => setSelectedShiftId(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-modern"
                 >
                   <option value="">Choose a shift...</option>
                   {shifts.map(shift => (
@@ -142,13 +184,13 @@ const ShiftManagement = ({ employeeId }) => {
               <div className="flex gap-2">
                 <button
                   onClick={handleAssignShift}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                  className="btn-modern btn-primary"
                 >
                   Assign
                 </button>
                 <button
                   onClick={() => setShowAssignForm(false)}
-                  className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400"
+                  className="btn-modern btn-secondary"
                 >
                   Cancel
                 </button>
@@ -159,45 +201,60 @@ const ShiftManagement = ({ employeeId }) => {
 
         {/* All Shifts Table */}
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b-2 border-gray-200">
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Shift Name</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Start Time</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">End Time</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Break</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Assigned Employees</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shifts.map(shift => (
-                <tr key={shift.id} className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="py-3 px-4 text-gray-800 font-semibold">{shift.name}</td>
-                  <td className="py-3 px-4 text-gray-600">{shift.startTime}</td>
-                  <td className="py-3 px-4 text-gray-600">{shift.endTime}</td>
-                  <td className="py-3 px-4 text-gray-600">{shift.breakDuration} mins</td>
-                  <td className="py-3 px-4">
-                    <span className="flex items-center gap-1 text-blue-600 font-semibold">
-                      <Users className="w-4 h-4" />
-                      {shift.shiftAssignments?.length || 0}
-                    </span>
-                  </td>
+          {loading ? (
+            <div className="p-8">
+              <LoadingSpinner />
+            </div>
+          ) : shifts.length === 0 ? (
+            <div className="text-center py-12">
+              <Briefcase className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">No shifts available</p>
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead className="bg-primary-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Shift Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Start Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">End Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Break</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase">Assigned</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-primary-200">
+                {shifts.map(shift => (
+                  <tr key={shift.id} className="hover:bg-primary-50">
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-primary-900">{shift.name}</div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-primary-900">{shift.startTime}</td>
+                    <td className="px-6 py-4 text-sm text-primary-900">{shift.endTime}</td>
+                    <td className="px-6 py-4 text-sm text-primary-600">{shift.breakDuration} mins</td>
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center gap-1 text-blue-600 font-medium text-sm">
+                        <Users className="w-4 h-4" />
+                        {shift.shiftAssignments?.length || 0}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 
       {/* Shift History */}
       {shiftHistory.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Shift History</h3>
-          <div className="space-y-3">
+        <div className="modern-card-elevated">
+          <div className="px-6 py-4 border-b border-primary-200">
+            <h2 className="text-lg font-semibold text-primary-900">Shift History</h2>
+          </div>
+          <div className="p-6 space-y-3">
             {shiftHistory.map(record => (
-              <div key={record.id} className="p-4 border border-gray-200 rounded-lg">
+              <div key={record.id} className="p-4 border border-primary-200 rounded-lg hover:bg-primary-50 transition">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="font-semibold text-gray-800">{record.shift.name}</p>
+                  <p className="font-semibold text-primary-900">{record.shift.name}</p>
                   <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                     record.status === 'ACTIVE'
                       ? 'bg-green-100 text-green-800'
@@ -206,7 +263,7 @@ const ShiftManagement = ({ employeeId }) => {
                     {record.status}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-primary-600">
                   From: {new Date(record.assignedFrom).toLocaleDateString()}
                   {record.assignedTo && ` to ${new Date(record.assignedTo).toLocaleDateString()}`}
                 </p>
@@ -217,6 +274,8 @@ const ShiftManagement = ({ employeeId }) => {
       )}
     </div>
   );
+
+  return isStandalone ? <Layout>{content}</Layout> : content;
 };
 
 export default ShiftManagement;

@@ -11,6 +11,8 @@ import {
   CheckCircle,
   AlertCircle 
 } from 'lucide-react';
+import Layout from '../../../components/layout/Layout';
+import LoadingSpinner from '../../../components/common/LoadingSpinner';
 
 export default function PayrollDashboard() {
   const navigate = useNavigate();
@@ -109,45 +111,48 @@ export default function PayrollDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <LoadingSpinner />
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <Layout>
+      <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Payroll Dashboard</h1>
-          <p className="text-gray-600 mt-1">Manage salary processing and disbursements</p>
+          <h1 className="text-2xl font-bold text-primary-900">Payroll Dashboard</h1>
+          <p className="text-primary-600 mt-1">Manage salary processing and disbursements</p>
         </div>
         <div className="flex gap-3">
           <button
             onClick={() => navigate('/hr/payroll/attendance')}
-            className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            className="btn-modern btn-secondary flex items-center space-x-2"
           >
-            <Clock className="w-4 h-4 inline mr-2" />
-            Attendance
+            <Clock className="w-4 h-4" />
+            <span>Attendance</span>
           </button>
           <button
             onClick={() => navigate('/hr/payroll/cycles')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="btn-modern btn-primary flex items-center space-x-2"
           >
-            <Calendar className="w-4 h-4 inline mr-2" />
-            Manage Cycles
+            <Calendar className="w-4 h-4" />
+            <span>Manage Cycles</span>
           </button>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div className="card-modern">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Payroll</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-sm font-medium text-primary-600">Total Payroll</p>
+              <p className="text-2xl font-bold text-primary-900 mt-1">
                 {formatCurrency(stats.totalPayroll)}
               </p>
             </div>
@@ -155,17 +160,17 @@ export default function PayrollDashboard() {
               <DollarSign className="w-6 h-6 text-blue-600" />
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-primary-500 mt-4">
             <TrendingUp className="w-4 h-4 inline text-green-600" />
             <span className="ml-1">Current period</span>
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="card-modern">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Avg. Salary</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-sm font-medium text-primary-600">Avg. Salary</p>
+              <p className="text-2xl font-bold text-primary-900 mt-1">
                 {formatCurrency(stats.avgSalary)}
               </p>
             </div>
@@ -173,16 +178,16 @@ export default function PayrollDashboard() {
               <Users className="w-6 h-6 text-green-600" />
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-primary-500 mt-4">
             <span>{stats.totalPayslips} employees</span>
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="card-modern">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Pending Approvals</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-sm font-medium text-primary-600">Pending Approvals</p>
+              <p className="text-2xl font-bold text-primary-900 mt-1">
                 {stats.pendingApprovals}
               </p>
             </div>
@@ -190,16 +195,16 @@ export default function PayrollDashboard() {
               <AlertCircle className="w-6 h-6 text-orange-600" />
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-primary-500 mt-4">
             <span>Payslips awaiting approval</span>
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="card-modern">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Disbursements</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-sm font-medium text-primary-600">Disbursements</p>
+              <p className="text-2xl font-bold text-primary-900 mt-1">
                 {stats.completedDisbursements}
               </p>
             </div>
@@ -213,12 +218,12 @@ export default function PayrollDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Recent Payroll Cycles */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        <div className="card-modern">
+          <div className="p-6 border-b border-primary-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Recent Payroll Cycles</h2>
+              <h2 className="text-lg font-semibold text-primary-900">Recent Payroll Cycles</h2>
               <button
                 onClick={() => navigate('/hr/payroll/cycles')}
                 className="text-sm text-blue-600 hover:text-blue-700"
@@ -229,8 +234,8 @@ export default function PayrollDashboard() {
           </div>
           <div className="p-6">
             {recentCycles.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <Calendar className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+              <div className="text-center py-8 text-primary-500">
+                <Calendar className="w-12 h-12 mx-auto mb-3 text-primary-400" />
                 <p>No payroll cycles found</p>
                 <button
                   onClick={() => navigate('/hr/payroll/cycles/new')}
@@ -244,14 +249,14 @@ export default function PayrollDashboard() {
                 {recentCycles.map((cycle) => (
                   <div
                     key={cycle.id}
-                    className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                    className="p-4 border border-primary-200 rounded-lg hover:bg-primary-50 cursor-pointer transition-colors"
                     onClick={() => navigate(`/hr/payroll/cycles/${cycle.id}`)}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium text-gray-900">{cycle.name}</h3>
+                      <h3 className="font-medium text-primary-900">{cycle.name}</h3>
                       {getStatusBadge(cycle.status)}
                     </div>
-                    <div className="text-sm text-gray-600 space-y-1">
+                    <div className="text-sm text-primary-600 space-y-1">
                       <p>Payment Date: {formatDate(cycle.paymentDate)}</p>
                       <p>Total: {formatCurrency(cycle.totalNet)}</p>
                     </div>
@@ -263,10 +268,10 @@ export default function PayrollDashboard() {
         </div>
 
         {/* Recent Payslips */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        <div className="card-modern">
+          <div className="p-6 border-b border-primary-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Recent Payslips</h2>
+              <h2 className="text-lg font-semibold text-primary-900">Recent Payslips</h2>
               <button
                 onClick={() => navigate('/hr/payroll/payslips')}
                 className="text-sm text-blue-600 hover:text-blue-700"
@@ -277,8 +282,8 @@ export default function PayrollDashboard() {
           </div>
           <div className="p-6">
             {recentPayslips.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <FileText className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+              <div className="text-center py-8 text-primary-500">
+                <FileText className="w-12 h-12 mx-auto mb-3 text-primary-400" />
                 <p>No payslips generated yet</p>
               </div>
             ) : (
@@ -286,18 +291,18 @@ export default function PayrollDashboard() {
                 {recentPayslips.map((payslip) => (
                   <div
                     key={payslip.id}
-                    className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                    className="p-4 border border-primary-200 rounded-lg hover:bg-primary-50 cursor-pointer transition-colors"
                     onClick={() => navigate(`/hr/payroll/payslips/${payslip.id}`)}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div>
-                        <h3 className="font-medium text-gray-900">{payslip.employee?.name}</h3>
-                        <p className="text-sm text-gray-500">{payslip.employee?.employeeCode}</p>
+                        <h3 className="font-medium text-primary-900">{payslip.employee?.name}</h3>
+                        <p className="text-sm text-primary-500">{payslip.employee?.employeeCode}</p>
                       </div>
                       {getStatusBadge(payslip.status)}
                     </div>
-                    <div className="text-sm text-gray-600">
-                      <p className="font-medium text-gray-900">
+                    <div className="text-sm text-primary-600">
+                      <p className="font-medium text-primary-900">
                         Net: {formatCurrency(payslip.netSalary)}
                       </p>
                     </div>
@@ -310,42 +315,43 @@ export default function PayrollDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+      <div className="card-modern">
+        <h2 className="text-lg font-semibold text-primary-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <button
             onClick={() => navigate('/hr/payroll/cycles/new')}
-            className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center"
+            className="p-4 border-2 border-dashed border-primary-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center transition-colors"
           >
-            <Calendar className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-            <p className="text-sm font-medium text-gray-700">New Payroll Cycle</p>
+            <Calendar className="w-8 h-8 mx-auto mb-2 text-primary-400" />
+            <p className="text-sm font-medium text-primary-700">New Payroll Cycle</p>
           </button>
           
           <button
             onClick={() => navigate('/hr/payroll/components')}
-            className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center"
+            className="p-4 border-2 border-dashed border-primary-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center transition-colors"
           >
-            <DollarSign className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-            <p className="text-sm font-medium text-gray-700">Salary Components</p>
+            <DollarSign className="w-8 h-8 mx-auto mb-2 text-primary-400" />
+            <p className="text-sm font-medium text-primary-700">Salary Components</p>
           </button>
           
           <button
             onClick={() => navigate('/hr/payroll/tax-config')}
-            className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center"
+            className="p-4 border-2 border-dashed border-primary-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center transition-colors"
           >
-            <FileText className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-            <p className="text-sm font-medium text-gray-700">Tax Configuration</p>
+            <FileText className="w-8 h-8 mx-auto mb-2 text-primary-400" />
+            <p className="text-sm font-medium text-primary-700">Tax Configuration</p>
           </button>
           
           <button
             onClick={() => navigate('/hr/payroll/reports')}
-            className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center"
+            className="p-4 border-2 border-dashed border-primary-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center transition-colors"
           >
-            <TrendingUp className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-            <p className="text-sm font-medium text-gray-700">Reports</p>
+            <TrendingUp className="w-8 h-8 mx-auto mb-2 text-primary-400" />
+            <p className="text-sm font-medium text-primary-700">Reports</p>
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </Layout>
   );
 }

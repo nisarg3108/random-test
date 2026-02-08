@@ -77,6 +77,32 @@ class CommunicationService {
     // Ensure creator is in participants
     const allParticipants = [...new Set([userId, ...(participantIds || [])])];
     
+    // For DIRECT conversations, check if one already exists between the participants
+    if (type === 'DIRECT' && allParticipants.length === 2) {
+      const existingConversation = await prisma.conversation.findFirst({
+        where: {
+          tenantId,
+          type: 'DIRECT',
+          participants: {
+            every: {
+              userId: {
+                in: allParticipants
+              }
+            }
+          }
+        },
+        include: {
+          participants: true
+        }
+      });
+      
+      // If an existing DM conversation is found, return it
+      if (existingConversation && existingConversation.participants.length === 2) {
+        return existingConversation;
+      }
+    }
+    
+    // Create new conversation (for groups or new DMs)
     return await prisma.conversation.create({
       data: {
         tenantId,

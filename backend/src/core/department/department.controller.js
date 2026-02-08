@@ -1,8 +1,10 @@
 import {
   createDepartment,
   listDepartments,
+  updateDepartment,
+  deleteDepartment,
 } from './department.service.js';
-import { logCreate } from '../audit/audit.helper.js';
+import { logCreate, logUpdate, logDelete } from '../audit/audit.helper.js';
 
 
 
@@ -29,6 +31,32 @@ export const createDepartmentController = async (req, res, next) => {
     res.status(201).json(dept);
   } catch (err) {
     console.error('Error in createDepartmentController:', err);
+    next(err);
+  }
+};
+
+export const updateDepartmentController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const dept = await updateDepartment(id, req.body, req.user.tenantId);
+    
+    await logUpdate(req, 'DEPARTMENT', dept);
+    res.json(dept);
+  } catch (err) {
+    console.error('Error in updateDepartmentController:', err);
+    next(err);
+  }
+};
+
+export const deleteDepartmentController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const dept = await deleteDepartment(id, req.user.tenantId);
+    
+    await logDelete(req, 'DEPARTMENT', { id });
+    res.json({ message: 'Department deleted successfully' });
+  } catch (err) {
+    console.error('Error in deleteDepartmentController:', err);
     next(err);
   }
 };

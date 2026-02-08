@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Plus, CheckCircle, AlertCircle, Clock } from 'lucide-react';
 import { apiClient } from '../../api/http';
+import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
-const OvertimeTracking = ({ employeeId }) => {
+const OvertimeTracking = ({ employeeId: propEmployeeId }) => {
   const [overtimeHours, setOvertimeHours] = useState(null);
   const [overtimeRecords, setOvertimeRecords] = useState([]);
+  const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -18,9 +20,33 @@ const OvertimeTracking = ({ employeeId }) => {
     reason: ''
   });
 
+  const isStandalone = !propEmployeeId;
+  const employeeId = propEmployeeId || employee?.id;
+
   useEffect(() => {
-    loadOvertimeData();
+    if (isStandalone) {
+      loadEmployee();
+    }
+  }, [isStandalone]);
+
+  useEffect(() => {
+    if (employeeId) {
+      loadOvertimeData();
+    }
   }, [employeeId, selectedDate]);
+
+  const loadEmployee = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.get('/employees/my-profile');
+      setEmployee(res.data?.data);
+    } catch (err) {
+      setError('Failed to load employee data');
+      console.error('Error loading employee:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadOvertimeData = async () => {
     setLoading(true);
@@ -68,12 +94,27 @@ const OvertimeTracking = ({ employeeId }) => {
     }
   };
 
-  if (loading) {
-    return <LoadingSpinner />;
+  if (loading && !employeeId) {
+    return isStandalone ? (
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    ) : <LoadingSpinner />;
   }
 
-  return (
+  const content = (
     <div className="space-y-6">
+      {isStandalone && (
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-primary-900">Overtime Tracking</h1>
+            <p className="text-primary-600 mt-1">Track and manage overtime hours</p>
+          </div>
+        </div>
+      )}
+
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
           <AlertCircle className="w-5 h-5 text-red-600" />
@@ -282,6 +323,8 @@ const OvertimeTracking = ({ employeeId }) => {
       </div>
     </div>
   );
+
+  return isStandalone ? <Layout>{content}</Layout> : content;
 };
 
 export default OvertimeTracking;

@@ -1,12 +1,13 @@
 import { useState, useEffect, createElement } from 'react';
 import { getToken, getUserFromToken, removeToken } from '../store/auth.store';
-import api from '../api/api';
+import { usePermissions } from '../contexts/PermissionContext';
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [permissions, setPermissions] = useState([]);
-  const [roles, setRoles] = useState([]);
+  
+  // Get permissions from context (cached, no redundant API calls)
+  const permissionContext = usePermissions();
 
   useEffect(() => {
     const initAuth = async () => {
@@ -32,26 +33,6 @@ export const useAuth = () => {
           role: userData.role || 'USER',
           companyId: userData.companyId
         });
-
-        // Try to fetch permissions (optional - don't block on failure)
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 2000);
-          
-          const response = await api.get('/rbac/my-permissions', {
-            signal: controller.signal
-          });
-          
-          clearTimeout(timeoutId);
-          
-          if (response?.success) {
-            setPermissions(response.data?.permissions || []);
-            setRoles(response.data?.roles || []);
-          }
-        } catch (error) {
-          // Permissions fetch failed - continue with basic auth
-          console.warn('Permissions API not available:', error.message);
-        }
       } catch (error) {
         console.error('Auth initialization error:', error);
       } finally {
@@ -65,14 +46,14 @@ export const useAuth = () => {
   const hasRole = (requiredRole) => {
     if (!user) return false;
     
-    // Check if user has ADMIN role (full access)
+    // Use permission context if available
+    if (permissionContext && !permissionContext.loading) {
+      return permissionContext.hasRole(requiredRole);
+    }
+    
+    // Fallback to basic role check
     if (user.role === 'ADMIN') return true;
-    
-    // Check if user has the specific role
     if (user.role === requiredRole) return true;
-    
-    // Check in roles array from RBAC system
-    if (roles.some(r => r.name === requiredRole)) return true;
     
     // Role hierarchy check for backward compatibility
     const roleHierarchy = { 
@@ -101,24 +82,33 @@ export const useAuth = () => {
   const hasPermission = (permission) => {
     if (!user) return false;
     
-    // ADMIN has all permissions
-    if (user.role === 'ADMIN') return true;
-    
-    // Check if user has the specific permission
-    if (Array.isArray(permission)) {
-      // Check if user has ANY of the permissions (OR logic)
-      return permission.some(perm => permissions.includes(perm));
+    // Use permission context if available
+    if (permissionContext && !permissionContext.loading) {
+      // Handle array of permissions (OR logic)
+      if (Array.isArray(permission)) {
+        return permissionContext.hasAnyPermission(
+          permission.map(p => ({ resource: p, action: 'read' }))
+        );
+      }
+      return permissionContext.hasPermission(permission, 'read');
     }
     
-    return permissions.includes(permission);
+    // Fallback: ADMIN has all permissions
+    return user.role === 'ADMIN';
   };
 
   const hasAllPermissions = (permissionList) => {
     if (!user) return false;
-    if (user.role === 'ADMIN') return true;
     
-    // Check if user has ALL permissions (AND logic)
-    return permissionList.every(perm => permissions.includes(perm));
+    // Use permission context if available
+    if (permissionContext && !permissionContext.loading) {
+      return permissionContext.hasAllPermissions(
+        permissionList.map(p => ({ resource: p, action: 'read' }))
+      );
+    }
+    
+    // Fallback: ADMIN has all permissions
+    return user.role === 'ADMIN';
   };
 
   const hasAnyRole = (roleList) => {
@@ -128,13 +118,13 @@ export const useAuth = () => {
 
   return { 
     user, 
-    loading, 
+    loading: loading || (permissionContext?.loading ?? false),
     hasRole, 
     hasPermission,
     hasAllPermissions,
     hasAnyRole,
-    permissions,
-    roles,
+    permissions: permissionContext?.permissions || [],
+    roles: permissionContext?.roles || [],
     isAdmin: user?.role === 'ADMIN'
   };
 };

@@ -16,7 +16,16 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "keywords": ["erp", "react", "nodejs", "prisma", "postgresql"],
+  "keywords": [
+    "erp",
+    "react",
+    "nodejs",
+    "prisma",
+    "postgresql"
+  ],
   "author": "ERP Team",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
 }

@@ -2,10 +2,12 @@ class WebSocketClient {
   constructor() {
     this.ws = null;
     this.reconnectAttempts = 0;
-    this.maxReconnectAttempts = 5;
-    this.reconnectInterval = 3000;
+    this.maxReconnectAttempts = 3;
+    this.reconnectInterval = 5000;
     this.subscriptions = new Set();
     this.listeners = new Map();
+    this.isConnecting = false;
+    this.hasGivenUp = false;
   }
 
   connect(token) {
@@ -13,23 +15,41 @@ class WebSocketClient {
       return Promise.resolve();
     }
 
+    if (this.hasGivenUp) {
+      return Promise.reject(new Error('WebSocket connection abandoned after max attempts'));
+    }
+
+    if (this.isConnecting) {
+      return Promise.reject(new Error('Connection already in progress'));
+    }
+
     return new Promise((resolve, reject) => {
       try {
+        this.isConnecting = true;
         const baseWsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
         const wsUrl = `${baseWsUrl}?token=${encodeURIComponent(token)}`;
-        console.log('🔌 Attempting WebSocket connection to:', wsUrl.replace(token, '[TOKEN]'));
+        
+        if (this.reconnectAttempts === 0) {
+          console.log('🔌 Attempting WebSocket connection to:', wsUrl.replace(token, '[TOKEN]'));
+        }
+        
         this.ws = new WebSocket(wsUrl);
 
         const connectionTimeout = setTimeout(() => {
-          console.error('❌ WebSocket connection timeout');
+          if (this.reconnectAttempts === 1) {
+            console.warn('⚠️ WebSocket connection timeout - will retry');
+          }
           this.ws.close();
+          this.isConnecting = false;
           reject(new Error('Connection timeout'));
-        }, 10000);
+        }, 5000);
 
         this.ws.onopen = () => {
           console.log('✅ WebSocket connected successfully');
           clearTimeout(connectionTimeout);
           this.reconnectAttempts = 0;
+          this.hasGivenUp = false;
+          this.isConnecting = false;
           
           // Resubscribe to previous subscriptions
           this.subscriptions.forEach(endpoint => {
@@ -50,13 +70,20 @@ class WebSocketClient {
 
         this.ws.onclose = (event) => {
           clearTimeout(connectionTimeout);
-          console.log('🔌 WebSocket disconnected. Code:', event.code, 'Reason:', event.reason);
+          this.isConnecting = false;
+          if (this.reconnectAttempts === 0 && !this.hasGivenUp) {
+            console.log('🔌 WebSocket disconnected. Code:', event.code);
+          }
           this.handleReconnect();
         };
 
         this.ws.onerror = (error) => {
           clearTimeout(connectionTimeout);
-          console.error('❌ WebSocket error:', error);
+          this.isConnecting = false;
+          // Only log first error to avoid spam
+          if (this.reconnectAttempts <= 1) {
+            console.warn('⚠️ WebSocket connection failed - running in offline mode');
+          }
           reject(error);
         };
 
@@ -139,14 +166,22 @@ class WebSocketClient {
   handleReconnect() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
-      console.log(`Attempting to reconnect... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+      
+      if (this.reconnectAttempts === 1) {
+        console.log(`⏱️ Will retry connection in ${this.reconnectInterval / 1000} seconds...`);
+      }
       
       setTimeout(() => {
         const token = localStorage.getItem('ueorms_token');
         if (token) {
-          this.connect(token).catch(console.error);
+          this.connect(token).catch(() => {
+            // Silently handle reconnection failures
+          });
         }
       }, this.reconnectInterval);
+    } else if (!this.hasGivenUp) {
+      this.hasGivenUp = true;
+      console.warn('⚠️ WebSocket unavailable - continuing in offline mode. Real-time features disabled.');
     }
   }
 

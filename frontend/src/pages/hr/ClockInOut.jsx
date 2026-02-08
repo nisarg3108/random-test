@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, LogIn, LogOut, AlertCircle, CheckCircle, MapPin } from 'lucide-react';
+import { Clock, LogIn, LogOut, AlertCircle, CheckCircle, MapPin, RefreshCw } from 'lucide-react';
 import { apiClient } from '../../api/http';
+import Layout from '../../components/layout/Layout';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
-const ClockInOut = ({ employeeId }) => {
+const ClockInOut = ({ employeeId: propEmployeeId }) => {
   const [clockStatus, setClockStatus] = useState(null);
+  const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  const isStandalone = !propEmployeeId;
+  const employeeId = propEmployeeId || employee?.id;
 
   useEffect(() => {
-    fetchClockStatus();
+    if (isStandalone) {
+      loadEmployee();
+    }
+  }, [isStandalone]);
+
+  useEffect(() => {
+    if (employeeId) {
+      fetchClockStatus();
+    }
+  }, [employeeId]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
+      setCurrentTime(new Date());
       if (clockStatus?.isClocked) {
         setElapsedTime(prev => prev + 1);
       }
@@ -19,6 +38,19 @@ const ClockInOut = ({ employeeId }) => {
 
     return () => clearInterval(interval);
   }, [clockStatus]);
+
+  const loadEmployee = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.get('/employees/my-profile');
+      setEmployee(res.data?.data);
+    } catch (err) {
+      setError('Failed to load employee data');
+      console.error('Error loading employee:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchClockStatus = async () => {
     try {
@@ -41,17 +73,24 @@ const ClockInOut = ({ employeeId }) => {
       const location = await getLocation();
       
       await apiClient.post('/attendance/clock-in', {
-        employeeId,
         location: location || 'Unknown'
       });
 
       setSuccess('Successfully clocked in!');
-      setClockStatus({ isClocked: true, clockedIn: new Date() });
+      
+      // Fetch updated clock status to get isLate flag
+      setTimeout(async () => {
+        await fetchClockStatus();
+      }, 500);
       setElapsedTime(0);
       
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to clock in');
+      // Refresh status in case of error to show current state
+      setTimeout(async () => {
+        await fetchClockStatus();
+      }, 500);
     } finally {
       setLoading(false);
     }
@@ -66,7 +105,6 @@ const ClockInOut = ({ employeeId }) => {
       const location = await getLocation();
       
       await apiClient.post('/attendance/clock-out', {
-        employeeId,
         location: location || 'Unknown'
       });
 
@@ -109,11 +147,62 @@ const ClockInOut = ({ employeeId }) => {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <Clock className="w-6 h-6 text-blue-600" />
-        <h2 className="text-2xl font-bold text-gray-800">Clock In/Out</h2>
+  const isAfterDeadline = () => {
+    const deadline = new Date();
+    deadline.setHours(9, 0, 0, 0);
+    return currentTime > deadline;
+  };
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+
+  if (loading && !employeeId) {
+    return isStandalone ? (
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    ) : <LoadingSpinner />;
+  }
+
+  const content = (
+    <div className="space-y-6">
+      {isStandalone && (
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-primary-900">Clock In/Out</h1>
+            <p className="text-primary-600 mt-1">Record your work attendance</p>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <Clock className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-gray-800">Clock In/Out</h2>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={fetchClockStatus}
+            disabled={loading}
+            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+            title="Refresh Status"
+          >
+            <RefreshCw className="w-5 h-5" />
+          </button>
+          <div className="text-right">
+            <p className="text-sm text-gray-600">Current Time</p>
+            <p className="text-2xl font-bold text-gray-800">
+              {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              Deadline: 09:00 AM
+            </p>
+          </div>
+        </div>
       </div>
 
       {error && (
@@ -130,6 +219,16 @@ const ClockInOut = ({ employeeId }) => {
         </div>
       )}
 
+      {!clockStatus?.isClocked && isAfterDeadline() && (
+        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center gap-2">
+          <AlertCircle className="w-5 h-5 text-yellow-600" />
+          <div>
+            <p className="text-yellow-800 font-semibold">Late Clock-In Warning</p>
+            <p className="text-yellow-700 text-sm">You are clocking in after 9:00 AM. This will be marked as a late arrival and may affect your salary.</p>
+          </div>
+        </div>
+      )}
+
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
         <div className="text-center">
           <p className="text-gray-600 mb-2">Current Status</p>
@@ -140,9 +239,17 @@ const ClockInOut = ({ employeeId }) => {
             {clockStatus?.isClocked ? 'Currently Clocked In' : 'Not Clocked In'}
           </p>
           {clockStatus?.clockedIn && (
-            <p className="text-sm text-gray-600 mt-2">
-              Clocked in at {new Date(clockStatus.clockedIn).toLocaleTimeString()}
-            </p>
+            <div className="mt-2">
+              <p className="text-sm text-gray-600">
+                Clocked in at {new Date(clockStatus.clockedIn).toLocaleTimeString()}
+              </p>
+              {clockStatus?.isLate && (
+                <p className="text-sm text-orange-600 font-semibold mt-1 flex items-center justify-center gap-1">
+                  <AlertCircle className="w-4 h-4" />
+                  Marked as Late - Half-day deduction may apply
+                </p>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -182,8 +289,11 @@ const ClockInOut = ({ employeeId }) => {
           </p>
         </div>
       </div>
+      </div>
     </div>
   );
+
+  return isStandalone ? <Layout>{content}</Layout> : content;
 };
 
 export default ClockInOut;

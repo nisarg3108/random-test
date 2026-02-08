@@ -12,6 +12,8 @@ export const getConversation = (id) => {
 };
 
 export const createConversation = (data) => {
+  // For DIRECT conversations between 2 users, backend will return existing conversation if one exists
+  // For GROUP conversations, a new one will always be created
   return apiClient.post('/communication/conversations', data);
 };
 

@@ -4,6 +4,8 @@ export const hrAPI = {
   // Employee APIs
   getEmployees: () => apiClient.get('/employees'),
   createEmployee: (data) => apiClient.post('/employees', data),
+  updateEmployee: (id, data) => apiClient.put(`/employees/${id}`, data),
+  deleteEmployee: (id) => apiClient.delete(`/employees/${id}`),
   assignManager: (data) => apiClient.post('/employees/assign-manager', data),
 
   // Salary APIs
