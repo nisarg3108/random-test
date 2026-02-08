@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Users, Plus, Search, UserCheck, Building } from 'lucide-react';
+import { Users, Plus, Search, UserCheck, Building, Edit2, Trash2 } from 'lucide-react';
 import { hrAPI } from '../../api/hr.api';
 import { apiClient } from '../../api/http';
 import Layout from '../../components/layout/Layout';
@@ -12,8 +12,11 @@ const EmployeeList = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showManagerModal, setShowManagerModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [editMode, setEditMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -21,7 +24,6 @@ const EmployeeList = () => {
     phone: '',
     position: '',
     departmentId: '',
-    salary: '',
     joiningDate: ''
   });
 
@@ -59,16 +61,59 @@ const EmployeeList = () => {
     try {
       const employeeData = {
         ...formData,
-        salary: parseFloat(formData.salary),
         departmentId: formData.departmentId
       };
 
-      await hrAPI.createEmployee(employeeData);
+      if (editMode && selectedEmployee) {
+        await hrAPI.updateEmployee(selectedEmployee.id, employeeData);
+      } else {
+        await hrAPI.createEmployee(employeeData);
+      }
       setShowModal(false);
       resetForm();
+      setEditMode(false);
+      setSelectedEmployee(null);
       loadEmployees();
     } catch (err) {
-      setError(err.message || 'Failed to create employee');
+      setError(err.message || `Failed to ${editMode ? 'update' : 'create'} employee`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (employee) => {
+    const nameParts = (employee.name || '').split(' ');
+    setFormData({
+      firstName: nameParts[0] || '',
+      lastName: nameParts.slice(1).join(' ') || '',
+      email: employee.email || '',
+      phone: employee.phone || '',
+      position: employee.designation || employee.position || '',
+      departmentId: employee.departmentId || '',
+      joiningDate: employee.joiningDate ? new Date(employee.joiningDate).toISOString().split('T')[0] : ''
+    });
+    setSelectedEmployee(employee);
+    setEditMode(true);
+    setShowModal(true);
+  };
+
+  const handleDeleteClick = (employee) => {
+    setSelectedEmployee(employee);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedEmployee) return;
+    
+    setLoading(true);
+    setError('');
+    try {
+      await hrAPI.deleteEmployee(selectedEmployee.id);
+      setShowDeleteModal(false);
+      setSelectedEmployee(null);
+      loadEmployees();
+    } catch (err) {
+      setError(err.message || 'Failed to delete employee');
     } finally {
       setLoading(false);
     }
@@ -96,9 +141,10 @@ const EmployeeList = () => {
       phone: '',
       position: '',
       departmentId: '',
-      salary: '',
       joiningDate: ''
     });
+    setEditMode(false);
+    setSelectedEmployee(null);
   };
 
   const handleChange = (e) => {
@@ -110,9 +156,13 @@ const EmployeeList = () => {
     const position = emp.designation || emp.position || '';
     const email = emp.email || '';
     
-    return fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
            email.toLowerCase().includes(searchTerm.toLowerCase()) ||
            position.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesDepartment = !selectedDepartment || emp.departmentId == selectedDepartment;
+    
+    return matchesSearch && matchesDepartment;
   });
 
   const potentialManagers = employees.filter(emp => 
@@ -183,17 +233,32 @@ const EmployeeList = () => {
           </div>
         </div>
 
-        {/* Search */}
+        {/* Search and Filters */}
         <div className="modern-card-elevated p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search employees..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-modern pl-10"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search employees..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="input-modern pl-10"
+              />
+            </div>
+            <div className="relative">
+              <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <select
+                value={selectedDepartment}
+                onChange={(e) => setSelectedDepartment(e.target.value)}
+                className="input-modern pl-10"
+              >
+                <option value="">All Departments</option>
+                {departments.map(dept => (
+                  <option key={dept.id} value={dept.id}>{dept.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -256,15 +321,31 @@ const EmployeeList = () => {
                         {employee.joiningDate ? new Date(employee.joiningDate).toLocaleDateString() : 'N/A'}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={() => {
-                            setSelectedEmployee(employee);
-                            setShowManagerModal(true);
-                          }}
-                          className="btn-modern btn-secondary text-xs"
-                        >
-                          Assign Manager
-                        </button>
+                        <div className="flex items-center justify-end space-x-2">
+                          <button
+                            onClick={() => handleEdit(employee)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Edit Employee"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(employee)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete Employee"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedEmployee(employee);
+                              setShowManagerModal(true);
+                            }}
+                            className="btn-modern btn-secondary text-xs"
+                          >
+                            Assign Manager
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -275,12 +356,14 @@ const EmployeeList = () => {
         </div>
       </div>
 
-      {/* Add Employee Modal */}
+      {/* Add/Edit Employee Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="modern-card-elevated max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-primary-200">
-              <h3 className="text-lg font-semibold text-primary-900">Add New Employee</h3>
+              <h3 className="text-lg font-semibold text-primary-900">
+                {editMode ? 'Edit Employee' : 'Add New Employee'}
+              </h3>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -355,17 +438,6 @@ const EmployeeList = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-primary-700 mb-1">Salary</label>
-                <input
-                  name="salary"
-                  type="number"
-                  step="0.01"
-                  value={formData.salary}
-                  onChange={handleChange}
-                  className="input-modern"
-                />
-              </div>
-              <div>
                 <label className="block text-sm font-medium text-primary-700 mb-1">Joining Date</label>
                 <input
                   name="joiningDate"
@@ -389,7 +461,7 @@ const EmployeeList = () => {
                   disabled={loading}
                   className="btn-modern btn-primary disabled:opacity-50"
                 >
-                  {loading ? 'Creating...' : 'Add Employee'}
+                  {loading ? (editMode ? 'Updating...' : 'Creating...') : (editMode ? 'Update Employee' : 'Add Employee')}
                 </button>
               </div>
             </form>
@@ -442,6 +514,44 @@ const EmployeeList = () => {
                   className="btn-modern btn-secondary"
                 >
                   Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && selectedEmployee && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="modern-card-elevated max-w-md w-full">
+            <div className="px-6 py-4 border-b border-primary-200">
+              <h3 className="text-lg font-semibold text-red-900">Confirm Delete</h3>
+            </div>
+            <div className="p-6">
+              <p className="text-primary-700 mb-4">
+                Are you sure you want to delete employee <strong>{selectedEmployee.name || `${selectedEmployee.firstName} ${selectedEmployee.lastName}`}</strong>?
+              </p>
+              <p className="text-sm text-red-600 mb-4">
+                This action cannot be undone and will remove all associated data.
+              </p>
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setSelectedEmployee(null);
+                  }}
+                  className="btn-modern btn-secondary"
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteConfirm}
+                  className="btn-modern bg-red-600 hover:bg-red-700 text-white disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Deleting...' : 'Delete'}
                 </button>
               </div>
             </div>

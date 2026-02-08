@@ -15,10 +15,48 @@ const Header = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  // Optimized notification polling with visibility detection
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
+    
+    let interval;
+    const POLL_INTERVAL = 60000; // 60 seconds (increased from 30s)
+    
+    // Start polling
+    const startPolling = () => {
+      if (!interval) {
+        interval = setInterval(fetchNotifications, POLL_INTERVAL);
+      }
+    };
+    
+    // Stop polling
+    const stopPolling = () => {
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    };
+    
+    // Handle visibility change
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopPolling(); // Pause when tab is hidden
+      } else {
+        fetchNotifications(); // Fetch immediately when tab becomes visible
+        startPolling(); // Resume polling
+      }
+    };
+    
+    // Start initial polling
+    startPolling();
+    
+    // Listen for visibility changes
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      stopPolling();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const fetchNotifications = async () => {

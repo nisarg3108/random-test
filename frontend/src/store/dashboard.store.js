@@ -34,7 +34,7 @@ export const useDashboardStore = create((set, get) => ({
       });
 
     } catch (error) {
-      console.error('Failed to initialize real-time connection:', error);
+      console.warn('Real-time dashboard updates unavailable - using polling mode');
       set({ isRealTimeConnected: false });
     }
   },

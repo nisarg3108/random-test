@@ -24,6 +24,7 @@ const EmployeeLeaveRequest = () => {
         }
       });
       const data = await response.json();
+      console.log('Fetched leave types:', data);
       setLeaveTypes(data);
     } catch (error) {
       console.error('Error fetching leave types:', error);
@@ -36,6 +37,9 @@ const EmployeeLeaveRequest = () => {
     setMessage('');
 
     try {
+      console.log('Form data before submit:', formData);
+      console.log('Leave type ID type:', typeof formData.leaveTypeId);
+      
       const response = await fetch('/api/leave-requests', {
         method: 'POST',
         headers: {

@@ -6,6 +6,13 @@ import prisma from '../../config/db.js';
 export const createLeaveRequestController = async (req, res, next) => {
   try {
     const { tenantId, userId, role } = req.user;
+    
+    // Log for debugging
+    console.log('Creating leave request - User:', { userId, tenantId, role });
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    console.log('leaveTypeId type:', typeof req.body.leaveTypeId);
+    console.log('leaveTypeId value:', req.body.leaveTypeId);
+    
     // 1️⃣ Create leave request
     const leave = await createLeaveRequest(req.body, tenantId, userId);
 

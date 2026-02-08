@@ -254,9 +254,22 @@ const MessagingPage = () => {
   const handleNewConversation = async (data) => {
     try {
       const response = await createConversation(data);
-      setConversations([response.data, ...conversations]);
-      setSelectedConversation(response.data);
+      
+      // Check if conversation already exists in the list (for existing DMs)
+      const existingIndex = conversations.findIndex(conv => conv.id === response.data.id);
+      
+      if (existingIndex !== -1) {
+        // If it already exists, just select it
+        setSelectedConversation(response.data);
+      } else {
+        // If new conversation, add it to the list
+        setConversations([response.data, ...conversations]);
+        setSelectedConversation(response.data);
+      }
+      
       setOpenNewChat(false);
+      setSelectedUserIds([]);
+      setConversationName('');
     } catch (error) {
       console.error('Error creating conversation:', error);
     }

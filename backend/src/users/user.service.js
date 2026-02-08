@@ -108,6 +108,7 @@ export const deleteUser = async (userId, tenantId) => {
     await prisma.expenseClaim.deleteMany({ where: { employeeId: employee.id } });
     await prisma.leaveRequest.deleteMany({ where: { employeeId: employee.id } });
     await prisma.salaryStructure.deleteMany({ where: { employeeId: employee.id } });
+    await prisma.timeTracking.deleteMany({ where: { employeeId: employee.id } });
     
     // Update manager references
     await prisma.employee.updateMany({

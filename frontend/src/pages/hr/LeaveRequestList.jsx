@@ -60,15 +60,25 @@ const LeaveRequestList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    // Validate required fields
+    if (!formData.employeeId || !formData.leaveTypeId || !formData.startDate || !formData.endDate || !formData.reason) {
+      setError('All fields are required');
+      return;
+    }
+    
     setLoading(true);
 
     try {
       const requestData = {
-        ...formData,
-        employeeId: parseInt(formData.employeeId),
-        leaveTypeId: parseInt(formData.leaveTypeId)
+        employeeId: formData.employeeId,
+        leaveTypeId: formData.leaveTypeId,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        reason: formData.reason
       };
 
+      console.log('Submitting leave request:', requestData);
       await hrAPI.createLeaveRequest(requestData);
       setShowModal(false);
       resetForm();
@@ -88,6 +98,7 @@ const LeaveRequestList = () => {
       endDate: '',
       reason: ''
     });
+    setError('');
   };
 
   const handleChange = (e) => {
@@ -343,6 +354,13 @@ const LeaveRequestList = () => {
               <h3 className="text-lg font-semibold text-primary-900">New Leave Request</h3>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
+              
               <div>
                 <label className="block text-sm font-medium text-primary-700 mb-1">Employee</label>
                 <select

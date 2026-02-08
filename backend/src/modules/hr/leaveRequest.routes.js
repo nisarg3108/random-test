@@ -12,14 +12,12 @@ const router = Router();
 router.post(
   '/',
   requireAuth,
-  requirePermission('leave.request'),
   createLeaveRequestController
 );
 
 router.get(
   '/',
   requireAuth,
-  requirePermission('leave.view'),
   listLeaveRequestsController
 );
 

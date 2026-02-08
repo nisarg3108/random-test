@@ -261,7 +261,7 @@ export const useOnlineUsersWebSocket = () => {
     };
 
     fetchOnlineUsers();
-    const intervalId = setInterval(fetchOnlineUsers, 10000);
+    const intervalId = setInterval(fetchOnlineUsers, 30000); // Increased from 10s to 30s
 
     const unregister = registerHandler('/users/online-status', (data) => {
       const { userId, isOnline } = data.data;

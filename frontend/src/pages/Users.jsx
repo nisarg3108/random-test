@@ -17,6 +17,8 @@ const Users = () => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('ALL');
   const [roleOptions, setRoleOptions] = useState([]);
@@ -24,7 +26,8 @@ const Users = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    role: 'USER'
+    role: 'USER',
+    status: 'ACTIVE'
   });
   
   const { fetchOptions } = useSystemOptionsStore();
@@ -108,12 +111,28 @@ const Users = () => {
     setLoading(true);
 
     try {
-      await apiClient.post('/users', formData);
-      setFormData({ email: '', password: '', role: 'USER' });
+      if (editMode && selectedUser) {
+        // Update existing user
+        const updateData = {
+          role: formData.role,
+          status: formData.status
+        };
+        // Only include password if it's provided
+        if (formData.password) {
+          updateData.password = formData.password;
+        }
+        await apiClient.put(`/users/${selectedUser.id}`, updateData);
+      } else {
+        // Create new user
+        await apiClient.post('/users', formData);
+      }
+      setFormData({ email: '', password: '', role: 'USER', status: 'ACTIVE' });
       setShowModal(false);
+      setEditMode(false);
+      setSelectedUser(null);
       loadUsers();
     } catch (err) {
-      setError(err.message || 'Failed to create user');
+      setError(err.message || `Failed to ${editMode ? 'update' : 'create'} user`);
     } finally {
       setLoading(false);
     }
@@ -121,6 +140,25 @@ const Users = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleEdit = (user) => {
+    setFormData({
+      email: user.email,
+      password: '',
+      role: user.role || 'USER',
+      status: user.status || 'ACTIVE'
+    });
+    setSelectedUser(user);
+    setEditMode(true);
+    setShowModal(true);
+  };
+
+  const handleAddNew = () => {
+    setFormData({ email: '', password: '', role: 'USER', status: 'ACTIVE' });
+    setEditMode(false);
+    setSelectedUser(null);
+    setShowModal(true);
   };
 
   const handleDeleteClick = (user) => {
@@ -131,11 +169,19 @@ const Users = () => {
   const handleDeleteConfirm = async () => {
     if (!userToDelete) return;
     
+    setLoading(true);
+    setError('');
     try {
       await apiClient.delete(`/users/${userToDelete.id}`);
+      setShowDeleteModal(false);
+      setUserToDelete(null);
       loadUsers();
     } catch (err) {
-      setError('Failed to delete user');
+      setError(err.message || 'Failed to delete user');
+      setShowDeleteModal(false);
+      setUserToDelete(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -207,7 +253,7 @@ const Users = () => {
               <p className="text-gray-600 mt-1">Manage system users and their roles</p>
             </div>
             <button
-              onClick={() => setShowModal(true)}
+              onClick={handleAddNew}
               className="btn-modern btn-primary flex items-center space-x-2"
             >
               <UserPlus className="w-4 h-4" />
@@ -343,12 +389,17 @@ const Users = () => {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end space-x-2">
-                            <button className="p-2 text-primary-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                            <button 
+                              onClick={() => handleEdit(user)}
+                              className="p-2 text-primary-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit User"
+                            >
                               <Edit className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={() => handleDeleteClick(user)}
                               className="p-2 text-primary-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete User"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -363,11 +414,16 @@ const Users = () => {
           </div>
         </div>
 
-        {/* Add User Modal */}
+        {/* Add/Edit User Modal */}
         <Modal 
           isOpen={showModal} 
-          onClose={() => { setShowModal(false); setError(''); }}
-          title="Add New User"
+          onClose={() => { 
+            setShowModal(false); 
+            setEditMode(false);
+            setSelectedUser(null);
+            setError(''); 
+          }}
+          title={editMode ? 'Edit User' : 'Add New User'}
           type="default"
           size="md"
         >
@@ -380,18 +436,24 @@ const Users = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="input-modern"
+                disabled={editMode}
+                className="input-modern disabled:bg-gray-100 disabled:cursor-not-allowed"
                 placeholder="user@company.com"
               />
+              {editMode && (
+                <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+              )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-primary-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-primary-700 mb-1">
+                Password {editMode && <span className="text-xs text-gray-500">(leave blank to keep current)</span>}
+              </label>
               <input
                 name="password"
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
-                required
+                required={!editMode}
                 className="input-modern"
                 placeholder="••••••••"
               />
@@ -414,11 +476,39 @@ const Users = () => {
                 )}
               </select>
             </div>
+            {editMode && (
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  required
+                  className="input-modern"
+                >
+                  {statusOptions.length === 0 ? (
+                    <>
+                      <option value="ACTIVE">Active</option>
+                      <option value="INACTIVE">Inactive</option>
+                    </>
+                  ) : (
+                    statusOptions.map(status => (
+                      <option key={status.value} value={status.value}>{status.label}</option>
+                    ))
+                  )}
+                </select>
+              </div>
+            )}
             
             <div className="flex justify-end space-x-3 pt-4">
               <button
                 type="button"
-                onClick={() => { setShowModal(false); setError(''); }}
+                onClick={() => { 
+                  setShowModal(false); 
+                  setEditMode(false);
+                  setSelectedUser(null);
+                  setError(''); 
+                }}
                 className="btn-modern btn-secondary"
               >
                 Cancel
@@ -428,7 +518,7 @@ const Users = () => {
                 disabled={loading}
                 className="btn-modern btn-primary disabled:opacity-50"
               >
-                {loading ? 'Creating...' : 'Create User'}
+                {loading ? (editMode ? 'Updating...' : 'Creating...') : (editMode ? 'Update User' : 'Create User')}
               </button>
             </div>
           </form>

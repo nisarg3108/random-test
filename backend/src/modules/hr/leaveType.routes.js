@@ -14,35 +14,33 @@ const router = Router();
 router.post(
   '/',
   requireAuth,
-  requirePermission('leaveType.create'),
+  requirePermission('leave.types.manage'),
   createLeaveTypeController
 );
 
 router.get(
   '/',
   requireAuth,
-  requirePermission('leaveType.view'),
   listLeaveTypesController
 );
 
 router.get(
   '/:id',
   requireAuth,
-  requirePermission('leaveType.view'),
   getLeaveTypeController
 );
 
 router.put(
   '/:id',
   requireAuth,
-  requirePermission('leaveType.update'),
+  requirePermission('leave.types.manage'),
   updateLeaveTypeController
 );
 
 router.delete(
   '/:id',
   requireAuth,
-  requirePermission('leaveType.delete'),
+  requirePermission('leave.types.manage'),
   deleteLeaveTypeController
 );
 

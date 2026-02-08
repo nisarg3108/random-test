@@ -67,7 +67,7 @@ const HRDashboard = () => {
   // Department distribution
   const departmentStats = departments.map(dept => ({
     ...dept,
-    employeeCount: employees.filter(emp => emp.departmentId === dept.id).length
+    employeeCount: dept.employeeCount ?? employees.filter(emp => emp.departmentId === dept.id).length
   }));
 
   const getStatusColor = (status) => {

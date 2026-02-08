@@ -6,6 +6,8 @@ import {
   listEmployeesController,
   assignManagerController,
   getMyProfileController,
+  updateEmployeeController,
+  deleteEmployeeController,
 } from './employee.controller.js';
 import {
   getEmployeeDashboardController,
@@ -31,6 +33,18 @@ router.post(
   requireAuth,
   requirePermission('employee.create'),
   createEmployeeController
+);
+router.put(
+  '/:id',
+  requireAuth,
+  requirePermission('employee.manage'),
+  updateEmployeeController
+);
+router.delete(
+  '/:id',
+  requireAuth,
+  requirePermission('employee.manage'),
+  deleteEmployeeController
 );
 router.post(
   '/assign-manager',

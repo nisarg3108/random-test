@@ -4,6 +4,8 @@ import { requirePermission } from '../rbac/permission.middleware.js';
 import {
   createDepartmentController,
   listDepartmentsController,
+  updateDepartmentController,
+  deleteDepartmentController,
 } from './department.controller.js';
 
 const router = Router();
@@ -20,6 +22,20 @@ router.get(
   requireAuth,
   requirePermission('department.view'),
   listDepartmentsController
+);
+
+router.put(
+  '/:id',
+  requireAuth,
+  requirePermission('department.update'),
+  updateDepartmentController
+);
+
+router.delete(
+  '/:id',
+  requireAuth,
+  requirePermission('department.delete'),
+  deleteDepartmentController
 );
 
 export default router;

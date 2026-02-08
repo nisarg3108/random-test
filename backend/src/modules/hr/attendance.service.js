@@ -31,6 +31,14 @@ export const clockIn = async (employeeId, tenantId, location = null) => {
 
   const checkInTime = new Date();
   
+  // Check if employee is late (after 9:00 AM by default)
+  const deadlineHour = 9; // 9:00 AM
+  const deadlineMinute = 0;
+  const deadline = new Date(checkInTime);
+  deadline.setHours(deadlineHour, deadlineMinute, 0, 0);
+  
+  const isLate = checkInTime > deadline;
+  
   const timeTracking = await prisma.timeTracking.create({
     data: {
       tenantId,
@@ -38,7 +46,8 @@ export const clockIn = async (employeeId, tenantId, location = null) => {
       date: today,
       checkInTime,
       checkInLocation: location,
-      status: 'CHECKED_IN'
+      status: 'CHECKED_IN',
+      isLate: isLate
     },
     include: {
       employee: {
@@ -48,12 +57,13 @@ export const clockIn = async (employeeId, tenantId, location = null) => {
   });
 
   // Send notification
+  const lateWarning = isLate ? ' ⚠️ You are marked as late.' : '';
   await notificationService.createNotification({
     tenantId,
     employeeId,
     type: 'CLOCK_IN',
-    title: 'Clock In Successful',
-    message: `You have clocked in at ${checkInTime.toLocaleTimeString()}`
+    title: isLate ? 'Clock In - Late Arrival' : 'Clock In Successful',
+    message: `You have clocked in at ${checkInTime.toLocaleTimeString()}.${lateWarning}`
   });
 
   return timeTracking;
@@ -134,6 +144,8 @@ export const getCurrentClockInStatus = async (employeeId, tenantId) => {
   return {
     isClocked: !!activeRecord,
     clockedIn: activeRecord?.checkInTime || null,
+    isLate: activeRecord?.isLate || false,
+    deadlineTime: '09:00', // Clock-in deadline time (9:00 AM)
     elapsedHours: activeRecord
       ? (new Date() - activeRecord.checkInTime) / (1000 * 60 * 60)
       : 0
@@ -783,6 +795,74 @@ const calculateWorkingDays = (startDate, endDate) => {
   return count;
 };
 
+// ==========================================
+// DASHBOARD STATISTICS
+// ==========================================
+
+export const getDashboardStatistics = async (tenantId) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Get total employees count
+  const totalEmployees = await prisma.employee.count({
+    where: { tenantId, status: 'ACTIVE' }
+  });
+
+  // Get today's attendance records
+  const todayAttendance = await prisma.timeTracking.findMany({
+    where: {
+      tenantId,
+      date: today
+    }
+  });
+
+  // Count present (checked in or checked out today)
+  const presentToday = todayAttendance.length;
+
+  // Count currently clocked in
+  const clockedIn = todayAttendance.filter(
+    record => record.status === 'CHECKED_IN'
+  ).length;
+
+  // Calculate absent (total employees - present today)
+  const absentToday = totalEmployees - presentToday;
+
+  // Calculate average attendance for last 30 days
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  thirtyDaysAgo.setHours(0, 0, 0, 0);
+
+  const last30DaysAttendance = await prisma.timeTracking.groupBy({
+    by: ['date'],
+    where: {
+      tenantId,
+      date: {
+        gte: thirtyDaysAgo,
+        lte: today
+      }
+    },
+    _count: {
+      id: true
+    }
+  });
+
+  const avgAttendanceCount = last30DaysAttendance.length > 0
+    ? last30DaysAttendance.reduce((sum, day) => sum + day._count.id, 0) / last30DaysAttendance.length
+    : 0;
+
+  const averageAttendance = totalEmployees > 0
+    ? ((avgAttendanceCount / totalEmployees) * 100).toFixed(1)
+    : 0;
+
+  return {
+    totalEmployees,
+    presentToday,
+    absentToday,
+    clockedIn,
+    averageAttendance: parseFloat(averageAttendance)
+  };
+};
+
 export default {
   clockIn,
   clockOut,
@@ -800,5 +880,6 @@ export default {
   getTeamAttendanceReport,
   integrateLeaveWithAttendance,
   updateAttendanceRecord,
-  updateAttendanceForLeave
+  updateAttendanceForLeave,
+  getDashboardStatistics
 };

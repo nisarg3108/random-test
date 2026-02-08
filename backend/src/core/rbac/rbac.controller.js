@@ -129,7 +129,6 @@ export class RBACController {
         where: { userId },
         include: {
           role: {
-            where: { tenantId },
             include: {
               permissions: {
                 include: { permission: true }
@@ -144,14 +143,17 @@ export class RBACController {
       const roles = [];
 
       userRoles.forEach(ur => {
-        roles.push({
-          id: ur.role.id,
-          name: ur.role.name,
-          label: ROLE_PERMISSIONS[ur.role.name]?.label || ur.role.name
-        });
-        ur.role.permissions.forEach(rp => {
-          permissionsSet.add(rp.permission.code);
-        });
+        // Filter by tenantId
+        if (ur.role.tenantId === tenantId) {
+          roles.push({
+            id: ur.role.id,
+            name: ur.role.name,
+            label: ROLE_PERMISSIONS[ur.role.name]?.label || ur.role.name
+          });
+          ur.role.permissions.forEach(rp => {
+            permissionsSet.add(rp.permission.code);
+          });
+        }
       });
 
       res.json({ 
@@ -302,10 +304,10 @@ export class RBACController {
           roles: {
             include: {
               role: {
-                where: { tenantId },
                 select: {
                   id: true,
-                  name: true
+                  name: true,
+                  tenantId: true
                 }
               }
             }
@@ -328,11 +330,13 @@ export class RBACController {
           : user.email.split('@')[0],
         legacyRole: user.role,
         status: user.status,
-        roles: user.roles.map(ur => ({
-          id: ur.role.id,
-          name: ur.role.name,
-          label: ROLE_PERMISSIONS[ur.role.name]?.label || ur.role.name
-        })),
+        roles: user.roles
+          .filter(ur => ur.role.tenantId === tenantId)
+          .map(ur => ({
+            id: ur.role.id,
+            name: ur.role.name,
+            label: ROLE_PERMISSIONS[ur.role.name]?.label || ur.role.name
+          })),
         createdAt: user.createdAt
       }));
 
