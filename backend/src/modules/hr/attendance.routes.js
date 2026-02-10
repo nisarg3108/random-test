@@ -1,76 +1,140 @@
 import express from 'express';
-import * as attendanceController from './attendance.controller.js';
-import { requireAuth as authenticate } from '../../core/auth/auth.middleware.js';
+import attendanceController from './attendance.controller.js';
+import { authenticate } from '../../middlewares/auth.js';
 import { requireRole } from '../../core/auth/role.middleware.js';
 
 const router = express.Router();
 
-// All attendance routes require authentication
+// Apply authentication to all routes
 router.use(authenticate);
 
-// ==========================================
+// ============================================
 // CLOCK IN/OUT ROUTES
-// ==========================================
+// ============================================
 
-// Clock in
+/**
+ * POST /api/attendance/clock-in
+ * Clock in with location tracking
+ */
 router.post('/clock-in', attendanceController.clockIn);
 
-// Clock out
+/**
+ * POST /api/attendance/clock-out
+ * Clock out with location tracking
+ */
 router.post('/clock-out', attendanceController.clockOut);
 
-// Get clock status for an employee
+/**
+ * GET /api/attendance/clock-status/:employeeId
+ * Get current clock status for an employee
+ */
 router.get('/clock-status/:employeeId', attendanceController.getClockStatus);
 
-// ==========================================
+// ============================================
 // SHIFT MANAGEMENT ROUTES
-// ==========================================
+// ============================================
 
-// Create a new shift
+/**
+ * POST /api/attendance/shifts
+ * Create a new shift (HR/Admin only)
+ */
 router.post('/shifts', requireRole(['ADMIN', 'HR']), attendanceController.createShift);
 
-// Get all shifts
-router.get('/shifts', attendanceController.getShifts);
+/**
+ * GET /api/attendance/shifts
+ * Get all shifts
+ */
+router.get('/shifts', attendanceController.getAllShifts);
 
-// Assign shift to employee
+/**
+ * POST /api/attendance/shifts/assign
+ * Assign shift to employee (HR/Admin only)
+ */
 router.post('/shifts/assign', requireRole(['ADMIN', 'HR']), attendanceController.assignShift);
 
-// Get employee's current shift
+/**
+ * GET /api/attendance/shifts/employee/:employeeId
+ * Get current shift for an employee
+ */
 router.get('/shifts/employee/:employeeId', attendanceController.getEmployeeShift);
 
-// ==========================================
-// OVERTIME MANAGEMENT ROUTES
-// ==========================================
+/**
+ * GET /api/attendance/shifts/history/:employeeId
+ * Get shift assignment history for an employee
+ */
+router.get('/shifts/history/:employeeId', attendanceController.getShiftHistory);
 
-// Create overtime policy
+// ============================================
+// OVERTIME ROUTES
+// ============================================
+
+/**
+ * POST /api/attendance/overtime-policies
+ * Create overtime policy (HR/Admin only)
+ */
 router.post('/overtime-policies', requireRole(['ADMIN', 'HR']), attendanceController.createOvertimePolicy);
 
-// Get overtime hours for an employee on a specific date
-router.get('/overtime-hours/:employeeId', attendanceController.getOvertimeHours);
+/**
+ * GET /api/attendance/overtime-hours/:employeeId
+ * Calculate overtime hours for a specific date
+ * Query params: date (YYYY-MM-DD)
+ */
+router.get('/overtime-hours/:employeeId', attendanceController.calculateOvertimeHours);
 
-// Record overtime manually
-router.post('/overtime-records/:employeeId', attendanceController.recordOvertimeManual);
+/**
+ * POST /api/attendance/overtime-records/:employeeId
+ * Record overtime for an employee
+ */
+router.post('/overtime-records/:employeeId', attendanceController.recordOvertime);
 
-// Approve overtime record
-router.put('/overtime-records/:overtimeRecordId/approve', requireRole(['ADMIN', 'HR']), attendanceController.approveOvertimeRecord);
+/**
+ * PUT /api/attendance/overtime-records/:overtimeRecordId/approve
+ * Approve overtime request (HR/Manager/Admin only)
+ */
+router.put(
+  '/overtime-records/:overtimeRecordId/approve',
+  requireRole(['ADMIN', 'HR', 'MANAGER']),
+  attendanceController.approveOvertime
+);
 
-// ==========================================
-// ATTENDANCE REPORTING ROUTES
-// ==========================================
+// ============================================
+// ATTENDANCE REPORT ROUTES
+// ============================================
 
-// Generate monthly attendance report
-router.post('/reports/:employeeId/generate', requireRole(['ADMIN', 'HR']), attendanceController.generateMonthlyReport);
+/**
+ * POST /api/attendance/reports/:employeeId/generate
+ * Generate monthly attendance report
+ * Query params: month, year
+ */
+router.post('/reports/:employeeId/generate', attendanceController.generateAttendanceReport);
 
-// Get monthly attendance report
-router.get('/reports/:employeeId', attendanceController.getMonthlyReport);
+/**
+ * GET /api/attendance/reports/:employeeId
+ * Get monthly attendance report
+ * Query params: month, year
+ */
+router.get('/reports/:employeeId', attendanceController.getAttendanceReport);
 
-// Get team attendance report
-router.get('/reports/department/:departmentId', requireRole(['ADMIN', 'HR']), attendanceController.getTeamReport);
+/**
+ * GET /api/attendance/reports/department/:departmentId
+ * Get department-wide attendance report (HR/Manager/Admin only)
+ * Query params: month, year
+ */
+router.get(
+  '/reports/department/:departmentId',
+  requireRole(['ADMIN', 'HR', 'MANAGER']),
+  attendanceController.getDepartmentReport
+);
 
-// ==========================================
-// LEAVE INTEGRATION ROUTES
-// ==========================================
+// ============================================
+// LEAVE INTEGRATION ROUTE
+// ============================================
 
-// Integrate leave with attendance
-router.post('/leave-integration', requireRole(['ADMIN', 'HR']), attendanceController.integrateLeave);
+/**
+ * POST /api/attendance/leave-integration
+ * Integrate approved leave with attendance
+ * (Internal route, typically called from leave approval)
+ */
+router.post('/leave-integration', requireRole(['ADMIN', 'HR']), attendanceController.integrateLeaveWithAttendance);
 
 export default router;

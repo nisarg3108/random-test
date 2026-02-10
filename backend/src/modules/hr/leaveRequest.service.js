@@ -129,16 +129,18 @@ export const updateLeaveRequestStatus = async (requestId, status, tenantId, comm
       message: `Your ${leaveRequest.leaveType.name} leave request has been ${status.toLowerCase()}${comment ? `: ${comment}` : ''}`
     });
 
-    // If approved, integrate with attendance system
-    if (status === 'APPROVED') {
-      try {
-        await attendanceService.integrateLeaveWithAttendance(requestId, tenantId);
-      } catch (error) {
-        console.error('Failed to integrate leave with attendance:', error);
-      }
-    }
   } catch (error) {
     console.error('Failed to create leave status notification:', error);
+  }
+
+  // Integrate with attendance system when leave is approved
+  if (status === 'APPROVED') {
+    try {
+      await attendanceService.integrateLeaveWithAttendance(requestId, tenantId);
+    } catch (error) {
+      console.error('Failed to integrate leave with attendance:', error);
+      // Don't throw error - leave was already approved
+    }
   }
 
   return leaveRequest;

@@ -1,325 +1,350 @@
 import React, { useState, useEffect } from 'react';
-import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from 'recharts';
-import { Calendar, Download, TrendingUp, Users } from 'lucide-react';
-import { apiClient } from '../../api/http';
+import { BarChart3, RefreshCw, FileText, Calendar, TrendingUp, Users } from 'lucide-react';
+import axios from 'axios';
+import { getToken } from '../../store/auth.store';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
-const AttendanceReports = ({ employeeId, departmentId }) => {
-  const [reportType, setReportType] = useState('employee');
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [report, setReport] = useState(null);
-  const [teamReport, setTeamReport] = useState(null);
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
+export default function AttendanceReports() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [report, setReport] = useState(null);
+  const [employeeId, setEmployeeId] = useState(null);
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [message, setMessage] = useState({ type: '', text: '' });
 
-  useEffect(() => {
-    if (reportType === 'employee' && employeeId) {
-      fetchEmployeeReport();
-    } else if (reportType === 'team' && departmentId) {
-      fetchTeamReport();
-    }
-  }, [reportType, selectedMonth, selectedYear, employeeId, departmentId]);
-
-  const fetchEmployeeReport = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await apiClient.get(
-        `/attendance/reports/${employeeId}?month=${selectedMonth}&year=${selectedYear}`
-      );
-      setReport(res.data?.data);
-    } catch (err) {
-      setError('Failed to fetch attendance report');
-      console.error('Error fetching report:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTeamReport = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await apiClient.get(
-        `/attendance/reports/department/${departmentId}?month=${selectedMonth}&year=${selectedYear}`
-      );
-      setTeamReport(res.data?.data);
-    } catch (err) {
-      setError('Failed to fetch team report');
-      console.error('Error fetching team report:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const generatePDF = () => {
-    const content = reportType === 'employee' ? report : teamReport;
-    if (!content) return;
-
-    // Simple PDF generation (you can use libraries like jspdf for more features)
-    const printWindow = window.open('', '', 'height=400,width=800');
-    printWindow.document.write(`
-      <html>
-        <head><title>Attendance Report</title></head>
-        <body>
-          <h1>Attendance Report</h1>
-          <p>Month: ${selectedMonth}/${selectedYear}</p>
-          <pre>${JSON.stringify(content, null, 2)}</pre>
-          <button onclick="window.print()">Print</button>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-  };
-
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+  const months = [
+    { value: 1, label: 'January' },
+    { value: 2, label: 'February' },
+    { value: 3, label: 'March' },
+    { value: 4, label: 'April' },
+    { value: 5, label: 'May' },
+    { value: 6, label: 'June' },
+    { value: 7, label: 'July' },
+    { value: 8, label: 'August' },
+    { value: 9, label: 'September' },
+    { value: 10, label: 'October' },
+    { value: 11, label: 'November' },
+    { value: 12, label: 'December' }
   ];
 
-  if (loading) {
-    return (
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+
+  useEffect(() => {
+    const fetchEmployeeInfo = async () => {
+      try {
+        const token = getToken();
+        const response = await axios.get(`${API_BASE_URL}/employees/my-profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setEmployeeId(response.data.id);
+      } catch (error) {
+        console.error('Error fetching employee info:', error);
+      }
+    };
+    fetchEmployeeInfo();
+  }, []);
+
+  useEffect(() => {
+    if (employeeId) {
+      fetchReport();
+    }
+  }, [employeeId, month, year]);
+
+  const fetchReport = async () => {
+    if (!employeeId) return;
+
+    setLoading(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const token = getToken();
+      const response = await axios.get(
+        `${API_BASE_URL}/attendance/reports/${employeeId}?month=${month}&year=${year}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReport(response.data.data);
+    } catch (error) {
+      if (error.response?.status === 404) {
+        setMessage({ type: 'info', text: 'No report found. Click "Generate Report" to create one.' });
+        setReport(null);
+      } else {
+        setMessage({ type: 'error', text: 'Failed to fetch report' });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateReport = async () => {
+    if (!employeeId) return;
+
+    setLoading(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const token = getToken();
+      const response = await axios.post(
+        `${API_BASE_URL}/attendance/reports/${employeeId}/generate?month=${month}&year=${year}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        setReport(response.data.data);
+        setMessage({ type: 'success', text: 'Report generated successfully!' });
+      }
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.message || 'Failed to generate report'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAttendancePercentageColor = (percentage) => {
+    if (percentage >= 90) return 'text-green-600';
+    if (percentage >= 75) return 'text-yellow-600';
+    return 'text-red-600';
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header and Filters */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <TrendingUp className="w-6 h-6 text-blue-600" />
-          <h2 className="text-2xl font-bold text-gray-800">Attendance Reports</h2>
+      {message.text && (
+        <div className={`p-4 rounded-lg ${
+          message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
+          message.type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' :
+          'bg-blue-50 text-blue-800 border border-blue-200'
+        }`}>
+          <p className="font-medium">{message.text}</p>
         </div>
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Report Type</label>
+      {/* Report Configuration */}
+      <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
+        <h3 className="text-lg font-semibold text-primary-900 mb-4 flex items-center">
+          <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
+          Report Configuration
+        </h3>
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-primary-700 mb-2">Month</label>
             <select
-              value={reportType}
-              onChange={(e) => setReportType(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={month}
+              onChange={(e) => setMonth(parseInt(e.target.value))}
+              className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="employee">Employee Report</option>
-              <option value="team">Team Report</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Month</label>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {monthNames.map((month, idx) => (
-                <option key={idx} value={idx + 1}>{month}</option>
+              {months.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
               ))}
             </select>
           </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Year</label>
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-primary-700 mb-2">Year</label>
             <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={year}
+              onChange={(e) => setYear(parseInt(e.target.value))}
+              className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              {[2024, 2025, 2026].map(year => (
-                <option key={year} value={year}>{year}</option>
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
               ))}
             </select>
           </div>
-
-          <div className="flex items-end">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-primary-700 mb-2">&nbsp;</label>
             <button
-              onClick={generatePDF}
-              className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center gap-2"
+              onClick={generateReport}
+              disabled={loading}
+              className="w-full flex items-center justify-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md"
             >
-              <Download className="w-4 h-4" />
-              Download PDF
+              {loading ? (
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4 mr-2" />
+              )}
+              Generate Report
             </button>
           </div>
         </div>
       </div>
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-          {error}
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <LoadingSpinner />
         </div>
-      )}
-
-      {/* Employee Report */}
-      {reportType === 'employee' && report && (
-        <div className="space-y-6">
+      ) : report ? (
+        <>
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <p className="text-gray-600 text-sm mb-2">Present Days</p>
-              <p className="text-3xl font-bold text-green-600">{report.presentDays}</p>
-              <p className="text-gray-500 text-xs mt-2">out of {report.totalWorkingDays} working days</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
+              <Users className="w-8 h-8 mb-3 opacity-80" />
+              <p className="text-sm opacity-90">Present Days</p>
+              <p className="text-4xl font-bold mt-2">{report.presentDays}</p>
+              <p className="text-sm opacity-75 mt-1">of {report.totalWorkingDays} days</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <p className="text-gray-600 text-sm mb-2">Absent Days</p>
-              <p className="text-3xl font-bold text-red-600">{report.absentDays}</p>
+            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-6 text-white shadow-lg">
+              <Calendar className="w-8 h-8 mb-3 opacity-80" />
+              <p className="text-sm opacity-90">Absent Days</p>
+              <p className="text-4xl font-bold mt-2">{report.absentDays}</p>
+              <p className="text-sm opacity-75 mt-1">unauthorized</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <p className="text-gray-600 text-sm mb-2">Leave Days</p>
-              <p className="text-3xl font-bold text-yellow-600">{report.leaveDays}</p>
+            <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg">
+              <FileText className="w-8 h-8 mb-3 opacity-80" />
+              <p className="text-sm opacity-90">Leave Days</p>
+              <p className="text-4xl font-bold mt-2">{report.leaveDays}</p>
+              <p className="text-sm opacity-75 mt-1">approved leaves</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <p className="text-gray-600 text-sm mb-2">Attendance %</p>
-              <p className="text-3xl font-bold text-blue-600">{report.attendancePercentage}%</p>
-            </div>
-          </div>
-
-          {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Attendance Pie Chart */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Attendance Breakdown</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={[
-                      { name: 'Present', value: report.presentDays, fill: '#22c55e' },
-                      { name: 'Absent', value: report.absentDays, fill: '#ef4444' },
-                      { name: 'Leave', value: report.leaveDays, fill: '#eab308' },
-                      { name: 'Half Day', value: report.halfDays, fill: '#f97316' }
-                    ]}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, value }) => `${name}: ${value}`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    <Cell fill="#22c55e" />
-                    <Cell fill="#ef4444" />
-                    <Cell fill="#eab308" />
-                    <Cell fill="#f97316" />
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Work Hours Chart */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Work Hours Summary</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={[
-                  {
-                    name: 'Hours',
-                    'Regular Work': report.totalWorkHours - report.totalOvertimeHours,
-                    'Overtime': report.totalOvertimeHours
-                  }
-                ]}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="Regular Work" stackId="a" fill="#3b82f6" />
-                  <Bar dataKey="Overtime" stackId="a" fill="#ef4444" />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
+              <TrendingUp className="w-8 h-8 mb-3 opacity-80" />
+              <p className="text-sm opacity-90">Attendance %</p>
+              <p className="text-4xl font-bold mt-2">{report.attendancePercentage.toFixed(1)}%</p>
+              <p className="text-sm opacity-75 mt-1">overall rate</p>
             </div>
           </div>
 
-          {/* Details Table */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Monthly Details</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <p className="text-gray-600 text-sm">Total Working Days</p>
-                <p className="text-2xl font-bold text-gray-800">{report.totalWorkingDays}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Total Work Hours</p>
-                <p className="text-2xl font-bold text-gray-800">{report.totalWorkHours.toFixed(2)}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">Overtime Hours</p>
-                <p className="text-2xl font-bold text-gray-800">{report.totalOvertimeHours.toFixed(2)}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm">WFH Days</p>
-                <p className="text-2xl font-bold text-gray-800">{report.workFromHomeDays}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Team Report */}
-      {reportType === 'team' && teamReport && (
-        <div className="space-y-6">
-          {/* Team Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <p className="text-gray-600 text-sm mb-2">Total Employees</p>
-              <p className="text-3xl font-bold text-blue-600">{teamReport.summary.totalEmployees}</p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <p className="text-gray-600 text-sm mb-2">Average Attendance</p>
-              <p className="text-3xl font-bold text-green-600">{teamReport.summary.averageAttendance}%</p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <p className="text-gray-600 text-sm mb-2">Total Overtime Hours</p>
-              <p className="text-3xl font-bold text-red-600">{teamReport.summary.totalOvertimeHours}</p>
-            </div>
-          </div>
-
-          {/* Team Details Table */}
-          <div className="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Employee Details</h3>
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2 border-gray-200">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Employee Name</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Present Days</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Absent Days</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Leave Days</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Attendance %</th>
-                </tr>
-              </thead>
-              <tbody>
-                {teamReport.reports.map((emp) => (
-                  <tr key={emp.id} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="py-3 px-4 text-gray-800">{emp.employee.name}</td>
-                    <td className="py-3 px-4 text-green-600 font-semibold">{emp.presentDays}</td>
-                    <td className="py-3 px-4 text-red-600 font-semibold">{emp.absentDays}</td>
-                    <td className="py-3 px-4 text-yellow-600 font-semibold">{emp.leaveDays}</td>
-                    <td className="py-3 px-4">
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        emp.attendancePercentage >= 90 ? 'bg-green-100 text-green-800' :
-                        emp.attendancePercentage >= 75 ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {emp.attendancePercentage}%
-                      </span>
+          {/* Detailed Statistics */}
+          <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
+            <h3 className="text-lg font-semibold text-primary-900 mb-4">Detailed Statistics</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-primary-50">
+                  <tr>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-primary-700">Metric</th>
+                    <th className="text-right py-3 px-4 text-sm font-semibold text-primary-700">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm text-primary-900">Total Working Days</td>
+                    <td className="py-3 px-4 text-sm text-primary-900 text-right font-medium">{report.totalWorkingDays}</td>
+                  </tr>
+                  <tr className="border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm text-primary-900">Present Days</td>
+                    <td className="py-3 px-4 text-sm text-primary-900 text-right font-medium">{report.presentDays}</td>
+                  </tr>
+                  <tr className="border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm text-primary-900">Absent Days</td>
+                    <td className="py-3 px-4 text-sm text-primary-900 text-right font-medium">{report.absentDays}</td>
+                  </tr>
+                  <tr className="border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm text-primary-900">Leave Days</td>
+                    <td className="py-3 px-4 text-sm text-primary-900 text-right font-medium">{report.leaveDays}</td>
+                  </tr>
+                  <tr className="border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm text-primary-900">Half Days</td>
+                    <td className="py-3 px-4 text-sm text-primary-900 text-right font-medium">{report.halfDays}</td>
+                  </tr>
+                  <tr className="border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm text-primary-900">Work From Home Days</td>
+                    <td className="py-3 px-4 text-sm text-primary-900 text-right font-medium">{report.workFromHomeDays}</td>
+                  </tr>
+                  <tr className="bg-primary-50 border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm font-semibold text-primary-900">Total Work Hours</td>
+                    <td className="py-3 px-4 text-sm font-semibold text-primary-900 text-right">{report.totalWorkHours.toFixed(2)}</td>
+                  </tr>
+                  <tr className="bg-primary-50 border-b border-primary-100">
+                    <td className="py-3 px-4 text-sm font-semibold text-primary-900">Total Overtime Hours</td>
+                    <td className="py-3 px-4 text-sm font-semibold text-primary-900 text-right">{report.totalOvertimeHours.toFixed(2)}</td>
+                  </tr>
+                  <tr className="bg-blue-50">
+                    <td className="py-3 px-4 text-sm font-bold text-primary-900">Attendance Percentage</td>
+                    <td className={`py-3 px-4 text-sm font-bold text-right ${getAttendancePercentageColor(report.attendancePercentage)}`}>
+                      {report.attendancePercentage.toFixed(2)}%
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Employee Info */}
+            {report.employee && (
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold text-primary-900 mb-2">Employee Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-primary-600">Name:</span>{' '}
+                    <span className="text-primary-900 font-medium">{report.employee.name}</span>
+                  </div>
+                  {report.employee.employeeCode && (
+                    <div>
+                      <span className="text-primary-600">Employee Code:</span>{' '}
+                      <span className="text-primary-900 font-medium">{report.employee.employeeCode}</span>
+                    </div>
+                  )}
+                  {report.employee.email && (
+                    <div>
+                      <span className="text-primary-600">Email:</span>{' '}
+                      <span className="text-primary-900 font-medium">{report.employee.email}</span>
+                    </div>
+                  )}
+                  {report.employee.department && (
+                    <div>
+                      <span className="text-primary-600">Department:</span>{' '}
+                      <span className="text-primary-900 font-medium">{report.employee.department.name}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Visual Breakdown */}
+          <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
+            <h3 className="text-lg font-semibold text-primary-900 mb-4">Attendance Breakdown</h3>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-2">
+                  <span className="text-2xl font-bold text-green-600">{report.presentDays}</span>
+                </div>
+                <p className="text-sm text-primary-600">Present</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-2">
+                  <span className="text-2xl font-bold text-red-600">{report.absentDays}</span>
+                </div>
+                <p className="text-sm text-primary-600">Absent</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-yellow-100 rounded-full flex items-center justify-center mb-2">
+                  <span className="text-2xl font-bold text-yellow-600">{report.leaveDays}</span>
+                </div>
+                <p className="text-sm text-primary-600">Leave</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                  <span className="text-2xl font-bold text-purple-600">{report.halfDays}</span>
+                </div>
+                <p className="text-sm text-primary-600">Half Day</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                  <span className="text-2xl font-bold text-blue-600">{report.workFromHomeDays}</span>
+                </div>
+                <p className="text-sm text-primary-600">WFH</p>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="bg-gray-50 border border-primary-200 rounded-xl p-12 text-center">
+          <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-600 font-medium">No Report Available</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Click "Generate Report" to create an attendance report for the selected period
+          </p>
         </div>
       )}
     </div>
   );
-};
-
-export default AttendanceReports;
+}

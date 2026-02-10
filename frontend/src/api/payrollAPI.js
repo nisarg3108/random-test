@@ -2,13 +2,6 @@ import { apiClient } from './http.js';
 
 const payrollAPI = {
   // ==========================================
-  // ATTENDANCE
-  // ==========================================
-  markAttendance: (data) => apiClient.post('/payroll/attendance', data),
-  getAttendance: (params) => apiClient.get('/payroll/attendance', { params }),
-  getAttendanceSummary: (params) => apiClient.get('/payroll/attendance/summary', { params }),
-
-  // ==========================================
   // SALARY COMPONENTS
   // ==========================================
   createSalaryComponent: (data) => apiClient.post('/payroll/components', data),

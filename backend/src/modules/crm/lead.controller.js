@@ -1,6 +1,7 @@
 import {
   createLead,
   listLeads,
+  getLead,
   updateLead,
   convertLead
 } from './lead.service.js';
@@ -8,7 +9,7 @@ import { logAudit } from '../../core/audit/audit.service.js';
 
 export const createLeadController = async (req, res, next) => {
   try {
-    const lead = await createLead(req.body, req.user.tenantId);
+    const lead = await createLead(req.body, req.user.tenantId, req.user.userId);
 
     await logAudit({
       userId: req.user.userId,
@@ -28,6 +29,18 @@ export const listLeadsController = async (req, res, next) => {
   try {
     const leads = await listLeads(req.user.tenantId);
     res.json(leads);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getLeadController = async (req, res, next) => {
+  try {
+    const lead = await getLead(req.params.id, req.user.tenantId);
+    if (!lead) {
+      return res.status(404).json({ message: 'Lead not found' });
+    }
+    res.json(lead);
   } catch (err) {
     next(err);
   }

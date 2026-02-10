@@ -56,6 +56,17 @@ model User {
   department Department? @relation(fields: [departmentId], references: [id])
   roles      UserRole[]
   employee   Employee?
+  
+  // CRM Relations
+  customersOwned      Customer[]       @relation("CustomerOwner")
+  contactsOwned       Contact[]        @relation("ContactOwner")
+  leadsOwned          Lead[]           @relation("LeadOwner")
+  dealsOwned          Deal[]           @relation("DealOwner")
+  communicationsCreated Communication[] @relation("CommCreator")
+  activitiesAssigned  Activity[]       @relation("ActivityAssignee")
+  activitiesCreated   Activity[]       @relation("ActivityCreator")
+  customerNotesCreated CustomerNote[]  @relation("NoteCreator")
+  attachmentsUploaded Attachment[]     @relation("AttachmentUploader")
 
   createdAt DateTime @default(now())
 }
@@ -183,6 +194,8 @@ model Item {
 model SalesQuotation {
   id            String   @id @default(uuid())
   tenantId      String
+  customerId    String?
+  dealId        String?
   customerName  String
   customerEmail String?
   title         String
@@ -197,12 +210,16 @@ model SalesQuotation {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  tenant Tenant @relation(fields: [tenantId], references: [id])
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
+  deal     Deal?     @relation(fields: [dealId], references: [id])
 }
 
 model SalesOrder {
   id               String   @id @default(uuid())
   tenantId         String
+  customerId       String?
+  dealId           String?
   orderNumber      String?
   customerName     String
   customerEmail    String?
@@ -220,12 +237,16 @@ model SalesOrder {
   updatedAt        DateTime @updatedAt
 
   tenant    Tenant               @relation(fields: [tenantId], references: [id])
+  customer  Customer?            @relation(fields: [customerId], references: [id])
+  deal      Deal?                @relation(fields: [dealId], references: [id])
   tracking  SalesOrderTracking[]
 }
 
 model SalesInvoice {
   id            String   @id @default(uuid())
   tenantId      String
+  customerId    String?
+  dealId        String?
   invoiceNumber String?
   customerName  String
   customerEmail String?
@@ -242,7 +263,25 @@ model SalesInvoice {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  tenant Tenant @relation(fields: [tenantId], references: [id])
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
+  deal     Deal?     @relation(fields: [dealId], references: [id])
+  payments InvoicePayment[]
+}
+
+model InvoicePayment {
+  id             String   @id @default(uuid())
+  tenantId       String
+  invoiceId      String
+  amount         Float
+  paymentDate    DateTime @default(now())
+  paymentMethod  String?  // CASH | BANK_TRANSFER | CREDIT_CARD | DEBIT_CARD | CHECK | UPI | OTHER
+  referenceNumber String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  invoice SalesInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 }
 
 model SalesOrderTracking {
@@ -379,7 +418,7 @@ model LeaveType {
 
   createdAt DateTime @default(now())
 
-  // ✅ ADD THIS
+  // Ã¢Å“â€¦ ADD THIS
   leaveRequests LeaveRequest[]
 }
 
@@ -507,10 +546,40 @@ model Customer {
   id        String   @id @default(uuid())
   tenantId  String
   name      String
+  
+  // Existing fields
   industry  String?
   website   String?
   status    String   @default("ACTIVE")
   notes     String?
+  
+  // New fields - Basic Info
+  type              String?  @default("BUSINESS") // BUSINESS | INDIVIDUAL
+  companySize       String?  // SMALL | MEDIUM | LARGE | ENTERPRISE
+  annualRevenue     Float?
+  currencyCode      String?  @default("USD")
+  
+  // Contact Information
+  primaryEmail      String?
+  primaryPhone      String?
+  billingAddress    Json?    // {street, city, state, zip, country}
+  shippingAddress   Json?    // {street, city, state, zip, country}
+  
+  // Relationship Management
+  ownerId           String?  // User responsible
+  accountManager    String?  // User ID
+  category          String?  // CUSTOMER | PARTNER | PROSPECT
+  source            String?  // WEB | REFERRAL | EVENT | CAMPAIGN
+  
+  // Engagement
+  firstContactDate  DateTime?
+  lastContactDate   DateTime?
+  preferredChannel  String?  // EMAIL | PHONE | SMS | IN_PERSON
+  timezone          String?
+  
+  // Metadata
+  tags              String[] @default([]) // Array of tag strings
+  customFields      Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -519,6 +588,18 @@ model Customer {
   deals          Deal[]
   communications Communication[]
   leads          Lead[]
+  activities     Activity[]
+  customerNotes  CustomerNote[]
+  attachments    Attachment[]
+  salesQuotations SalesQuotation[]
+  salesOrders     SalesOrder[]
+  salesInvoices   SalesInvoice[]
+  
+  owner          User?    @relation("CustomerOwner", fields: [ownerId], references: [id])
+  
+  @@index([tenantId, status])
+  @@index([tenantId, ownerId])
+  @@index([tenantId, category])
 }
 
 model Contact {
@@ -526,34 +607,119 @@ model Contact {
   tenantId   String
   customerId String
 
+  // Existing fields
   name   String
   email  String?
   phone  String?
   title  String?
   status String   @default("ACTIVE")
+  
+  // New fields
+  firstName         String?
+  lastName          String?
+  jobTitle          String?
+  department        String?
+  role              String?  // DECISION_MAKER | INFLUENCER | USER | GATEKEEPER
+  
+  // Contact Details
+  mobilePhone       String?
+  workPhone         String?
+  linkedinUrl       String?
+  twitterHandle     String?
+  
+  // Relationship
+  isPrimary         Boolean  @default(false)
+  ownerId           String?  // User responsible
+  preferredChannel  String?  // EMAIL | PHONE | SMS
+  
+  // Engagement
+  lastContactDate   DateTime?
+  birthday          DateTime?
+  anniversary       DateTime?
+  
+  // Preferences
+  emailOptIn        Boolean  @default(true)
+  smsOptIn          Boolean  @default(false)
+  doNotCall         Boolean  @default(false)
+  
+  // Metadata
+  tags              String[] @default([])
+  customFields      Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  customer       Customer       @relation(fields: [customerId], references: [id])
+  customer       Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
   communications Communication[]
   leads          Lead[]
+  activities     Activity[]
+  
+  owner          User?          @relation("ContactOwner", fields: [ownerId], references: [id])
+  
+  @@index([tenantId, customerId])
+  @@index([tenantId, email])
+  @@index([tenantId, ownerId])
 }
 
 model Lead {
   id        String   @id @default(uuid())
   tenantId  String
 
+  // Existing fields
   name     String
   email    String?
   phone    String?
   company  String?
   source   String?
-  status   String   @default("NEW") // NEW | QUALIFIED | CONVERTED | LOST
+  status   String   @default("NEW") // NEW | QUALIFIED | CONVERTED | LOST | DISQUALIFIED
   notes    String?
 
   customerId String?
   contactId  String?
+  
+  // New fields
+  firstName         String?
+  lastName          String?
+  jobTitle          String?
+  
+  // Lead Classification
+  leadScore         Int      @default(0) // 0-100
+  rating            String?  // HOT | WARM | COLD
+  priority          String?  @default("MEDIUM") // LOW | MEDIUM | HIGH
+  
+  // Source Tracking
+  campaign          String?
+  medium            String?  // ORGANIC | PAID | SOCIAL | REFERRAL | DIRECT
+  referrer          String?
+  
+  // Qualification
+  budget            Float?
+  timeline          String?  // IMMEDIATE | 1_3_MONTHS | 3_6_MONTHS | 6_12_MONTHS | 12_PLUS_MONTHS
+  authority         String?  // YES | NO | UNKNOWN
+  need              String?  // EXPLICIT | IMPLIED
+  
+  // Assignment
+  ownerId           String?  // User responsible
+  assignedAt        DateTime?
+  
+  // Conversion
+  convertedAt       DateTime?
+  conversionSource  String?  // MANUAL | AUTOMATED
+  dealId            String?  // Deal created from conversion
+  
+  // Engagement
+  firstContactDate  DateTime?
+  lastContactDate   DateTime?
+  lastActivityDate  DateTime?
+  
+  // Disqualification
+  disqualifiedAt    DateTime?
+  disqualifiedBy    String?
+  disqualifiedReason String?
+  
+  // Metadata
+  tags              String[] @default([])
+  customFields      Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -561,6 +727,15 @@ model Lead {
   customer       Customer?       @relation(fields: [customerId], references: [id])
   contact        Contact?        @relation(fields: [contactId], references: [id])
   communications Communication[]
+  activities     Activity[]
+  deal           Deal?           @relation("LeadDeal", fields: [dealId], references: [id])
+  
+  owner          User?           @relation("LeadOwner", fields: [ownerId], references: [id])
+  
+  @@index([tenantId, status])
+  @@index([tenantId, ownerId])
+  @@index([tenantId, leadScore])
+  @@index([tenantId, source])
 }
 
 model Deal {
@@ -568,24 +743,86 @@ model Deal {
   tenantId  String
   customerId String
 
+  // Existing fields
   name      String
   stage     String   @default("PROSPECTING") // PROSPECTING | QUALIFICATION | PROPOSAL | NEGOTIATION | WON | LOST
   value     Float    @default(0)
   expectedCloseDate DateTime?
   status    String   @default("OPEN") // OPEN | WON | LOST
   notes     String?
+  
+  // New fields
+  dealNumber        String?  @unique
+  
+  // Pipeline
+  pipelineId        String?  @default("default")
+  stageOrder        Int?     @default(0)
+  probability       Int?     @default(0) // 0-100
+  
+  // Financial
+  amount            Float    @default(0)
+  currencyCode      String?  @default("USD")
+  discount          Float?   @default(0)
+  tax               Float?   @default(0)
+  total             Float?   @default(0)
+  
+  // Products/Services
+  products          Json?    // [{productId, name, quantity, price, total}]
+  
+  // Assignment
+  ownerId           String?  // User responsible
+  teamMembers       String[] @default([]) // Array of User IDs
+  
+  // Dates
+  createdDate       DateTime @default(now())
+  closedDate        DateTime?
+  firstContactDate  DateTime?
+  lastActivityDate  DateTime?
+  
+  // Competition
+  competitors       String[] @default([]) // Array of competitor names
+  
+  // Closure
+  wonReason         String?
+  lostReason        String?  // PRICE | COMPETITION | NO_BUDGET | TIMING | PRODUCT_FIT | OTHER
+  lostToCompetitor  String?
+  
+  // Source
+  leadId            String?  // Converted from lead
+  source            String?  // INBOUND | OUTBOUND | REFERRAL | PARTNER
+  
+  // Metadata
+  tags              String[] @default([])
+  customFields      Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  customer Customer @relation(fields: [customerId], references: [id])
+  customer        Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  salesQuotations SalesQuotation[]
+  salesOrders     SalesOrder[]
+  salesInvoices   SalesInvoice[]
+  communications  Communication[]
+  activities      Activity[]
+  attachments     Attachment[]
+  leadConverted   Lead[]           @relation("LeadDeal")
+  
+  owner           User?            @relation("DealOwner", fields: [ownerId], references: [id])
+  pipeline        Pipeline?        @relation(fields: [pipelineId], references: [id])
+  
+  @@index([tenantId, customerId])
+  @@index([tenantId, stage])
+  @@index([tenantId, status])
+  @@index([tenantId, ownerId])
+  @@index([tenantId, expectedCloseDate])
 }
 
 model Communication {
   id        String   @id @default(uuid())
   tenantId  String
 
-  type      String   // CALL | EMAIL | MEETING | NOTE
+  // Existing fields
+  type      String   // CALL | EMAIL | MEETING | NOTE | SMS | CHAT
   subject   String?
   notes     String
   occurredAt DateTime
@@ -594,13 +831,214 @@ model Communication {
   customerId String?
   contactId  String?
   leadId     String?
+  
+  // New fields
+  direction         String?  // INBOUND | OUTBOUND
+  duration          Int?     // Minutes for calls/meetings
+  outcome           String?  // SUCCESSFUL | NO_ANSWER | LEFT_MESSAGE | FOLLOW_UP_REQUIRED
+  
+  // Email specific
+  emailFrom         String?
+  emailTo           String?
+  emailCc           String?
+  
+  // Meeting specific
+  meetingLocation   String?
+  meetingAttendees  String[] @default([]) // Array of contact/user names
+  
+  // Integration
+  dealId            String?
+  activityId        String?  // Related activity/task
+  
+  // Attachments
+  hasAttachments    Boolean  @default(false)
+  attachmentCount   Int      @default(0)
+  
+  // Metadata
+  tags              String[] @default([])
+  customFields      Json?
 
   createdAt DateTime @default(now())
 
-  customer Customer? @relation(fields: [customerId], references: [id])
-  contact  Contact?  @relation(fields: [contactId], references: [id])
-  lead     Lead?     @relation(fields: [leadId], references: [id])
+  customer   Customer?   @relation(fields: [customerId], references: [id])
+  contact    Contact?    @relation(fields: [contactId], references: [id])
+  lead       Lead?       @relation(fields: [leadId], references: [id])
+  deal       Deal?       @relation(fields: [dealId], references: [id])
+  activity   Activity?   @relation(fields: [activityId], references: [id])
+  attachments Attachment[]
+  
+  creator    User?       @relation("CommCreator", fields: [createdBy], references: [id])
+  
+  @@index([tenantId, customerId])
+  @@index([tenantId, contactId])
+  @@index([tenantId, leadId])
+  @@index([tenantId, dealId])
+  @@index([tenantId, occurredAt])
 }
+
+// CRM Supporting Models
+
+model Pipeline {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String   // "Sales Pipeline", "Consulting Pipeline"
+  description String?
+  isDefault   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  stages      PipelineStage[]
+  deals       Deal[]
+  
+  @@unique([tenantId, name])
+  @@index([tenantId, isDefault])
+}
+
+model PipelineStage {
+  id          String   @id @default(uuid())
+  tenantId    String
+  pipelineId  String
+  
+  name        String   // "Prospecting", "Qualification", "Proposal"
+  order       Int      // Display order
+  probability Int      @default(0) // Default win probability 0-100
+  color       String?  // Hex color for UI
+  
+  // Stage behavior
+  isClosedWon Boolean  @default(false)
+  isClosedLost Boolean @default(false)
+  
+  // Automation
+  daysInStage Int?     // Alert if deal stays too long
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  pipeline    Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  
+  @@unique([pipelineId, name])
+  @@unique([pipelineId, order])
+  @@index([tenantId, pipelineId])
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  tenantId    String
+  
+  type        String   // TASK | CALL | EMAIL | MEETING | TODO
+  subject     String
+  description String?
+  
+  // Status
+  status      String   @default("PENDING") // PENDING | IN_PROGRESS | COMPLETED | CANCELLED
+  priority    String   @default("MEDIUM") // LOW | MEDIUM | HIGH | URGENT
+  
+  // Scheduling
+  dueDate     DateTime?
+  dueTime     String?  // HH:MM
+  reminderAt  DateTime?
+  
+  // Completion
+  completedAt DateTime?
+  completedBy String?
+  
+  // Assignment
+  assignedTo  String?  // User ID
+  createdBy   String
+  
+  // Entity Relations
+  customerId  String?
+  contactId   String?
+  leadId      String?
+  dealId      String?
+  
+  // Result
+  outcome     String?
+  notes       String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  customer        Customer?       @relation(fields: [customerId], references: [id])
+  contact         Contact?        @relation(fields: [contactId], references: [id])
+  lead            Lead?           @relation(fields: [leadId], references: [id])
+  deal            Deal?           @relation(fields: [dealId], references: [id])
+  communications  Communication[]
+  
+  assignee        User?           @relation("ActivityAssignee", fields: [assignedTo], references: [id])
+  creator         User            @relation("ActivityCreator", fields: [createdBy], references: [id])
+  
+  @@index([tenantId, assignedTo])
+  @@index([tenantId, status])
+  @@index([tenantId, dueDate])
+  @@index([tenantId, customerId])
+  @@index([tenantId, dealId])
+}
+
+model CustomerNote {
+  id          String   @id @default(uuid())
+  tenantId    String
+  customerId  String
+  
+  title       String?
+  content     String
+  isPinned    Boolean  @default(false)
+  
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  creator     User     @relation("NoteCreator", fields: [createdBy], references: [id])
+  
+  @@index([tenantId, customerId])
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  tenantId    String
+  
+  fileName    String
+  fileSize    Int      // Bytes
+  mimeType    String
+  fileUrl     String   // S3/storage URL
+  
+  // Entity Relations (polymorphic)
+  customerId      String?
+  dealId          String?
+  communicationId String?
+  
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  
+  customer        Customer?      @relation(fields: [customerId], references: [id])
+  deal            Deal?          @relation(fields: [dealId], references: [id])
+  communication   Communication? @relation(fields: [communicationId], references: [id])
+  
+  uploader    User     @relation("AttachmentUploader", fields: [uploadedBy], references: [id])
+  
+  @@index([tenantId, customerId])
+  @@index([tenantId, dealId])
+}
+
+model Tag {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String
+  color       String?
+  category    String?  // CUSTOMER | LEAD | DEAL | GENERAL
+  
+  usageCount  Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([tenantId, name, category])
+  @@index([tenantId, category])
+}
+
 
 model PasswordReset {
   id        String   @id @default(uuid())
@@ -656,6 +1094,8 @@ model Vendor {
   purchaseRequisitions PurchaseRequisition[]
   purchaseOrders       PurchaseOrder[]
   evaluations          SupplierEvaluation[]
+  bills                APBill[]    @relation("VendorBills")
+  payments             Payment[]   @relation("VendorPayments")
 }
 
 model PurchaseRequisition {
@@ -760,6 +1200,7 @@ model PurchaseOrder {
   vendor          Vendor            @relation(fields: [vendorId], references: [id])
   requisition     PurchaseRequisition? @relation(fields: [requisitionId], references: [id])
   receipts        GoodsReceipt[]
+  bills           APBill[]          @relation("POBills")
 }
 
 model GoodsReceipt {
@@ -831,6 +1272,105 @@ model SupplierEvaluation {
   vendor          Vendor   @relation(fields: [vendorId], references: [id])
 }
 
+model APBill {
+  id              String   @id @default(uuid())
+  tenantId        String
+  billNumber      String   @unique
+  vendorId        String
+  purchaseOrderId String?
+  
+  // Bill Details
+  billDate        DateTime
+  dueDate         DateTime
+  invoiceNumber   String?  // Vendor's invoice number
+  invoiceDate     DateTime?
+  
+  // Amounts
+  subtotal        Float    @default(0)
+  taxAmount       Float    @default(0)
+  discountAmount  Float    @default(0)
+  shippingCost    Float    @default(0)
+  totalAmount     Float    @default(0)
+  paidAmount      Float    @default(0)
+  balanceAmount   Float    @default(0)
+  
+  // Line Items
+  items           Json     // [{description, quantity, unitPrice, amount, glAccount}]
+  
+  // Status
+  status          String   @default("PENDING") // PENDING, APPROVED, PARTIALLY_PAID, PAID, OVERDUE, CANCELLED
+  approvalStatus  String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  
+  // Matching Status
+  matchedToPO     Boolean  @default(false)
+  matchedToReceipt Boolean @default(false)
+  threeWayMatched Boolean  @default(false)
+  
+  // Payment Terms
+  paymentTerms    String?  // NET30, NET60, NET90, COD
+  
+  // GL Integration
+  glPosted        Boolean  @default(false)
+  glPostDate      DateTime?
+  glJournalId     String?
+  
+  // Approvals
+  approvedBy      String?
+  approvedAt      DateTime?
+  
+  // Notes
+  notes           String?
+  internalNotes   String?
+  attachments     Json?
+  
+  createdBy       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  vendor          Vendor          @relation("VendorBills", fields: [vendorId], references: [id])
+  purchaseOrder   PurchaseOrder?  @relation("POBills", fields: [purchaseOrderId], references: [id])
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  tenantId        String
+  paymentNumber   String   @unique
+  vendorId        String
+  
+  // Payment Details
+  paymentDate     DateTime
+  amount          Float
+  
+  // Payment Method
+  paymentMethod   String   // CHECK, WIRE, ACH, CREDIT_CARD, CASH
+  referenceNumber String?  // Check number, transaction ID
+  bankAccount     String?
+  
+  // Status
+  status          String   @default("PENDING") // PENDING, CLEARED, RETURNED, CANCELLED, SCHEDULED
+  clearedDate     DateTime?
+  
+  // Bill Allocations
+  allocations     Json     // [{billId, billNumber, allocatedAmount}]
+  
+  // GL Integration
+  glPosted        Boolean  @default(false)
+  glPostDate      DateTime?
+  glJournalId     String?
+  
+  // Notes
+  notes           String?
+  attachments     Json?    // Payment receipts, remittance advice
+  
+  createdBy       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  vendor          Vendor   @relation("VendorPayments", fields: [vendorId], references: [id])
+}
+
 model WorkflowTemplate {
   id          String @id @default(uuid())
   name        String
@@ -899,9 +1439,25 @@ model Project {
   // Progress
   progressPercent Float    @default(0)
   
+  // Computed/Rollup fields
+  totalPlannedHours   Float    @default(0)
+  totalActualHours    Float    @default(0)
+  totalResourceCost   Float    @default(0)
+  budgetVariance      Float    @default(0)
+  scheduleVariance    Int      @default(0) // Days ahead/behind
+  
+  // Capacity & Health
+  utilizationPercent  Float    @default(0)
+  healthScore         String   @default("GREEN") // GREEN, YELLOW, RED
+  riskLevel           String   @default("LOW")   // LOW, MEDIUM, HIGH, CRITICAL
+  
   // Team
   departmentId    String?
-  teamMembers     Json?    // [{employeeId, role, allocation%}]
+  teamMembers     Json?    // Deprecated - use ProjectMember relation
+  
+  // Integrations
+  documentFolderId    String?  // Link to document management
+  financeAccountId    String?  // Link to finance accounts
   
   // Custom Fields
   customFields    Json?
@@ -915,10 +1471,47 @@ model Project {
   
   // Relations
   department      Department?         @relation(fields: [departmentId], references: [id])
+  members         ProjectMember[]
   milestones      ProjectMilestone[]
   resources       ProjectResource[]
   budgets         ProjectBudget[]
   timeLogs        ProjectTimeLog[]
+  
+  @@index([status, priority])
+  @@index([projectManager])
+  @@index([departmentId])
+  @@index([healthScore])
+}
+
+model ProjectMember {
+  id                String   @id @default(uuid())
+  tenantId          String
+  projectId         String
+  employeeId        String
+  userId            String?  // Link to user account
+  
+  role              String   // PROJECT_MANAGER, TEAM_LEAD, DEVELOPER, DESIGNER, etc.
+  allocationPercent Float    @default(100)
+  
+  startDate         DateTime
+  endDate           DateTime?
+  status            String   @default("ACTIVE") // ACTIVE, INACTIVE, COMPLETED
+  
+  hourlyRate        Float?   // Override project rate
+  permissions       Json?    // Specific project permissions
+  
+  notes             String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@index([projectId])
+  @@index([employeeId])
+  @@index([tenantId])
+  @@index([status])
 }
 
 model ProjectMilestone {
@@ -942,6 +1535,10 @@ model ProjectMilestone {
   // Deliverables
   deliverables    Json?    // [{name, status, dueDate}]
   
+  // Dependencies & Scheduling
+  isCriticalPath  Boolean  @default(false)
+  isAutoScheduled Boolean  @default(false)
+  
   notes           String?
   attachments     Json?
   
@@ -951,6 +1548,29 @@ model ProjectMilestone {
   
   // Relations
   project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  predecessors    ProjectMilestoneDependency[] @relation("SuccessorDependencies")
+  successors      ProjectMilestoneDependency[] @relation("PredecessorDependencies")
+}
+
+model ProjectMilestoneDependency {
+  id              String   @id @default(uuid())
+  tenantId        String
+  
+  predecessorId   String   // Milestone that must finish first
+  successorId     String   // Milestone that depends on predecessor
+  
+  dependencyType  String   @default("FS") // FS (Finish-to-Start), SS (Start-to-Start), FF (Finish-to-Finish), SF (Start-to-Finish)
+  lagDays         Int      @default(0)    // Lag time in days (can be negative for lead)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  predecessor     ProjectMilestone @relation("PredecessorDependencies", fields: [predecessorId], references: [id], onDelete: Cascade)
+  successor       ProjectMilestone @relation("SuccessorDependencies", fields: [successorId], references: [id], onDelete: Cascade)
+  
+  @@unique([predecessorId, successorId])
+  @@index([tenantId])
 }
 
 model ProjectResource {
@@ -972,6 +1592,16 @@ model ProjectResource {
   units           Float    @default(1)
   totalCost       Float    @default(0)
   
+  // Capacity Tracking
+  plannedHours    Float    @default(0)
+  actualHours     Float    @default(0)
+  availableHours  Float    @default(0)
+  
+  // For equipment/material
+  quantity        Float    @default(1)
+  quantityUsed    Float    @default(0)
+  quantityUnit    String   @default("unit") // unit, hours, kg, etc.
+  
   status          String   @default("ALLOCATED") // ALLOCATED, ACTIVE, RELEASED
   
   notes           String?
@@ -981,6 +1611,9 @@ model ProjectResource {
   
   // Relations
   project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@index([resourceType])
+  @@index([employeeId])
 }
 
 model ProjectBudget {
@@ -1016,6 +1649,7 @@ model ProjectTimeLog {
   tenantId        String
   projectId       String
   employeeId      String   // Who logged the time
+  timesheetId     String?  // Link to timesheet
   
   // Time Details
   logDate         DateTime @default(now())
@@ -1039,6 +1673,48 @@ model ProjectTimeLog {
   
   // Relations
   project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  timesheet       ProjectTimesheet? @relation(fields: [timesheetId], references: [id])
+  
+  @@index([employeeId])
+  @@index([projectId])
+  @@index([timesheetId])
+  @@index([status])
+}
+
+model ProjectTimesheet {
+  id              String   @id @default(uuid())
+  tenantId        String
+  employeeId      String
+  
+  weekStartDate   DateTime // Monday of the week
+  weekEndDate     DateTime // Sunday of the week
+  
+  status          String   @default("DRAFT") // DRAFT, SUBMITTED, APPROVED, REJECTED
+  
+  totalHours      Float    @default(0)
+  billableHours   Float    @default(0)
+  
+  submittedAt     DateTime?
+  submittedBy     String?
+  
+  approvedAt      DateTime?
+  approvedBy      String?
+  rejectedAt      DateTime?
+  rejectedBy      String?
+  
+  rejectionReason String?
+  notes           String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  timeLogs        ProjectTimeLog[]
+  
+  @@unique([tenantId, employeeId, weekStartDate])
+  @@index([employeeId])
+  @@index([status])
+  @@index([weekStartDate])
 }
 
 // ==========================================
@@ -1964,7 +2640,7 @@ model MessageReaction {
   id         String   @id @default(uuid())
   messageId  String
   userId     String
-  emoji      String   // 👍 ❤️ 😂 etc.
+  emoji      String   // Ã°Å¸â€˜Â Ã¢ÂÂ¤Ã¯Â¸Â Ã°Å¸Ëœâ€š etc.
   
   createdAt  DateTime @default(now())
   

@@ -184,6 +184,61 @@ export const rejectRequisition = async (id, tenantId, userId, reason) => {
   });
 };
 
+export const convertRequisitionToPO = async (id, tenantId, userId) => {
+  // Get the requisition with all details
+  const requisition = await prisma.purchaseRequisition.findFirst({
+    where: { id, tenantId },
+    include: { vendor: true }
+  });
+
+  if (!requisition) {
+    throw new Error('Requisition not found');
+  }
+
+  if (requisition.approvalStatus !== 'APPROVED') {
+    throw new Error('Only approved requisitions can be converted to purchase orders');
+  }
+
+  if (requisition.status === 'CONVERTED') {
+    throw new Error('This requisition has already been converted to a purchase order');
+  }
+
+  // Generate unique PO number
+  const poCount = await prisma.purchaseOrder.count({ where: { tenantId } });
+  const poNumber = `PO-${String(poCount + 1).padStart(6, '0')}`;
+
+  // Create purchase order from requisition
+  const purchaseOrder = await prisma.purchaseOrder.create({
+    data: {
+      poNumber,
+      vendorId: requisition.vendorId,
+      requisitionId: requisition.id,
+      items: requisition.items,
+      subtotal: requisition.totalAmount,
+      tax: 0,
+      discount: 0,
+      shipping: 0,
+      totalAmount: requisition.totalAmount,
+      paymentTerms: requisition.vendor?.paymentTerms || 'Net 30',
+      deliveryDate: requisition.requiredDate,
+      shippingAddress: requisition.deliveryAddress,
+      status: 'DRAFT',
+      approvalStatus: 'PENDING',
+      paymentStatus: 'UNPAID',
+      createdBy: userId,
+      tenantId
+    }
+  });
+
+  // Update requisition status to CONVERTED
+  await prisma.purchaseRequisition.update({
+    where: { id, tenantId },
+    data: { status: 'CONVERTED' }
+  });
+
+  return purchaseOrder;
+};
+
 // ==================== PURCHASE ORDERS ====================
 
 export const listPurchaseOrders = async (tenantId, filters = {}) => {
@@ -294,6 +349,48 @@ export const updatePaymentStatus = async (id, paymentStatus, paidAmount, tenantI
 
 // ==================== GOODS RECEIPTS ====================
 
+// Helper function to update PO status based on receipt completion
+const updatePOStatusFromReceipts = async (purchaseOrderId) => {
+  const purchaseOrder = await prisma.purchaseOrder.findUnique({
+    where: { id: purchaseOrderId },
+    include: { receipts: true }
+  });
+
+  if (!purchaseOrder) return;
+
+  const orderedItems = purchaseOrder.items || [];
+  const allReceipts = purchaseOrder.receipts || [];
+  
+  // Calculate total received quantities per item
+  const receivedQuantities = {};
+  allReceipts.forEach(receipt => {
+    const receiptItems = receipt.items || [];
+    receiptItems.forEach(item => {
+      const key = item.itemName;
+      receivedQuantities[key] = (receivedQuantities[key] || 0) + (item.receivedQuantity || 0);
+    });
+  });
+
+  // Check if all items are fully received
+  let allItemsReceived = orderedItems.length > 0;
+  orderedItems.forEach(orderedItem => {
+    const totalReceived = receivedQuantities[orderedItem.itemName] || 0;
+    const ordered = orderedItem.quantity || 0;
+    if (totalReceived < ordered) {
+      allItemsReceived = false;
+    }
+  });
+
+  // Update PO status: RECEIVED if fully received, keep as SHIPPED if partial
+  const newStatus = allItemsReceived ? 'RECEIVED' : purchaseOrder.status;
+  if (purchaseOrder.status !== newStatus && newStatus === 'RECEIVED') {
+    await prisma.purchaseOrder.update({
+      where: { id: purchaseOrderId },
+      data: { status: 'RECEIVED' }
+    });
+  }
+};
+
 export const listGoodsReceipts = async (tenantId, filters = {}) => {
   const where = { tenantId };
   
@@ -327,7 +424,7 @@ export const createGoodsReceipt = async (data, tenantId, userId) => {
   const receiptCount = await prisma.goodsReceipt.count({ where: { tenantId } });
   const receiptNumber = `GRN-${String(receiptCount + 1).padStart(6, '0')}`;
 
-  // Update PO status if fully received
+  // Create the receipt
   const receipt = await prisma.goodsReceipt.create({
     data: {
       ...data,
@@ -337,23 +434,61 @@ export const createGoodsReceipt = async (data, tenantId, userId) => {
     }
   });
 
-  // Update PO status to RECEIVED if this is the final receipt
-  await prisma.purchaseOrder.update({
-    where: { id: data.purchaseOrderId },
-    data: { status: 'RECEIVED' }
-  });
+  // Update PO status based on receipt quantities
+  await updatePOStatusFromReceipts(data.purchaseOrderId);
 
   return receipt;
 };
 
 export const updateGoodsReceipt = async (id, data, tenantId) => {
-  return await prisma.goodsReceipt.update({
+  const receipt = await prisma.goodsReceipt.update({
     where: { id, tenantId },
     data
   });
+
+  // Recalculate PO status after receipt update
+  await updatePOStatusFromReceipts(receipt.purchaseOrderId);
+
+  return receipt;
+};
+
+export const deleteGoodsReceipt = async (id, tenantId) => {
+  // Get receipt before deleting to access purchaseOrderId
+  const receipt = await prisma.goodsReceipt.findFirst({
+    where: { id, tenantId }
+  });
+
+  if (!receipt) {
+    throw new Error('Goods receipt not found');
+  }
+
+  const purchaseOrderId = receipt.purchaseOrderId;
+
+  // Delete the receipt
+  await prisma.goodsReceipt.delete({
+    where: { id, tenantId }
+  });
+
+  // Recalculate PO status after receipt deletion
+  await updatePOStatusFromReceipts(purchaseOrderId);
+
+  return receipt;
 };
 
 // ==================== SUPPLIER EVALUATIONS ====================
+
+// Helper function to update vendor rating based on all evaluations
+const updateVendorRating = async (vendorId, tenantId) => {
+  const avgRating = await prisma.supplierEvaluation.aggregate({
+    where: { vendorId, tenantId },
+    _avg: { overallRating: true }
+  });
+
+  await prisma.vendor.update({
+    where: { id: vendorId },
+    data: { rating: avgRating._avg.overallRating || 0 }
+  });
+};
 
 export const listEvaluations = async (tenantId, filters = {}) => {
   const where = { tenantId };
@@ -399,16 +534,8 @@ export const createEvaluation = async (data, tenantId, userId) => {
     }
   });
 
-  // Update vendor's rating
-  const avgRating = await prisma.supplierEvaluation.aggregate({
-    where: { vendorId: data.vendorId, tenantId },
-    _avg: { overallRating: true }
-  });
-
-  await prisma.vendor.update({
-    where: { id: data.vendorId },
-    data: { rating: avgRating._avg.overallRating || 0 }
-  });
+  // Update vendor's rating based on all evaluations
+  await updateVendorRating(data.vendorId, tenantId);
 
   return evaluation;
 };
@@ -424,19 +551,40 @@ export const updateEvaluation = async (id, data, tenantId) => {
   ];
   const overallRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
 
-  return await prisma.supplierEvaluation.update({
+  const evaluation = await prisma.supplierEvaluation.update({
     where: { id, tenantId },
     data: {
       ...data,
       overallRating
     }
   });
+
+  // Update vendor's rating based on all evaluations
+  await updateVendorRating(evaluation.vendorId, tenantId);
+
+  return evaluation;
 };
 
 export const deleteEvaluation = async (id, tenantId) => {
-  return await prisma.supplierEvaluation.delete({
+  // Get vendor ID before deleting
+  const evaluation = await prisma.supplierEvaluation.findFirst({
     where: { id, tenantId }
   });
+
+  if (!evaluation) {
+    throw new Error('Evaluation not found');
+  }
+
+  const vendorId = evaluation.vendorId;
+
+  await prisma.supplierEvaluation.delete({
+    where: { id, tenantId }
+  });
+
+  // Update vendor's rating after deletion
+  await updateVendorRating(vendorId, tenantId);
+
+  return evaluation;
 };
 
 // ==================== ANALYTICS ====================
@@ -518,8 +666,8 @@ export const getPurchaseAnalytics = async (tenantId, startDate, endDate) => {
     FROM "PurchaseOrder"
     WHERE "tenantId" = ${tenantId}
       AND "status" != 'CANCELLED'
-      ${startDate ? prisma.Prisma.sql`AND "orderDate" >= ${new Date(startDate)}` : prisma.Prisma.empty}
-      ${endDate ? prisma.Prisma.sql`AND "orderDate" <= ${new Date(endDate)}` : prisma.Prisma.empty}
+      AND "orderDate" >= ${startDate ? new Date(startDate) : new Date('2000-01-01')}
+      AND "orderDate" <= ${endDate ? new Date(endDate) : new Date()}
     GROUP BY month
     ORDER BY month DESC
     LIMIT 12

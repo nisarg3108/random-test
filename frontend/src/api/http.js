@@ -4,6 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 export const authFetch = async (endpoint, options = {}) => {
   const token = getToken();
+  const isBlob = options.responseType === 'blob';
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
@@ -22,10 +23,11 @@ export const authFetch = async (endpoint, options = {}) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ message: 'Network error' }));
-    throw new Error(errorData.message || `HTTP ${response.status}`);
+    throw new Error(errorData.error || errorData.message || `HTTP ${response.status}`);
   }
 
-  return response.json();
+  // Return blob for file downloads, otherwise parse as JSON
+  return isBlob ? response.blob() : response.json();
 };
 
 // API Client for new modules
@@ -48,7 +50,12 @@ export const apiClient = {
         }
       }
       
-      const response = await authFetch(url, { method: 'GET', ...config });
+      // Pass responseType to authFetch for blob handling
+      const response = await authFetch(url, { 
+        method: 'GET', 
+        responseType: config.responseType,
+        ...config 
+      });
       return { data: response };
     } catch (error) {
       console.error(`GET ${endpoint}:`, error.message);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, Plus, Search, Edit, Trash2, Check, X } from 'lucide-react';
+import { FileText, Plus, Search, Edit, Trash2, Check, X, ShoppingCart } from 'lucide-react';
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import axios from 'axios';
@@ -130,6 +130,24 @@ const PurchaseRequisitions = () => {
       fetchRequisitions();
     } catch (err) {
       setError('Failed to reject requisition');
+    }
+  };
+
+  const handleConvertToPO = async (id) => {
+    if (!window.confirm('Convert this requisition to a purchase order?')) return;
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      await axios.post(`${API_URL}/api/purchase/requisitions/${id}/convert-to-po`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchRequisitions();
+      alert('Successfully converted to purchase order!');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to convert requisition to purchase order');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -270,6 +288,15 @@ const PurchaseRequisitions = () => {
                               <X className="w-4 h-4" />
                             </button>
                           </>
+                        )}
+                        {req.approvalStatus === 'APPROVED' && req.status !== 'CONVERTED' && (
+                          <button 
+                            onClick={() => handleConvertToPO(req.id)} 
+                            className="text-purple-600 hover:text-purple-800" 
+                            title="Convert to Purchase Order"
+                          >
+                            <ShoppingCart className="w-4 h-4" />
+                          </button>
                         )}
                         <button onClick={() => handleEdit(req)} className="text-blue-600 hover:text-blue-800">
                           <Edit className="w-4 h-4" />

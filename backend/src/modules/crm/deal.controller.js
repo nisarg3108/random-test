@@ -1,6 +1,7 @@
 import {
   createDeal,
   listDeals,
+  getDeal,
   updateDeal,
   deleteDeal
 } from './deal.service.js';
@@ -8,7 +9,7 @@ import { logAudit } from '../../core/audit/audit.service.js';
 
 export const createDealController = async (req, res, next) => {
   try {
-    const deal = await createDeal(req.body, req.user.tenantId);
+    const deal = await createDeal(req.body, req.user.tenantId, req.user.userId);
 
     await logAudit({
       userId: req.user.userId,
@@ -28,6 +29,18 @@ export const listDealsController = async (req, res, next) => {
   try {
     const deals = await listDeals(req.user.tenantId);
     res.json(deals);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getDealController = async (req, res, next) => {
+  try {
+    const deal = await getDeal(req.params.id, req.user.tenantId);
+    if (!deal) {
+      return res.status(404).json({ message: 'Deal not found' });
+    }
+    res.json(deal);
   } catch (err) {
     next(err);
   }

@@ -1,5 +1,6 @@
-import { createEmployee, listEmployees, assignManager, getEmployeeByUserId, updateEmployee, deleteEmployee } from './employee.service.js';
+import { createEmployee, listEmployees, assignManager, getEmployeeByUserId } from './employee.service.js';
 import { logAudit } from '../../core/audit/audit.service.js';
+import prisma from '../../config/db.js';
 
 export const createEmployeeController = async (req, res, next) => {
   try {
@@ -73,7 +74,10 @@ export const assignManagerController = async (req, res, next) => {
 export const updateEmployeeController = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const employee = await updateEmployee(id, req.body, req.user.tenantId);
+    const employee = await prisma.employee.update({
+      where: { id, tenantId: req.user.tenantId },
+      data: req.body
+    });
 
     await logAudit({
       userId: req.user.userId,
@@ -101,8 +105,11 @@ export const deleteEmployeeController = async (req, res, next) => {
       entityId: id,
     });
 
-    const result = await deleteEmployee(id, req.user.tenantId);
-    res.json(result);
+    await prisma.employee.delete({
+      where: { id, tenantId: req.user.tenantId }
+    });
+    
+    res.json({ message: 'Employee deleted successfully' });
   } catch (err) {
     next(err);
   }

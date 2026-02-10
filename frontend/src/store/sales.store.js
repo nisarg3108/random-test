@@ -175,6 +175,37 @@ export const useSalesStore = create((set, get) => ({
     }
   },
 
+  // Conversions
+  convertQuotationToOrder: async (id) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await salesAPI.convertQuotationToOrder(id);
+      await Promise.all([
+        get().fetchQuotations(),
+        get().fetchSalesOrders()
+      ]);
+      return response.data;
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  convertOrderToInvoice: async (id) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await salesAPI.convertOrderToInvoice(id);
+      await Promise.all([
+        get().fetchSalesOrders(),
+        get().fetchInvoices()
+      ]);
+      return response.data;
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
   // Clear state
   clearError: () => set({ error: null }),
   

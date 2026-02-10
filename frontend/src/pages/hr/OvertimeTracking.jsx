@@ -1,330 +1,328 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Plus, CheckCircle, AlertCircle, Clock } from 'lucide-react';
-import { apiClient } from '../../api/http';
-import Layout from '../../components/layout/Layout';
+import { TrendingUp, DollarSign, Clock, Plus, X, AlertCircle } from 'lucide-react';
+import axios from 'axios';
+import { getToken } from '../../store/auth.store';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
-const OvertimeTracking = ({ employeeId: propEmployeeId }) => {
-  const [overtimeHours, setOvertimeHours] = useState(null);
-  const [overtimeRecords, setOvertimeRecords] = useState([]);
-  const [employee, setEmployee] = useState(null);
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
+export default function OvertimeTracking() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [showForm, setShowForm] = useState(false);
+  const [employeeId, setEmployeeId] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [overtimeData, setOvertimeData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
   const [formData, setFormData] = useState({
-    overtimePolicyId: '',
-    overtimeHours: '',
-    dailyRate: '',
-    reason: ''
+    hours: '',
+    reason: '',
+    isHoliday: false
   });
 
-  const isStandalone = !propEmployeeId;
-  const employeeId = propEmployeeId || employee?.id;
+  useEffect(() => {
+    const fetchEmployeeInfo = async () => {
+      try {
+        const token = getToken();
+        const response = await axios.get(`${API_BASE_URL}/employees/my-profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setEmployeeId(response.data.id);
+      } catch (error) {
+        console.error('Error fetching employee info:', error);
+      }
+    };
+    fetchEmployeeInfo();
+  }, []);
 
   useEffect(() => {
-    if (isStandalone) {
-      loadEmployee();
-    }
-  }, [isStandalone]);
-
-  useEffect(() => {
-    if (employeeId) {
-      loadOvertimeData();
+    if (employeeId && selectedDate) {
+      fetchOvertimeData();
     }
   }, [employeeId, selectedDate]);
 
-  const loadEmployee = async () => {
+  const fetchOvertimeData = async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get('/employees/my-profile');
-      setEmployee(res.data?.data);
-    } catch (err) {
-      setError('Failed to load employee data');
-      console.error('Error loading employee:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadOvertimeData = async () => {
-    setLoading(true);
-    try {
-      const res = await apiClient.get(
-        `/attendance/overtime-hours/${employeeId}?date=${selectedDate}`
+      const token = getToken();
+      const response = await axios.get(
+        `${API_BASE_URL}/attendance/overtime-hours/${employeeId}?date=${selectedDate}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      setOvertimeHours(res.data?.data || null);
-      // In a real scenario, you'd also fetch overtime records here
-    } catch (err) {
-      console.error('Error loading overtime data:', err);
+      setOvertimeData(response.data.data);
+    } catch (error) {
+      console.error('Error fetching overtime data:', error);
+      setOvertimeData(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRecordOvertime = async () => {
-    if (!formData.overtimePolicyId || !formData.overtimeHours) {
-      setError('Please fill in all required fields');
-      return;
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage({ type: '', text: '' });
 
     try {
-      await apiClient.post(`/attendance/overtime-records/${employeeId}`, {
-        overtimePolicyId: formData.overtimePolicyId,
-        overtimeHours: parseFloat(formData.overtimeHours),
-        date: selectedDate,
-        dailyRate: formData.dailyRate ? parseFloat(formData.dailyRate) : 0,
-        reason: formData.reason
+      const token = getToken();
+      await axios.post(
+        `${API_BASE_URL}/attendance/overtime-records/${employeeId}`,
+        {
+          date: selectedDate,
+          hours: parseFloat(formData.hours),
+          reason: formData.reason,
+          isHoliday: formData.isHoliday
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setMessage({ type: 'success', text: 'Overtime record submitted successfully!' });
+      setShowModal(false);
+      resetForm();
+      fetchOvertimeData();
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.message || 'Failed to submit overtime record'
       });
-
-      setSuccess('Overtime recorded successfully!');
-      setShowForm(false);
-      setFormData({
-        overtimePolicyId: '',
-        overtimeHours: '',
-        dailyRate: '',
-        reason: ''
-      });
-      loadOvertimeData();
-
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to record overtime');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading && !employeeId) {
-    return isStandalone ? (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
+  const resetForm = () => {
+    setFormData({
+      hours: '',
+      reason: '',
+      isHoliday: false
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      {message.text && (
+        <div className={`p-4 rounded-lg ${
+          message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
+          'bg-red-50 text-red-800 border border-red-200'
+        }`}>
+          <p className="font-medium">{message.text}</p>
+        </div>
+      )}
+
+      {/* Date Selector */}
+      <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold text-primary-900">Daily Overtime Tracker</h3>
+            <p className="text-sm text-primary-600 mt-1">Select a date to view overtime calculations</p>
+          </div>
+          <div className="flex gap-3">
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              max={new Date().toISOString().split('T')[0]}
+              className="px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              onClick={() => setShowModal(true)}
+              disabled={!overtimeData || overtimeData.overtimeHours <= 0}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Record OT
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-12">
           <LoadingSpinner />
         </div>
-      </Layout>
-    ) : <LoadingSpinner />;
-  }
+      ) : overtimeData ? (
+        <>
+          {/* Overtime Summary Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
+              <div className="flex items-center justify-between mb-2">
+                <Clock className="w-8 h-8 opacity-80" />
+              </div>
+              <p className="text-sm opacity-90">Total Work Hours</p>
+              <p className="text-4xl font-bold mt-2">{overtimeData.totalWorkHours.toFixed(2)}</p>
+              <p className="text-sm opacity-75 mt-1">hours worked</p>
+            </div>
 
-  const content = (
-    <div className="space-y-6">
-      {isStandalone && (
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-primary-900">Overtime Tracking</h1>
-            <p className="text-primary-600 mt-1">Track and manage overtime hours</p>
-          </div>
-        </div>
-      )}
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+              <div className="flex items-center justify-between mb-2">
+                <TrendingUp className="w-8 h-8 opacity-80" />
+              </div>
+              <p className="text-sm opacity-90">Shift Duration</p>
+              <p className="text-4xl font-bold mt-2">{overtimeData.shiftDuration.toFixed(2)}</p>
+              <p className="text-sm opacity-75 mt-1">scheduled hours</p>
+            </div>
 
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-red-600" />
-          <span className="text-red-700">{error}</span>
-        </div>
-      )}
-
-      {success && (
-        <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 text-green-600" />
-          <span className="text-green-700">{success}</span>
-        </div>
-      )}
-
-      {/* Today's Overtime Summary */}
-      {overtimeHours && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm mb-2">Total Work Hours</p>
-            <p className="text-3xl font-bold text-blue-600">{overtimeHours.totalWorkHours.toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-2">Hours worked today</p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm mb-2">Shift Duration</p>
-            <p className="text-3xl font-bold text-gray-700">{overtimeHours.shiftDuration.toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-2">Expected shift hours</p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-600 text-sm mb-2">Overtime Hours</p>
-            <p className={`text-3xl font-bold ${
-              overtimeHours.overtimeHours > 0 ? 'text-orange-600' : 'text-gray-400'
+            <div className={`rounded-xl p-6 text-white shadow-lg ${
+              overtimeData.overtimeHours > 0
+                ? 'bg-gradient-to-br from-green-500 to-green-600'
+                : 'bg-gradient-to-br from-gray-500 to-gray-600'
             }`}>
-              {overtimeHours.overtimeHours.toFixed(2)}
-            </p>
-            <p className="text-xs text-gray-500 mt-2">Extra hours beyond shift</p>
+              <div className="flex items-center justify-between mb-2">
+                <DollarSign className="w-8 h-8 opacity-80" />
+              </div>
+              <p className="text-sm opacity-90">Overtime Hours</p>
+              <p className="text-4xl font-bold mt-2">{overtimeData.overtimeHours.toFixed(2)}</p>
+              <p className="text-sm opacity-75 mt-1">
+                {overtimeData.overtimeHours > 0 ? 'OT eligible' : 'No overtime'}
+              </p>
+            </div>
           </div>
+
+          {/* Overtime Policy Info */}
+          {overtimeData.policy && (
+            <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
+              <h3 className="text-lg font-semibold text-primary-900 mb-4 flex items-center">
+                <AlertCircle className="w-5 h-5 mr-2 text-blue-600" />
+                Overtime Policy
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-sm text-primary-600">Policy Name</p>
+                  <p className="text-base font-semibold text-primary-900">{overtimeData.policy.name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-primary-600">Weekday Rate</p>
+                  <p className="text-base font-semibold text-primary-900">{overtimeData.policy.weekdayRate}x</p>
+                </div>
+                <div>
+                  <p className="text-sm text-primary-600">Weekend Rate</p>
+                  <p className="text-base font-semibold text-primary-900">{overtimeData.policy.weekendRate}x</p>
+                </div>
+                <div>
+                  <p className="text-sm text-primary-600">Holiday Rate</p>
+                  <p className="text-base font-semibold text-primary-900">{overtimeData.policy.holidayRate}x</p>
+                </div>
+              </div>
+              {overtimeData.policy.description && (
+                <p className="mt-4 text-sm text-primary-600">{overtimeData.policy.description}</p>
+              )}
+            </div>
+          )}
+
+          {overtimeData.overtimeHours <= 0 && (
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start">
+              <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+              <div>
+                <p className="font-medium text-blue-900">No Overtime Detected</p>
+                <p className="text-sm text-blue-700 mt-1">
+                  Your work hours for this date do not exceed the shift duration. Overtime is calculated when work hours exceed scheduled hours.
+                </p>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="bg-gray-50 border border-primary-200 rounded-xl p-12 text-center">
+          <Clock className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-600 font-medium">No data available for selected date</p>
+          <p className="text-sm text-gray-500 mt-2">Select a different date or ensure attendance records exist</p>
         </div>
       )}
 
-      {/* Date Selector and Record Form */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-orange-600" />
-              Record Overtime
-            </h3>
-            <p className="text-sm text-gray-600 mt-1">Track and request additional work hours</p>
-          </div>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Record Overtime
-          </button>
-        </div>
+      {/* Record Overtime Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full">
+            <div className="border-b border-primary-200 px-6 py-4 flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-primary-900">Record Overtime</h3>
+              <button
+                onClick={() => {
+                  setShowModal(false);
+                  resetForm();
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-        {showForm && (
-          <div className="p-4 bg-orange-50 rounded-lg border border-orange-200 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Date</label>
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => {
-                    setSelectedDate(e.target.value);
-                    loadOvertimeData();
-                  }}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-900 font-medium">
+                  Overtime Hours for {new Date(selectedDate).toLocaleDateString()}
+                </p>
+                <p className="text-3xl font-bold text-blue-900 mt-2">
+                  {overtimeData?.overtimeHours.toFixed(2)} hours
+                </p>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Overtime Hours*</label>
-                <input
-                  type="number"
-                  step="0.5"
-                  value={formData.overtimeHours}
-                  onChange={(e) => setFormData({...formData, overtimeHours: e.target.value})}
-                  placeholder="Enter overtime hours"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Overtime Policy*</label>
-                <select
-                  value={formData.overtimePolicyId}
-                  onChange={(e) => setFormData({...formData, overtimePolicyId: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="">Select policy...</option>
-                  <option value="standard">Standard OT (1.5x rate)</option>
-                  <option value="weekend">Weekend OT (2x rate)</option>
-                  <option value="holiday">Holiday OT (2.5x rate)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Daily Rate</label>
+                <label className="block text-sm font-medium text-primary-700 mb-2">
+                  Overtime Hours *
+                </label>
                 <input
                   type="number"
                   step="0.01"
-                  value={formData.dailyRate}
-                  onChange={(e) => setFormData({...formData, dailyRate: e.target.value})}
-                  placeholder="Enter hourly rate"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  min="0"
+                  max={overtimeData?.overtimeHours || 0}
+                  value={formData.hours}
+                  onChange={(e) => setFormData({ ...formData, hours: e.target.value })}
+                  className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
                 />
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Reason</label>
-              <textarea
-                value={formData.reason}
-                onChange={(e) => setFormData({...formData, reason: e.target.value})}
-                placeholder="Why did you work overtime?"
-                rows="3"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                onClick={handleRecordOvertime}
-                className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700"
-              >
-                Record
-              </button>
-              <button
-                onClick={() => setShowForm(false)}
-                className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Overtime Information */}
-      <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg shadow-md p-6 border border-orange-200">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-orange-600" />
-          Overtime Policies
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <p className="font-semibold text-gray-800 mb-2">Standard Overtime</p>
-            <p className="text-sm text-gray-700">
-              <strong>Rate:</strong> 1.5x<br />
-              <strong>Applies:</strong> Weekdays after 8 hours
-            </p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-800 mb-2">Weekend Overtime</p>
-            <p className="text-sm text-gray-700">
-              <strong>Rate:</strong> 2x<br />
-              <strong>Applies:</strong> Saturday & Sunday work
-            </p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-800 mb-2">Holiday Overtime</p>
-            <p className="text-sm text-gray-700">
-              <strong>Rate:</strong> 2.5x<br />
-              <strong>Applies:</strong> Public holidays
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Overtime Records */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Overtime Records</h3>
-        <div className="space-y-3">
-          {overtimeRecords.length === 0 ? (
-            <p className="text-gray-600 text-center py-8">No overtime records found</p>
-          ) : (
-            overtimeRecords.map(record => (
-              <div key={record.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="font-semibold text-gray-800">
-                    {record.overtimeHours} hours OT
-                  </p>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    record.approvalStatus === 'APPROVED'
-                      ? 'bg-green-100 text-green-800'
-                      : record.approvalStatus === 'REJECTED'
-                      ? 'bg-red-100 text-red-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {record.approvalStatus}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600">
-                  {new Date(record.date).toLocaleDateString()} • {record.reason}
+                <p className="text-xs text-primary-600 mt-1">
+                  Maximum: {overtimeData?.overtimeHours.toFixed(2)} hours
                 </p>
               </div>
-            ))
-          )}
+
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-2">
+                  Reason *
+                </label>
+                <textarea
+                  value={formData.reason}
+                  onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                  rows={3}
+                  className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Reason for overtime work..."
+                  required
+                />
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="isHoliday"
+                  checked={formData.isHoliday}
+                  onChange={(e) => setFormData({ ...formData, isHoliday: e.target.checked })}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="isHoliday" className="ml-2 text-sm text-primary-700">
+                  This was a holiday (applies holiday rate)
+                </label>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all font-medium"
+                >
+                  {loading ? 'Submitting...' : 'Submit Overtime'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowModal(false);
+                    resetForm();
+                  }}
+                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
-
-  return isStandalone ? <Layout>{content}</Layout> : content;
-};
-
-export default OvertimeTracking;
+}

@@ -15,6 +15,7 @@ import {
   deleteRequisitionController,
   approveRequisitionController,
   rejectRequisitionController,
+  convertRequisitionToPOController,
   // Purchase Orders
   listPurchaseOrdersController,
   getPurchaseOrderController,
@@ -29,6 +30,7 @@ import {
   getGoodsReceiptController,
   createGoodsReceiptController,
   updateGoodsReceiptController,
+  deleteGoodsReceiptController,
   // Evaluations
   listEvaluationsController,
   getEvaluationController,
@@ -57,6 +59,7 @@ router.put('/requisitions/:id', requireAuth, updateRequisitionController);
 router.delete('/requisitions/:id', requireAuth, deleteRequisitionController);
 router.post('/requisitions/:id/approve', requireAuth, approveRequisitionController);
 router.post('/requisitions/:id/reject', requireAuth, rejectRequisitionController);
+router.post('/requisitions/:id/convert-to-po', requireAuth, convertRequisitionToPOController);
 
 // ==================== PURCHASE ORDERS ====================
 router.get('/orders', requireAuth, listPurchaseOrdersController);
@@ -73,6 +76,7 @@ router.get('/receipts', requireAuth, listGoodsReceiptsController);
 router.get('/receipts/:id', requireAuth, getGoodsReceiptController);
 router.post('/receipts', requireAuth, createGoodsReceiptController);
 router.put('/receipts/:id', requireAuth, updateGoodsReceiptController);
+router.delete('/receipts/:id', requireAuth, deleteGoodsReceiptController);
 
 // ==================== SUPPLIER EVALUATIONS ====================
 router.get('/evaluations', requireAuth, listEvaluationsController);

@@ -17,6 +17,8 @@ import { projectAPI } from '../../api/project.api';
 import { apiClient } from '../../api/http';
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ProjectTeamTab from './ProjectTeamTab';
+import TeamCapacityDashboard from './TeamCapacityDashboard';
 
 const ProjectDetails = () => {
   const { id } = useParams();
@@ -445,12 +447,12 @@ const ProjectDetails = () => {
         {/* Tabs */}
         <div className="modern-card">
           <div className="border-b border-primary-200">
-            <nav className="flex space-x-8 px-6" aria-label="Tabs">
-              {['overview', 'milestones', 'resources', 'budget', 'timeLogs'].map((tab) => (
+            <nav className="flex space-x-8 px-6 overflow-x-auto" aria-label="Tabs">
+              {['overview', 'milestones', 'resources', 'budget', 'timeLogs', 'team', 'capacity'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                     activeTab === tab
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-primary-600 hover:text-primary-900 hover:border-primary-300'
@@ -737,6 +739,16 @@ const ProjectDetails = () => {
                   <p className="text-center text-primary-600 py-8">No time logs</p>
                 )}
               </div>
+            )}
+
+            {/* Team Management Tab */}
+            {activeTab === 'team' && (
+              <ProjectTeamTab projectId={project.id} />
+            )}
+
+            {/* Capacity Dashboard Tab */}
+            {activeTab === 'capacity' && (
+              <TeamCapacityDashboard projectId={project.id} />
             )}
           </div>
         </div>

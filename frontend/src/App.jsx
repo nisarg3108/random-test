@@ -32,11 +32,9 @@ import HRDashboard from './pages/hr/HRDashboard';
 import EmployeeList from './pages/hr/EmployeeList';
 import LeaveRequestList from './pages/hr/LeaveRequestList';
 import LeaveTypeList from './pages/hr/LeaveTypeList';
+
+// Attendance
 import AttendanceDashboard from './pages/hr/AttendanceDashboard';
-import AttendanceReports from './pages/hr/AttendanceReports';
-import ClockInOut from './pages/hr/ClockInOut';
-import ShiftManagement from './pages/hr/ShiftManagement';
-import OvertimeTracking from './pages/hr/OvertimeTracking';
 
 // Payroll
 import { 
@@ -62,9 +60,12 @@ import FinanceApprovals from './pages/finance/FinanceApprovals';
 
 // CRM
 import Customers from './pages/crm/Customers';
+import CustomerDetails from './pages/crm/CustomerDetails';
 import Contacts from './pages/crm/Contacts';
 import Leads from './pages/crm/Leads';
+import LeadDetails from './pages/crm/LeadDetails';
 import SalesPipeline from './pages/crm/SalesPipeline';
+import DealDetails from './pages/crm/DealDetails';
 import Communications from './pages/crm/Communications';
 import CRMDashboard from './pages/crm/CRMDashboard';
 
@@ -73,7 +74,7 @@ import QuotationsList from './pages/sales/QuotationsList';
 import SalesOrdersList from './pages/sales/SalesOrdersList';
 import InvoicesList from './pages/sales/InvoicesList';
 import OrderTracking from './pages/sales/OrderTracking';
-import SalesAnalytics from './pages/sales/SalesAnalytics';
+import SalesAnalytics from './pages/sales/SalesAnalyticsDashboard';
 
 // Purchase
 import {
@@ -81,11 +82,22 @@ import {
   PurchaseOrdersList,
   PurchaseRequisitions,
   SupplierEvaluation,
-  PurchaseAnalytics
+  PurchaseAnalytics,
+  GoodsReceiptList
 } from './pages/purchase';
+
+// Accounts Payable
+import {
+  BillsList,
+  PaymentsList,
+  AgingReport
+} from './pages/ap';
 
 // Projects
 import { ProjectList, ProjectDetails } from './pages/projects';
+import TimesheetEntry from './pages/projects/TimesheetEntry';
+import MyTimesheets from './pages/projects/MyTimesheets';
+import TimesheetApprovals from './pages/projects/TimesheetApprovals';
 
 // Assets
 import AssetDashboard from './pages/assets/AssetDashboard';
@@ -216,11 +228,9 @@ function App() {
         <Route path="/hr/employees" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
         <Route path="/hr/leave-requests" element={<ProtectedRoute><LeaveRequestList /></ProtectedRoute>} />
         <Route path="/hr/leave-types" element={<ProtectedRoute><LeaveTypeList /></ProtectedRoute>} />
+        
+        {/* Attendance Routes */}
         <Route path="/hr/attendance" element={<ProtectedRoute><AttendanceDashboard /></ProtectedRoute>} />
-        <Route path="/hr/attendance/reports" element={<ProtectedRoute><AttendanceReports /></ProtectedRoute>} />
-        <Route path="/hr/attendance/clock" element={<ProtectedRoute><ClockInOut /></ProtectedRoute>} />
-        <Route path="/hr/shifts" element={<ProtectedRoute><ShiftManagement /></ProtectedRoute>} />
-        <Route path="/hr/overtime" element={<ProtectedRoute><OvertimeTracking /></ProtectedRoute>} />
         
         {/* Payroll Routes */}
         <Route path="/hr/payroll" element={<ProtectedRoute><PayrollDashboard /></ProtectedRoute>} />
@@ -245,9 +255,12 @@ function App() {
         {/* CRM Routes */}
         <Route path="/crm" element={<ProtectedRoute><CRMDashboard /></ProtectedRoute>} />
         <Route path="/crm/customers" element={<ProtectedRoute><Customers /></ProtectedRoute>} />
+        <Route path="/crm/customers/:id" element={<ProtectedRoute><CustomerDetails /></ProtectedRoute>} />
         <Route path="/crm/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
         <Route path="/crm/leads" element={<ProtectedRoute><Leads /></ProtectedRoute>} />
+        <Route path="/crm/leads/:id" element={<ProtectedRoute><LeadDetails /></ProtectedRoute>} />
         <Route path="/crm/pipeline" element={<ProtectedRoute><SalesPipeline /></ProtectedRoute>} />
+        <Route path="/crm/deals/:id" element={<ProtectedRoute><DealDetails /></ProtectedRoute>} />
         <Route path="/crm/communications" element={<ProtectedRoute><Communications /></ProtectedRoute>} />
 
         {/* Sales Routes */}
@@ -261,12 +274,21 @@ function App() {
         <Route path="/purchase/vendors" element={<ProtectedRoute><VendorsList /></ProtectedRoute>} />
         <Route path="/purchase/orders" element={<ProtectedRoute><PurchaseOrdersList /></ProtectedRoute>} />
         <Route path="/purchase/requisitions" element={<ProtectedRoute><PurchaseRequisitions /></ProtectedRoute>} />
+        <Route path="/purchase/receipts" element={<ProtectedRoute><GoodsReceiptList /></ProtectedRoute>} />
         <Route path="/purchase/evaluations" element={<ProtectedRoute><SupplierEvaluation /></ProtectedRoute>} />
         <Route path="/purchase/analytics" element={<ProtectedRoute><PurchaseAnalytics /></ProtectedRoute>} />
+
+        {/* Accounts Payable Routes */}
+        <Route path="/ap/bills" element={<ProtectedRoute><BillsList /></ProtectedRoute>} />
+        <Route path="/ap/payments" element={<ProtectedRoute><PaymentsList /></ProtectedRoute>} />
+        <Route path="/ap/aging" element={<ProtectedRoute><AgingReport /></ProtectedRoute>} />
         
         {/* Project Management Routes */}
         <Route path="/projects" element={<ProtectedRoute><ProjectList /></ProtectedRoute>} />
         <Route path="/projects/:id" element={<ProtectedRoute><ProjectDetails /></ProtectedRoute>} />
+        <Route path="/projects/timesheet/entry" element={<ProtectedRoute><TimesheetEntry /></ProtectedRoute>} />
+        <Route path="/projects/timesheet/my" element={<ProtectedRoute><MyTimesheets /></ProtectedRoute>} />
+        <Route path="/projects/timesheet/approvals" element={<ProtectedRoute><TimesheetApprovals /></ProtectedRoute>} />
         
         {/* Asset Management Routes */}
         <Route path="/assets" element={<ProtectedRoute><AssetDashboard /></ProtectedRoute>} />

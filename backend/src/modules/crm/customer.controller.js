@@ -9,7 +9,7 @@ import { logAudit } from '../../core/audit/audit.service.js';
 
 export const createCustomerController = async (req, res, next) => {
   try {
-    const customer = await createCustomer(req.body, req.user.tenantId);
+    const customer = await createCustomer(req.body, req.user.tenantId, req.user.userId);
 
     await logAudit({
       userId: req.user.userId,
@@ -27,7 +27,13 @@ export const createCustomerController = async (req, res, next) => {
 
 export const listCustomersController = async (req, res, next) => {
   try {
-    const customers = await listCustomers(req.user.tenantId);
+    const filters = {
+      status: req.query.status,
+      category: req.query.category,
+      ownerId: req.query.ownerId,
+      search: req.query.search
+    };
+    const customers = await listCustomers(req.user.tenantId, filters);
     res.json(customers);
   } catch (err) {
     next(err);

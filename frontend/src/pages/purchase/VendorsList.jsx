@@ -3,6 +3,7 @@ import { Users, Plus, Search, Edit, Trash2, Star, TrendingUp, MapPin, Mail, Phon
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import axios from 'axios';
+import { getToken } from '../../store/auth.store';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
 
@@ -50,7 +51,7 @@ const VendorsList = () => {
   const fetchVendors = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = getToken();
       const response = await axios.get(`${API_URL}/api/purchase/vendors`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -95,7 +96,7 @@ const VendorsList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = getToken();
     
     const payload = {
       ...formData,
@@ -152,7 +153,7 @@ const VendorsList = () => {
     if (!window.confirm('Delete this vendor? This action cannot be undone.')) return;
     
     try {
-      const token = localStorage.getItem('token');
+      const token = getToken();
       await axios.delete(`${API_URL}/api/purchase/vendors/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

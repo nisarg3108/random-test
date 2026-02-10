@@ -9,7 +9,7 @@ import { logAudit } from '../../core/audit/audit.service.js';
 
 export const createContactController = async (req, res, next) => {
   try {
-    const contact = await createContact(req.body, req.user.tenantId);
+    const contact = await createContact(req.body, req.user.tenantId, req.user.userId);
 
     await logAudit({
       userId: req.user.userId,

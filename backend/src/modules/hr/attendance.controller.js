@@ -1,72 +1,47 @@
 import attendanceService from './attendance.service.js';
-import { getEmployeeByUserId } from './employee.service.js';
 
-// ==========================================
-// CLOCK IN/OUT ENDPOINTS
-// ==========================================
+// ============================================
+// CLOCK IN/OUT CONTROLLERS
+// ============================================
 
 export const clockIn = async (req, res) => {
   try {
-    let { employeeId, location } = req.body;
+    const { employeeId, location, isWorkFromHome } = req.body;
     const tenantId = req.user.tenantId;
-    const userId = req.user.userId;
 
-    // If employeeId not provided, get it from current user
-    if (!employeeId) {
-      const employee = await getEmployeeByUserId(userId, tenantId);
-      if (!employee) {
-        return res.status(404).json({
-          success: false,
-          message: 'Employee profile not found for current user'
-        });
-      }
-      employeeId = employee.id;
-    }
+    const timeTracking = await attendanceService.clockIn(employeeId, tenantId, location, isWorkFromHome);
 
-    const result = await attendanceService.clockIn(employeeId, tenantId, location);
-    
     res.status(200).json({
       success: true,
       message: 'Clock in successful',
-      data: result
+      data: timeTracking
     });
   } catch (error) {
+    console.error('Clock in error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to clock in'
     });
   }
 };
 
 export const clockOut = async (req, res) => {
   try {
-    let { employeeId, location } = req.body;
+    const { employeeId, location } = req.body;
     const tenantId = req.user.tenantId;
-    const userId = req.user.userId;
 
-    // If employeeId not provided, get it from current user
-    if (!employeeId) {
-      const employee = await getEmployeeByUserId(userId, tenantId);
-      if (!employee) {
-        return res.status(404).json({
-          success: false,
-          message: 'Employee profile not found for current user'
-        });
-      }
-      employeeId = employee.id;
-    }
+    const timeTracking = await attendanceService.clockOut(employeeId, tenantId, location);
 
-    const result = await attendanceService.clockOut(employeeId, tenantId, location);
-    
     res.status(200).json({
       success: true,
       message: 'Clock out successful',
-      data: result
+      data: timeTracking
     });
   } catch (error) {
+    console.error('Clock out error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to clock out'
     });
   }
 };
@@ -76,60 +51,81 @@ export const getClockStatus = async (req, res) => {
     const { employeeId } = req.params;
     const tenantId = req.user.tenantId;
 
-    const status = await attendanceService.getCurrentClockInStatus(employeeId, tenantId);
-    
+    const status = await attendanceService.getClockStatus(employeeId, tenantId);
+
     res.status(200).json({
       success: true,
       data: status
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Get clock status error:', error);
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to get clock status'
     });
   }
 };
 
-// ==========================================
-// SHIFT MANAGEMENT ENDPOINTS
-// ==========================================
+// ============================================
+// SHIFT MANAGEMENT CONTROLLERS
+// ============================================
 
 export const createShift = async (req, res) => {
   try {
-    const data = req.body;
     const tenantId = req.user.tenantId;
+    const shiftData = {
+      ...req.body,
+      code: req.body.code || `SHIFT-${Date.now()}`
+    };
+    const shift = await attendanceService.createShift(shiftData, tenantId);
 
-    const result = await attendanceService.createShift(data, tenantId);
-    
     res.status(201).json({
       success: true,
       message: 'Shift created successfully',
-      data: result
+      data: shift
     });
   } catch (error) {
+    console.error('Create shift error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to create shift'
+    });
+  }
+};
+
+export const getAllShifts = async (req, res) => {
+  try {
+    const tenantId = req.user.tenantId;
+    const shifts = await attendanceService.getAllShifts(tenantId);
+
+    res.status(200).json({
+      success: true,
+      data: shifts
+    });
+  } catch (error) {
+    console.error('Get shifts error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to get shifts'
     });
   }
 };
 
 export const assignShift = async (req, res) => {
   try {
-    const { employeeId, shiftId, assignedFrom } = req.body;
     const tenantId = req.user.tenantId;
+    const assignment = await attendanceService.assignShift(req.body, tenantId);
 
-    const result = await attendanceService.assignShift(employeeId, shiftId, tenantId, assignedFrom);
-    
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: 'Shift assigned successfully',
-      data: result
+      data: assignment
     });
   } catch (error) {
+    console.error('Assign shift error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to assign shift'
     });
   }
 };
@@ -137,70 +133,72 @@ export const assignShift = async (req, res) => {
 export const getEmployeeShift = async (req, res) => {
   try {
     const { employeeId } = req.params;
-    const { date } = req.query;
     const tenantId = req.user.tenantId;
 
-    const shift = await attendanceService.getEmployeeShift(
-      employeeId,
-      tenantId,
-      date ? new Date(date) : null
-    );
-    
+    const shift = await attendanceService.getEmployeeShift(employeeId, tenantId);
+
     res.status(200).json({
       success: true,
       data: shift
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Get employee shift error:', error);
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to get employee shift'
     });
   }
 };
 
-export const getShifts = async (req, res) => {
+export const getShiftHistory = async (req, res) => {
   try {
+    const { employeeId } = req.params;
+    const { limit } = req.query;
     const tenantId = req.user.tenantId;
 
-    const shifts = await attendanceService.getShiftsByTenant(tenantId);
-    
+    const history = await attendanceService.getShiftHistory(
+      employeeId,
+      tenantId,
+      limit ? parseInt(limit) : 10
+    );
+
     res.status(200).json({
       success: true,
-      data: shifts
+      data: history
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Get shift history error:', error);
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to get shift history'
     });
   }
 };
 
-// ==========================================
-// OVERTIME MANAGEMENT ENDPOINTS
-// ==========================================
+// ============================================
+// OVERTIME CONTROLLERS
+// ============================================
 
 export const createOvertimePolicy = async (req, res) => {
   try {
-    const data = req.body;
     const tenantId = req.user.tenantId;
+    const policy = await attendanceService.createOvertimePolicy(req.body, tenantId);
 
-    const result = await attendanceService.createOvertimePolicy(data, tenantId);
-    
     res.status(201).json({
       success: true,
       message: 'Overtime policy created successfully',
-      data: result
+      data: policy
     });
   } catch (error) {
+    console.error('Create overtime policy error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to create overtime policy'
     });
   }
 };
 
-export const getOvertimeHours = async (req, res) => {
+export const calculateOvertimeHours = async (req, res) => {
   try {
     const { employeeId } = req.params;
     const { date } = req.query;
@@ -213,67 +211,69 @@ export const getOvertimeHours = async (req, res) => {
       });
     }
 
-    const result = await attendanceService.calculateOvertimeHours(employeeId, tenantId, new Date(date));
-    
+    const overtime = await attendanceService.calculateOvertimeHours(employeeId, tenantId, date);
+
     res.status(200).json({
       success: true,
-      data: result
+      data: overtime
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Calculate overtime error:', error);
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to calculate overtime'
     });
   }
 };
 
-export const recordOvertimeManual = async (req, res) => {
+export const recordOvertime = async (req, res) => {
   try {
     const { employeeId } = req.params;
-    const data = req.body;
     const tenantId = req.user.tenantId;
 
-    const result = await attendanceService.recordOvertime(employeeId, tenantId, data);
-    
+    const record = await attendanceService.recordOvertime(employeeId, tenantId, req.body);
+
     res.status(201).json({
       success: true,
       message: 'Overtime recorded successfully',
-      data: result
+      data: record
     });
   } catch (error) {
+    console.error('Record overtime error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to record overtime'
     });
   }
 };
 
-export const approveOvertimeRecord = async (req, res) => {
+export const approveOvertime = async (req, res) => {
   try {
     const { overtimeRecordId } = req.params;
     const { approvedBy } = req.body;
     const tenantId = req.user.tenantId;
 
-    const result = await attendanceService.approveOvertime(overtimeRecordId, tenantId, approvedBy);
-    
+    const record = await attendanceService.approveOvertime(overtimeRecordId, tenantId, approvedBy);
+
     res.status(200).json({
       success: true,
       message: 'Overtime approved successfully',
-      data: result
+      data: record
     });
   } catch (error) {
+    console.error('Approve overtime error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to approve overtime'
     });
   }
 };
 
-// ==========================================
-// ATTENDANCE REPORTING ENDPOINTS
-// ==========================================
+// ============================================
+// ATTENDANCE REPORT CONTROLLERS
+// ============================================
 
-export const generateMonthlyReport = async (req, res) => {
+export const generateAttendanceReport = async (req, res) => {
   try {
     const { employeeId } = req.params;
     const { month, year } = req.query;
@@ -282,7 +282,7 @@ export const generateMonthlyReport = async (req, res) => {
     if (!month || !year) {
       return res.status(400).json({
         success: false,
-        message: 'Month and year are required'
+        message: 'Month and year parameters are required'
       });
     }
 
@@ -292,20 +292,22 @@ export const generateMonthlyReport = async (req, res) => {
       parseInt(month),
       parseInt(year)
     );
-    
+
     res.status(200).json({
       success: true,
+      message: 'Report generated successfully',
       data: report
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Generate report error:', error);
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to generate report'
     });
   }
 };
 
-export const getMonthlyReport = async (req, res) => {
+export const getAttendanceReport = async (req, res) => {
   try {
     const { employeeId } = req.params;
     const { month, year } = req.query;
@@ -314,7 +316,7 @@ export const getMonthlyReport = async (req, res) => {
     if (!month || !year) {
       return res.status(400).json({
         success: false,
-        message: 'Month and year are required'
+        message: 'Month and year parameters are required'
       });
     }
 
@@ -324,20 +326,28 @@ export const getMonthlyReport = async (req, res) => {
       parseInt(month),
       parseInt(year)
     );
-    
+
+    if (!report) {
+      return res.status(404).json({
+        success: false,
+        message: 'Report not found'
+      });
+    }
+
     res.status(200).json({
       success: true,
       data: report
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Get report error:', error);
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to get report'
     });
   }
 };
 
-export const getTeamReport = async (req, res) => {
+export const getDepartmentReport = async (req, res) => {
   try {
     const { departmentId } = req.params;
     const { month, year } = req.query;
@@ -346,71 +356,70 @@ export const getTeamReport = async (req, res) => {
     if (!month || !year) {
       return res.status(400).json({
         success: false,
-        message: 'Month and year are required'
+        message: 'Month and year parameters are required'
       });
     }
 
-    const report = await attendanceService.getTeamAttendanceReport(
+    const report = await attendanceService.getDepartmentReport(
       departmentId,
       tenantId,
       parseInt(month),
       parseInt(year)
     );
-    
+
     res.status(200).json({
       success: true,
       data: report
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Get department report error:', error);
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to get department report'
     });
   }
 };
 
-// ==========================================
-// LEAVE INTEGRATION ENDPOINTS
-// ==========================================
+// ============================================
+// LEAVE INTEGRATION CONTROLLER
+// ============================================
 
-export const integrateLeave = async (req, res) => {
+export const integrateLeaveWithAttendance = async (req, res) => {
   try {
     const { leaveRequestId } = req.body;
     const tenantId = req.user.tenantId;
 
-    const result = await attendanceService.integrateLeaveWithAttendance(leaveRequestId, tenantId);
-    
+    const integrations = await attendanceService.integrateLeaveWithAttendance(leaveRequestId, tenantId);
+
     res.status(200).json({
       success: true,
       message: 'Leave integrated with attendance successfully',
-      data: result
+      data: integrations
     });
   } catch (error) {
+    console.error('Leave integration error:', error);
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to integrate leave with attendance'
     });
   }
 };
 
-// ==========================================
-// DASHBOARD STATISTICS ENDPOINT
-// ==========================================
-
-export const getDashboardStats = async (req, res) => {
-  try {
-    const tenantId = req.user.tenantId;
-
-    const stats = await attendanceService.getDashboardStatistics(tenantId);
-    
-    res.status(200).json({
-      success: true,
-      data: stats
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
+export default {
+  clockIn,
+  clockOut,
+  getClockStatus,
+  createShift,
+  getAllShifts,
+  assignShift,
+  getEmployeeShift,
+  getShiftHistory,
+  createOvertimePolicy,
+  calculateOvertimeHours,
+  recordOvertime,
+  approveOvertime,
+  generateAttendanceReport,
+  getAttendanceReport,
+  getDepartmentReport,
+  integrateLeaveWithAttendance
 };

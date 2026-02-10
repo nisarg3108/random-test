@@ -6,8 +6,8 @@ import {
   ShieldCheck, Zap, CheckCircle, FileText, Settings, 
   BarChart3, ChevronLeft, ChevronRight, LogOut, Menu, 
   User, Crown, Zap as ZapIcon, UserCheck, Calendar, DollarSign, Truck,
-  ClipboardList, Target, Briefcase, ShoppingCart, Box, Clock, 
-  TrendingDown, Wrench, Bell, MessageSquare, Megaphone, Hash
+  ClipboardList, Target, Briefcase, ShoppingCart, Box, 
+  TrendingDown, Wrench, Bell, MessageSquare, Megaphone, Hash, Clock
 } from 'lucide-react';
 import { removeToken } from '../../store/auth.store';
 
@@ -25,15 +25,11 @@ const Sidebar = () => {
     { path: '/hr', label: 'HR Dashboard', icon: UserCheck, minRole: 'MANAGER' },
     { path: '/hr/employees', label: 'Employees', icon: Users, minRole: 'MANAGER' },
     { path: '/hr/salary-management', label: 'Salary Management', icon: DollarSign, minRole: 'MANAGER' },
+    { path: '/hr/attendance', label: 'Attendance & Time', icon: Clock, minRole: 'USER' },
     { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar, minRole: 'USER' },
     { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar, minRole: 'MANAGER' },
     { path: '/hr/payroll', label: 'Payroll Dashboard', icon: DollarSign, minRole: 'MANAGER' },
     { path: '/hr/payroll/cycles', label: 'Payroll Cycles', icon: Calendar, minRole: 'MANAGER' },
-    { path: '/hr/attendance', label: 'Attendance Dashboard', icon: Clock, minRole: 'MANAGER' },
-    { path: '/hr/attendance/clock', label: 'Clock In/Out', icon: Clock, minRole: 'USER' },
-    { path: '/hr/attendance/reports', label: 'Attendance Reports', icon: FileText, minRole: 'MANAGER' },
-    { path: '/hr/shifts', label: 'Shift Management', icon: Calendar, minRole: 'MANAGER' },
-    { path: '/hr/overtime', label: 'Overtime Tracking', icon: Clock, minRole: 'MANAGER' },
     { path: '/employee/dashboard', label: 'My Dashboard', icon: User, minRole: 'EMPLOYEE', roles: ['EMPLOYEE'] },
     { path: '/employee/tasks', label: 'Task Management', icon: Target, minRole: 'MANAGER' },
     { path: '/employee/work-reports', label: 'Work Reports', icon: ClipboardList, minRole: 'EMPLOYEE', roles: ['EMPLOYEE'] },
@@ -57,6 +53,9 @@ const Sidebar = () => {
     { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart, minRole: 'USER' },
     { path: '/purchase/evaluations', label: 'Supplier Evaluation', icon: CheckCircle, minRole: 'MANAGER' },
     { path: '/purchase/analytics', label: 'Purchase Analytics', icon: BarChart3, minRole: 'USER' },
+    { path: '/ap/bills', label: 'AP Bills', icon: FileText, minRole: 'USER' },
+    { path: '/ap/payments', label: 'AP Payments', icon: DollarSign, minRole: 'USER' },
+    { path: '/ap/aging', label: 'AP Aging Report', icon: BarChart3, minRole: 'MANAGER' },
     { path: '/projects', label: 'Projects', icon: Briefcase, minRole: 'USER' },
     { path: '/assets', label: 'Asset Management', icon: Box, minRole: 'USER' },
     { path: '/assets/list', label: 'Assets List', icon: Package, minRole: 'USER' },

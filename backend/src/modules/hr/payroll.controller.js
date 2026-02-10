@@ -2,52 +2,6 @@ import payrollService from './payroll.service.js';
 
 class PayrollController {
   // ==========================================
-  // ATTENDANCE
-  // ==========================================
-
-  async markAttendance(req, res) {
-    try {
-      const { tenantId } = req.user;
-      const attendance = await payrollService.markAttendance({
-        ...req.body,
-        tenantId
-      });
-      res.json(attendance);
-    } catch (error) {
-      console.error('Mark attendance error:', error);
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  async getAttendance(req, res) {
-    try {
-      const { tenantId } = req.user;
-      const attendance = await payrollService.getAttendance(tenantId, req.query);
-      res.json(attendance);
-    } catch (error) {
-      console.error('Get attendance error:', error);
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  async getAttendanceSummary(req, res) {
-    try {
-      const { tenantId } = req.user;
-      const { employeeId, startDate, endDate } = req.query;
-      const summary = await payrollService.getAttendanceSummary(
-        tenantId,
-        employeeId,
-        startDate,
-        endDate
-      );
-      res.json(summary);
-    } catch (error) {
-      console.error('Get attendance summary error:', error);
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  // ==========================================
   // SALARY COMPONENTS
   // ==========================================
 
