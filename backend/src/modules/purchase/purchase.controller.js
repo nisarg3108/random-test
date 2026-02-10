@@ -11,6 +11,7 @@ import {
   deleteRequisition,
   approveRequisition,
   rejectRequisition,
+  convertRequisitionToPO,
   listPurchaseOrders,
   getPurchaseOrderById,
   createPurchaseOrder,
@@ -23,6 +24,7 @@ import {
   getGoodsReceiptById,
   createGoodsReceipt,
   updateGoodsReceipt,
+  deleteGoodsReceipt,
   listEvaluations,
   getEvaluationById,
   createEvaluation,
@@ -158,6 +160,15 @@ export const rejectRequisitionController = async (req, res, next) => {
   }
 };
 
+export const convertRequisitionToPOController = async (req, res, next) => {
+  try {
+    const purchaseOrder = await convertRequisitionToPO(req.params.id, req.user.tenantId, req.user.id);
+    res.status(201).json(purchaseOrder);
+  } catch (error) {
+    handleError(error, next);
+  }
+};
+
 // ==================== PURCHASE ORDERS ====================
 
 export const listPurchaseOrdersController = async (req, res, next) => {
@@ -273,6 +284,15 @@ export const updateGoodsReceiptController = async (req, res, next) => {
   try {
     const receipt = await updateGoodsReceipt(req.params.id, req.body, req.user.tenantId);
     res.json(receipt);
+  } catch (error) {
+    handleError(error, next);
+  }
+};
+
+export const deleteGoodsReceiptController = async (req, res, next) => {
+  try {
+    await deleteGoodsReceipt(req.params.id, req.user.tenantId);
+    res.status(204).send();
   } catch (error) {
     handleError(error, next);
   }

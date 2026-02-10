@@ -5,19 +5,6 @@ import { requireAuth as authenticate } from '../../core/auth/auth.middleware.js'
 const router = express.Router();
 
 // ==========================================
-// ATTENDANCE ROUTES
-// ==========================================
-
-// Mark attendance
-router.post('/attendance', authenticate, payrollController.markAttendance);
-
-// Get attendance records
-router.get('/attendance', authenticate, payrollController.getAttendance);
-
-// Get attendance summary
-router.get('/attendance/summary', authenticate, payrollController.getAttendanceSummary);
-
-// ==========================================
 // SALARY COMPONENTS ROUTES
 // ==========================================
 

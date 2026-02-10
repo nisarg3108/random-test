@@ -44,15 +44,6 @@ export const PERMISSIONS = {
     MANAGE_SALARY: 'employee.salary.manage',
   },
 
-  // ========== ATTENDANCE ==========
-  ATTENDANCE: {
-    MARK_OWN: 'attendance.mark.own',
-    VIEW_OWN: 'attendance.view.own',
-    VIEW_ALL: 'attendance.view.all',
-    MANAGE: 'attendance.manage',
-    APPROVE: 'attendance.approve',
-  },
-
   // ========== LEAVE MANAGEMENT ==========
   LEAVE: {
     REQUEST: 'leave.request',
@@ -226,8 +217,6 @@ export const ROLE_PERMISSIONS = {
     permissions: [
       // Employee Management
       ...Object.values(PERMISSIONS.EMPLOYEE),
-      // Attendance
-      ...Object.values(PERMISSIONS.ATTENDANCE),
       // Leave Management
       ...Object.values(PERMISSIONS.LEAVE),
       // Payroll
@@ -261,8 +250,6 @@ export const ROLE_PERMISSIONS = {
       PERMISSIONS.EMPLOYEE.VIEW,
       PERMISSIONS.EMPLOYEE.VIEW_ALL,
       PERMISSIONS.EMPLOYEE.UPDATE,
-      PERMISSIONS.ATTENDANCE.VIEW_ALL,
-      PERMISSIONS.ATTENDANCE.MANAGE,
       PERMISSIONS.LEAVE.VIEW_ALL,
       PERMISSIONS.DEPARTMENT.VIEW,
       PERMISSIONS.USER.VIEW,
@@ -440,8 +427,6 @@ export const ROLE_PERMISSIONS = {
     description: 'Department/team manager with approval rights',
     permissions: [
       PERMISSIONS.EMPLOYEE.VIEW,
-      PERMISSIONS.ATTENDANCE.VIEW_ALL,
-      PERMISSIONS.ATTENDANCE.APPROVE,
       PERMISSIONS.LEAVE.VIEW_ALL,
       PERMISSIONS.LEAVE.APPROVE,
       PERMISSIONS.EXPENSE.VIEW_ALL,
@@ -464,8 +449,6 @@ export const ROLE_PERMISSIONS = {
     description: 'Standard employee with basic self-service access',
     permissions: [
       PERMISSIONS.EMPLOYEE.VIEW_OWN,
-      PERMISSIONS.ATTENDANCE.MARK_OWN,
-      PERMISSIONS.ATTENDANCE.VIEW_OWN,
       PERMISSIONS.LEAVE.REQUEST,
       PERMISSIONS.LEAVE.VIEW_OWN,
       PERMISSIONS.EXPENSE.CLAIM,

@@ -7,7 +7,6 @@ import {
   Calendar, 
   TrendingUp, 
   FileText, 
-  Clock,
   CheckCircle,
   AlertCircle 
 } from 'lucide-react';
@@ -129,13 +128,6 @@ export default function PayrollDashboard() {
           <p className="text-primary-600 mt-1">Manage salary processing and disbursements</p>
         </div>
         <div className="flex gap-3">
-          <button
-            onClick={() => navigate('/hr/payroll/attendance')}
-            className="btn-modern btn-secondary flex items-center space-x-2"
-          >
-            <Clock className="w-4 h-4" />
-            <span>Attendance</span>
-          </button>
           <button
             onClick={() => navigate('/hr/payroll/cycles')}
             className="btn-modern btn-primary flex items-center space-x-2"

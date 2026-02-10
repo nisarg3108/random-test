@@ -3,6 +3,7 @@ import { TrendingUp, DollarSign, FileText, Users, Package, Clock, BarChart3 } fr
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import axios from 'axios';
+import { getToken } from '../../store/auth.store';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
 
@@ -23,7 +24,7 @@ const PurchaseAnalytics = () => {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = getToken();
       const params = new URLSearchParams(dateRange).toString();
       const response = await axios.get(`${API_URL}/api/purchase/analytics?${params}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -38,7 +39,7 @@ const PurchaseAnalytics = () => {
 
   const fetchVendorPerformance = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getToken();
       const response = await axios.get(`${API_URL}/api/purchase/vendor-performance`, {
         headers: { Authorization: `Bearer ${token}` }
       });

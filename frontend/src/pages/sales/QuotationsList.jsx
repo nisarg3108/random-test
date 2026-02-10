@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { FileText, Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock, ArrowRight } from 'lucide-react';
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import LineItemEditor from '../../components/sales/LineItemEditor';
 import { useSalesStore } from '../../store/sales.store';
+import { crmAPI } from '../../api/crm.api';
 
 const statusStyles = {
   DRAFT: { label: 'Draft', color: 'text-gray-700', bg: 'bg-gray-100' },
@@ -21,17 +23,26 @@ const QuotationsList = () => {
     createQuotation,
     updateQuotation,
     deleteQuotation,
+    convertQuotationToOrder,
     clearError
   } = useSalesStore();
 
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [customers, setCustomers] = useState([]);
+  const [deals, setDeals] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
+    customerId: '',
+    dealId: '',
     customerName: '',
     customerEmail: '',
-    total: '',
+    items: [],
+    subtotal: 0,
+    tax: 0,
+    discount: 0,
+    total: 0,
     status: 'DRAFT',
     validUntil: ''
   });
@@ -40,12 +51,35 @@ const QuotationsList = () => {
     fetchQuotations();
   }, [fetchQuotations]);
 
+  useEffect(() => {
+    const loadCRMData = async () => {
+      try {
+        const [customersRes, dealsRes] = await Promise.all([
+          crmAPI.getCustomers(),
+          crmAPI.getDeals()
+        ]);
+        setCustomers(customersRes.data || []);
+        setDeals(dealsRes.data || []);
+      } catch (err) {
+        console.error('Failed to load CRM data for quotations:', err);
+      }
+    };
+
+    loadCRMData();
+  }, []);
+
   const resetForm = () => {
     setFormData({
       title: '',
+      customerId: '',
+      dealId: '',
       customerName: '',
       customerEmail: '',
-      total: '',
+      items: [],
+      subtotal: 0,
+      tax: 0,
+      discount: 0,
+      total: 0,
       status: 'DRAFT',
       validUntil: ''
     });
@@ -56,11 +90,42 @@ const QuotationsList = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleCustomerChange = (e) => {
+    const customerId = e.target.value;
+    const customer = customers.find((item) => item.id === customerId);
+    setFormData({
+      ...formData,
+      customerId,
+      customerName: customer?.name || ''
+    });
+  };
+
+  const handleDealChange = (e) => {
+    const dealId = e.target.value;
+    const deal = deals.find((item) => item.id === dealId);
+    setFormData({
+      ...formData,
+      dealId,
+      customerId: deal?.customer?.id || formData.customerId,
+      customerName: deal?.customer?.name || formData.customerName
+    });
+  };
+
+  const handleTotalsChange = (totals) => {
+    setFormData(prev => ({
+      ...prev,
+      items: totals.items,
+      subtotal: totals.subtotal,
+      tax: totals.tax,
+      discount: totals.discount,
+      total: totals.total
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
       ...formData,
-      total: Number(formData.total || 0),
       validUntil: formData.validUntil || null
     };
 
@@ -82,9 +147,15 @@ const QuotationsList = () => {
     setEditing(quotation);
     setFormData({
       title: quotation.title || '',
+      customerId: quotation.customerId || '',
+      dealId: quotation.dealId || '',
       customerName: quotation.customerName || '',
       customerEmail: quotation.customerEmail || '',
-      total: quotation.total?.toString() || '',
+      items: quotation.items || [],
+      subtotal: quotation.subtotal || 0,
+      tax: quotation.tax || 0,
+      discount: quotation.discount || 0,
+      total: quotation.total || 0,
       status: quotation.status || 'DRAFT',
       validUntil: quotation.validUntil ? quotation.validUntil.substring(0, 10) : ''
     });
@@ -97,6 +168,18 @@ const QuotationsList = () => {
         await deleteQuotation(id);
       } catch (deleteError) {
         console.error('Failed to delete quotation:', deleteError);
+      }
+    }
+  };
+
+  const handleConvertToOrder = async (id) => {
+    if (window.confirm('Convert this quotation to a sales order?')) {
+      try {
+        await convertQuotationToOrder(id);
+        alert('Successfully converted quotation to sales order!');
+      } catch (convertError) {
+        console.error('Failed to convert quotation:', convertError);
+        alert('Error: ' + (convertError.message || 'Failed to convert quotation'));
       }
     }
   };
@@ -218,10 +301,18 @@ const QuotationsList = () => {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end space-x-2">
+                            {q.status === 'ACCEPTED' && (
+                              <button
+                                onClick={() => handleConvertToOrder(q.id)}
+                                className="p-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
+                                title="Convert to Order"
+                              >
+                                <ArrowRight className="w-4 h-4" />
+                              </button>
+                            )}
                             <button
                               onClick={() => handleEdit(q)}
-                              className="p-2 text-primary-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            >
+                              className="p-2 text-primary-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                               <Edit className="w-4 h-4" />
                             </button>
                             <button
@@ -244,8 +335,7 @@ const QuotationsList = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="modern-card-elevated max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b border-primary-200">
+          <div className="modern-card-elevated max-w-4xl w-full max-h-[90vh] overflow-y-auto">\n            <div className="px-6 py-4 border-b border-primary-200">
               <h3 className="text-lg font-semibold text-primary-900">
                 {editing ? 'Edit Quotation' : 'New Quotation'}
               </h3>
@@ -262,6 +352,38 @@ const QuotationsList = () => {
                   className="input-modern"
                   placeholder="Quotation title"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Customer (CRM)</label>
+                <select
+                  name="customerId"
+                  value={formData.customerId}
+                  onChange={handleCustomerChange}
+                  className="input-modern"
+                >
+                  <option value="">Link customer</option>
+                  {customers.map((customer) => (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Deal (CRM)</label>
+                <select
+                  name="dealId"
+                  value={formData.dealId}
+                  onChange={handleDealChange}
+                  className="input-modern"
+                >
+                  <option value="">Link deal</option>
+                  {deals.map((deal) => (
+                    <option key={deal.id} value={deal.id}>
+                      {deal.name} {deal.customer?.name ? `(${deal.customer.name})` : ''}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-primary-700 mb-1">Customer Name</label>
@@ -286,20 +408,12 @@ const QuotationsList = () => {
                   placeholder="customer@email.com"
                 />
               </div>
+              <LineItemEditor
+                items={formData.items}
+                onTotalsChange={handleTotalsChange}
+              />
+              
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-primary-700 mb-1">Total (₹)</label>
-                  <input
-                    name="total"
-                    type="number"
-                    step="0.01"
-                    value={formData.total}
-                    onChange={handleChange}
-                    required
-                    className="input-modern"
-                    placeholder="0.00"
-                  />
-                </div>
                 <div>
                   <label className="block text-sm font-medium text-primary-700 mb-1">Status</label>
                   <select
@@ -313,18 +427,17 @@ const QuotationsList = () => {
                     ))}
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-primary-700 mb-1">Valid Until</label>
+                  <input
+                    name="validUntil"
+                    type="date"
+                    value={formData.validUntil}
+                    onChange={handleChange}
+                    className="input-modern"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-primary-700 mb-1">Valid Until</label>
-                <input
-                  name="validUntil"
-                  type="date"
-                  value={formData.validUntil}
-                  onChange={handleChange}
-                  className="input-modern"
-                />
-              </div>
-
               <div className="flex justify-end space-x-3 pt-4">
                 <button
                   type="button"

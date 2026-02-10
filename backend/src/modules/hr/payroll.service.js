@@ -2,124 +2,6 @@ import prisma from '../../config/db.js';
 
 class PayrollService {
   // ==========================================
-  // ATTENDANCE MANAGEMENT
-  // ==========================================
-
-  async markAttendance(data) {
-    const { tenantId, employeeId, date, checkIn, checkOut, status, notes } = data;
-    
-    // Calculate work hours
-    let workHours = 0;
-    let overtimeHours = 0;
-    
-    if (checkIn && checkOut) {
-      const checkInTime = new Date(checkIn);
-      const checkOutTime = new Date(checkOut);
-      const totalHours = (checkOutTime - checkInTime) / (1000 * 60 * 60);
-      
-      const standardHours = 8;
-      workHours = Math.min(totalHours, standardHours);
-      overtimeHours = Math.max(0, totalHours - standardHours);
-    } else if (status === 'HALF_DAY') {
-      workHours = 4;
-    } else if (status === 'PRESENT') {
-      workHours = 8;
-    }
-
-    return prisma.attendance.upsert({
-      where: {
-        tenantId_employeeId_date: {
-          tenantId,
-          employeeId,
-          date: new Date(date)
-        }
-      },
-      update: {
-        checkIn: checkIn ? new Date(checkIn) : undefined,
-        checkOut: checkOut ? new Date(checkOut) : undefined,
-        status,
-        workHours,
-        overtimeHours,
-        notes
-      },
-      create: {
-        tenantId,
-        employeeId,
-        date: new Date(date),
-        checkIn: checkIn ? new Date(checkIn) : null,
-        checkOut: checkOut ? new Date(checkOut) : null,
-        status,
-        workHours,
-        overtimeHours,
-        notes
-      },
-      include: {
-        employee: {
-          select: {
-            id: true,
-            name: true,
-            employeeCode: true
-          }
-        }
-      }
-    });
-  }
-
-  async getAttendance(tenantId, filters) {
-    const { employeeId, startDate, endDate, status } = filters;
-    
-    const where = { tenantId };
-    if (employeeId) where.employeeId = employeeId;
-    if (status) where.status = status;
-    if (startDate || endDate) {
-      where.date = {};
-      if (startDate) where.date.gte = new Date(startDate);
-      if (endDate) where.date.lte = new Date(endDate);
-    }
-
-    return prisma.attendance.findMany({
-      where,
-      include: {
-        employee: {
-          select: {
-            id: true,
-            name: true,
-            employeeCode: true,
-            designation: true
-          }
-        }
-      },
-      orderBy: { date: 'desc' }
-    });
-  }
-
-  async getAttendanceSummary(tenantId, employeeId, startDate, endDate) {
-    const attendance = await prisma.attendance.findMany({
-      where: {
-        tenantId,
-        employeeId,
-        date: {
-          gte: new Date(startDate),
-          lte: new Date(endDate)
-        }
-      }
-    });
-
-    const summary = {
-      totalDays: attendance.length,
-      presentDays: attendance.filter(a => a.status === 'PRESENT').length,
-      absentDays: attendance.filter(a => a.status === 'ABSENT').length,
-      leaveDays: attendance.filter(a => a.status === 'LEAVE').length,
-      halfDays: attendance.filter(a => a.status === 'HALF_DAY').length,
-      workFromHome: attendance.filter(a => a.status === 'WORK_FROM_HOME').length,
-      totalWorkHours: attendance.reduce((sum, a) => sum + a.workHours, 0),
-      totalOvertimeHours: attendance.reduce((sum, a) => sum + a.overtimeHours, 0)
-    };
-
-    return summary;
-  }
-
-  // ==========================================
   // SALARY COMPONENTS
   // ==========================================
 
@@ -340,32 +222,26 @@ class PayrollService {
     for (const employee of employees) {
       if (!employee.salaryStructure) continue;
 
-      // Get attendance summary
-      const attendanceSummary = await this.getAttendanceSummary(
-        tenantId,
-        employee.id,
-        cycle.startDate,
-        cycle.endDate
-      );
-
       // Calculate working days
       const workingDays = Math.ceil(
         (cycle.endDate - cycle.startDate) / (1000 * 60 * 60 * 24)
       );
 
-      // Calculate salary based on attendance
+      const presentDays = workingDays;
+      const absentDays = 0;
+      const leaveDays = 0;
+
+      // Calculate salary for the cycle period
       const { basicSalary, allowances, deductions } = employee.salaryStructure;
       
       const dailyBasic = basicSalary / 30;
-      const calculatedBasic = dailyBasic * attendanceSummary.presentDays;
+      const calculatedBasic = dailyBasic * presentDays;
       
       // Calculate allowances
       const allowancesObj = typeof allowances === 'object' ? allowances : {};
       const allowancesTotal = Object.values(allowancesObj).reduce((sum, val) => sum + val, 0);
       
-      // Calculate overtime
-      const overtimeRate = (basicSalary / 30 / 8) * 2; // Double rate
-      const overtimePay = attendanceSummary.totalOvertimeHours * overtimeRate;
+      const overtimePay = 0;
       
       const grossSalary = calculatedBasic + allowancesTotal + overtimePay;
       
@@ -403,9 +279,9 @@ class PayrollService {
           totalDeductions: totalDeduction,
           netSalary,
           workingDays,
-          presentDays: attendanceSummary.presentDays,
-          absentDays: attendanceSummary.absentDays,
-          leaveDays: attendanceSummary.leaveDays
+          presentDays,
+          absentDays,
+          leaveDays
         },
         include: {
           employee: {

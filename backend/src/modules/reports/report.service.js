@@ -177,23 +177,6 @@ export const generateHRAnalyticsReport = async (tenantId, startDate, endDate) =>
     return acc;
   }, {});
 
-  // Attendance (if available)
-  const attendanceRecords = await prisma.attendance?.findMany({
-    where: {
-      tenantId,
-      date: {
-        gte: new Date(startDate),
-        lte: new Date(endDate),
-      },
-    },
-  }).catch(() => []);
-
-  const attendanceStats = {
-    totalRecords: attendanceRecords?.length || 0,
-    present: attendanceRecords?.filter((a) => a.status === 'PRESENT').length || 0,
-    absent: attendanceRecords?.filter((a) => a.status === 'ABSENT').length || 0,
-    leave: attendanceRecords?.filter((a) => a.status === 'LEAVE').length || 0,
-  };
 
   // Payroll stats
   const totalPayroll = employees.reduce((sum, emp) => {
@@ -213,7 +196,6 @@ export const generateHRAnalyticsReport = async (tenantId, startDate, endDate) =>
       statistics: leaveStats,
       byType: leaveByType,
     },
-    attendance: attendanceStats,
     payroll: {
       totalMonthlyPayroll: totalPayroll,
       averageSalary: employees.length > 0 ? totalPayroll / employees.length : 0,

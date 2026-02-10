@@ -31,10 +31,10 @@ const CRMDashboard = () => {
       const dealsRes = await apiClient.get('/crm/deals');
 
       setStats({
-        totalCustomers: customersRes.data.data?.length || 0,
-        totalLeads: leadsRes.data.data?.length || 0,
-        totalDeals: dealsRes.data.data?.length || 0,
-        totalRevenue: dealsRes.data.data?.reduce((sum, deal) => sum + (deal.value || 0), 0) || 0,
+        totalCustomers: customersRes.data?.length || 0,
+        totalLeads: leadsRes.data?.length || 0,
+        totalDeals: dealsRes.data?.length || 0,
+        totalRevenue: dealsRes.data?.reduce((sum, deal) => sum + (deal.value || 0), 0) || 0,
         recentActivities: []
       });
     } catch (error) {

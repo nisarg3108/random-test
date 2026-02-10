@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import dbTestRoutes from './routes/db-test.routes.js';
 import healthRoutes from './routes/health.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
@@ -26,9 +29,8 @@ import leaveTypeRoutes from './modules/hr/leaveType.routes.js';
 import leaveRequestRoutes from './modules/hr/leaveRequest.routes.js';
 import employeeDashboardRoutes from './modules/hr/employee.dashboard.routes.js';
 import payrollRoutes from './modules/hr/payroll.routes.js';
-import attendanceRoutes from './modules/hr/attendance.routes.js';
-import shiftRoutes from './modules/hr/shift.routes.js';
 import taskRoutes from './modules/hr/task.routes.js';
+import attendanceRoutes from './modules/hr/attendance.routes.js';
 import expenseCategoryRoutes from './modules/finance/expenseCategory.routes.js';
 import expenseClaimRoutes from './modules/finance/expenseClaim.routes.js';
 import accountingRoutes from './modules/finance/accounting.routes.js';
@@ -41,7 +43,10 @@ import branchRoutes from './modules/company/branch.routes.js';
 import crmRoutes from './modules/crm/crm.routes.js';
 import salesRoutes from './modules/sales/sales.routes.js';
 import purchaseRoutes from './modules/purchase/purchase.routes.js';
+import apRoutes from './modules/ap/ap.routes.js';
 import projectRoutes from './modules/projects/project.routes.js';
+import projectMemberRoutes from './modules/projects/project-member.routes.js';
+import timesheetRoutes from './modules/projects/timesheet.routes.js';
 import manufacturingRoutes from './modules/manufacturing/manufacturing.routes.js';
 import assetRoutes from './modules/assets/asset.routes.js';
 import allocationRoutes from './modules/assets/allocation.routes.js';
@@ -55,6 +60,9 @@ import dataImportExportRoutes from './modules/utils/data-import-export.routes.js
 
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 /* Global Middlewares */
 app.use(helmet());
 app.use(cors({
@@ -64,6 +72,8 @@ app.use(cors({
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 /* Routes */
 app.get('/', (req, res) => {
@@ -85,15 +95,14 @@ app.use('/api/stock-movements', stockMovementRoutes);
 app.use('/api/departments', departmentRoutes);
 app.use('/api/audit-logs', auditRoutes);
 app.use('/api/system-options', systemOptionsRoutes);
-app.use('/api', rbacRoutes);
+app.use('/api/rbac', rbacRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/leave-types', leaveTypeRoutes);
 app.use('/api/leave-requests', leaveRequestRoutes);
 app.use('/api/employee', employeeDashboardRoutes);
 app.use('/api/payroll', payrollRoutes);
-app.use('/api/attendance', attendanceRoutes);
-app.use('/api/shifts', shiftRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/attendance', attendanceRoutes);
 app.use('/api/expense-categories', expenseCategoryRoutes);
 app.use('/api/expense-claims', expenseClaimRoutes);
 app.use('/api/finance-dashboard', financeDashboardRoutes);
@@ -106,7 +115,10 @@ app.use('/api/branches', branchRoutes);
 app.use('/api/crm', crmRoutes);
 app.use('/api/sales', salesRoutes);
 app.use('/api/purchase', purchaseRoutes);
+app.use('/api/ap', apRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/projects', projectMemberRoutes);
+app.use('/api/timesheets', timesheetRoutes);
 app.use('/api/manufacturing', manufacturingRoutes);
 
 app.use('/api/workflows', workflowRoutes);
