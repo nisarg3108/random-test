@@ -23,9 +23,26 @@ const calculateDecliningBalanceDepreciation = (bookValue, depreciationRate) => {
 };
 
 /**
+ * Calculate units of production depreciation
+ * Formula: ((Purchase Price - Salvage Value) / Total Expected Units) * Units Produced in Period
+ */
+const calculateUnitsOfProductionDepreciation = (
+  purchasePrice,
+  salvageValue,
+  totalExpectedUnits,
+  unitsProducedInPeriod
+) => {
+  if (!totalExpectedUnits || totalExpectedUnits === 0) {
+    throw new Error('Total expected units must be greater than zero for Units of Production method');
+  }
+  const depreciationPerUnit = (purchasePrice - salvageValue) / totalExpectedUnits;
+  return depreciationPerUnit * unitsProducedInPeriod;
+};
+
+/**
  * Calculate depreciation for an asset for a specific month
  */
-export const calculateAssetDepreciation = async (assetId, year, month, tenantId) => {
+export const calculateAssetDepreciation = async (assetId, year, month, tenantId, unitsProducedInPeriod = 0) => {
   // Get asset details
   const asset = await prisma.asset.findFirst({
     where: { id: assetId, tenantId },
@@ -92,6 +109,19 @@ export const calculateAssetDepreciation = async (assetId, year, month, tenantId)
       openingValue,
       asset.depreciationRate || 0
     );
+  } else if (asset.depreciationMethod === 'UNITS_OF_PRODUCTION') {
+    if (!asset.totalExpectedUnits) {
+      throw new Error('Asset does not have total expected units configured for Units of Production method');
+    }
+    if (unitsProducedInPeriod === 0) {
+      throw new Error('Units produced in period must be provided for Units of Production method');
+    }
+    depreciationAmount = calculateUnitsOfProductionDepreciation(
+      asset.purchasePrice,
+      salvageValue,
+      asset.totalExpectedUnits,
+      unitsProducedInPeriod
+    );
   }
 
   // Ensure depreciation doesn't go below salvage value
@@ -99,11 +129,15 @@ export const calculateAssetDepreciation = async (assetId, year, month, tenantId)
   depreciationAmount = openingValue - closingValue;
   accumulatedDepreciation += depreciationAmount;
 
+  // Calculate period date (last day of the month)
+  const periodDate = new Date(year, month, 0); // month is 1-based, Date constructor uses 0-based, so this gives last day
+
   // Create depreciation record
   const depreciation = await prisma.assetDepreciation.create({
     data: {
       tenantId,
       assetId,
+      period: periodDate,
       year,
       month,
       openingValue,
@@ -112,16 +146,23 @@ export const calculateAssetDepreciation = async (assetId, year, month, tenantId)
       accumulatedDepreciation,
       method: asset.depreciationMethod,
       rate: asset.depreciationRate || 0,
+      unitsProduced: asset.depreciationMethod === 'UNITS_OF_PRODUCTION' ? unitsProducedInPeriod : null,
     },
   });
 
-  // Update asset's current value and accumulated depreciation
+  // Update asset's current value, accumulated depreciation, and units produced to date
+  const updateData = {
+    currentValue: closingValue,
+    accumulatedDepreciation,
+  };
+
+  if (asset.depreciationMethod === 'UNITS_OF_PRODUCTION') {
+    updateData.unitsProducedToDate = (asset.unitsProducedToDate || 0) + unitsProducedInPeriod;
+  }
+
   await prisma.asset.update({
     where: { id: assetId },
-    data: {
-      currentValue: closingValue,
-      accumulatedDepreciation,
-    },
+    data: updateData,
   });
 
   return depreciation;

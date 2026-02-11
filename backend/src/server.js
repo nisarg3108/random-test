@@ -3,6 +3,7 @@ import app from './app.js';
 import { env } from './config/env.js';
 import prisma from './config/db.js';
 import { realTimeServer } from './core/realtime.js';
+import { initializeScheduledJobs } from './core/scheduler.js';
 
 import { seedPermissions } from './core/rbac/permissions.seed.js';
 import { seedRoles } from './core/rbac/roles.seed.js';
@@ -36,7 +37,10 @@ const startServer = async () => {
     const server = createServer(app);
     realTimeServer.initialize(server);
 
-    // 4️⃣ Start server
+    // 4️⃣ Initialize scheduled jobs (cron tasks)
+    initializeScheduledJobs();
+
+    // 5️⃣ Start server
     server.listen(env.port, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${env.port}`);
       console.log(`🔌 WebSocket server available at ws://localhost:${env.port}/ws`);

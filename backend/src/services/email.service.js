@@ -320,6 +320,140 @@ class EmailService {
   }
 
   /**
+   * Send overdue allocation notification to employee
+   */
+  async sendOverdueAllocationNotification(allocationData) {
+    this.checkConfiguration();
+    
+    const { 
+      employee, 
+      asset, 
+      expectedReturnDate, 
+      allocatedDate,
+      purpose,
+      id 
+    } = allocationData;
+
+    // Calculate days overdue
+    const daysOverdue = Math.floor(
+      (new Date() - new Date(expectedReturnDate)) / (1000 * 60 * 60 * 24)
+    );
+
+    const mailOptions = {
+      from: process.env.SMTP_FROM || 'noreply@company.com',
+      to: employee.email,
+      subject: `⚠️ Overdue Asset Return Notice - ${asset.name}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: #dc2626; color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0;">
+            <h1 style="margin: 0; font-size: 24px;">⚠️ Asset Return Overdue</h1>
+          </div>
+          
+          <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px;">
+            <p>Hello <strong>${employee.name}</strong>,</p>
+            
+            <p>This is a reminder that the following asset allocation is now <strong style="color: #dc2626;">${daysOverdue} day${daysOverdue !== 1 ? 's' : ''} overdue</strong>:</p>
+            
+            <div style="background: white; padding: 20px; border-left: 4px solid #dc2626; margin: 20px 0; border-radius: 4px;">
+              <h3 style="margin: 0 0 15px 0; color: #1f2937;">Asset Details</h3>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Asset Name:</td>
+                  <td style="padding: 8px 0; color: #1f2937; font-weight: bold;">${asset.name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Asset Code:</td>
+                  <td style="padding: 8px 0; color: #1f2937;">${asset.assetCode}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Allocated Date:</td>
+                  <td style="padding: 8px 0; color: #1f2937;">${new Date(allocatedDate).toLocaleDateString()}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Expected Return:</td>
+                  <td style="padding: 8px 0; color: #dc2626; font-weight: bold;">${new Date(expectedReturnDate).toLocaleDateString()}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Days Overdue:</td>
+                  <td style="padding: 8px 0; color: #dc2626; font-weight: bold; font-size: 18px;">${daysOverdue}</td>
+                </tr>
+                ${purpose ? `<tr>
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Purpose:</td>
+                  <td style="padding: 8px 0; color: #1f2937;">${purpose}</td>
+                </tr>` : ''}
+              </table>
+            </div>
+
+            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 4px;">
+              <p style="margin: 0; color: #78350f;"><strong>⚡ Action Required:</strong> Please return this asset as soon as possible to avoid any further delays or penalties.</p>
+            </div>
+
+            <p style="text-align: center; margin: 30px 0;">
+              <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/assets/allocations" 
+                 style="display: inline-block; padding: 14px 28px; background: #3b82f6; color: white; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                View My Allocations
+              </a>
+            </p>
+
+            <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+              If you have already returned this asset or have any questions, please contact your manager or the asset management team immediately.
+            </p>
+
+            <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+            <p style="color: #6b7280; font-size: 12px; text-align: center; margin: 0;">
+              This is an automated notification from the Asset Management System.<br>
+              Allocation ID: ${id}
+            </p>
+          </div>
+        </div>
+      `
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      console.log(`Overdue allocation notification sent to ${employee.email} for asset ${asset.assetCode}`);
+      return { success: true, email: employee.email };
+    } catch (error) {
+      console.error('Failed to send overdue allocation notification:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send batch overdue allocation notifications
+   */
+  async sendBatchOverdueNotifications(allocations) {
+    if (!this.isConfigured) {
+      console.log('⚠️  Email not configured. Skipping overdue notifications.');
+      return { success: false, sent: 0, failed: 0 };
+    }
+
+    const results = {
+      sent: 0,
+      failed: 0,
+      errors: []
+    };
+
+    for (const allocation of allocations) {
+      try {
+        await this.sendOverdueAllocationNotification(allocation);
+        results.sent++;
+      } catch (error) {
+        results.failed++;
+        results.errors.push({
+          allocationId: allocation.id,
+          employeeEmail: allocation.employee?.email,
+          error: error.message
+        });
+      }
+    }
+
+    console.log(`Overdue notifications: ${results.sent} sent, ${results.failed} failed`);
+    return results;
+  }
+
+  /**
    * Verify email configuration
    */
   async verifyConnection() {

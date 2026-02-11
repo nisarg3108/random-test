@@ -133,9 +133,9 @@ export const getAllocationById = async (id, tenantId) => {
 export const returnAsset = async (id, data, tenantId) => {
   const { returnCondition, returnNotes } = data;
 
-  // Get the allocation
+  // Get the allocation (allow ACTIVE or OVERDUE)
   const allocation = await prisma.assetAllocation.findFirst({
-    where: { id, tenantId, status: 'ACTIVE' },
+    where: { id, tenantId, status: { in: ['ACTIVE', 'OVERDUE'] } },
   });
 
   if (!allocation) {
@@ -215,6 +215,81 @@ export const getMyAllocations = async (employeeId, tenantId) => {
       },
     },
     orderBy: { allocatedDate: 'desc' },
+  });
+
+  return allocations;
+};
+
+/**
+ * Mark overdue allocations
+ * Scans all ACTIVE allocations and marks them as OVERDUE if past expectedReturnDate
+ */
+export const markOverdueAllocations = async () => {
+  const now = new Date();
+  
+  // Find all ACTIVE allocations that are past their expected return date
+  const overdueAllocations = await prisma.assetAllocation.findMany({
+    where: {
+      status: 'ACTIVE',
+      expectedReturnDate: {
+        lt: now, // Less than current time = overdue
+      },
+    },
+  });
+
+  if (overdueAllocations.length === 0) {
+    return { count: 0, allocations: [] };
+  }
+
+  // Update all overdue allocations to OVERDUE status
+  const updatePromises = overdueAllocations.map((allocation) =>
+    prisma.assetAllocation.update({
+      where: { id: allocation.id },
+      data: { status: 'OVERDUE' },
+    })
+  );
+
+  await Promise.all(updatePromises);
+
+  return {
+    count: overdueAllocations.length,
+    allocations: overdueAllocations.map(a => ({
+      id: a.id,
+      assetId: a.assetId,
+      employeeId: a.employeeId,
+      expectedReturnDate: a.expectedReturnDate,
+    })),
+  };
+};
+
+/**
+ * Get overdue allocations
+ * Returns all allocations with OVERDUE status
+ */
+export const getOverdueAllocations = async (tenantId) => {
+  const allocations = await prisma.assetAllocation.findMany({
+    where: {
+      tenantId,
+      status: 'OVERDUE',
+    },
+    include: {
+      asset: {
+        include: { category: true },
+      },
+      employee: {
+        select: {
+          id: true,
+          name: true,
+          employeeCode: true,
+          email: true,
+          designation: true,
+          department: {
+            select: { name: true },
+          },
+        },
+      },
+    },
+    orderBy: { expectedReturnDate: 'asc' }, // Oldest overdue first
   });
 
   return allocations;

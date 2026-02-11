@@ -14,7 +14,7 @@ import { logAudit } from '../../core/audit/audit.service.js';
 export const calculateAssetDepreciationController = async (req, res, next) => {
   try {
     const { assetId } = req.params;
-    const { year, month } = req.body;
+    const { year, month, unitsProduced } = req.body;
 
     if (!year || !month) {
       return res.status(400).json({ error: 'Year and month are required' });
@@ -24,7 +24,8 @@ export const calculateAssetDepreciationController = async (req, res, next) => {
       assetId,
       parseInt(year),
       parseInt(month),
-      req.user.tenantId
+      req.user.tenantId,
+      unitsProduced ? parseInt(unitsProduced) : 0
     );
 
     await logAudit({

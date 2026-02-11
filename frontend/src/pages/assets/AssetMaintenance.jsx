@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/layout/Layout';
-import { Package, TrendingUp, AlertTriangle, DollarSign, Wrench, Calendar } from 'lucide-react';
-import { apiClient } from '../../api/http';
+import { Package, TrendingUp, AlertTriangle, DollarSign, Wrench, Calendar, Play, CheckCircle } from 'lucide-react';
+import { assetAPI } from '../../api/asset.api';
 
 const AssetMaintenance = () => {
   const [maintenanceRecords, setMaintenanceRecords] = useState([]);
@@ -22,8 +22,8 @@ const AssetMaintenance = () => {
 
   const fetchMaintenanceRecords = async () => {
     try {
-      const response = await apiClient.get('/asset-maintenance');
-      setMaintenanceRecords(response.data.data || []);
+      const response = await assetAPI.getMaintenanceSchedules();
+      setMaintenanceRecords(response.data || []);
     } catch (error) {
       console.error('Error fetching maintenance records:', error);
     } finally {
@@ -31,10 +31,22 @@ const AssetMaintenance = () => {
     }
   };
 
+  const handleStartMaintenance = async (id) => {
+    if (!window.confirm('Start this maintenance now? This will set the asset status to MAINTENANCE.')) return;
+    
+    try {
+      await assetAPI.startMaintenance(id);
+      fetchMaintenanceRecords();
+    } catch (error) {
+      console.error('Error starting maintenance:', error);
+      alert(error.response?.data?.error || 'Failed to start maintenance');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await apiClient.post('/asset-maintenance', formData);
+      await assetAPI.createMaintenance(formData);
       setShowModal(false);
       setFormData({
         assetId: '',
@@ -47,6 +59,7 @@ const AssetMaintenance = () => {
       fetchMaintenanceRecords();
     } catch (error) {
       console.error('Error creating maintenance record:', error);
+      alert(error.response?.data?.error || 'Failed to create maintenance');
     }
   };
 
@@ -92,12 +105,12 @@ const AssetMaintenance = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">Scheduled</p>
+                <p className="text-gray-600 text-sm font-medium">In Progress</p>
                 <p className="text-2xl font-bold text-gray-800 mt-2">
-                  {maintenanceRecords.filter(m => m.status === 'SCHEDULED').length}
+                  {maintenanceRecords.filter(m => m.status === 'IN_PROGRESS').length}
                 </p>
               </div>
-              <Calendar className="w-10 h-10 text-orange-500" />
+              <AlertTriangle className="w-10 h-10 text-blue-500" />
             </div>
           </div>
 
@@ -151,12 +164,15 @@ const AssetMaintenance = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Cost
                   </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {maintenanceRecords.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
                       No maintenance records found
                     </td>
                   </tr>
@@ -167,14 +183,18 @@ const AssetMaintenance = () => {
                         <div className="text-sm font-medium text-gray-900">
                           {record.asset?.name || 'N/A'}
                         </div>
+                        <div className="text-sm text-gray-500">
+                          {record.asset?.assetCode || ''}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                          ${record.type === 'PREVENTIVE' ? 'bg-blue-100 text-blue-800' : ''}
-                          ${record.type === 'CORRECTIVE' ? 'bg-orange-100 text-orange-800' : ''}
-                          ${record.type === 'INSPECTION' ? 'bg-green-100 text-green-800' : ''}
+                          ${record.maintenanceType === 'PREVENTIVE' ? 'bg-blue-100 text-blue-800' : ''}
+                          ${record.maintenanceType === 'CORRECTIVE' ? 'bg-orange-100 text-orange-800' : ''}
+                          ${record.maintenanceType === 'INSPECTION' ? 'bg-green-100 text-green-800' : ''}
+                          ${record.maintenanceType === 'CALIBRATION' ? 'bg-purple-100 text-purple-800' : ''}
                         `}>
-                          {record.type}
+                          {record.maintenanceType}
                         </span>
                       </td>
                       <td className="px-6 py-4">
@@ -188,12 +208,38 @@ const AssetMaintenance = () => {
                           ${record.status === 'SCHEDULED' ? 'bg-yellow-100 text-yellow-800' : ''}
                           ${record.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' : ''}
                           ${record.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : ''}
+                          ${record.status === 'CANCELLED' ? 'bg-gray-100 text-gray-800' : ''}
+                          ${record.status === 'OVERDUE' ? 'bg-red-100 text-red-800' : ''}
                         `}>
                           {record.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         ${record.cost?.toLocaleString() || '0'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        {record.status === 'SCHEDULED' && (
+                          <button
+                            onClick={() => handleStartMaintenance(record.id)}
+                            className="text-blue-600 hover:text-blue-900 inline-flex items-center"
+                            title="Start Maintenance"
+                          >
+                            <Play className="w-4 h-4 mr-1" />
+                            Start
+                          </button>
+                        )}
+                        {record.status === 'IN_PROGRESS' && (
+                          <span className="text-blue-600 inline-flex items-center">
+                            <Wrench className="w-4 h-4 mr-1" />
+                            In Progress
+                          </span>
+                        )}
+                        {record.status === 'COMPLETED' && (
+                          <span className="text-green-600 inline-flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                            Done
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))

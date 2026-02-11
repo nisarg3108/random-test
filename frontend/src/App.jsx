@@ -41,7 +41,8 @@ import {
   PayrollDashboard, 
   PayrollCyclesList, 
   PayrollCycleDetails, 
-  PayslipDetails 
+  PayslipDetails,
+  DisbursementList
 } from './pages/hr/payroll';
 
 // Employee Self-Service
@@ -106,6 +107,7 @@ import AssetForm from './pages/assets/AssetForm';
 import AssetAllocations from './pages/assets/AssetAllocations';
 import AssetMaintenance from './pages/assets/AssetMaintenance';
 import AssetDepreciation from './pages/assets/AssetDepreciation';
+import AssetCategoryList from './pages/assets/AssetCategoryList';
 
 // Documents
 import DocumentsPage from './pages/Documents/DocumentsPage';
@@ -237,6 +239,7 @@ function App() {
         <Route path="/hr/payroll/cycles" element={<ProtectedRoute><PayrollCyclesList /></ProtectedRoute>} />
         <Route path="/hr/payroll/cycles/:id" element={<ProtectedRoute><PayrollCycleDetails /></ProtectedRoute>} />
         <Route path="/hr/payroll/payslips/:id" element={<ProtectedRoute><PayslipDetails /></ProtectedRoute>} />
+        <Route path="/hr/payroll/disbursements" element={<ProtectedRoute><DisbursementList /></ProtectedRoute>} />
         
         {/* Employee Self-Service Routes */}
         <Route path="/employee" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
@@ -292,8 +295,7 @@ function App() {
         
         {/* Asset Management Routes */}
         <Route path="/assets" element={<ProtectedRoute><AssetDashboard /></ProtectedRoute>} />
-        <Route path="/assets/list" element={<ProtectedRoute><AssetList /></ProtectedRoute>} />
-        <Route path="/assets/new" element={<ProtectedRoute><AssetForm /></ProtectedRoute>} />
+        <Route path="/assets/list" element={<ProtectedRoute><AssetList /></ProtectedRoute>} />        <Route path="/assets/categories" element={<ProtectedRoute><AssetCategoryList /></ProtectedRoute>} />        <Route path="/assets/new" element={<ProtectedRoute><AssetForm /></ProtectedRoute>} />
         <Route path="/assets/:id/edit" element={<ProtectedRoute><AssetForm /></ProtectedRoute>} />
         <Route path="/assets/allocations" element={<ProtectedRoute><AssetAllocations /></ProtectedRoute>} />
         <Route path="/assets/maintenance" element={<ProtectedRoute><AssetMaintenance /></ProtectedRoute>} />

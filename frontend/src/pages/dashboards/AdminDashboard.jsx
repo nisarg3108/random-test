@@ -9,6 +9,7 @@ import { apiClient } from '../../api/http';
 import { dashboardAPI } from '../../api/dashboard.api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ApprovalWidget from '../../components/approvals/ApprovalWidget';
+import OverdueAllocationWidget from '../../components/assets/OverdueAllocationWidget';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -239,6 +240,11 @@ const AdminDashboard = () => {
         {/* Approval Widget */}
         <div className="lg:col-span-1">
           <ApprovalWidget maxItems={4} showActions={true} />
+        </div>
+
+        {/* Overdue Allocation Widget */}
+        <div className="lg:col-span-1">
+          <OverdueAllocationWidget maxItems={4} showDetails={true} />
         </div>
 
         {/* User Breakdown */}

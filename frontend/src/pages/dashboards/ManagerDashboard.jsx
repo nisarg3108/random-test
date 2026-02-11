@@ -5,6 +5,7 @@ import { useDepartmentsStore } from '../../store/departments.store';
 import { dashboardAPI } from '../../api/dashboard.api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ApprovalWidget from '../../components/approvals/ApprovalWidget';
+import OverdueAllocationWidget from '../../components/assets/OverdueAllocationWidget';
 import { Package, Building2, Clock, Zap, BarChart3, CheckCircle, Activity, TrendingUp, Sparkles, ArrowUpRight, Target } from 'lucide-react';
 
 const ManagerDashboard = () => {
@@ -205,6 +206,11 @@ const ManagerDashboard = () => {
         {/* Approval Widget */}
         <div className="lg:col-span-1">
           <ApprovalWidget maxItems={5} showActions={true} />
+        </div>
+
+        {/* Overdue Allocation Widget */}
+        <div className="lg:col-span-1">
+          <OverdueAllocationWidget maxItems={5} showDetails={true} />
         </div>
 
         {/* Enhanced Departments */}

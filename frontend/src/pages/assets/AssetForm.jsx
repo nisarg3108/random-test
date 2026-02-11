@@ -11,6 +11,7 @@ const AssetForm = () => {
   const isEditMode = Boolean(id);
 
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
@@ -31,6 +32,7 @@ const AssetForm = () => {
     depreciationRate: '',
     usefulLife: '',
     salvageValue: '0',
+    totalExpectedUnits: '',
     warrantyExpiry: '',
     insuranceExpiry: '',
     insuranceProvider: '',
@@ -60,6 +62,12 @@ const AssetForm = () => {
       const response = await assetAPI.getAssetById(id);
       const asset = response.data;
       
+      // Set the selected category for displaying defaults
+      if (asset.categoryId) {
+        const category = categories.find(cat => cat.id === asset.categoryId);
+        setSelectedCategory(category);
+      }
+      
       setFormData({
         assetCode: asset.assetCode || '',
         name: asset.name || '',
@@ -78,6 +86,7 @@ const AssetForm = () => {
         depreciationRate: asset.depreciationRate || '',
         usefulLife: asset.usefulLife || '',
         salvageValue: asset.salvageValue || '0',
+        totalExpectedUnits: asset.totalExpectedUnits || '',
         warrantyExpiry: asset.warrantyExpiry?.split('T')[0] || '',
         insuranceExpiry: asset.insuranceExpiry?.split('T')[0] || '',
         insuranceProvider: asset.insuranceProvider || '',
@@ -103,6 +112,7 @@ const AssetForm = () => {
         depreciationRate: formData.depreciationRate ? parseFloat(formData.depreciationRate) : null,
         usefulLife: formData.usefulLife ? parseInt(formData.usefulLife) : null,
         salvageValue: parseFloat(formData.salvageValue || 0),
+        totalExpectedUnits: formData.totalExpectedUnits ? parseInt(formData.totalExpectedUnits) : null,
       };
 
       if (isEditMode) {
@@ -121,7 +131,24 @@ const AssetForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // If category changed, apply defaults from category
+    if (name === 'categoryId' && value) {
+      const category = categories.find(cat => cat.id === value);
+      setSelectedCategory(category);
+      
+      // Apply category defaults only if fields are empty
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+        // Apply defaults only if current values are empty (not in edit mode or not manually changed)
+        depreciationMethod: prev.depreciationMethod || category?.defaultDepreciationMethod || '',
+        depreciationRate: prev.depreciationRate || (category?.defaultDepreciationRate?.toString() || ''),
+        usefulLife: prev.usefulLife || (category?.defaultUsefulLife?.toString() || ''),
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   if (loading && isEditMode) {
@@ -362,10 +389,30 @@ const AssetForm = () => {
           {/* Depreciation Information */}
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Depreciation Information</h2>
+            {selectedCategory && (selectedCategory.defaultDepreciationMethod || selectedCategory.defaultDepreciationRate || selectedCategory.defaultUsefulLife) && (
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm font-medium text-blue-900 mb-1">Category Defaults Applied:</p>
+                <ul className="text-sm text-blue-700 space-y-1">
+                  {selectedCategory.defaultDepreciationMethod && (
+                    <li>• Method: {selectedCategory.defaultDepreciationMethod.replace(/_/g, ' ')}</li>
+                  )}
+                  {selectedCategory.defaultDepreciationRate && (
+                    <li>• Rate: {selectedCategory.defaultDepreciationRate}% per year</li>
+                  )}
+                  {selectedCategory.defaultUsefulLife && (
+                    <li>• Useful Life: {selectedCategory.defaultUsefulLife} months ({Math.round(selectedCategory.defaultUsefulLife / 12)} years)</li>
+                  )}
+                </ul>
+                <p className="text-xs text-blue-600 mt-2">You can override these values below if needed.</p>
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Depreciation Method
+                  {selectedCategory?.defaultDepreciationMethod && !formData.depreciationMethod && (
+                    <span className="ml-2 text-xs text-blue-600">(Using category default)</span>
+                  )}
                 </label>
                 <select
                   name="depreciationMethod"
@@ -383,6 +430,9 @@ const AssetForm = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Depreciation Rate (%)
+                  {selectedCategory?.defaultDepreciationRate && !formData.depreciationRate && (
+                    <span className="ml-2 text-xs text-blue-600">(Using category default)</span>
+                  )}
                 </label>
                 <input
                   type="number"
@@ -390,6 +440,7 @@ const AssetForm = () => {
                   value={formData.depreciationRate}
                   onChange={handleChange}
                   step="0.01"
+                  placeholder={selectedCategory?.defaultDepreciationRate ? `Default: ${selectedCategory.defaultDepreciationRate}%` : ''}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -397,12 +448,18 @@ const AssetForm = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Useful Life (Months)
+                  {selectedCategory?.defaultUsefulLife && !formData.usefulLife && (
+                    <span className="ml-2 text-xs text-blue-600">(Using category default)</span>
+                  )}
                 </label>
                 <input
                   type="number"
                   name="usefulLife"
                   value={formData.usefulLife}
                   onChange={handleChange}
+                  placeholder={selectedCategory?.defaultUsefulLife ? `Default: ${selectedCategory.defaultUsefulLife} months` : ''}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -420,7 +477,44 @@ const AssetForm = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
+              {/* Units of Production specific field */}
+              {formData.depreciationMethod === 'UNITS_OF_PRODUCTION' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Total Expected Units <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="totalExpectedUnits"
+                    value={formData.totalExpectedUnits}
+                    onChange={handleChange}
+                    required={formData.depreciationMethod === 'UNITS_OF_PRODUCTION'}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., 10000"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Total units expected to be produced/used over asset lifetime
+                  </p>
+                </div>
+              )}
             </div>
+
+            {formData.depreciationMethod && (
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  {formData.depreciationMethod === 'STRAIGHT_LINE' && (
+                    <>📊 Straight Line: Equal depreciation each period over useful life</>
+                  )}
+                  {formData.depreciationMethod === 'DECLINING_BALANCE' && (
+                    <>📉 Declining Balance: Higher depreciation in early periods</>
+                  )}
+                  {formData.depreciationMethod === 'UNITS_OF_PRODUCTION' && (
+                    <>🏭 Units of Production: Depreciation based on actual usage/output</>
+                  )}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Warranty & Insurance */}

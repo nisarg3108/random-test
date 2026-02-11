@@ -64,7 +64,28 @@ export const apiClient = {
   },
   post: async (endpoint, data, config = {}) => {
     try {
-      const response = await authFetch(endpoint, { method: 'POST', body: JSON.stringify(data), ...config });
+      let url = endpoint;
+      
+      // Handle query parameters
+      if (config.params) {
+        const searchParams = new URLSearchParams();
+        Object.entries(config.params).forEach(([key, value]) => {
+          if (value !== null && value !== undefined && value !== '') {
+            searchParams.append(key, value);
+          }
+        });
+        const queryString = searchParams.toString();
+        if (queryString) {
+          url += `?${queryString}`;
+        }
+      }
+      
+      const response = await authFetch(url, { 
+        method: 'POST', 
+        body: JSON.stringify(data), 
+        responseType: config.responseType,
+        ...config 
+      });
       return { data: response };
     } catch (error) {
       console.error(`POST ${endpoint}:`, error.message);
@@ -73,7 +94,28 @@ export const apiClient = {
   },
   put: async (endpoint, data, config = {}) => {
     try {
-      const response = await authFetch(endpoint, { method: 'PUT', body: JSON.stringify(data), ...config });
+      let url = endpoint;
+      
+      // Handle query parameters
+      if (config.params) {
+        const searchParams = new URLSearchParams();
+        Object.entries(config.params).forEach(([key, value]) => {
+          if (value !== null && value !== undefined && value !== '') {
+            searchParams.append(key, value);
+          }
+        });
+        const queryString = searchParams.toString();
+        if (queryString) {
+          url += `?${queryString}`;
+        }
+      }
+      
+      const response = await authFetch(url, { 
+        method: 'PUT', 
+        body: JSON.stringify(data), 
+        responseType: config.responseType,
+        ...config 
+      });
       return { data: response };
     } catch (error) {
       console.error(`PUT ${endpoint}:`, error.message);
