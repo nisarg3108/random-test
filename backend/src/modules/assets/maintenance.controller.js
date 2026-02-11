@@ -7,6 +7,7 @@ import {
   deleteMaintenance,
   getUpcomingMaintenance,
   getOverdueMaintenance,
+  startMaintenance,
 } from './maintenance.service.js';
 import { logAudit } from '../../core/audit/audit.service.js';
 
@@ -134,6 +135,26 @@ export const getOverdueMaintenanceController = async (req, res, next) => {
   try {
     const schedules = await getOverdueMaintenance(req.user.tenantId);
     res.json(schedules);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const startMaintenanceController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const maintenance = await startMaintenance(id, req.user.tenantId);
+
+    await logAudit({
+      userId: req.user.userId,
+      tenantId: req.user.tenantId,
+      action: 'START_MAINTENANCE',
+      entity: 'ASSET_MAINTENANCE',
+      entityId: id,
+      meta: { assetId: maintenance.assetId },
+    });
+
+    res.json(maintenance);
   } catch (err) {
     next(err);
   }

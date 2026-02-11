@@ -34,8 +34,14 @@ const payrollAPI = {
   // ==========================================
   // DISBURSEMENTS
   // ==========================================
-  getDisbursements: (params) => apiClient.get('/payroll/disbursements', { params }),
-  updateDisbursementStatus: (id, data) => apiClient.put(`/payroll/disbursements/${id}/status`, data),
+  createDisbursements: (data) => apiClient.post('/hr/disbursements', data),
+  getDisbursements: (params) => apiClient.get('/hr/disbursements', { params }),
+  getDisbursement: (id) => apiClient.get(`/hr/disbursements/${id}`),
+  getDisbursementStats: (params) => apiClient.get('/hr/disbursements/stats', { params }),
+  updateDisbursementStatus: (id, data) => apiClient.patch(`/hr/disbursements/${id}/status`, data),
+  bulkUpdateDisbursementStatus: (data) => apiClient.patch('/hr/disbursements/bulk-status', data),
+  generatePaymentFile: (data) => apiClient.post('/hr/disbursements/generate-payment-file', data),
+  reconcilePayments: (data) => apiClient.post('/hr/disbursements/reconcile', data),
 
   // ==========================================
   // REPORTS

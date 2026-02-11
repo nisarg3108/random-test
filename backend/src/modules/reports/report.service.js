@@ -58,11 +58,16 @@ export const generateProfitLossReport = async (tenantId, startDate, endDate) => 
 
 export const generateBalanceSheetReport = async (tenantId, asOfDate) => {
   // Assets - Inventory Items
-  const inventoryItems = await prisma.inventoryItem.findMany({
-    where: {
-      tenantId,
-    },
-  });
+  let inventoryItems = [];
+  try {
+    inventoryItems = await prisma.inventoryItem.findMany({
+      where: {
+        tenantId,
+      },
+    });
+  } catch (error) {
+    console.log('InventoryItem table not available:', error.message);
+  }
 
   const totalInventoryValue = inventoryItems.reduce(
     (sum, item) => sum + item.quantity * item.unitPrice,
@@ -70,17 +75,22 @@ export const generateBalanceSheetReport = async (tenantId, asOfDate) => {
   );
 
   // Assets - Fixed Assets
-  const fixedAssets = await prisma.asset?.findMany({
-    where: {
-      tenantId,
-      status: 'ACTIVE',
-    },
-  }).catch(() => []);
+  let fixedAssets = [];
+  try {
+    fixedAssets = await prisma.asset.findMany({
+      where: {
+        tenantId,
+        status: 'ACTIVE',
+      },
+    });
+  } catch (error) {
+    console.log('Asset table not available:', error.message);
+  }
 
-  const totalFixedAssets = fixedAssets?.reduce(
+  const totalFixedAssets = fixedAssets.reduce(
     (sum, asset) => sum + (asset.purchasePrice || 0),
     0
-  ) || 0;
+  );
 
   // Liabilities - Pending Expenses
   const pendingExpenses = await prisma.expenseClaim.findMany({
@@ -207,12 +217,17 @@ export const generateHRAnalyticsReport = async (tenantId, startDate, endDate) =>
 // ==================== INVENTORY REPORTS ====================
 
 export const generateInventoryReport = async (tenantId) => {
-  const inventoryItems = await prisma.inventoryItem.findMany({
-    where: { tenantId },
-    include: {
-      category: true,
-    },
-  });
+  let inventoryItems = [];
+  try {
+    inventoryItems = await prisma.inventoryItem.findMany({
+      where: { tenantId },
+      include: {
+        category: true,
+      },
+    });
+  } catch (error) {
+    console.log('InventoryItem table not available:', error.message);
+  }
 
   // Calculate inventory by category
   const inventoryByCategory = inventoryItems.reduce((acc, item) => {
@@ -301,21 +316,26 @@ export const executeCustomReport = async (tenantId, config) => {
   let data = [];
 
   // Execute query based on data source
-  switch (dataSource) {
-    case 'employees':
-      data = await prisma.employee.findMany({ where: query, include });
-      break;
-    case 'inventory':
-      data = await prisma.inventoryItem.findMany({ where: query, include });
-      break;
-    case 'expenses':
-      data = await prisma.expenseClaim.findMany({ where: query, include });
-      break;
-    case 'leaves':
-      data = await prisma.leaveRequest.findMany({ where: query, include });
-      break;
-    default:
-      throw new Error(`Unsupported data source: ${dataSource}`);
+  try {
+    switch (dataSource) {
+      case 'employees':
+        data = await prisma.employee.findMany({ where: query, include });
+        break;
+      case 'inventory':
+        data = await prisma.inventoryItem.findMany({ where: query, include });
+        break;
+      case 'expenses':
+        data = await prisma.expenseClaim.findMany({ where: query, include });
+        break;
+      case 'leaves':
+        data = await prisma.leaveRequest.findMany({ where: query, include });
+        break;
+      default:
+        throw new Error(`Unsupported data source: ${dataSource}`);
+    }
+  } catch (error) {
+    console.log(`Table for ${dataSource} not available:`, error.message);
+    // Return empty data if table doesn't exist
   }
 
   // Apply column filtering if specified

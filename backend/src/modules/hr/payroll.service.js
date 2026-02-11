@@ -1,4 +1,5 @@
 import prisma from '../../config/db.js';
+import SalaryComponentCalculator from '../../utils/salaryComponentCalculator.js';
 
 class PayrollService {
   // ==========================================
@@ -227,39 +228,104 @@ class PayrollService {
         (cycle.endDate - cycle.startDate) / (1000 * 60 * 60 * 24)
       );
 
-      const presentDays = workingDays;
-      const absentDays = 0;
-      const leaveDays = 0;
+      // Fetch actual attendance data for the cycle period
+      const attendanceRecords = await prisma.attendance.findMany({
+        where: {
+          employeeId: employee.id,
+          tenantId,
+          date: {
+            gte: cycle.startDate,
+            lte: cycle.endDate
+          }
+        }
+      });
 
-      // Calculate salary for the cycle period
-      const { basicSalary, allowances, deductions } = employee.salaryStructure;
+      // Calculate attendance statistics
+      let presentDays = 0;
+      let absentDays = 0;
+      let leaveDays = 0;
+      let halfDays = 0;
+      let totalOvertimeHours = 0;
+
+      attendanceRecords.forEach(record => {
+        switch (record.status) {
+          case 'PRESENT':
+          case 'WORK_FROM_HOME':
+            presentDays++;
+            break;
+          case 'ABSENT':
+            absentDays++;
+            break;
+          case 'LEAVE':
+            leaveDays++;
+            break;
+          case 'HALF_DAY':
+            halfDays++;
+            presentDays += 0.5;
+            absentDays += 0.5;
+            break;
+        }
+        
+        // Sum overtime hours
+        if (record.overtimeHours) {
+          totalOvertimeHours += record.overtimeHours;
+        }
+      });
+
+      // If no attendance records, assume full presence (backward compatibility)
+      if (attendanceRecords.length === 0) {
+        presentDays = workingDays;
+        absentDays = 0;
+        leaveDays = 0;
+      }
+
+      // Get basic salary from employee's salary structure
+      const { basicSalary } = employee.salaryStructure;
       
+      // Pro-rate basic salary by attendance
       const dailyBasic = basicSalary / 30;
       const calculatedBasic = dailyBasic * presentDays;
       
-      // Calculate allowances
-      const allowancesObj = typeof allowances === 'object' ? allowances : {};
-      const allowancesTotal = Object.values(allowancesObj).reduce((sum, val) => sum + val, 0);
+      // Calculate overtime pay (2x hourly rate)
+      const hourlyRate = basicSalary / 30 / 8;
+      const overtimePay = totalOvertimeHours * hourlyRate * 2;
       
-      const overtimePay = 0;
+      // Fetch active salary components for this tenant
+      const salaryComponents = await prisma.salaryComponent.findMany({
+        where: {
+          tenantId,
+          isActive: true
+        }
+      });
+
+      // Calculate all components dynamically using the formula engine
+      const componentResults = SalaryComponentCalculator.calculateAllComponents(
+        salaryComponents,
+        {
+          basicSalary: calculatedBasic,
+          presentDays,
+          workingDays,
+          overtimeHours: totalOvertimeHours,
+          employeeId: employee.id
+        }
+      );
+
+      const grossSalary = calculatedBasic + componentResults.allowancesTotal + componentResults.bonusesTotal + overtimePay;
       
-      const grossSalary = calculatedBasic + allowancesTotal + overtimePay;
-      
-      // Calculate deductions
-      const deductionsObj = typeof deductions === 'object' ? deductions : {};
-      const pfDeduction = deductionsObj.pf || 0;
-      const insuranceDeduction = deductionsObj.insurance || 0;
-      
-      // Calculate tax
+      // Calculate tax on the gross salary
       const annualIncome = grossSalary * 12;
       const taxResult = await this.calculateTax(annualIncome, 'INCOME_TAX', tenantId);
       const monthlyTax = taxResult.tax / 12;
       
-      const totalDeduction = pfDeduction + insuranceDeduction + monthlyTax;
+      const totalDeduction = componentResults.deductionsTotal + monthlyTax;
       const netSalary = grossSalary - totalDeduction;
       
       // Generate payslip number
       const payslipNumber = `PAY-${cycle.name.replace(/\s/g, '-')}-${employee.employeeCode}`;
+      
+      // Separate PF and Insurance for backward compatibility fields
+      const pfDeduction = componentResults.deductions.PF || componentResults.deductions.PROVIDENT_FUND || 0;
+      const insuranceDeduction = componentResults.deductions.INSURANCE || componentResults.deductions.ESI || 0;
       
       const payslip = await prisma.payslip.create({
         data: {
@@ -268,20 +334,21 @@ class PayrollService {
           payrollCycleId: cycleId,
           payslipNumber,
           basicSalary: calculatedBasic,
-          allowances: allowancesObj,
-          bonuses: 0,
+          allowances: componentResults.allowances,
+          bonuses: componentResults.bonusesTotal,
           overtime: overtimePay,
           grossSalary,
           taxDeductions: monthlyTax,
           providentFund: pfDeduction,
           insurance: insuranceDeduction,
-          otherDeductions: {},
+          otherDeductions: componentResults.deductions,
           totalDeductions: totalDeduction,
           netSalary,
           workingDays,
-          presentDays,
-          absentDays,
-          leaveDays
+          presentDays: Math.round(presentDays * 10) / 10, // Round to 1 decimal
+          absentDays: Math.round(absentDays * 10) / 10,
+          leaveDays,
+          overtimeHours: totalOvertimeHours
         },
         include: {
           employee: {

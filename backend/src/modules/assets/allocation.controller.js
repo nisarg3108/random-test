@@ -5,6 +5,8 @@ import {
   returnAsset,
   updateAllocation,
   getMyAllocations,
+  markOverdueAllocations,
+  getOverdueAllocations,
 } from './allocation.service.js';
 import { logAudit } from '../../core/audit/audit.service.js';
 
@@ -130,6 +132,51 @@ export const getMyAllocationsController = async (req, res, next) => {
 
     const allocations = await getMyAllocations(employee.id, req.user.tenantId);
     res.json(allocations);
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Get overdue allocations
+ */
+export const getOverdueAllocationsController = async (req, res, next) => {
+  try {
+    const allocations = await getOverdueAllocations(req.user.tenantId);
+    res.json(allocations);
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Manual trigger to mark overdue allocations
+ * This is also called automatically by the scheduled job
+ */
+export const markOverdueAllocationsController = async (req, res, next) => {
+  try {
+    const result = await markOverdueAllocations();
+    
+    // Log audit for manual trigger
+    if (result.count > 0) {
+      await logAudit({
+        userId: req.user.userId,
+        tenantId: req.user.tenantId,
+        action: 'UPDATE',
+        entity: 'ASSET_ALLOCATION',
+        entityId: 'BULK',
+        meta: {
+          action: 'MARK_OVERDUE',
+          count: result.count,
+        },
+      });
+    }
+
+    res.json({
+      success: true,
+      message: `Marked ${result.count} allocation(s) as overdue`,
+      ...result,
+    });
   } catch (err) {
     next(err);
   }

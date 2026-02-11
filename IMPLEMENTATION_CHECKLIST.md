@@ -54,6 +54,7 @@
 - [x] Inter-branch transfers
 - [x] Warehouse aggregation
 
+
 ### Reporting & Analytics
 - [x] Reporting service with 7 report types
 - [x] Reporting controller
@@ -67,6 +68,11 @@
 - [x] Sales reports
 - [x] Dashboard summary KPIs
 - [x] Report scheduling framework
+- [x] PDF export (pdfkit)
+- [x] Excel export (exceljs)
+- [x] Custom report builder
+- [x] Report templates (save/reuse)
+- [x] Saved reports storage
 
 ### Data Import/Export
 - [x] Data import/export service

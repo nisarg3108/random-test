@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Users, Plus, Filter, ArrowLeft } from 'lucide-react';
+import { Users, Plus, Filter, ArrowLeft, AlertTriangle, Clock } from 'lucide-react';
 import { assetAPI } from '../../api/asset.api';
 import { employeeAPI } from '../../api/employee.api';
 import Layout from '../../components/layout/Layout';
@@ -15,6 +15,7 @@ const AssetAllocations = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState('');
+  const [overdueCount, setOverdueCount] = useState(0);
   const [formData, setFormData] = useState({
     assetId: '',
     employeeId: '',
@@ -40,6 +41,11 @@ const AssetAllocations = () => {
       setAllocations(allocationsRes.data || []);
       setAssets(assetsRes.data || []);
       setEmployees(employeesRes.data || []);
+      
+      // Count overdue allocations
+      const allAllocations = allocationsRes.data || [];
+      const overdue = allAllocations.filter(a => a.status === 'OVERDUE').length;
+      setOverdueCount(overdue);
     } catch (err) {
       setError('Failed to load data');
       console.error(err);
@@ -138,9 +144,67 @@ const AssetAllocations = () => {
           </div>
         )}
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm font-medium">Total Allocations</p>
+                <p className="text-2xl font-bold text-gray-800 mt-2">
+                  {allocations.length}
+                </p>
+              </div>
+              <Users className="w-10 h-10 text-blue-500" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm font-medium">Active</p>
+                <p className="text-2xl font-bold text-gray-800 mt-2">
+                  {allocations.filter(a => a.status === 'ACTIVE').length}
+                </p>
+              </div>
+              <Clock className="w-10 h-10 text-green-500" />
+            </div>
+          </div>
+
+          <div 
+            className="bg-white rounded-lg shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => setFilterStatus('OVERDUE')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm font-medium">Overdue</p>
+                <p className="text-2xl font-bold text-red-600 mt-2">
+                  {overdueCount}
+                </p>
+              </div>
+              <AlertTriangle className="w-10 h-10 text-red-500" />
+            </div>
+            {overdueCount > 0 && (
+              <p className="text-xs text-red-600 mt-2">Click to view</p>
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm font-medium">Returned</p>
+                <p className="text-2xl font-bold text-gray-800 mt-2">
+                  {allocations.filter(a => a.status === 'RETURNED').length}
+                </p>
+              </div>
+              <Users className="w-10 h-10 text-gray-400" />
+            </div>
+          </div>
+        </div>
+
         {/* Filters */}
         <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            <Filter className="w-5 h-5 text-gray-500" />
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
@@ -151,6 +215,22 @@ const AssetAllocations = () => {
               <option value="RETURNED">Returned</option>
               <option value="OVERDUE">Overdue</option>
             </select>
+            
+            {filterStatus && (
+              <button
+                onClick={() => setFilterStatus('')}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                Clear filter
+              </button>
+            )}
+            
+            {filterStatus === 'OVERDUE' && overdueCount > 0 && (
+              <div className="ml-auto flex items-center gap-2 text-sm text-red-600">
+                <AlertTriangle className="w-4 h-4" />
+                {overdueCount} overdue allocation{overdueCount !== 1 ? 's' : ''} found
+              </div>
+            )}
           </div>
         </div>
 
@@ -180,8 +260,10 @@ const AssetAllocations = () => {
                       </td>
                     </tr>
                   ) : (
-                    allocations.map((allocation) => (
-                      <tr key={allocation.id} className="hover:bg-gray-50">
+                    allocations.map((allocation) => {
+                      const isOverdue = allocation.status === 'OVERDUE';
+                      return (
+                      <tr key={allocation.id} className={`hover:bg-gray-50 ${isOverdue ? 'bg-red-50' : ''}`}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
                             <div className="text-sm font-medium text-gray-900">{allocation.asset?.name}</div>
@@ -197,10 +279,18 @@ const AssetAllocations = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {new Date(allocation.allocatedDate).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {allocation.expectedReturnDate 
-                            ? new Date(allocation.expectedReturnDate).toLocaleDateString()
-                            : '-'}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {allocation.expectedReturnDate 
+                              ? new Date(allocation.expectedReturnDate).toLocaleDateString()
+                              : '-'}
+                          </div>
+                          {isOverdue && allocation.expectedReturnDate && (
+                            <div className="text-xs text-red-600 flex items-center gap-1 mt-1">
+                              <AlertTriangle className="w-3 h-3" />
+                              {Math.floor((new Date() - new Date(allocation.expectedReturnDate)) / (1000 * 60 * 60 * 24))} days overdue
+                            </div>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getStatusBadge(allocation.status)}
@@ -209,7 +299,7 @@ const AssetAllocations = () => {
                           {allocation.purpose || '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          {allocation.status === 'ACTIVE' && (
+                          {(allocation.status === 'ACTIVE' || allocation.status === 'OVERDUE') && (
                             <button
                               onClick={() => handleReturn(allocation.id)}
                               className="text-blue-600 hover:text-blue-900"
@@ -219,7 +309,8 @@ const AssetAllocations = () => {
                           )}
                         </td>
                       </tr>
-                    ))
+                    );
+                    })
                   )}
                 </tbody>
               </table>

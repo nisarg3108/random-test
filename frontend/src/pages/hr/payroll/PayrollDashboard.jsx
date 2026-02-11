@@ -49,7 +49,7 @@ export default function PayrollDashboard() {
       
       // Fetch disbursements
       const disbursementsRes = await payrollAPI.getDisbursements();
-      const disbursements = disbursementsRes.data || [];
+      const disbursements = disbursementsRes.disbursements || [];
       
       // Calculate stats
       const totalPayroll = payslips.reduce((sum, p) => sum + (p.netSalary || 0), 0);
@@ -192,7 +192,10 @@ export default function PayrollDashboard() {
           </p>
         </div>
 
-        <div className="card-modern">
+        <div 
+          className="card-modern cursor-pointer hover:shadow-lg transition-shadow"
+          onClick={() => navigate('/hr/payroll/disbursements')}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-primary-600">Disbursements</p>
@@ -319,11 +322,11 @@ export default function PayrollDashboard() {
           </button>
           
           <button
-            onClick={() => navigate('/hr/payroll/components')}
-            className="p-4 border-2 border-dashed border-primary-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-center transition-colors"
+            onClick={() => navigate('/hr/payroll/disbursements')}
+            className="p-4 border-2 border-dashed border-primary-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-center transition-colors"
           >
             <DollarSign className="w-8 h-8 mx-auto mb-2 text-primary-400" />
-            <p className="text-sm font-medium text-primary-700">Salary Components</p>
+            <p className="text-sm font-medium text-primary-700">Salary Disbursements</p>
           </button>
           
           <button

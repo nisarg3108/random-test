@@ -1798,9 +1798,10 @@ model Payslip {
   
   // Attendance Info
   workingDays     Int      @default(0)
-  presentDays     Int      @default(0)
-  absentDays      Int      @default(0)
+  presentDays     Float    @default(0)  // Float to support half-days
+  absentDays      Float    @default(0)  // Float to support half-days
   leaveDays       Int      @default(0)
+  overtimeHours   Float    @default(0)  // Total overtime hours
   
   // Status
   status          String   @default("GENERATED") // GENERATED | APPROVED | PAID
@@ -2132,6 +2133,10 @@ model Asset {
   usefulLife         Int?    // In months
   salvageValue       Float?  @default(0)
   
+  // Units of Production tracking
+  totalExpectedUnits Int?    // Total units expected over asset lifetime
+  unitsProducedToDate Int?   @default(0) // Cumulative units produced/used
+  
   // Current Values (computed from depreciation)
   currentValue       Float?
   accumulatedDepreciation Float? @default(0)
@@ -2199,6 +2204,7 @@ model AssetMaintenance {
   completedDate   DateTime?
   
   status          String   @default("SCHEDULED") // SCHEDULED | IN_PROGRESS | COMPLETED | CANCELLED | OVERDUE
+  statusBeforeMaintenance String? // Asset status before maintenance started
   
   // Maintenance Details
   description     String
@@ -2239,6 +2245,7 @@ model AssetDepreciation {
   
   method          String   // STRAIGHT_LINE | DECLINING_BALANCE | UNITS_OF_PRODUCTION
   rate            Float    // Percentage or units
+  unitsProduced   Int?     // Units produced in this period (for UNITS_OF_PRODUCTION)
   
   notes           String?
   

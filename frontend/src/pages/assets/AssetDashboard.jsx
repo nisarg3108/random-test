@@ -157,7 +157,7 @@ const AssetDashboard = () => {
               Add New Asset
             </button>
             <button
-              onClick={() => navigate('/assets/allocate')}
+              onClick={() => navigate('/assets/allocations')}
               className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium"
             >
               Allocate Asset

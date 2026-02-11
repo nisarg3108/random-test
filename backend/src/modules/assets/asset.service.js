@@ -77,16 +77,37 @@ export const deleteAssetCategory = async (id, tenantId) => {
 // ========================================
 
 export const createAsset = async (data, tenantId) => {
-  const asset = await prisma.asset.create({
-    data: {
-      ...data,
-      tenantId,
-      currentValue: data.purchasePrice, // Initial value equals purchase price
+  // Fetch category to get default values
+  const category = await prisma.assetCategory.findFirst({
+    where: { 
+      id: data.categoryId,
+      tenantId 
     },
+  });
+
+  if (!category) {
+    throw new Error('Asset category not found');
+  }
+
+  // Apply category defaults if asset-specific values not provided
+  const assetData = {
+    ...data,
+    tenantId,
+    currentValue: data.purchasePrice, // Initial value equals purchase price
+    
+    // Apply depreciation defaults from category if not specified
+    depreciationMethod: data.depreciationMethod || category.defaultDepreciationMethod,
+    depreciationRate: data.depreciationRate !== undefined ? data.depreciationRate : category.defaultDepreciationRate,
+    usefulLife: data.usefulLife !== undefined ? data.usefulLife : category.defaultUsefulLife,
+  };
+
+  const asset = await prisma.asset.create({
+    data: assetData,
     include: {
       category: true,
     },
   });
+  
   return asset;
 };
 

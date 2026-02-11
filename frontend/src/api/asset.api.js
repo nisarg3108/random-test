@@ -29,6 +29,8 @@ export const assetAPI = {
   updateAllocation: (id, data) => apiClient.put(`/asset-allocations/${id}`, data),
   returnAsset: (id, data) => apiClient.post(`/asset-allocations/${id}/return`, data),
   getMyAllocations: () => apiClient.get('/asset-allocations/my-allocations'),
+  getOverdueAllocations: () => apiClient.get('/asset-allocations/overdue'),
+  markOverdueAllocations: () => apiClient.post('/asset-allocations/mark-overdue'),
 
   // ========================================
   // MAINTENANCE OPERATIONS
@@ -37,6 +39,7 @@ export const assetAPI = {
   getMaintenanceSchedules: (params) => apiClient.get('/asset-maintenance', { params }),
   getMaintenanceById: (id) => apiClient.get(`/asset-maintenance/${id}`),
   updateMaintenance: (id, data) => apiClient.put(`/asset-maintenance/${id}`, data),
+  startMaintenance: (id) => apiClient.post(`/asset-maintenance/${id}/start`),
   completeMaintenance: (id, data) => apiClient.post(`/asset-maintenance/${id}/complete`, data),
   deleteMaintenance: (id) => apiClient.delete(`/asset-maintenance/${id}`),
   getUpcomingMaintenance: (days = 30) => apiClient.get('/asset-maintenance/upcoming', { params: { days } }),
