@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Check, X, Clock, DollarSign, Calendar, FileText, User, AlertCircle } from 'lucide-react';
+import { Check, X, Clock, DollarSign, Calendar, FileText, User, AlertCircle, Settings } from 'lucide-react';
 import Layout from '../../components/layout/Layout.jsx';
 import { apiClient } from '../../api/http.js';
 import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
@@ -9,6 +9,7 @@ const FinanceApprovals = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(null);
+  const [showSetup, setShowSetup] = useState(false);
 
   const fetchApprovals = async () => {
     try {
@@ -23,6 +24,15 @@ const FinanceApprovals = () => {
         approval => approval.workflow?.module === 'FINANCE' && 
                    approval.workflow?.action === 'EXPENSE_CLAIM'
       );
+      
+      // If no approvals found, check if workflow exists
+      if (financeApprovals.length === 0) {
+        const debugResponse = await apiClient.get('/approvals/debug');
+        const hasFinanceWorkflow = debugResponse.data.workflows?.some(
+          w => w.module === 'FINANCE' && w.action === 'EXPENSE_CLAIM'
+        );
+        setShowSetup(!hasFinanceWorkflow);
+      }
       
       // Fetch detailed expense claim data for each approval
       const approvalsWithDetails = await Promise.all(
@@ -61,6 +71,24 @@ const FinanceApprovals = () => {
   useEffect(() => {
     fetchApprovals();
   }, []);
+
+  const handleSetupWorkflow = async () => {
+    try {
+      setProcessing('setup');
+      setError(null);
+      
+      await apiClient.post('/approvals/seed-workflows');
+      
+      alert('Workflow setup completed! You can now approve expense claims.');
+      setShowSetup(false);
+      await fetchApprovals();
+    } catch (err) {
+      console.error('Failed to setup workflow:', err);
+      setError(err.response?.data?.message || 'Failed to setup workflow');
+    } finally {
+      setProcessing(null);
+    }
+  };
 
   const handleApprove = async (approvalId) => {
     if (!window.confirm('Are you sure you want to approve this expense claim?')) {
@@ -159,6 +187,43 @@ const FinanceApprovals = () => {
             >
               ×
             </button>
+          </div>
+        )}
+
+        {/* Setup Notice */}
+        {showSetup && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <Settings className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                  Setup Required: Expense Approval Workflow
+                </h3>
+                <p className="text-blue-700 mb-4">
+                  The expense claim approval workflow needs to be initialized for your organization. 
+                  This is a one-time setup that enables the approval process for expense claims.
+                </p>
+                <button
+                  onClick={handleSetupWorkflow}
+                  disabled={processing === 'setup'}
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                >
+                  {processing === 'setup' ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Setting up...
+                    </>
+                  ) : (
+                    <>
+                      <Settings className="h-4 w-4 mr-2" />
+                      Initialize Workflow
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 

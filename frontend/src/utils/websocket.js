@@ -26,11 +26,11 @@ class WebSocketClient {
     return new Promise((resolve, reject) => {
       try {
         this.isConnecting = true;
-        const baseWsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
-        const wsUrl = `${baseWsUrl}?token=${encodeURIComponent(token)}`;
+        const baseWsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
+        const wsUrl = `${baseWsUrl}/ws?token=${encodeURIComponent(token)}`;
         
         if (this.reconnectAttempts === 0) {
-          console.log('🔌 Attempting WebSocket connection to:', wsUrl.replace(token, '[TOKEN]'));
+          console.log('🔌 Attempting WebSocket connection...');
         }
         
         this.ws = new WebSocket(wsUrl);

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, DollarSign, Briefcase, Edit, Trash2, Settings, TrendingUp, Package, X } from 'lucide-react';
+import { Plus, DollarSign, Briefcase, Edit, Trash2, TrendingUp, Package, X } from 'lucide-react';
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { crmAPI } from '../../api/crm.api';
@@ -232,11 +232,10 @@ const SalesPipeline = () => {
             <p className="text-primary-600 mt-1">Track deals across pipeline stages</p>
           </div>
           <div className="flex items-center space-x-3">
-            <Link to="/crm/pipelines/settings" className="btn-modern btn-secondary flex items-center space-x-2">
-              <Settings className="w-4 h-4" />
-              <span>Configure Pipelines</span>
-            </Link>
-            <button className="btn-modern btn-primary flex items-center space-x-2" onClick={() => setShowModal(true)}>
+            <button
+              onClick={() => setShowModal(true)}
+              className="btn-modern btn-primary flex items-center space-x-2"
+            >
               <Plus className="w-4 h-4" />
               <span>Add Deal</span>
             </button>
@@ -272,21 +271,21 @@ const SalesPipeline = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[
-            { label: 'Total Deals', value: pipelineStats.totalDeals, icon: Briefcase, bg: 'bg-blue-50', color: 'text-blue-600' },
-            { label: 'Pipeline Value', value: `₹${pipelineStats.totalValue.toLocaleString()}`, icon: DollarSign, bg: 'bg-emerald-50', color: 'text-emerald-600' },
-            { label: 'Won Value', value: `₹${pipelineStats.wonValue.toLocaleString()}`, icon: TrendingUp, bg: 'bg-purple-50', color: 'text-purple-600' },
-            { label: 'Avg Deal Size', value: `₹${pipelineStats.avgDealSize.toLocaleString()}`, icon: DollarSign, bg: 'bg-orange-50', color: 'text-orange-600' }
+            { label: 'Total Deals', value: pipelineStats.totalDeals, icon: Briefcase, bg: 'bg-gradient-to-br from-blue-50 to-blue-100', color: 'text-blue-600', border: 'border-blue-200' },
+            { label: 'Pipeline Value', value: `₹${pipelineStats.totalValue.toLocaleString()}`, icon: DollarSign, bg: 'bg-gradient-to-br from-emerald-50 to-emerald-100', color: 'text-emerald-600', border: 'border-emerald-200' },
+            { label: 'Won Value', value: `₹${pipelineStats.wonValue.toLocaleString()}`, icon: TrendingUp, bg: 'bg-gradient-to-br from-purple-50 to-purple-100', color: 'text-purple-600', border: 'border-purple-200' },
+            { label: 'Avg Deal Size', value: `₹${pipelineStats.avgDealSize.toLocaleString()}`, icon: DollarSign, bg: 'bg-gradient-to-br from-orange-50 to-orange-100', color: 'text-orange-600', border: 'border-orange-200' }
           ].map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <div key={index} className="modern-card-elevated p-4">
+              <div key={index} className={`modern-card-elevated p-5 border-2 ${stat.border} hover:shadow-lg transition-all`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-primary-600">{stat.label}</p>
-                    <p className="text-xl font-bold text-primary-900 mt-1">{stat.value}</p>
+                    <p className="text-xs font-semibold text-primary-500 uppercase tracking-wide">{stat.label}</p>
+                    <p className="text-2xl font-bold text-primary-900 mt-2">{stat.value}</p>
                   </div>
-                  <div className={`p-2 rounded-lg ${stat.bg}`}>
-                    <Icon className={`w-5 h-5 ${stat.color}`} />
+                  <div className={`p-3 rounded-xl ${stat.bg} shadow-sm`}>
+                    <Icon className={`w-6 h-6 ${stat.color}`} />
                   </div>
                 </div>
               </div>
@@ -300,43 +299,53 @@ const SalesPipeline = () => {
             <div className="inline-flex space-x-4 pb-4">
               {(selectedPipeline.stages || []).sort((a, b) => a.order - b.order).map(stage => (
                 <div key={stage.id} className="w-80 flex-shrink-0">
-                  <div className="modern-card-elevated">
-                    <div className="p-4 border-b border-primary-200 bg-gradient-to-r from-primary-50 to-white">
+                  <div className="modern-card-elevated overflow-hidden">
+                    <div className="p-4 border-b-2 border-primary-200 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-bold text-primary-900">{stage.name}</h3>
+                        <h3 className="text-sm font-bold text-primary-900 uppercase tracking-wide">{stage.name}</h3>
                         <div className="flex items-center space-x-2">
-                          <span className="text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full font-medium">
+                          <span className="text-xs bg-white/80 backdrop-blur-sm text-primary-700 px-2.5 py-1 rounded-full font-bold shadow-sm border border-primary-200">
                             {dealsByStage[stage.name]?.length || 0}
                           </span>
-                          <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium">
+                          <span className="text-xs bg-emerald-500 text-white px-2.5 py-1 rounded-full font-bold shadow-sm">
                             {stage.probability}%
                           </span>
                         </div>
                       </div>
                       {stage.description && (
-                        <p className="text-xs text-primary-500">{stage.description}</p>
+                        <p className="text-xs text-primary-600 font-medium">{stage.description}</p>
                       )}
                     </div>
                     <div className="p-4 space-y-3 min-h-[200px] max-h-[600px] overflow-y-auto">
                       {loading ? (
-                        <LoadingSpinner />
+                        <div className="flex justify-center py-8">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        </div>
+                      ) : (dealsByStage[stage.name] || []).length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-8 text-center">
+                          <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-2">
+                            <Briefcase className="w-6 h-6 text-gray-400" />
+                          </div>
+                          <p className="text-xs text-gray-500">No deals in this stage</p>
+                        </div>
                       ) : (
                         (dealsByStage[stage.name] || []).map(deal => (
-                          <div key={deal.id} className="p-3 border-2 border-primary-100 rounded-lg bg-white hover:shadow-md transition-shadow cursor-move">
-                            <div className="flex items-start justify-between mb-2">
-                              <Link to={`/crm/deals/${deal.id}`} className="text-sm font-bold text-primary-900 hover:underline flex-1">
+                          <div key={deal.id} className="p-4 border-2 border-primary-100 rounded-xl bg-white hover:shadow-lg hover:border-blue-300 transition-all cursor-move group">
+                            <div className="flex items-start justify-between mb-3">
+                              <Link to={`/crm/deals/${deal.id}`} className="text-sm font-bold text-primary-900 hover:text-blue-600 hover:underline flex-1 transition-colors">
                                 {deal.name}
                               </Link>
-                              <div className="flex items-center space-x-1 ml-2">
-                                <button onClick={() => handleEdit(deal)} className="p-1 text-blue-600 hover:bg-blue-50 rounded">
+                              <div className="flex items-center space-x-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => handleEdit(deal)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                                   <Edit className="w-3.5 h-3.5" />
                                 </button>
-                                <button onClick={() => handleDelete(deal.id)} className="p-1 text-red-600 hover:bg-red-50 rounded">
+                                <button onClick={() => handleDelete(deal.id)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>
                               </div>
                             </div>
-                            <div className="text-xs text-primary-600 mb-2">
+                            <div className="text-xs font-medium text-primary-600 mb-3 flex items-center">
+                              <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
                               {deal.customer?.name || 'No customer'}
                             </div>
                             
@@ -389,8 +398,22 @@ const SalesPipeline = () => {
         )}
 
         {!selectedPipeline && !loading && (
-          <div className="text-center py-12 text-primary-500">
-            No pipelines configured. Please configure a pipeline first.
+          <div className="modern-card-elevated p-12 text-center">
+            <div className="max-w-md mx-auto">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Briefcase className="w-10 h-10 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-primary-900 mb-2">No Pipeline Configured</h3>
+              <p className="text-primary-600 mb-6">Create a sales pipeline to start tracking your deals and opportunities.</p>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+                <p className="text-sm font-semibold text-blue-900 mb-2">Quick Setup:</p>
+                <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+                  <li>Run: <code className="bg-blue-100 px-2 py-0.5 rounded">cd backend && node seed-pipeline.js</code></li>
+                  <li>Refresh this page</li>
+                  <li>Start adding deals!</li>
+                </ol>
+              </div>
+            </div>
           </div>
         )}
 

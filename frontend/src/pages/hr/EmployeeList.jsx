@@ -166,7 +166,9 @@ const EmployeeList = () => {
   });
 
   const potentialManagers = employees.filter(emp => 
-    emp.id !== selectedEmployee?.id
+    emp.id !== selectedEmployee?.id &&
+    emp.user?.role &&
+    ['MANAGER', 'ADMIN'].includes(emp.user.role)
   );
 
   return (
@@ -480,7 +482,10 @@ const EmployeeList = () => {
             </div>
             <div className="p-6">
               {potentialManagers.length === 0 ? (
-                <p className="text-gray-600">No other employees available</p>
+                <div className="text-center py-4">
+                  <p className="text-gray-600 mb-2">No managers available</p>
+                  <p className="text-sm text-gray-500">Only employees with MANAGER or ADMIN role can be assigned as managers.</p>
+                </div>
               ) : (
                 <div className="space-y-2">
                   {selectedEmployee.managerId && (

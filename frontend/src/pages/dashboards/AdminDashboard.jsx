@@ -16,6 +16,7 @@ const AdminDashboard = () => {
     users: 0,
     inventory: 0,
     departments: 0,
+    employees: 0,
     activeUsers: 0,
     adminCount: 0,
     managerCount: 0,
@@ -32,22 +33,31 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const [usersRes, inventoryRes, departmentsRes, activitiesRes] = await Promise.allSettled([
+      const [usersRes, inventoryRes, departmentsRes, activitiesRes, employeesRes] = await Promise.allSettled([
         apiClient.get('/users'),
         apiClient.get('/inventory'),
         apiClient.get('/departments'),
-        dashboardAPI.getRecentActivities()
+        dashboardAPI.getRecentActivities(),
+        apiClient.get('/employees')
       ]);
 
       const users = usersRes.status === 'fulfilled' ? usersRes.value.data : [];
       const inventory = inventoryRes.status === 'fulfilled' ? inventoryRes.value.data : [];
       const departments = departmentsRes.status === 'fulfilled' ? departmentsRes.value.data : [];
       const activitiesData = activitiesRes.status === 'fulfilled' ? activitiesRes.value.data : [];
+      const employees = employeesRes.status === 'fulfilled' ? employeesRes.value.data : [];
+      
+      // Filter employees that are not admins or managers
+      const regularEmployees = employees.filter(emp => {
+        const user = users.find(u => u.email === emp.email);
+        return !user || (user.role !== 'ADMIN' && user.role !== 'MANAGER');
+      });
 
       setStats({
         users: users.length || 0,
         inventory: inventory.length || 0,
         departments: departments.length || 0,
+        employees: regularEmployees.length || 0,
         activeUsers: users.filter(u => u.status === 'ACTIVE').length || 0,
         adminCount: users.filter(u => u.role === 'ADMIN').length || 0,
         managerCount: users.filter(u => u.role === 'MANAGER').length || 0,
@@ -77,6 +87,14 @@ const AdminDashboard = () => {
       change: '+12%'
     },
     {
+      title: 'Employees',
+      value: stats.employees,
+      icon: Users,
+      bg: 'bg-indigo-50',
+      color: 'text-indigo-600',
+      change: '+5%'
+    },
+    {
       title: 'Inventory Items',
       value: stats.inventory,
       icon: Package,
@@ -91,14 +109,6 @@ const AdminDashboard = () => {
       bg: 'bg-purple-50',
       color: 'text-purple-600',
       change: '+3%'
-    },
-    {
-      title: 'System Health',
-      value: '99.9%',
-      icon: Activity,
-      bg: 'bg-emerald-50',
-      color: 'text-emerald-600',
-      change: '+0.1%'
     }
   ];
 
@@ -236,99 +246,96 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Approval Widget */}
-        <div className="lg:col-span-1">
-          <ApprovalWidget maxItems={4} showActions={true} />
-        </div>
-
-        {/* Overdue Allocation Widget */}
-        <div className="lg:col-span-1">
-          <OverdueAllocationWidget maxItems={4} showDetails={true} />
-        </div>
-
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* User Breakdown */}
-        <div className="lg:col-span-1">
-          <div className="modern-card-elevated p-6 h-full">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-5 h-5 text-blue-600" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900">User Breakdown</h2>
+        <div className="modern-card-elevated p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-blue-600" />
               </div>
+              <h2 className="text-lg font-semibold text-gray-900">User Breakdown</h2>
             </div>
-            <div className="space-y-4">
-              {[
-                { label: 'Active Users', value: stats.activeUsers, color: 'bg-emerald-500', percentage: 85 },
-                { label: 'Administrators', value: stats.adminCount, color: 'bg-red-500', percentage: 15 },
-                { label: 'Managers', value: stats.managerCount, color: 'bg-blue-500', percentage: 25 },
-                { label: 'Regular Users', value: stats.userCount, color: 'bg-gray-500', percentage: 60 }
-              ].map((item, index) => (
-                <div key={index}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-700 font-medium text-sm">{item.label}</span>
-                    <span className="font-bold text-gray-900">{item.value}</span>
-                  </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
-                    <div 
-                      className={`h-full ${item.color} rounded-full transition-all duration-1000`}
-                      style={{ width: `${item.percentage}%` }}
-                    ></div>
-                  </div>
+          </div>
+          <div className="space-y-4">
+            {[
+              { label: 'Active Users', value: stats.activeUsers, color: 'bg-emerald-500' },
+              { label: 'Administrators', value: stats.adminCount, color: 'bg-red-500' },
+              { label: 'Managers', value: stats.managerCount, color: 'bg-blue-500' },
+              { label: 'Employees', value: stats.employees, color: 'bg-indigo-500' }
+            ].map((item, index) => {
+              const percentage = stats.users > 0 ? Math.round((item.value / stats.users) * 100) : 0;
+              return (
+              <div key={index}>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-700 font-medium text-sm">{item.label}</span>
+                  <span className="font-bold text-gray-900">{item.value}</span>
                 </div>
-              ))}
-            </div>
+                <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div 
+                    className={`h-full ${item.color} rounded-full transition-all duration-1000`}
+                    style={{ width: `${percentage}%` }}
+                  ></div>
+                </div>
+              </div>
+            );
+            })}
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="lg:col-span-1">
-          <div className="modern-card-elevated p-6 h-full">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-purple-600" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+        <div className="modern-card-elevated p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Activity className="w-5 h-5 text-purple-600" />
               </div>
-              <Link to="/audit" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center space-x-1">
-                <span>View All</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
+              <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
             </div>
-            <div className="space-y-4">
-              {activities.length > 0 ? (
-                activities.map((activity, index) => (
-                  <div key={activity.id} className="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <Activity className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 text-sm">{activity.description}</p>
-                      <p className="text-sm text-gray-600">
-                        by {activity.user ? `${activity.user.firstName} ${activity.user.lastName}` : 'System'}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs text-gray-500">{formatTimeAgo(activity.timestamp)}</span>
-                      <div className={`w-2 h-2 rounded-full mt-1 ml-auto ${
-                        index < 2 ? 'bg-emerald-500' : 'bg-gray-300'
-                      }`}></div>
-                    </div>
+            <Link to="/audit" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center space-x-1">
+              <span>View All</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="space-y-4">
+            {activities.length > 0 ? (
+              activities.map((activity, index) => (
+                <div key={activity.id} className="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                  <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <Activity className="w-4 h-4 text-gray-600" />
                   </div>
-                ))
-              ) : (
-                <div className="text-center py-8">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Activity className="w-6 h-6 text-gray-400" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 text-sm">{activity.description}</p>
+                    <p className="text-sm text-gray-600">
+                      by {activity.user ? `${activity.user.firstName} ${activity.user.lastName}` : 'System'}
+                    </p>
                   </div>
-                  <p className="text-gray-500 text-sm">No recent activities</p>
+                  <div className="text-right">
+                    <span className="text-xs text-gray-500">{formatTimeAgo(activity.timestamp)}</span>
+                    <div className={`w-2 h-2 rounded-full mt-1 ml-auto ${
+                      index < 2 ? 'bg-emerald-500' : 'bg-gray-300'
+                    }`}></div>
+                  </div>
                 </div>
-              )}
-            </div>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Activity className="w-6 h-6 text-gray-400" />
+                </div>
+                <p className="text-gray-500 text-sm">No recent activities</p>
+              </div>
+            )}
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Approval Widget */}
+        <ApprovalWidget maxItems={4} showActions={true} />
+
+        {/* Overdue Allocation Widget */}
+        <OverdueAllocationWidget maxItems={4} showDetails={true} />
       </div>
     </div>
   );

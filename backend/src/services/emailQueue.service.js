@@ -79,22 +79,21 @@ class EmailQueueService {
       this.processing = true;
 
       // Get pending emails that are scheduled to be sent
-      const pendingEmails = await prisma.emailQueue.findMany({
+      const allPendingEmails = await prisma.emailQueue.findMany({
         where: {
           status: 'PENDING',
           scheduledAt: {
             lte: new Date()
-          },
-          attempts: {
-            lt: prisma.raw('max_attempts')
           }
         },
         orderBy: [
           { priority: 'asc' },
           { scheduledAt: 'asc' }
-        ],
-        take: 10 // Process 10 emails at a time
+        ]
       });
+
+      // Filter emails where attempts < maxAttempts
+      const pendingEmails = allPendingEmails.filter(email => email.attempts < email.maxAttempts).slice(0, 10);
 
       if (pendingEmails.length > 0) {
         console.log(`📬 Processing ${pendingEmails.length} queued emails`);
@@ -242,15 +241,15 @@ class EmailQueueService {
    */
   async retryFailedEmails() {
     try {
-      const failedEmails = await prisma.emailQueue.findMany({
+      const allFailedEmails = await prisma.emailQueue.findMany({
         where: {
-          status: 'FAILED',
-          attempts: {
-            lt: prisma.raw('max_attempts')
-          }
+          status: 'FAILED'
         },
-        take: 5 // Retry 5 failed emails at a time
+        take: 20
       });
+
+      // Filter emails where attempts < maxAttempts
+      const failedEmails = allFailedEmails.filter(email => email.attempts < email.maxAttempts).slice(0, 5);
 
       for (const email of failedEmails) {
         // Reset to pending with exponential backoff

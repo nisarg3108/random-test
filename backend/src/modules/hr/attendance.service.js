@@ -206,6 +206,11 @@ export const clockOut = async (employeeId, tenantId, location = null) => {
   const checkOutTime = new Date();
   const workHours = (checkOutTime - timeTracking.checkInTime) / (1000 * 60 * 60);
 
+  // Minimum work hours check (prevent accidental early clock-out)
+  if (workHours < 0.5) {
+    throw new Error('Cannot clock out within 30 minutes of clock-in. Please contact HR if this is an error.');
+  }
+
   // Get employee's shift to calculate overtime
   const shiftAssignment = await prisma.shiftAssignment.findFirst({
     where: {
@@ -224,12 +229,19 @@ export const clockOut = async (employeeId, tenantId, location = null) => {
   });
 
   let overtimeHours = 0;
+  let earlyLeaveWarning = null;
   if (shiftAssignment) {
     const shift = shiftAssignment.shift;
     const [startHour, startMin] = shift.startTime.split(':').map(Number);
     const [endHour, endMin] = shift.endTime.split(':').map(Number);
     const shiftDuration = (endHour + endMin / 60) - (startHour + startMin / 60) - shift.breakDuration / 60;
     overtimeHours = Math.max(0, workHours - shiftDuration);
+    
+    // Check for early leave
+    if (workHours < shiftDuration * 0.9) {
+      const shortfall = Math.round((shiftDuration - workHours) * 60);
+      earlyLeaveWarning = `You are leaving ${shortfall} minutes early. This may affect your attendance.`;
+    }
   }
 
   // Update time tracking record
@@ -287,7 +299,11 @@ export const clockOut = async (employeeId, tenantId, location = null) => {
     }
   });
 
-  return updatedTracking;
+  return {
+    ...updatedTracking,
+    earlyLeaveWarning,
+    overtimeHours: parseFloat(overtimeHours.toFixed(2))
+  };
 };
 
 export const getClockStatus = async (employeeId, tenantId) => {
