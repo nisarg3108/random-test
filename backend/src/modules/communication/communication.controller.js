@@ -1,5 +1,7 @@
 import communicationService from './communication.service.js';
 import { listUsers } from '../../users/user.service.js';
+import fileUploadService from '../../services/fileUpload.service.js';
+import emailQueueService from '../../services/emailQueue.service.js';
 
 class CommunicationController {
   // ==================== CONVERSATIONS ====================
@@ -66,6 +68,22 @@ class CommunicationController {
     } catch (error) {
       console.error('Error updating conversation:', error);
       res.status(error.message === 'Unauthorized to update this conversation' ? 403 : 500)
+        .json({ error: error.message });
+    }
+  }
+  
+  async deleteConversation(req, res) {
+    try {
+      const { id } = req.params;
+      await communicationService.deleteConversation(
+        id,
+        req.user.id,
+        req.user.tenantId
+      );
+      res.json({ message: 'Conversation deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting conversation:', error);
+      res.status(error.message === 'Unauthorized' ? 403 : 500)
         .json({ error: error.message });
     }
   }
@@ -624,6 +642,188 @@ class CommunicationController {
       res.json(results);
     } catch (error) {
       console.error('Error searching messages:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+  
+  // ==================== FILE UPLOADS ====================
+  
+  async uploadFiles(req, res) {
+    try {
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: 'No files uploaded' });
+      }
+      
+      const attachments = fileUploadService.processUploadedFiles(
+        req.files,
+        req.user.tenantId,
+        req.user.id
+      );
+      
+      res.status(201).json({
+        message: 'Files uploaded successfully',
+        attachments,
+        count: attachments.length
+      });
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+  
+  async getFile(req, res) {
+    try {
+      const { filename } = req.params;
+      
+      const file = fileUploadService.getFile(filename);
+      
+      if (!file.exists) {
+        return res.status(404).json({ error: 'File not found' });
+      }
+      
+      // Set CORS headers for cross-origin image loading
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+      
+      // Send file
+      res.sendFile(file.path);
+    } catch (error) {
+      console.error('Error getting file:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+  
+  async deleteFile(req, res) {
+    try {
+      const { filename } = req.params;
+      
+      const result = await fileUploadService.deleteFile(filename);
+      
+      if (!result.success) {
+        return res.status(404).json({ error: result.message });
+      }
+      
+      res.json({ message: 'File deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+  
+  async getFileStats(req, res) {
+    try {
+      const { filename } = req.params;
+      
+      const stats = fileUploadService.getFileStats(filename);
+      
+      if (!stats) {
+        return res.status(404).json({ error: 'File not found' });
+      }
+      
+      res.json(stats);
+    } catch (error) {
+      console.error('Error getting file stats:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // ==================== EMAIL QUEUE ====================
+
+  async checkEmailHealth(req, res) {
+    try {
+      const health = await emailQueueService.checkHealth();
+      
+      const statusCode = health.healthy ? 200 : 503;
+      res.status(statusCode).json(health);
+    } catch (error) {
+      console.error('Error checking email health:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getEmailQueueStats(req, res) {
+    try {
+      const stats = await emailQueueService.getStats(req.user.tenantId);
+      res.json(stats);
+    } catch (error) {
+      console.error('Error getting email queue stats:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getQueuedEmails(req, res) {
+    try {
+      const { status, priority, limit, offset } = req.query;
+      
+      const result = await emailQueueService.getQueuedEmails({
+        tenantId: req.user.tenantId,
+        status,
+        priority: priority ? parseInt(priority) : undefined,
+        limit: limit ? parseInt(limit) : 50,
+        offset: offset ? parseInt(offset) : 0
+      });
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Error getting queued emails:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async retryFailedEmails(req, res) {
+    try {
+      await emailQueueService.retryFailedEmails();
+      res.json({ message: 'Failed emails queued for retry' });
+    } catch (error) {
+      console.error('Error retrying failed emails:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async retryEmail(req, res) {
+    try {
+      const { emailId } = req.params;
+      
+      await emailQueueService.retryEmail(emailId);
+      res.json({ message: 'Email queued for retry' });
+    } catch (error) {
+      console.error('Error retrying email:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async cancelEmail(req, res) {
+    try {
+      const { emailId } = req.params;
+      
+      await emailQueueService.cancelEmail(emailId);
+      res.json({ message: 'Email cancelled' });
+    } catch (error) {
+      console.error('Error cancelling email:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async queueEmail(req, res) {
+    try {
+      const { to, cc, bcc, subject, body, templateId, variables, priority, scheduledAt } = req.body;
+      
+      const queuedEmail = await emailQueueService.queueEmail({
+        tenantId: req.user.tenantId,
+        to,
+        cc,
+        bcc,
+        subject,
+        body,
+        templateId,
+        variables,
+        priority,
+        scheduledAt: scheduledAt ? new Date(scheduledAt) : new Date()
+      });
+      
+      res.status(201).json(queuedEmail);
+    } catch (error) {
+      console.error('Error queueing email:', error);
       res.status(500).json({ error: error.message });
     }
   }

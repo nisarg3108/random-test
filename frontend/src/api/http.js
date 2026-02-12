@@ -5,14 +5,27 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 export const authFetch = async (endpoint, options = {}) => {
   const token = getToken();
   const isBlob = options.responseType === 'blob';
+  const isFormData = options.body instanceof FormData;
+
+  // Build headers - don't set Content-Type for FormData (browser will set it with boundary)
+  const headers = {
+    ...(token && { Authorization: `Bearer ${token}` }),
+    ...options.headers,
+  };
+  
+  // Only set Content-Type to application/json if it's not FormData and not already set
+  if (!isFormData && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
+  }
+  
+  // Remove Content-Type header for FormData to let browser set it with boundary
+  if (isFormData && headers['Content-Type']) {
+    delete headers['Content-Type'];
+  }
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` }),
-      ...options.headers,
-    },
+    headers,
   });
 
   if (response.status === 401) {
@@ -80,9 +93,12 @@ export const apiClient = {
         }
       }
       
+      // Don't JSON.stringify FormData - pass it as-is
+      const body = data instanceof FormData ? data : JSON.stringify(data);
+      
       const response = await authFetch(url, { 
         method: 'POST', 
-        body: JSON.stringify(data), 
+        body, 
         responseType: config.responseType,
         ...config 
       });
@@ -110,9 +126,12 @@ export const apiClient = {
         }
       }
       
+      // Don't JSON.stringify FormData - pass it as-is
+      const body = data instanceof FormData ? data : JSON.stringify(data);
+      
       const response = await authFetch(url, { 
         method: 'PUT', 
-        body: JSON.stringify(data), 
+        body, 
         responseType: config.responseType,
         ...config 
       });

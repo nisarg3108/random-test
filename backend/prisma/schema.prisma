@@ -2762,6 +2762,45 @@ model EmailLog {
   @@index([createdAt])
 }
 
+model EmailQueue {
+  id          String   @id @default(uuid())
+  tenantId    String
+  
+  to          String
+  cc          String?
+  bcc         String?
+  subject     String
+  body        String   @db.Text
+  
+  templateId  String?
+  variables   Json?    // Variables for template substitution
+  
+  status      String   @default("PENDING") // PENDING | PROCESSING | SENT | FAILED | CANCELLED
+  priority    Int      @default(5)  // 1 (highest) to 10 (lowest)
+  
+  attempts    Int      @default(0)
+  maxAttempts Int      @default(3)
+  
+  scheduledAt DateTime @default(now()) // When to send
+  processingAt DateTime?
+  sentAt      DateTime?
+  failedAt    DateTime?
+  cancelledAt DateTime?
+  
+  lastError   String?  @db.Text
+  errorLog    Json?    // Array of error attempts
+  
+  metadata    Json?    // Additional tracking info
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([tenantId, status])
+  @@index([status, scheduledAt])
+  @@index([priority, scheduledAt])
+  @@index([createdAt])
+}
+
 model ChatChannel {
   id          String   @id @default(uuid())
   tenantId    String

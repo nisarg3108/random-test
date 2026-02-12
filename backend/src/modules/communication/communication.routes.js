@@ -1,6 +1,7 @@
 import express from 'express';
 import communicationController from './communication.controller.js';
 import { requireAuth } from '../../core/auth/auth.middleware.js';
+import { upload } from '../../services/fileUpload.service.js';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.get('/conversations', communicationController.getConversations);
 router.get('/conversations/:id', communicationController.getConversation);
 router.post('/conversations', communicationController.createConversation);
 router.put('/conversations/:id', communicationController.updateConversation);
+router.delete('/conversations/:id', communicationController.deleteConversation);
 router.post('/conversations/:id/participants', communicationController.addParticipants);
 router.delete('/conversations/:id/participants/:participantId', communicationController.removeParticipant);
 router.put('/conversations/:conversationId/read', communicationController.markConversationAsRead);
@@ -57,5 +59,20 @@ router.get('/email-logs', communicationController.getEmailLogs);
 
 // ==================== SEARCH ====================
 router.get('/search/messages', communicationController.searchMessages);
+
+// ==================== FILE UPLOADS ====================
+router.post('/files/upload', upload.array('files', 5), communicationController.uploadFiles);
+router.get('/files/:filename', communicationController.getFile);
+router.delete('/files/:filename', communicationController.deleteFile);
+router.get('/files/:filename/stats', communicationController.getFileStats);
+
+// ==================== EMAIL QUEUE ====================
+router.get('/email/health', communicationController.checkEmailHealth);
+router.get('/email/queue/stats', communicationController.getEmailQueueStats);
+router.get('/email/queue', communicationController.getQueuedEmails);
+router.post('/email/queue', communicationController.queueEmail);
+router.post('/email/queue/retry-failed', communicationController.retryFailedEmails);
+router.post('/email/queue/:emailId/retry', communicationController.retryEmail);
+router.post('/email/queue/:emailId/cancel', communicationController.cancelEmail);
 
 export default router;

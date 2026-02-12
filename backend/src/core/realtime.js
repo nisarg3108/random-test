@@ -13,14 +13,20 @@ class RealTimeServer {
   initialize(server) {
     this.wss = new WebSocketServer({ 
       server,
-      path: '/ws'
+      path: '/ws',
+      clientTracking: true,
+      perMessageDeflate: false
     });
 
     this.wss.on('connection', (ws, request) => {
       this.handleConnection(ws, request);
     });
 
-    console.log('🔌 WebSocket server initialized');
+    this.wss.on('error', (error) => {
+      console.error('❌ WebSocket server error:', error);
+    });
+
+    console.log('🔌 WebSocket server initialized on path /ws');
   }
 
   async handleConnection(ws, request) {
@@ -29,6 +35,7 @@ class RealTimeServer {
       const token = url.searchParams.get('token');
 
       if (!token) {
+        console.warn('⚠️ WebSocket connection rejected: No token provided');
         ws.close(1008, 'Token required');
         return;
       }
@@ -41,6 +48,7 @@ class RealTimeServer {
       });
 
       if (!user) {
+        console.warn('⚠️ WebSocket connection rejected: Invalid user');
         ws.close(1008, 'Invalid user');
         return;
       }
@@ -65,10 +73,13 @@ class RealTimeServer {
       });
 
       ws.send(JSON.stringify({ type: 'connected', clientId }));
+      console.log(`✅ WebSocket client connected: ${user.email} (${clientId})`);
 
     } catch (error) {
-      console.error('WebSocket connection error:', error);
-      ws.close(1008, 'Authentication failed');
+      console.error('❌ WebSocket connection error:', error.message);
+      if (ws.readyState === 1) {
+        ws.close(1008, 'Authentication failed');
+      }
     }
   }
 

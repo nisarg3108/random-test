@@ -84,6 +84,27 @@
 - [x] Error collection and reporting
 - [x] Transaction support for bulk operations
 
+### Communication Module
+- [x] Database schema: Conversation, ConversationParticipant, Message, MessageReaction, MessageReadReceipt, Announcement, AnnouncementRead, ChatChannel, ChatChannelMember, EmailTemplate, EmailLog, EmailQueue
+- [x] Communication service (conversations, messages, announcements, channels, email templates)
+- [x] Communication controller with validation and permissions
+- [x] Communication routes under /api/communication
+- [x] Search across messages
+- [x] Read receipts and reactions endpoints
+- [x] Typing status and online users endpoints
+- [x] Real-time broadcasts (message, typing, announcement, presence)
+- [x] Email log and status tracking
+- [x] Attachment upload service and storage provider integration
+- [x] File upload endpoints (POST /files/upload, GET /files/:filename, DELETE /files/:filename)
+- [x] File preview and download functionality
+- [x] Multer configuration with file type validation and size limits
+- [x] SMTP configuration validation and health check endpoint
+- [x] Background job or queue for email retries
+- [x] Email queue service with priority, retry logic, and exponential backoff
+- [x] Email queue management endpoints (stats, queue, retry, cancel)
+- [ ] Audit log for message and announcement edits/deletes (optional)
+- [ ] Retention policy and archive cleanup (optional)
+
 ### App.js Integration
 - [x] Import all new route modules
 - [x] Register warehouse routes
@@ -154,6 +175,34 @@
   - [x] Create work order modal
   - [x] Priority selection
 
+### Communication Module
+- [x] MessagingPage.jsx component
+  - [x] Conversation list and search
+  - [x] Message thread and pagination
+  - [x] Send, edit, delete messages
+  - [x] Emoji reactions
+  - [x] Read receipts and typing indicator
+  - [x] Online presence indicators
+- [x] AnnouncementsPage.jsx component
+  - [x] Priority badges and pinning
+  - [x] Create, edit, delete announcements
+  - [x] Target audience selection
+  - [x] Read tracking and filters
+- [x] ChannelsPage.jsx component
+  - [x] Public and private tabs
+  - [x] Join, leave, create, edit channels
+  - [x] Member management
+- [x] Communication API client (frontend/src/api/communication.js)
+- [x] WebSocket hooks (frontend/src/hooks/useWebSocket.js)
+- [x] Router and nav links for /communication/messages, /communication/announcements, /communication/channels
+- [x] Attachment upload UI with preview (FileUpload component)
+- [x] File preview component with download and delete (FilePreview component)
+- [x] Drag & drop file upload support
+- [x] File type icons and size formatting
+- [x] Image preview dialog with zoom
+- [ ] Rich text editor for messages and announcements
+- [ ] Notifications for new messages outside active thread
+
 ### Styling
 - [x] Warehouse.css (400 lines)
   - [x] Table styling
@@ -203,6 +252,20 @@
 - [x] ProductionBatch
 - [x] Branch
 
+### Communication Models Added (12)
+- [x] Conversation
+- [x] ConversationParticipant
+- [x] Message
+- [x] MessageReaction
+- [x] MessageReadReceipt
+- [x] Announcement
+- [x] AnnouncementRead
+- [x] ChatChannel
+- [x] ChatChannelMember
+- [x] EmailTemplate
+- [x] EmailLog
+- [x] EmailQueue
+
 ### Schema Features
 - [x] Proper relationships and foreign keys
 - [x] Indexes on commonly queried fields
@@ -225,6 +288,7 @@
 - [x] Branch management (10 endpoints)
 - [x] Reporting endpoints (8 endpoints)
 - [x] Import/Export operations
+- [x] Communication operations (30+ endpoints)
 
 ### API Standards Followed
 - [x] RESTful conventions
@@ -340,12 +404,12 @@
 
 | Category | Items | LOC |
 |----------|-------|-----|
-| Backend Services | 7 | ~3,200 |
-| Frontend Components | 8 | ~2,100 |
+| Backend Services | 8 | ~4,500 |
+| Frontend Components | 11 | ~3,600 |
 | CSS Styling | 3 | ~1,200 |
-| Database Models | 16 | ~800 |
-| Routes/Controllers | 15 | ~1,500 |
-| **Total** | **49** | **~8,800** |
+| Database Models | 27 | ~1,400 |
+| Routes/Controllers | 16 | ~1,950 |
+| **Total** | **65** | **~12,650** |
 
 ---
 
@@ -362,8 +426,9 @@
 | Reporting Engine | ✅ Complete | 7 report types |
 | Data Import/Export | ✅ Complete | CSV operations |
 | Dashboard Analytics | ✅ Complete | KPI display |
-| API Integration | ✅ Complete | 70+ endpoints |
-| Frontend UI | ✅ Complete | 8 pages + modals |
+| API Integration | ✅ Complete | 100+ endpoints |
+| Frontend UI | ✅ Complete | 11 pages + modals |
+| Communication Module | ✅ Complete | Chat, announcements, channels, file attachments, SMTP queue with retry logic, health check |
 | Mobile Responsive | ✅ Complete | Breakpoint at 768px |
 | Authentication | ✅ Complete | JWT + permissions |
 | Error Handling | ✅ Complete | All layers covered |
@@ -414,3 +479,104 @@
 3. Deploy to staging
 4. User acceptance testing
 5. Production deployment
+diff --git a/IMPLEMENTATION_CHECKLIST.md b/IMPLEMENTATION_CHECKLIST.md
+@@
+ ### Data Import/Export
+ - [x] Data import/export service
+ - [x] CSV parsing with validation
+ - [x] Item bulk import
+ - [x] Warehouse bulk import
+ - [x] Journal entry bulk import
+ - [x] CSV export functions
+ - [x] Error collection and reporting
+ - [x] Transaction support for bulk operations
+ 
++### Communication Module
++- [x] Database schema: Conversation, ConversationParticipant, Message, MessageReaction, MessageReadReceipt, Announcement, AnnouncementRead, ChatChannel, ChatChannelMember, EmailTemplate, EmailLog
++- [x] Communication service (conversations, messages, announcements, channels, email templates)
++- [x] Communication controller with validation and permissions
++- [x] Communication routes under /api/communication
++- [x] Search across messages
++- [x] Read receipts and reactions endpoints
++- [x] Typing status and online users endpoints
++- [x] Real-time broadcasts (message, typing, announcement, presence)
++- [x] Email log and status tracking
++- [ ] Attachment upload service and storage provider integration
++- [ ] SMTP configuration validation and health check endpoint
++- [ ] Background job or queue for email retries
++- [ ] Audit log for message and announcement edits/deletes (optional)
++- [ ] Retention policy and archive cleanup (optional)
++
+ ### App.js Integration
+ - [x] Import all new route modules
+ - [x] Register warehouse routes
+@@
+ ### Manufacturing Module
+ - [x] BOMList.jsx component
+@@
+ - [x] WorkOrderList.jsx component
+   - [x] Work order table
+   - [x] Status filtering
+   - [x] Progress bars
+   - [x] State transition buttons
+   - [x] Create work order modal
+   - [x] Priority selection
++
++### Communication Module
++- [x] MessagingPage.jsx component
++  - [x] Conversation list and search
++  - [x] Message thread and pagination
++  - [x] Send, edit, delete messages
++  - [x] Emoji reactions
++  - [x] Read receipts and typing indicator
++  - [x] Online presence indicators
++- [x] AnnouncementsPage.jsx component
++  - [x] Priority badges and pinning
++  - [x] Create, edit, delete announcements
++  - [x] Target audience selection
++  - [x] Read tracking and filters
++- [x] ChannelsPage.jsx component
++  - [x] Public and private tabs
++  - [x] Join, leave, create, edit channels
++  - [x] Member management
++- [x] Communication API client (frontend/src/api/communication.js)
++- [x] WebSocket hooks (frontend/src/hooks/useWebSocket.js)
++- [x] Router and nav links for /communication/messages, /communication/announcements, /communication/channels
++- [ ] Attachment upload UI with preview
++- [ ] Rich text editor for messages and announcements
++- [ ] Notifications for new messages outside active thread
+@@
+ ## ✅ Database Schema
+ 
+ ### New Models Added (16)
+@@
+ - [x] Branch
++
++### Communication Models Added (11)
++- [x] Conversation
++- [x] ConversationParticipant
++- [x] Message
++- [x] MessageReaction
++- [x] MessageReadReceipt
++- [x] Announcement
++- [x] AnnouncementRead
++- [x] ChatChannel
++- [x] ChatChannelMember
++- [x] EmailTemplate
++- [x] EmailLog
+@@
+ ### Endpoints Created (70+)
+ - [x] Warehouse CRUD (6 endpoints)
+ - [x] Stock Movement CRUD (6 endpoints)
+ - [x] Accounting operations (18 endpoints)
+ - [x] Manufacturing operations (20+ endpoints)
+ - [x] Branch management (10 endpoints)
+ - [x] Reporting endpoints (8 endpoints)
+ - [x] Import/Export operations
++- [x] Communication operations (30+ endpoints)
+@@
+ | Dashboard Analytics | ✅ Complete | KPI display |
+ | API Integration | ✅ Complete | 70+ endpoints |
+ | Frontend UI | ✅ Complete | 8 pages + modals |
++| Communication Module | ⚠️ Partial | Core chat, announcements, channels ready; attachments and email queue pending |
+ | Mobile Responsive | ✅ Complete | Breakpoint at 768px |
