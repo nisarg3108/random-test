@@ -139,59 +139,73 @@ const FinanceDashboard = () => {
         </div>
 
         {/* Stats Cards Row 1 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="modern-card-elevated p-5 bg-gradient-to-br from-blue-50 to-white border border-blue-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-600">Total Claims</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stats.totalExpenseClaims}</p>
-                <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                  <ArrowUpRight className="w-3 h-3 text-green-500" />
-                  All time
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="modern-card-elevated p-6 hover:shadow-xl transition-all duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+                <FileText className="w-6 h-6 text-white" />
               </div>
-              <div className="p-3 rounded-xl bg-blue-100">
-                <FileText className="w-6 h-6 text-blue-600" />
+              <div className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                <ArrowUpRight className="w-3 h-3" />
+                <span>All time</span>
               </div>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Total Claims</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.totalExpenseClaims}</p>
             </div>
           </div>
 
-          <div className="modern-card-elevated p-5 bg-gradient-to-br from-yellow-50 to-white border border-yellow-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-yellow-600">Pending Review</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{metrics.pendingCount}</p>
-                <p className="text-xs text-gray-500 mt-1">${metrics.totalPending.toLocaleString()}</p>
+          <div className="modern-card-elevated p-6 hover:shadow-xl transition-all duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500 to-yellow-600 shadow-lg">
+                <Clock className="w-6 h-6 text-white" />
               </div>
-              <div className="p-3 rounded-xl bg-yellow-100">
-                <Clock className="w-6 h-6 text-yellow-600" />
-              </div>
+              {metrics.pendingCount > 0 && (
+                <span className="flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-yellow-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+                </span>
+              )}
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Pending Review</p>
+              <p className="text-3xl font-bold text-gray-900">{metrics.pendingCount}</p>
+              <p className="text-xs text-gray-500 mt-2">${metrics.totalPending.toLocaleString()}</p>
             </div>
           </div>
 
-          <div className="modern-card-elevated p-5 bg-gradient-to-br from-green-50 to-white border border-green-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-green-600">Approved</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">${metrics.totalApproved.toLocaleString()}</p>
-                <p className="text-xs text-gray-500 mt-1">{metrics.approvedCount} claims</p>
+          <div className="modern-card-elevated p-6 hover:shadow-xl transition-all duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
+                <CheckCircle className="w-6 h-6 text-white" />
               </div>
-              <div className="p-3 rounded-xl bg-green-100">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+              <div className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                <CheckCircle className="w-3 h-3" />
+                <span>{metrics.approvedCount}</span>
               </div>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Approved</p>
+              <p className="text-3xl font-bold text-gray-900">${metrics.totalApproved.toLocaleString()}</p>
+              <p className="text-xs text-gray-500 mt-2">{metrics.approvedCount} claims</p>
             </div>
           </div>
 
-          <div className="modern-card-elevated p-5 bg-gradient-to-br from-purple-50 to-white border border-purple-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-purple-600">Paid Out</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">${metrics.totalPaid.toLocaleString()}</p>
-                <p className="text-xs text-gray-500 mt-1">{metrics.paidCount} reimbursed</p>
+          <div className="modern-card-elevated p-6 hover:shadow-xl transition-all duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
+                <CreditCard className="w-6 h-6 text-white" />
               </div>
-              <div className="p-3 rounded-xl bg-purple-100">
-                <CreditCard className="w-6 h-6 text-purple-600" />
+              <div className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+                <CreditCard className="w-3 h-3" />
+                <span>{metrics.paidCount}</span>
               </div>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">Paid Out</p>
+              <p className="text-3xl font-bold text-gray-900">${metrics.totalPaid.toLocaleString()}</p>
+              <p className="text-xs text-gray-500 mt-2">{metrics.paidCount} reimbursed</p>
             </div>
           </div>
         </div>

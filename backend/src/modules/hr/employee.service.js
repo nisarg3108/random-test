@@ -131,20 +131,31 @@ export const getEmployeeByUserId = async (userId, tenantId) => {
 };
 
 export const assignManager = async (employeeId, managerId, tenantId) => {
-  // If managerId is provided, validate manager exists
+  // If managerId is provided, validate manager exists and has appropriate role
   if (managerId) {
     const manager = await prisma.employee.findFirst({
       where: { id: managerId, tenantId },
+      include: { user: true }
     });
     
     if (!manager) {
       throw new Error('Manager not found');
     }
+
+    // Check if the user has MANAGER or ADMIN role
+    if (manager.user && !['MANAGER', 'ADMIN'].includes(manager.user.role)) {
+      throw new Error('Selected employee does not have manager privileges. Only users with MANAGER or ADMIN role can be assigned as managers.');
+    }
   }
 
   return prisma.employee.update({
-    where: { id: employeeId, tenantId },
+    where: { id: employeeId },
     data: { managerId },
+    include: {
+      manager: {
+        include: { user: true }
+      }
+    }
   });
 };
 

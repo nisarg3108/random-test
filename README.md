@@ -83,6 +83,7 @@ npm run dev
 - **Department Management**
 - **Inventory Management**
 - **Workflow Engine**
+- **Expense Claims with Approval Workflow**
 - **Audit Logging**
 - **Dashboard Analytics**
 
@@ -136,6 +137,14 @@ NODE_ENV="development"
 3. **CORS Issues**
    - Backend is configured for localhost:5173
    - Update CORS settings in `backend/src/app.js` if needed
+
+4. **Expense Claims Not Generating Approval Requests**
+   - The approval workflow needs to be initialized (one-time setup)
+   - Login as MANAGER or ADMIN
+   - Navigate to Finance > Finance Approvals
+   - Click "Initialize Workflow" button if shown
+   - Or run: `POST /api/approvals/seed-workflows` with your auth token
+   - See `EXPENSE_CLAIMS_SETUP.md` for detailed instructions
 
 ## 📞 Support
 

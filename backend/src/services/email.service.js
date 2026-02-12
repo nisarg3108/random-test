@@ -33,6 +33,45 @@ class EmailService {
     }
   }
 
+  /**
+   * Send generic email
+   */
+  async sendEmail({ to, cc, bcc, subject, html, text, tenantId }) {
+    this.ensureConfigured();
+    
+    const mailOptions = {
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to,
+      cc,
+      bcc,
+      subject,
+      html: html || text,
+      text
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`Email sent to ${to}: ${info.messageId}`);
+      return { success: true, messageId: info.messageId };
+    } catch (error) {
+      console.error('Email send error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send template email
+   */
+  async sendTemplateEmail(to, templateId, variables, tenantId) {
+    this.ensureConfigured();
+    
+    // For now, just send a basic email - template system can be enhanced later
+    const subject = variables.subject || 'Notification';
+    const html = variables.body || variables.message || 'You have a new notification';
+    
+    return this.sendEmail({ to, subject, html, tenantId });
+  }
+
   async sendWelcomeEmail(employeeData, defaultPassword) {
     this.ensureConfigured();
     

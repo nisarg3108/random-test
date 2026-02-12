@@ -36,24 +36,29 @@ const startServer = async () => {
 
     // 3️⃣ Create HTTP server and initialize WebSocket
     const server = createServer(app);
+    
+    // Start server first
+    await new Promise((resolve, reject) => {
+      server.listen(env.port, '0.0.0.0', () => {
+        console.log(`🚀 Server running on port ${env.port}`);
+        resolve();
+      });
+      
+      server.on('error', (error) => {
+        console.error('❌ Server error:', error);
+        reject(error);
+      });
+    });
+    
+    // Initialize WebSocket after server is listening
     realTimeServer.initialize(server);
+    console.log(`🔌 WebSocket server available at ws://localhost:${env.port}/ws`);
 
     // 4️⃣ Initialize scheduled jobs (cron tasks)
     initializeScheduledJobs();
 
     // 5️⃣ Initialize email queue processor
     emailQueueService.initialize();
-
-    // 6️⃣ Start server
-    server.listen(env.port, '0.0.0.0', () => {
-      console.log(`🚀 Server running on port ${env.port}`);
-      console.log(`🔌 WebSocket server available at ws://localhost:${env.port}/ws`);
-    });
-
-    server.on('error', (error) => {
-      console.error('❌ Server error:', error);
-      process.exit(1);
-    });
   } catch (error) {
     console.error('❌ Fatal error starting server:', error);
     process.exit(1);

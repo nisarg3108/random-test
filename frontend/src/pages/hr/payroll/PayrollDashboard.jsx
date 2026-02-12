@@ -140,120 +140,134 @@ export default function PayrollDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <div className="card-modern">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-primary-600">Total Payroll</p>
-              <p className="text-2xl font-bold text-primary-900 mt-1">
-                {formatCurrency(stats.totalPayroll)}
-              </p>
+        <div className="modern-card-elevated p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg">
+              <DollarSign className="w-6 h-6 text-white" />
             </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <DollarSign className="w-6 h-6 text-blue-600" />
+            <div className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+              <TrendingUp className="w-3 h-3" />
+              <span>+12%</span>
             </div>
           </div>
-          <p className="text-sm text-primary-500 mt-4">
-            <TrendingUp className="w-4 h-4 inline text-green-600" />
-            <span className="ml-1">Current period</span>
-          </p>
+          <div>
+            <p className="text-sm font-medium text-gray-600 mb-1">Total Payroll</p>
+            <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalPayroll)}</p>
+            <p className="text-xs text-gray-500 mt-2">Current period</p>
+          </div>
         </div>
 
-        <div className="card-modern">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-primary-600">Avg. Salary</p>
-              <p className="text-2xl font-bold text-primary-900 mt-1">
-                {formatCurrency(stats.avgSalary)}
-              </p>
+        <div className="modern-card-elevated p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg">
+              <Users className="w-6 h-6 text-white" />
             </div>
-            <div className="p-3 bg-green-100 rounded-lg">
-              <Users className="w-6 h-6 text-green-600" />
-            </div>
+            <span className="text-xs font-medium text-gray-500">{stats.totalPayslips} employees</span>
           </div>
-          <p className="text-sm text-primary-500 mt-4">
-            <span>{stats.totalPayslips} employees</span>
-          </p>
+          <div>
+            <p className="text-sm font-medium text-gray-600 mb-1">Avg. Salary</p>
+            <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.avgSalary)}</p>
+            <p className="text-xs text-gray-500 mt-2">Per employee</p>
+          </div>
         </div>
 
-        <div className="card-modern">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-primary-600">Pending Approvals</p>
-              <p className="text-2xl font-bold text-primary-900 mt-1">
-                {stats.pendingApprovals}
-              </p>
+        <div className="modern-card-elevated p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg">
+              <AlertCircle className="w-6 h-6 text-white" />
             </div>
-            <div className="p-3 bg-orange-100 rounded-lg">
-              <AlertCircle className="w-6 h-6 text-orange-600" />
-            </div>
+            {stats.pendingApprovals > 0 && (
+              <span className="flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-orange-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+              </span>
+            )}
           </div>
-          <p className="text-sm text-primary-500 mt-4">
-            <span>Payslips awaiting approval</span>
-          </p>
+          <div>
+            <p className="text-sm font-medium text-gray-600 mb-1">Pending Approvals</p>
+            <p className="text-2xl font-bold text-gray-900">{stats.pendingApprovals}</p>
+            <p className="text-xs text-gray-500 mt-2">Awaiting approval</p>
+          </div>
         </div>
 
         <div 
-          className="card-modern cursor-pointer hover:shadow-lg transition-shadow"
+          className="modern-card-elevated p-6 cursor-pointer hover:shadow-xl transition-all duration-200 hover:scale-105"
           onClick={() => navigate('/hr/payroll/disbursements')}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-primary-600">Disbursements</p>
-              <p className="text-2xl font-bold text-primary-900 mt-1">
-                {stats.completedDisbursements}
-              </p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg">
+              <CheckCircle className="w-6 h-6 text-white" />
             </div>
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-purple-600" />
+            <div className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+              <CheckCircle className="w-3 h-3" />
+              <span>Done</span>
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
-            <span>Successfully completed</span>
-          </p>
+          <div>
+            <p className="text-sm font-medium text-gray-600 mb-1">Disbursements</p>
+            <p className="text-2xl font-bold text-gray-900">{stats.completedDisbursements}</p>
+            <p className="text-xs text-gray-500 mt-2">Successfully completed</p>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Recent Payroll Cycles */}
-        <div className="card-modern">
-          <div className="p-6 border-b border-primary-100">
+        <div className="modern-card-elevated">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-primary-900">Recent Payroll Cycles</h2>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-900">Recent Payroll Cycles</h2>
+              </div>
               <button
                 onClick={() => navigate('/hr/payroll/cycles')}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center space-x-1"
               >
-                View all
+                <span>View all</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </button>
             </div>
           </div>
           <div className="p-6">
             {recentCycles.length === 0 ? (
-              <div className="text-center py-8 text-primary-500">
-                <Calendar className="w-12 h-12 mx-auto mb-3 text-primary-400" />
-                <p>No payroll cycles found</p>
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="w-8 h-8 text-gray-400" />
+                </div>
+                <p className="text-gray-600 mb-3">No payroll cycles found</p>
                 <button
                   onClick={() => navigate('/hr/payroll/cycles/new')}
-                  className="mt-3 text-blue-600 hover:text-blue-700 text-sm"
+                  className="btn-modern btn-primary text-sm"
                 >
                   Create your first cycle
                 </button>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {recentCycles.map((cycle) => (
                   <div
                     key={cycle.id}
-                    className="p-4 border border-primary-200 rounded-lg hover:bg-primary-50 cursor-pointer transition-colors"
+                    className="p-4 border border-gray-200 rounded-xl hover:shadow-md hover:border-blue-300 cursor-pointer transition-all duration-200"
                     onClick={() => navigate(`/hr/payroll/cycles/${cycle.id}`)}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium text-primary-900">{cycle.name}</h3>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="font-semibold text-gray-900">{cycle.name}</h3>
                       {getStatusBadge(cycle.status)}
                     </div>
-                    <div className="text-sm text-primary-600 space-y-1">
-                      <p>Payment Date: {formatDate(cycle.paymentDate)}</p>
-                      <p>Total: {formatCurrency(cycle.totalNet)}</p>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <p className="text-gray-500 text-xs">Payment Date</p>
+                        <p className="text-gray-900 font-medium">{formatDate(cycle.paymentDate)}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 text-xs">Total Amount</p>
+                        <p className="text-gray-900 font-medium">{formatCurrency(cycle.totalNet)}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -263,43 +277,57 @@ export default function PayrollDashboard() {
         </div>
 
         {/* Recent Payslips */}
-        <div className="card-modern">
-          <div className="p-6 border-b border-primary-100">
+        <div className="modern-card-elevated">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-primary-900">Recent Payslips</h2>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-green-600" />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-900">Recent Payslips</h2>
+              </div>
               <button
                 onClick={() => navigate('/hr/payroll/payslips')}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-green-600 hover:text-green-700 font-medium flex items-center space-x-1"
               >
-                View all
+                <span>View all</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </button>
             </div>
           </div>
           <div className="p-6">
             {recentPayslips.length === 0 ? (
-              <div className="text-center py-8 text-primary-500">
-                <FileText className="w-12 h-12 mx-auto mb-3 text-primary-400" />
-                <p>No payslips generated yet</p>
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="w-8 h-8 text-gray-400" />
+                </div>
+                <p className="text-gray-600">No payslips generated yet</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {recentPayslips.map((payslip) => (
                   <div
                     key={payslip.id}
-                    className="p-4 border border-primary-200 rounded-lg hover:bg-primary-50 cursor-pointer transition-colors"
+                    className="p-4 border border-gray-200 rounded-xl hover:shadow-md hover:border-green-300 cursor-pointer transition-all duration-200"
                     onClick={() => navigate(`/hr/payroll/payslips/${payslip.id}`)}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <h3 className="font-medium text-primary-900">{payslip.employee?.name}</h3>
-                        <p className="text-sm text-primary-500">{payslip.employee?.employeeCode}</p>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                          {payslip.employee?.name?.charAt(0) || 'E'}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{payslip.employee?.name}</h3>
+                          <p className="text-xs text-gray-500">{payslip.employee?.employeeCode}</p>
+                        </div>
                       </div>
                       {getStatusBadge(payslip.status)}
                     </div>
-                    <div className="text-sm text-primary-600">
-                      <p className="font-medium text-primary-900">
-                        Net: {formatCurrency(payslip.netSalary)}
-                      </p>
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                      <span className="text-xs text-gray-500">Net Salary</span>
+                      <span className="text-sm font-bold text-gray-900">{formatCurrency(payslip.netSalary)}</span>
                     </div>
                   </div>
                 ))}

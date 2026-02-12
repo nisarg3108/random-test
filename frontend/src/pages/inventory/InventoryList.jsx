@@ -44,13 +44,13 @@ const InventoryList = () => {
   const loadApprovals = async () => {
     try {
       const [approvalsRes, requestsRes] = await Promise.all([
-        apiClient.get('/approvals/pending'),
+        apiClient.get('/approvals'),
         apiClient.get('/approvals/my-requests')
       ]);
       
       // Filter for inventory-related approvals
       const inventoryApprovals = (approvalsRes.data || []).filter(
-        a => a.workflowRequest?.module === 'INVENTORY'
+        a => a.workflowRequest?.module === 'INVENTORY' && a.status === 'PENDING'
       );
       const inventoryRequests = (requestsRes.data || []).filter(
         r => r.module === 'INVENTORY'

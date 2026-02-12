@@ -131,16 +131,16 @@ const ExpenseClaimList = () => {
                       <p className="text-primary-600 mt-1">{claim.description}</p>
                     )}
                     <div className="flex items-center space-x-4 mt-3 text-sm text-primary-500">
-                      <div className="flex items-center">
+                      <div key="date" className="flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(claim.expenseDate).toLocaleDateString()}
                       </div>
-                      <div className="flex items-center">
+                      <div key="amount" className="flex items-center">
                         <DollarSign className="h-4 w-4 mr-1" />
                         ${claim.amount}
                       </div>
                       {claim.category && (
-                        <span className="bg-primary-100 px-2 py-1 rounded text-xs text-primary-700">
+                        <span key="category" className="bg-primary-100 px-2 py-1 rounded text-xs text-primary-700">
                           {claim.category.name}
                         </span>
                       )}

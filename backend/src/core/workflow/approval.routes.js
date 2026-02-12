@@ -86,28 +86,33 @@ router.post('/seed-workflows',
   async (req, res, next) => {
     try {
       const { tenantId } = req.user;
+      const { seedFinanceExpenseWorkflow } = await import('./workflow.seed.js');
       
-      // Check if workflows already exist
-      const existingWorkflows = await prisma.workflow.findMany({
-        where: {
-          tenantId,
-          module: 'INVENTORY'
-        }
+      const results = [];
+      
+      // Check and seed inventory workflows
+      const existingInventoryWorkflows = await prisma.workflow.findMany({
+        where: { tenantId, module: 'INVENTORY' }
       });
       
-      if (existingWorkflows.length > 0) {
-        return res.json({ 
-          message: 'Workflows already exist',
-          workflows: existingWorkflows.map(w => ({ id: w.id, action: w.action }))
-        });
+      if (existingInventoryWorkflows.length === 0) {
+        const inventoryWorkflows = await seedInventoryWorkflows(tenantId);
+        results.push({ module: 'INVENTORY', count: inventoryWorkflows.length });
       }
       
-      // Create workflows
-      const workflows = await seedInventoryWorkflows(tenantId);
+      // Check and seed finance expense workflow
+      const existingFinanceWorkflow = await prisma.workflow.findFirst({
+        where: { tenantId, module: 'FINANCE', action: 'EXPENSE_CLAIM' }
+      });
+      
+      if (!existingFinanceWorkflow) {
+        await seedFinanceExpenseWorkflow(tenantId);
+        results.push({ module: 'FINANCE', action: 'EXPENSE_CLAIM', created: true });
+      }
       
       res.json({ 
-        message: 'Workflows seeded successfully',
-        workflows: workflows.map(w => ({ id: w.id, action: w.action }))
+        message: results.length > 0 ? 'Workflows seeded successfully' : 'All workflows already exist',
+        results
       });
     } catch (error) {
       console.error('Error seeding workflows:', error);

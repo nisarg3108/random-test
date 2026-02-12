@@ -6,6 +6,7 @@
 import cron from 'node-cron';
 import { markOverdueAllocations } from '../modules/assets/allocation.service.js';
 import emailService from '../services/email.service.js';
+import prisma from '../config/db.js';
 
 /**
  * Initialize all scheduled jobs
@@ -14,8 +15,6 @@ export const initializeScheduledJobs = () => {
   console.log('⏰ Initializing scheduled jobs...');
 
   // Check for overdue allocations every day at 12:00 AM (midnight)
-  // Cron pattern: second minute hour day month weekday
-  // '0 0 * * *' = At 00:00 (midnight) every day
   cron.schedule('0 0 * * *', async () => {
     console.log('🔍 Running scheduled job: Check overdue allocations');
     
@@ -37,7 +36,6 @@ export const initializeScheduledJobs = () => {
           }
         } catch (emailError) {
           console.error('⚠️  Failed to send overdue notifications:', emailError.message);
-          // Don't throw - we still want to mark allocations as overdue even if emails fail
         }
       } else {
         console.log('✅ No overdue allocations found');
@@ -47,22 +45,82 @@ export const initializeScheduledJobs = () => {
     }
   });
 
-  // Optional: More frequent check during business hours (every 6 hours)
-  // Uncomment if you want more frequent checks
-  // cron.schedule('0 */6 * * *', async () => {
-  //   console.log('🔍 Running periodic overdue check (6 hours)');
-  //   try {
-  //     const result = await markOverdueAllocations();
-  //     if (result.count > 0) {
-  //       console.log(`✅ Marked ${result.count} allocation(s) as overdue`);
-  //     }
-  //   } catch (error) {
-  //     console.error('❌ Error checking overdue allocations:', error);
-  //   }
-  // });
+  // Mark absent employees daily at 11:59 PM
+  cron.schedule('59 23 * * *', async () => {
+    console.log('🔍 Running scheduled job: Mark absent employees');
+    
+    try {
+      await markAbsentEmployees();
+    } catch (error) {
+      console.error('❌ Error marking absent employees:', error);
+    }
+  });
 
   console.log('✅ Scheduled jobs initialized');
   console.log('   - Overdue allocations: Daily at midnight (00:00)');
+  console.log('   - Mark absent employees: Daily at 11:59 PM');
+};
+
+/**
+ * Mark employees as absent if they didn't clock in
+ */
+export const markAbsentEmployees = async () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  try {
+    // Get all active employees
+    const employees = await prisma.employee.findMany({
+      where: { status: 'ACTIVE' },
+      select: { id: true, tenantId: true }
+    });
+
+    let markedCount = 0;
+
+    for (const employee of employees) {
+      // Check if employee has attendance record for today
+      const attendance = await prisma.attendance.findUnique({
+        where: {
+          tenantId_employeeId_date: {
+            tenantId: employee.tenantId,
+            employeeId: employee.id,
+            date: today
+          }
+        }
+      });
+
+      // Check if on approved leave
+      const onLeave = await prisma.leaveIntegration.findFirst({
+        where: {
+          employeeId: employee.id,
+          tenantId: employee.tenantId,
+          leaveDate: today,
+          status: 'APPROVED'
+        }
+      });
+
+      // If no attendance record and not on leave, mark as absent
+      if (!attendance && !onLeave) {
+        await prisma.attendance.create({
+          data: {
+            employeeId: employee.id,
+            tenantId: employee.tenantId,
+            date: today,
+            status: 'ABSENT',
+            workHours: 0,
+            overtimeHours: 0
+          }
+        });
+        markedCount++;
+      }
+    }
+
+    console.log(`✅ Marked ${markedCount} employee(s) as absent`);
+    return { count: markedCount };
+  } catch (error) {
+    console.error('❌ Error marking absent employees:', error);
+    throw error;
+  }
 };
 
 /**
