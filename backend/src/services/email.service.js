@@ -24,13 +24,17 @@ class EmailService {
   }
 
   checkConfiguration() {
+    return this.isConfigured;
+  }
+
+  ensureConfigured() {
     if (!this.isConfigured) {
       throw new Error('Email service not configured. Please set SMTP_USER and SMTP_PASS in your .env file. See .env.example for setup instructions.');
     }
   }
 
   async sendWelcomeEmail(employeeData, defaultPassword) {
-    this.checkConfiguration();
+    this.ensureConfigured();
     
     const { email, name, employeeCode } = employeeData;
     
@@ -70,7 +74,7 @@ class EmailService {
   }
 
   async sendPasswordResetOTP(email, otp, name) {
-    this.checkConfiguration();
+    this.ensureConfigured();
     
     const mailOptions = {
       from: process.env.SMTP_FROM || 'noreply@company.com',
@@ -113,7 +117,7 @@ class EmailService {
    * Send analytics report email
    */
   async sendAnalyticsReport(to, analyticsData, options = {}) {
-    this.checkConfiguration();
+    this.ensureConfigured();
     
     try {
       const {
@@ -239,7 +243,7 @@ class EmailService {
    * Schedule recurring analytics reports
    */
   async scheduleReport(tenantId, schedule, recipients, options = {}) {
-    this.checkConfiguration();
+    this.ensureConfigured();
     
     const jobKey = `${tenantId}-${schedule}`;
 
@@ -323,7 +327,7 @@ class EmailService {
    * Send overdue allocation notification to employee
    */
   async sendOverdueAllocationNotification(allocationData) {
-    this.checkConfiguration();
+    this.ensureConfigured();
     
     const { 
       employee, 

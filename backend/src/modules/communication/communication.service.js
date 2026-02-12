@@ -1,5 +1,6 @@
 import prisma from '../../config/db.js';
 import { realTimeServer } from '../../core/realtime.js';
+import emailQueueService from '../../services/emailQueue.service.js';
 
 class CommunicationService {
   // ==================== CONVERSATIONS ====================
@@ -144,6 +145,32 @@ class CommunicationService {
         description: data.description,
         isArchived: data.isArchived
       }
+    });
+  }
+  
+  async deleteConversation(conversationId, userId, tenantId) {
+    // Verify user is participant
+    const participant = await prisma.conversationParticipant.findFirst({
+      where: { conversationId, userId }
+    });
+    
+    if (!participant) {
+      throw new Error('Unauthorized');
+    }
+    
+    // Delete all messages in conversation
+    await prisma.message.deleteMany({
+      where: { conversationId }
+    });
+    
+    // Delete all participants
+    await prisma.conversationParticipant.deleteMany({
+      where: { conversationId }
+    });
+    
+    // Delete conversation
+    return await prisma.conversation.delete({
+      where: { id: conversationId }
     });
   }
   
@@ -770,24 +797,22 @@ class CommunicationService {
   }
   
   async sendEmail(tenantId, data) {
-    // Log the email
-    const emailLog = await prisma.emailLog.create({
-      data: {
-        tenantId,
-        to: data.to,
-        cc: data.cc,
-        bcc: data.bcc,
-        subject: data.subject,
-        body: data.body,
-        templateId: data.templateId,
-        metadata: data.metadata
-      }
+    // Queue the email for sending
+    const queuedEmail = await emailQueueService.queueEmail({
+      tenantId,
+      to: data.to,
+      cc: data.cc,
+      bcc: data.bcc,
+      subject: data.subject,
+      body: data.body,
+      templateId: data.templateId,
+      variables: data.variables,
+      priority: data.priority || 5,
+      scheduledAt: data.scheduledAt || new Date(),
+      metadata: data.metadata
     });
     
-    // TODO: Integrate with nodemailer or email service
-    // For now, just log it
-    
-    return emailLog;
+    return queuedEmail;
   }
   
   async getEmailLogs(tenantId, { page = 1, limit = 50, status = null }) {

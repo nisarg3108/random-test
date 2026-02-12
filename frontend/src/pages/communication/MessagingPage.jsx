@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback, useMemo, useDeferredVa
 import {
   Box,
   Paper,
-  Grid,
   TextField,
   IconButton,
   Typography,
@@ -46,6 +45,7 @@ import {
   sendMessage,
   createConversation,
   markConversationAsRead,
+  deleteConversation,
   addReaction,
   updateMessage,
   deleteMessage,
@@ -55,6 +55,8 @@ import {
 import { useMessagingWebSocket, useOnlineUsersWebSocket } from '../../hooks/useWebSocket';
 import { getUserFromToken } from '../../store/auth.store';
 import Layout from '../../components/layout/Layout';
+import FileUpload from '../../components/communication/FileUpload';
+import FilePreview from '../../components/communication/FilePreview';
 
 const MessagingPage = () => {
   const [conversations, setConversations] = useState([]);
@@ -70,7 +72,12 @@ const MessagingPage = () => {
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [conversationName, setConversationName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [conversationSearchQuery, setConversationSearchQuery] = useState('');
+  const [showConversationSearch, setShowConversationSearch] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [emojiAnchorEl, setEmojiAnchorEl] = useState(null);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [pendingAttachments, setPendingAttachments] = useState([]);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
   const currentUserId = getUserFromToken()?.userId || getUserFromToken()?.id || null;
@@ -189,6 +196,38 @@ const MessagingPage = () => {
   };
   
   // Handle typing indicator
+  const handleDeleteConversation = async () => {
+    if (!selectedConversation) return;
+    
+    if (window.confirm('Are you sure you want to delete this conversation? All messages will be permanently deleted.')) {
+      try {
+        await deleteConversation(selectedConversation.id);
+      } catch (error) {
+        console.error('Error deleting conversation:', error);
+      }
+      
+      setConversations(prev => prev.filter(c => c.id !== selectedConversation.id));
+      setMessages([]);
+      setSelectedConversation(null);
+      setAnchorEl(null);
+    }
+  };
+
+  const handleViewProfile = () => {
+    if (selectedConversation?.type === 'DIRECT') {
+      const participantId = getDirectParticipantId(selectedConversation);
+      alert(`View profile for user: ${participantId}`);
+    } else {
+      alert('Group conversation details');
+    }
+    setAnchorEl(null);
+  };
+
+  const handleSearchInConversation = () => {
+    setShowConversationSearch(true);
+    setAnchorEl(null);
+  };
+
   const handleTyping = useCallback((e) => {
     setMessageInput(e.target.value);
     
@@ -208,9 +247,19 @@ const MessagingPage = () => {
     }
   }, [selectedConversation]);
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!messageInput.trim() || !selectedConversation) return;
+  const handleEmojiSelect = (emoji) => {
+    setMessageInput(prev => prev + emoji);
+    setEmojiAnchorEl(null);
+  };
+
+  const handleSendMessage = async (e, attachmentsToSend = null) => {
+    if (e) e.preventDefault();
+    
+    const hasContent = messageInput.trim();
+    const hasAttachments = attachmentsToSend || pendingAttachments.length > 0;
+    
+    if (!hasContent && !hasAttachments) return;
+    if (!selectedConversation) return;
 
     try {
       setSending(true);
@@ -221,9 +270,12 @@ const MessagingPage = () => {
       }
       setTypingStatus(selectedConversation.id, false).catch(console.error);
       
+      const attachments = attachmentsToSend || pendingAttachments;
+      
       const response = await sendMessage(selectedConversation.id, {
-        content: messageInput,
-        type: 'TEXT'
+        content: messageInput || '',
+        type: attachments.length > 0 ? 'FILE' : 'TEXT',
+        attachments: attachments
       });
       
       // Only add to messages if WebSocket didn't already add it
@@ -232,6 +284,7 @@ const MessagingPage = () => {
         return [...prev, response.data];
       });
       setMessageInput('');
+      setPendingAttachments([]);
       
       // Update conversation's last message
       const updatedConversations = conversations.map(conv =>
@@ -366,55 +419,70 @@ const MessagingPage = () => {
     )
   ), [users, deferredUsersSearch]);
 
+  const displayMessages = useMemo(() => {
+    if (!conversationSearchQuery.trim()) return messages;
+    return messages.filter(msg => 
+      msg.content?.toLowerCase().includes(conversationSearchQuery.toLowerCase())
+    );
+  }, [messages, conversationSearchQuery]);
+
   return (
     <Layout>
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
+          Messages
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Connect and collaborate with your team
+        </Typography>
+      </Box>
+      
       <Paper
-        elevation={0}
+        elevation={2}
         sx={{
-          border: 1,
-          borderColor: 'divider',
-          borderRadius: 2,
+          borderRadius: 3,
           overflow: 'hidden',
-          height: 'calc(100vh - 220px)',
+          height: 'calc(100vh - 280px)',
           display: 'flex',
           flexDirection: 'column',
-          bgcolor: 'background.paper'
+          bgcolor: 'background.paper',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
         }}
       >
-        <Grid container sx={{ flexGrow: 1, overflow: 'hidden' }}>
+        <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
         {/* Conversations List */}
-        <Grid
-          item
-          xs={12}
-          md={4}
+        <Box
           sx={{
+            width: { xs: '100%', md: '350px' },
             borderRight: { md: 1 },
             borderColor: 'divider',
-            bgcolor: 'background.paper',
+            bgcolor: 'grey.50',
             overflow: 'auto',
             height: '100%'
           }}
         >
           <Box
             sx={{
-              p: 2,
+              p: 2.5,
               borderBottom: 1,
               borderColor: 'divider',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              bgcolor: 'white'
             }}
           >
-            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-              Conversations
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Chats
             </Typography>
             <Button
               variant="contained"
               size="small"
               startIcon={<AddIcon />}
               onClick={() => setOpenNewChat(true)}
+              sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600 }}
             >
-              New Chat
+              New
             </Button>
           </Box>
           <Box sx={{ p: 2 }}>
@@ -427,6 +495,12 @@ const MessagingPage = () => {
               InputProps={{
                 startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
               }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 3,
+                  bgcolor: 'white'
+                }
+              }}
             />
           </Box>
 
@@ -435,28 +509,34 @@ const MessagingPage = () => {
               <CircularProgress />
             </Box>
           ) : (
-            <List sx={{ px: 1 }}>
+            <List sx={{ px: 1.5 }}>
               {filteredConversations.map((conversation) => (
-                <ListItem
+                <ListItemButton
                   key={conversation.id}
-                  button
                   selected={selectedConversation?.id === conversation.id}
                   onClick={() => handleSelectConversation(conversation)}
                   sx={{
-                    borderRadius: 2,
-                    mb: 0.5,
-                    border: '1px solid',
-                    borderColor: selectedConversation?.id === conversation.id
-                      ? 'primary.main'
-                      : 'divider',
+                    borderRadius: 3,
+                    mb: 1,
                     bgcolor: selectedConversation?.id === conversation.id
-                      ? 'primary.50'
-                      : 'transparent',
+                      ? 'primary.main'
+                      : 'white',
+                    color: selectedConversation?.id === conversation.id
+                      ? 'white'
+                      : 'text.primary',
+                    boxShadow: selectedConversation?.id === conversation.id
+                      ? '0 2px 8px rgba(25, 118, 210, 0.3)'
+                      : '0 1px 3px rgba(0,0,0,0.05)',
                     '&:hover': {
                       bgcolor: selectedConversation?.id === conversation.id
-                        ? 'primary.50'
-                        : 'action.hover'
-                    }
+                        ? 'primary.dark'
+                        : 'grey.100',
+                      transform: 'translateY(-1px)',
+                      boxShadow: selectedConversation?.id === conversation.id
+                        ? '0 4px 12px rgba(25, 118, 210, 0.4)'
+                        : '0 2px 6px rgba(0,0,0,0.1)'
+                    },
+                    transition: 'all 0.2s'
                   }}
                 >
                   <ListItemAvatar>
@@ -466,7 +546,11 @@ const MessagingPage = () => {
                       overlap="circular"
                       invisible={conversation.type !== 'DIRECT'}
                     >
-                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                      <Avatar sx={{ 
+                        bgcolor: selectedConversation?.id === conversation.id ? 'white' : 'primary.main',
+                        color: selectedConversation?.id === conversation.id ? 'primary.main' : 'white',
+                        fontWeight: 700
+                      }}>
                         {conversation.type === 'GROUP'
                           ? <GroupIcon />
                           : getConversationInitials(conversation)}
@@ -499,59 +583,115 @@ const MessagingPage = () => {
                       )
                     }
                   />
-                </ListItem>
+                </ListItemButton>
               ))}
             </List>
           )}
-        </Grid>
+        </Box>
 
         {/* Messages Area */}
-        <Grid item xs={12} md={8} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', flex: 1 }}>
           {selectedConversation ? (
             <>
               {/* Chat Header */}
               <Paper
                 elevation={0}
                 sx={{
-                  p: 2,
+                  p: 2.5,
                   borderBottom: 1,
                   borderColor: 'divider',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  bgcolor: 'white'
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
+                  <Avatar sx={{ mr: 2, bgcolor: 'primary.main', width: 48, height: 48 }}>
                     {selectedConversation.type === 'GROUP'
                       ? <GroupIcon />
                       : getConversationInitials(selectedConversation)}
                   </Avatar>
-                  <Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 700 }}>
                       {getConversationName(selectedConversation)}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       {selectedConversation.type === 'DIRECT'
-                        ? (onlineUsers.includes(getDirectParticipantId(selectedConversation))
-                          ? 'Online'
-                          : 'Offline')
+                        ? (
+                          <>
+                            <Box component="span" sx={{ 
+                              width: 8, 
+                              height: 8, 
+                              borderRadius: '50%', 
+                              bgcolor: onlineUsers.includes(getDirectParticipantId(selectedConversation)) ? 'success.main' : 'grey.400',
+                              display: 'inline-block'
+                            }} />
+                            {onlineUsers.includes(getDirectParticipantId(selectedConversation)) ? 'Online' : 'Offline'}
+                          </>
+                        )
                         : `${selectedConversation.participants?.length || 0} participants`}
                     </Typography>
                   </Box>
+                  {showConversationSearch && (
+                    <TextField
+                      size="small"
+                      placeholder="Search messages..."
+                      value={conversationSearchQuery}
+                      onChange={(e) => setConversationSearchQuery(e.target.value)}
+                      sx={{ mr: 1, width: 200 }}
+                      InputProps={{
+                        endAdornment: (
+                          <IconButton size="small" onClick={() => {
+                            setShowConversationSearch(false);
+                            setConversationSearchQuery('');
+                          }}>
+                            <CloseIcon fontSize="small" />
+                          </IconButton>
+                        )
+                      }}
+                    />
+                  )}
                 </Box>
                 <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
                   <MoreVertIcon />
                 </IconButton>
               </Paper>
+              
+              {/* Conversation Menu */}
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <MenuItem onClick={handleViewProfile}>
+                  <PersonIcon sx={{ mr: 1 }} /> View Profile
+                </MenuItem>
+                <MenuItem onClick={handleSearchInConversation}>
+                  <SearchIcon sx={{ mr: 1 }} /> Search in Conversation
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleDeleteConversation} sx={{ color: 'error.main' }}>
+                  <DeleteIcon sx={{ mr: 1 }} /> Delete Conversation
+                </MenuItem>
+              </Menu>
 
               {/* Messages */}
               <Box
                 sx={{
                   flexGrow: 1,
                   overflow: 'auto',
-                  p: 2,
-                  bgcolor: 'background.default',
+                  p: 3,
+                  bgcolor: '#f5f7fa',
+                  backgroundImage: 'linear-gradient(to bottom, #f5f7fa 0%, #e8ecf1 100%)',
                   display: 'flex',
                   flexDirection: 'column'
                 }}
@@ -572,11 +712,11 @@ const MessagingPage = () => {
                     <Typography variant="body2">No messages yet. Say hello!</Typography>
                   </Box>
                 )}
-                {messages.map((message, index) => {
+                {displayMessages.map((message, index) => {
                   const isOwnMessage = message.senderId === effectiveUserId;
                   const showDate =
                     index === 0 ||
-                    new Date(messages[index - 1].createdAt).toDateString() !==
+                    new Date(displayMessages[index - 1].createdAt).toDateString() !==
                       new Date(message.createdAt).toDateString();
 
                   return (
@@ -594,35 +734,45 @@ const MessagingPage = () => {
                         sx={{
                           display: 'flex',
                           justifyContent: isOwnMessage ? 'flex-end' : 'flex-start',
-                          mb: 1
+                          mb: 1.5
                         }}
                       >
                         <Paper
                           sx={{
                             maxWidth: '70%',
-                            p: 1.25,
-                            bgcolor: isOwnMessage ? 'grey.100' : 'background.paper',
-                            color: 'text.primary',
-                            borderRadius: 2,
-                            boxShadow: 1
+                            p: 1.5,
+                            bgcolor: isOwnMessage ? 'primary.main' : 'white',
+                            color: isOwnMessage ? 'white' : 'text.primary',
+                            borderRadius: isOwnMessage ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                           }}
                         >
                           {selectedConversation?.type === 'GROUP' && !isOwnMessage && (
                             <Typography
                               variant="caption"
-                              sx={{ display: 'block', opacity: 0.8, mb: 0.5 }}
+                              sx={{ display: 'block', opacity: 0.9, mb: 0.5, fontWeight: 600 }}
                             >
                               {getSenderLabel(message.senderId)}
                             </Typography>
                           )}
-                          <Typography variant="body1">{message.content}</Typography>
-                          <Typography
+                          {message.content && (
+                            <Typography variant="body1" sx={{ wordBreak: 'break-word' }}>{message.content}</Typography>
+                          )}
+                          {/* Display attachments */}
+                          {message.attachments && message.attachments.length > 0 && (
+                            <FilePreview 
+                              attachments={message.attachments} 
+                              compact={false}
+                            />
+                          )}
+                                                    <Typography
                             variant="caption"
                             sx={{
                               display: 'block',
                               mt: 0.5,
-                              opacity: 0.7,
-                              textAlign: 'right'
+                              opacity: isOwnMessage ? 0.9 : 0.7,
+                              textAlign: 'right',
+                              fontSize: '0.7rem'
                             }}
                           >
                             {new Date(message.createdAt).toLocaleTimeString([], {
@@ -651,7 +801,7 @@ const MessagingPage = () => {
 
               {/* Message Input */}
               <Paper
-                elevation={3}
+                elevation={0}
                 component="form"
                 onSubmit={handleSendMessage}
                 sx={{
@@ -661,13 +811,37 @@ const MessagingPage = () => {
                   alignItems: 'center',
                   borderTop: 1,
                   borderColor: 'divider',
-                  bgcolor: 'background.paper'
+                  bgcolor: 'white'
                 }}
               >
-                <IconButton size="small">
-                  <AttachFileIcon />
-                </IconButton>
-                <IconButton size="small">
+                <Tooltip title="Attach files">
+                  <IconButton 
+                    size="medium"
+                    onClick={() => setUploadDialogOpen(true)}
+                    sx={{ 
+                      bgcolor: 'grey.100',
+                      '&:hover': { bgcolor: 'grey.200' }
+                    }}
+                  >
+                    <AttachFileIcon />
+                    {pendingAttachments.length > 0 && (
+                      <Chip 
+                        label={pendingAttachments.length} 
+                        size="small" 
+                        color="primary"
+                        sx={{ position: 'absolute', top: -8, right: -8, height: 18, minWidth: 18 }}
+                      />
+                    )}
+                  </IconButton>
+                </Tooltip>
+                <IconButton 
+                  size="medium"
+                  onClick={(e) => setEmojiAnchorEl(e.currentTarget)}
+                  sx={{ 
+                    bgcolor: 'grey.100',
+                    '&:hover': { bgcolor: 'grey.200' }
+                  }}
+                >
                   <EmojiIcon />
                 </IconButton>
                 <TextField
@@ -679,17 +853,23 @@ const MessagingPage = () => {
                   disabled={sending}
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      borderRadius: 2,
-                      bgcolor: 'primary.50'
+                      borderRadius: 3,
+                      bgcolor: 'grey.50'
                     }
                   }}
                 />
                 <IconButton
                   type="submit"
                   color="primary"
-                  disabled={!messageInput.trim() || sending}
+                  disabled={(!messageInput.trim() && pendingAttachments.length === 0) || sending}
+                  sx={{
+                    bgcolor: 'primary.main',
+                    color: 'white',
+                    '&:hover': { bgcolor: 'primary.dark' },
+                    '&:disabled': { bgcolor: 'grey.300' }
+                  }}
                 >
-                  {sending ? <CircularProgress size={24} /> : <SendIcon />}
+                  {sending ? <CircularProgress size={24} sx={{ color: 'white' }} /> : <SendIcon />}
                 </IconButton>
               </Paper>
             </>
@@ -708,8 +888,8 @@ const MessagingPage = () => {
               <Typography variant="h6">Select a conversation to start messaging</Typography>
             </Box>
           )}
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* New Conversation Dialog */}
       <Dialog open={openNewChat} onClose={() => setOpenNewChat(false)} maxWidth="sm" fullWidth>
@@ -775,6 +955,75 @@ const MessagingPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      
+      {/* File Upload Dialog */}
+      <Dialog
+        open={uploadDialogOpen}
+        onClose={() => setUploadDialogOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          Upload Files
+          <IconButton
+            onClick={() => setUploadDialogOpen(false)}
+            sx={{ position: 'absolute', right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <FileUpload
+            onFilesUploaded={(attachments) => {
+              setPendingAttachments(prev => [...prev, ...attachments]);
+              setUploadDialogOpen(false);
+              // Send immediately
+              handleSendMessage(null, attachments);
+            }}
+            maxFiles={5}
+          />
+          
+          {pendingAttachments.length > 0 && (
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Pending Attachments
+              </Typography>
+              <FilePreview
+                attachments={pendingAttachments}
+                showDelete={true}
+                onDelete={(attachment) => {
+                  setPendingAttachments(prev =>
+                    prev.filter(a => a.filename !== attachment.filename)
+                  );
+                }}
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setUploadDialogOpen(false)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+      
+      {/* Emoji Picker Menu */}
+      <Menu
+        anchorEl={emojiAnchorEl}
+        open={Boolean(emojiAnchorEl)}
+        onClose={() => setEmojiAnchorEl(null)}
+        PaperProps={{
+          sx: { p: 1, maxWidth: 320 }
+        }}
+      >
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 0.5 }}>
+          {['😀', '😂', '😍', '🥰', '😎', '🤔', '😊', '😢', '😭', '😡', '👍', '👎', '❤️', '🎉', '🔥', '✅', '❌', '⭐', '💯', '👏'].map((emoji) => (
+            <IconButton key={emoji} onClick={() => handleEmojiSelect(emoji)} size="large">
+              <Typography variant="h5">{emoji}</Typography>
+            </IconButton>
+          ))}
+        </Box>
+      </Menu>
       </Paper>
     </Layout>
   );

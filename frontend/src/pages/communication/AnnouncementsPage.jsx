@@ -40,6 +40,8 @@ import {
   markAnnouncementAsRead
 } from '../../api/communication';
 import { useAnnouncementsWebSocket } from '../../hooks/useWebSocket';
+import FileUpload from '../../components/communication/FileUpload';
+import FilePreview from '../../components/communication/FilePreview';
 
 const AnnouncementsPage = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -54,7 +56,8 @@ const AnnouncementsPage = () => {
     priority: 'NORMAL',
     targetType: 'ALL',
     isPinned: false,
-    expiresAt: ''
+    expiresAt: '',
+    attachments: []
   });
 
   // WebSocket for real-time announcements
@@ -113,7 +116,8 @@ const AnnouncementsPage = () => {
         isPinned: announcement.isPinned,
         expiresAt: announcement.expiresAt
           ? new Date(announcement.expiresAt).toISOString().slice(0, 16)
-          : ''
+          : '',
+        attachments: announcement.attachments || []
       });
     } else {
       setSelectedAnnouncement(null);
@@ -123,7 +127,8 @@ const AnnouncementsPage = () => {
         priority: 'NORMAL',
         targetType: 'ALL',
         isPinned: false,
-        expiresAt: ''
+        expiresAt: '',
+        attachments: []
       });
     }
     setOpenDialog(true);
@@ -415,19 +420,45 @@ const AnnouncementsPage = () => {
             
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Button
-                variant="outlined"
-                startIcon={<AttachFileIcon />}
-              >
-                Add Attachment
-              </Button>
-              
-              <Button
                 variant={formData.isPinned ? 'contained' : 'outlined'}
                 startIcon={<PinIcon />}
                 onClick={() => setFormData({ ...formData, isPinned: !formData.isPinned })}
               >
                 {formData.isPinned ? 'Pinned' : 'Pin This'}
               </Button>
+            </Box>
+            
+            {/* File Upload Section */}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Attachments
+              </Typography>
+              <FileUpload
+                onFilesUploaded={(attachments) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    attachments: [...prev.attachments, ...attachments]
+                  }));
+                }}
+                maxFiles={5}
+              />
+              
+              {formData.attachments.length > 0 && (
+                <Box sx={{ mt: 2 }}>
+                  <FilePreview
+                    attachments={formData.attachments}
+                    showDelete={true}
+                    onDelete={(attachment) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        attachments: prev.attachments.filter(
+                          a => a.filename !== attachment.filename
+                        )
+                      }));
+                    }}
+                  />
+                </Box>
+              )}
             </Box>
           </Box>
         </DialogContent>
@@ -476,6 +507,16 @@ const AnnouncementsPage = () => {
               <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
                 {selectedAnnouncement.content}
               </Typography>
+              
+              {/* Display attachments */}
+              {selectedAnnouncement.attachments && selectedAnnouncement.attachments.length > 0 && (
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Attachments ({selectedAnnouncement.attachments.length})
+                  </Typography>
+                  <FilePreview attachments={selectedAnnouncement.attachments} />
+                </Box>
+              )}
               
               <Box sx={{ mt: 3, display: 'flex', gap: 1 }}>
                 <Chip

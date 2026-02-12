@@ -4,12 +4,17 @@ import { env } from '../../config/env.js';
 export const requireAuth = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
+    const queryToken = req.query.token;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    let token;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+    } else if (queryToken) {
+      token = queryToken;
+    } else {
       return res.status(401).json({ message: 'Authorization header missing' });
     }
 
-    const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, env.jwtSecret);
 
     // ✅ NORMALIZE USER CONTEXT (CRITICAL)

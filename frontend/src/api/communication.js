@@ -1,4 +1,5 @@
 import { apiClient } from './http';
+import { getToken } from '../store/auth.store';
 
 // ==================== CONVERSATIONS ====================
 
@@ -31,6 +32,10 @@ export const removeParticipant = (conversationId, participantId) => {
 
 export const markConversationAsRead = (conversationId) => {
   return apiClient.put(`/communication/conversations/${conversationId}/read`);
+};
+
+export const deleteConversation = (conversationId) => {
+  return apiClient.delete(`/communication/conversations/${conversationId}`);
 };
 
 // ==================== USERS (FOR MESSAGING) ====================
@@ -158,3 +163,41 @@ export const getEmailLogs = (params = {}) => {
 export const searchMessages = (query) => {
   return apiClient.get('/communication/search/messages', { params: { q: query } });
 };
+
+// ==================== FILE UPLOADS ====================
+
+export const uploadFiles = (files, type = 'messages') => {
+  const formData = new FormData();
+  
+  // Add files to form data
+  for (let i = 0; i < files.length; i++) {
+    formData.append('files', files[i]);
+  }
+  
+  // Add type to form data
+  formData.append('type', type);
+  
+  // Note: Don't set Content-Type header - browser will set it automatically with the boundary
+  return apiClient.post('/communication/files/upload', formData);
+};
+
+export const getFile = (filename) => {
+  return apiClient.get(`/communication/files/${filename}`, {
+    responseType: 'blob'
+  });
+};
+
+export const getFileUrl = (filename) => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const token = getToken();
+  return `${API_BASE_URL}/communication/files/${filename}?token=${token}`;
+};
+
+export const deleteFile = (filename) => {
+  return apiClient.delete(`/communication/files/${filename}`);
+};
+
+export const getFileStats = (filename) => {
+  return apiClient.get(`/communication/files/${filename}/stats`);
+};
+
