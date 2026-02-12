@@ -151,7 +151,7 @@ const RolesList = () => {
   const isSystemRole = (role) => ['ADMIN', 'MANAGER', 'USER'].includes(role.name);
 
   // Group permissions by module
-  const groupedPermissions = permissions.reduce((acc, permission) => {
+  const groupedPermissions = (Array.isArray(permissions) ? permissions : []).reduce((acc, permission) => {
     const module = permission.module || permission.key?.split('_')[0] || 'General';
     if (!acc[module]) acc[module] = [];
     acc[module].push(permission);
@@ -213,7 +213,7 @@ const RolesList = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {roles.map((role) => (
+                  {(Array.isArray(roles) ? roles : []).map((role) => (
                     <tr key={role.id} className="hover:bg-gray-50">
                       {columns.map(col => (
                         <td key={col.key} className="px-6 py-4 whitespace-nowrap text-sm">
