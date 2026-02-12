@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../api/api';
+import Layout from '../components/layout/Layout';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 import { 
   Users as UserGroupIcon, 
   ShieldCheck as ShieldCheckIcon, 
@@ -29,10 +31,18 @@ const RoleManagement = () => {
         api.get('/rbac/users'),
         api.get('/rbac/roles')
       ]);
-      setUsers(usersRes.data.data);
-      setRoles(rolesRes.data.data);
+      
+      // Extract data - handle nested response structure
+      const usersData = usersRes.data?.data || usersRes.data || [];
+      const rolesData = rolesRes.data?.data || rolesRes.data || [];
+      
+      setUsers(Array.isArray(usersData) ? usersData : []);
+      setRoles(Array.isArray(rolesData) ? rolesData : []);
     } catch (err) {
+      console.error('Error fetching RBAC data:', err);
       setError(err.response?.data?.message || 'Failed to load data');
+      setUsers([]);
+      setRoles([]);
     } finally {
       setLoading(false);
     }
@@ -90,14 +100,17 @@ const RoleManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <LoadingSpinner />
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <Layout>
+      <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
@@ -131,20 +144,27 @@ const RoleManagement = () => {
           </h2>
         </div>
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {roles.map((role) => (
-            <div key={role.id} className="border border-gray-200 rounded-lg p-4">
-              <div className="flex items-start justify-between mb-2">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRoleBadgeColor(role.name)}`}>
-                  {role.label}
-                </span>
-                <span className="text-xs text-gray-500">{role.userCount} users</span>
+          {(Array.isArray(roles) && roles.length > 0) ? (
+            roles.map((role) => (
+              <div key={role.id} className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRoleBadgeColor(role.name)}`}>
+                    {role.label}
+                  </span>
+                  <span className="text-xs text-gray-500">{role.userCount} users</span>
+                </div>
+                <p className="text-sm text-gray-600 mb-2">{role.description}</p>
+                <div className="text-xs text-gray-500">
+                  {role.permissionCount} permissions
+                </div>
               </div>
-              <p className="text-sm text-gray-600 mb-2">{role.description}</p>
-              <div className="text-xs text-gray-500">
-                {role.permissionCount} permissions
-              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              <ShieldCheckIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+              <p>No roles found. Please run RBAC initialization.</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
@@ -177,8 +197,9 @@ const RoleManagement = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+              {(Array.isArray(users) && users.length > 0) ? (
+                users.map((user) => (
+                  <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{user.name}</div>
                   </td>
@@ -187,7 +208,7 @@ const RoleManagement = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-wrap gap-2">
-                      {user.roles.length > 0 ? (
+                      {(user.roles && Array.isArray(user.roles) && user.roles.length > 0) ? (
                         user.roles.map((role) => (
                           <span
                             key={role.id}
@@ -229,7 +250,15 @@ const RoleManagement = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                    <UserGroupIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+                    <p>No users found.</p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -252,7 +281,7 @@ const RoleManagement = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Choose a role...</option>
-                {roles.map((role) => (
+                {(Array.isArray(roles) ? roles : []).map((role) => (
                   <option key={role.id} value={role.name}>
                     {role.label} - {role.description}
                   </option>
@@ -282,6 +311,7 @@ const RoleManagement = () => {
         </div>
       )}
     </div>
+    </Layout>
   );
 };
 

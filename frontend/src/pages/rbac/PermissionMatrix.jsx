@@ -37,7 +37,7 @@ const PermissionMatrix = () => {
   // Initialize pending changes when entering edit mode
   const handleEnterEditMode = () => {
     const initialChanges = {};
-    roles.forEach(role => {
+    (Array.isArray(roles) ? roles : []).forEach(role => {
       initialChanges[role.id] = role.permissions?.map(p => p.permissionId || p.id) || [];
     });
     setPendingChanges(initialChanges);
@@ -97,7 +97,7 @@ const PermissionMatrix = () => {
   };
 
   // Group permissions by module for better organization
-  const groupedPermissions = permissions.reduce((acc, permission) => {
+  const groupedPermissions = (Array.isArray(permissions) ? permissions : []).reduce((acc, permission) => {
     const module = permission.module || permission.key?.split('_')[0] || 'General';
     if (!acc[module]) acc[module] = [];
     acc[module].push(permission);
@@ -193,7 +193,7 @@ const PermissionMatrix = () => {
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-r bg-gray-50 sticky left-0 z-10">
                         Permission
                       </th>
-                      {roles.map((role) => (
+                      {(Array.isArray(roles) ? roles : []).map((role) => (
                         <th key={role.id} className="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider border-b min-w-[120px]">
                           <span className={`inline-block px-2 py-1 rounded-full text-xs ${
                             role.name === 'ADMIN' ? 'bg-red-100 text-red-700' :
@@ -224,7 +224,7 @@ const PermissionMatrix = () => {
                                 )}
                               </div>
                             </td>
-                            {roles.map((role) => (
+                            {(Array.isArray(roles) ? roles : []).map((role) => (
                               <td key={role.id} className="px-6 py-3 text-center">
                                 <input
                                   type="checkbox"

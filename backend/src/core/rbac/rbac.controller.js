@@ -33,6 +33,15 @@ export class RBACController {
         orderBy: { name: 'asc' }
       });
 
+      // If no roles found, return empty array (system may not be initialized)
+      if (!roles || roles.length === 0) {
+        return res.json({ 
+          success: true, 
+          data: [],
+          message: 'No roles found. Please run RBAC initialization.' 
+        });
+      }
+
       // Map to include permission details
       const rolesWithDetails = roles.map(role => ({
         id: role.id,
@@ -68,6 +77,16 @@ export class RBACController {
       const permissions = await prisma.permission.findMany({
         orderBy: { code: 'asc' }
       });
+
+      // If no permissions found, return empty array
+      if (!permissions || permissions.length === 0) {
+        return res.json({ 
+          success: true, 
+          data: [],
+          grouped: {},
+          message: 'No permissions found. Please run RBAC initialization.' 
+        });
+      }
 
       // Group by module
       const grouped = {};
@@ -314,8 +333,7 @@ export class RBACController {
           },
           employee: {
             select: {
-              firstName: true,
-              lastName: true
+              name: true
             }
           }
         },
@@ -325,9 +343,7 @@ export class RBACController {
       const usersWithRoles = users.map(user => ({
         id: user.id,
         email: user.email,
-        name: user.employee 
-          ? `${user.employee.firstName} ${user.employee.lastName}`.trim() 
-          : user.email.split('@')[0],
+        name: user.employee?.name || user.email.split('@')[0],
         legacyRole: user.role,
         status: user.status,
         roles: user.roles
