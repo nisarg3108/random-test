@@ -7,53 +7,26 @@ import { checkPermission } from '../../middlewares/permissions.js';
 const router = express.Router();
 
 // Chart of Accounts routes
-router.post('/accounts', 
-  authenticate, 
-  checkPermission('finance.create'),
-  accountingController.createAccount
-);
+router.post('/chart-of-accounts', authenticate, checkPermission('finance.create'), accountingController.createAccount);
+router.get('/chart-of-accounts', authenticate, checkPermission('finance.read'), accountingController.getAllAccounts);
+router.get('/chart-of-accounts/hierarchy', authenticate, checkPermission('finance.read'), accountingController.getAccountHierarchy);
+router.post('/chart-of-accounts/initialize', authenticate, checkPermission('finance.create'), accountingController.initializeDefaultAccounts);
+router.get('/chart-of-accounts/:id', authenticate, checkPermission('finance.read'), accountingController.getAccountById);
+router.put('/chart-of-accounts/:id', authenticate, checkPermission('finance.update'), accountingController.updateAccount);
+router.delete('/chart-of-accounts/:id', authenticate, checkPermission('finance.delete'), accountingController.deleteAccount);
+router.get('/chart-of-accounts/:id/balance', authenticate, checkPermission('finance.read'), accountingController.getAccountBalance);
 
-router.get('/accounts', 
-  authenticate, 
-  checkPermission('finance.read'),
-  accountingController.getAllAccounts
-);
+router.post('/accounts', authenticate, checkPermission('finance.create'), accountingController.createAccount);
+router.get('/accounts', authenticate, checkPermission('finance.read'), accountingController.getAllAccounts);
+router.get('/accounts/hierarchy', authenticate, checkPermission('finance.read'), accountingController.getAccountHierarchy);
+router.post('/accounts/initialize', authenticate, checkPermission('finance.create'), accountingController.initializeDefaultAccounts);
+router.get('/accounts/:id', authenticate, checkPermission('finance.read'), accountingController.getAccountById);
+router.put('/accounts/:id', authenticate, checkPermission('finance.update'), accountingController.updateAccount);
+router.delete('/accounts/:id', authenticate, checkPermission('finance.delete'), accountingController.deleteAccount);
+router.get('/accounts/:id/balance', authenticate, checkPermission('finance.read'), accountingController.getAccountBalance);
 
-router.get('/accounts/hierarchy', 
-  authenticate, 
-  checkPermission('finance.read'),
-  accountingController.getAccountHierarchy
-);
-
-router.post('/accounts/initialize', 
-  authenticate, 
-  checkPermission('finance.create'),
-  accountingController.initializeDefaultAccounts
-);
-
-router.get('/accounts/:id', 
-  authenticate, 
-  checkPermission('finance.read'),
-  accountingController.getAccountById
-);
-
-router.put('/accounts/:id', 
-  authenticate, 
-  checkPermission('finance.update'),
-  accountingController.updateAccount
-);
-
-router.delete('/accounts/:id', 
-  authenticate, 
-  checkPermission('finance.delete'),
-  accountingController.deleteAccount
-);
-
-router.get('/accounts/:id/balance', 
-  authenticate, 
-  checkPermission('finance.read'),
-  accountingController.getAccountBalance
-);
+// General Ledger routes
+router.get('/general-ledger', authenticate, checkPermission('finance.read'), journalController.getAllJournalEntries);
 
 // Journal Entry routes
 router.post('/journal-entries', 

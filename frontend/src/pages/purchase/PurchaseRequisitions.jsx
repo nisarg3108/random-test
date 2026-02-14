@@ -34,7 +34,7 @@ const PurchaseRequisitions = () => {
   const fetchRequisitions = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       const response = await axios.get(`${API_URL}/api/purchase/requisitions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -48,7 +48,7 @@ const PurchaseRequisitions = () => {
 
   const fetchVendors = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       const response = await axios.get(`${API_URL}/api/purchase/vendors?status=ACTIVE`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -85,7 +85,7 @@ const PurchaseRequisitions = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('ueorms_token');
 
     try {
       if (editing) {
@@ -108,7 +108,7 @@ const PurchaseRequisitions = () => {
 
   const handleApprove = async (id) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       await axios.post(`${API_URL}/api/purchase/requisitions/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -123,7 +123,7 @@ const PurchaseRequisitions = () => {
     if (!reason) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       await axios.post(`${API_URL}/api/purchase/requisitions/${id}/reject`, { reason }, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -138,7 +138,7 @@ const PurchaseRequisitions = () => {
 
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       await axios.post(`${API_URL}/api/purchase/requisitions/${id}/convert-to-po`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -155,7 +155,7 @@ const PurchaseRequisitions = () => {
     if (!window.confirm('Delete this requisition?')) return;
     
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       await axios.delete(`${API_URL}/api/purchase/requisitions/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

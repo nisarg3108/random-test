@@ -3,13 +3,15 @@ import prisma from '../../config/db.js';
 import emailService from '../../services/email.service.js';
 
 export const createEmployee = async (data, tenantId) => {
-  // Validate department exists
-  const department = await prisma.department.findFirst({
-    where: { id: data.departmentId, tenantId },
-  });
-  
-  if (!department) {
-    throw new Error('Department not found');
+  // Validate department exists if provided
+  if (data.departmentId) {
+    const department = await prisma.department.findFirst({
+      where: { id: data.departmentId, tenantId },
+    });
+    
+    if (!department) {
+      throw new Error('Department not found');
+    }
   }
 
   // Generate employee email if not provided
@@ -50,24 +52,34 @@ export const createEmployee = async (data, tenantId) => {
       password: hashedPassword,
       role: 'EMPLOYEE',
       tenantId,
-      departmentId: data.departmentId,
+      ...(data.departmentId && { departmentId: data.departmentId }),
     },
   });
 
   // Create employee linked to user
+  const employeeData = {
+    employeeCode,
+    name: `${data.firstName} ${data.lastName}`,
+    email: employeeEmail,
+    designation: data.position,
+    joiningDate: data.joiningDate ? new Date(data.joiningDate) : new Date(),
+    status: 'ACTIVE',
+    tenantId,
+    user: {
+      connect: { id: user.id }
+    }
+  };
+
+  if (data.departmentId) {
+    employeeData.department = { connect: { id: data.departmentId } };
+  }
+
+  if (data.managerId) {
+    employeeData.manager = { connect: { id: data.managerId } };
+  }
+
   const employee = await prisma.employee.create({
-    data: {
-      employeeCode,
-      name: `${data.firstName} ${data.lastName}`,
-      email: employeeEmail,
-      designation: data.position,
-      departmentId: data.departmentId,
-      managerId: data.managerId || null,
-      joiningDate: data.joiningDate ? new Date(data.joiningDate) : new Date(),
-      status: 'ACTIVE',
-      tenantId,
-      userId: user.id,
-    },
+    data: employeeData,
   });
 
   // Create welcome notification for new employee

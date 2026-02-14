@@ -18,78 +18,182 @@ const Sidebar = () => {
 
   if (!user) return null;
 
-  const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, minRole: 'USER' },
-    { path: '/inventory', label: 'Inventory', icon: Package, minRole: 'USER' },
-    { path: '/inventory-dashboard', label: 'Analytics', icon: BarChart3, minRole: 'USER' },
-    { path: '/hr', label: 'HR Dashboard', icon: UserCheck, minRole: 'MANAGER' },
-    { path: '/hr/employees', label: 'Employees', icon: Users, minRole: 'MANAGER' },
-    { path: '/hr/salary-management', label: 'Salary Management', icon: DollarSign, minRole: 'MANAGER' },
-    { path: '/hr/attendance', label: 'Attendance & Time', icon: Clock, minRole: 'USER' },
-    { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar, minRole: 'USER' },
-    { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar, minRole: 'MANAGER' },
-    { path: '/hr/payroll', label: 'Payroll Dashboard', icon: DollarSign, minRole: 'MANAGER' },
-    { path: '/hr/payroll/cycles', label: 'Payroll Cycles', icon: Calendar, minRole: 'MANAGER' },
-    { path: '/employee/dashboard', label: 'My Dashboard', icon: User, minRole: 'EMPLOYEE', roles: ['EMPLOYEE'] },
-    { path: '/employee/tasks', label: 'Task Management', icon: Target, minRole: 'MANAGER' },
-    { path: '/employee/work-reports', label: 'Work Reports', icon: ClipboardList, minRole: 'EMPLOYEE', roles: ['EMPLOYEE'] },
-    { path: '/finance', label: 'Finance Dashboard', icon: DollarSign, minRole: 'MANAGER' },
-    { path: '/finance/expense-categories', label: 'Expense Categories', icon: FileText, minRole: 'MANAGER' },
-    { path: '/finance/expense-claims', label: 'Expense Claims', icon: DollarSign, minRole: 'USER' },
-    { path: '/finance/approvals', label: 'Finance Approvals', icon: CheckCircle, minRole: 'MANAGER' },
-    { path: '/crm', label: 'CRM Dashboard', icon: Briefcase, minRole: 'USER' },
-    { path: '/crm/customers', label: 'CRM Customers', icon: Users, minRole: 'USER' },
-    { path: '/crm/contacts', label: 'CRM Contacts', icon: User, minRole: 'USER' },
-    { path: '/crm/leads', label: 'CRM Leads', icon: Target, minRole: 'USER' },
-    { path: '/crm/pipeline', label: 'Sales Pipeline', icon: Briefcase, minRole: 'MANAGER' },
-    { path: '/crm/communications', label: 'Communication History', icon: FileText, minRole: 'USER' },
-    { path: '/sales/quotations', label: 'Quotations', icon: FileText, minRole: 'USER' },
-    { path: '/sales/orders', label: 'Sales Orders', icon: Package, minRole: 'USER' },
-    { path: '/sales/invoices', label: 'Invoicing', icon: DollarSign, minRole: 'USER' },
-    { path: '/sales/tracking', label: 'Order Tracking', icon: Truck, minRole: 'USER' },
-    { path: '/sales/analytics', label: 'Sales Analytics', icon: BarChart3, minRole: 'USER' },
-    { path: '/purchase/vendors', label: 'Vendors', icon: Users, minRole: 'USER' },
-    { path: '/purchase/requisitions', label: 'Purchase Requisitions', icon: FileText, minRole: 'USER' },
-    { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart, minRole: 'USER' },
-    { path: '/purchase/evaluations', label: 'Supplier Evaluation', icon: CheckCircle, minRole: 'MANAGER' },
-    { path: '/purchase/analytics', label: 'Purchase Analytics', icon: BarChart3, minRole: 'USER' },
-    { path: '/ap/bills', label: 'AP Bills', icon: FileText, minRole: 'USER' },
-    { path: '/ap/payments', label: 'AP Payments', icon: DollarSign, minRole: 'USER' },
-    { path: '/ap/aging', label: 'AP Aging Report', icon: BarChart3, minRole: 'MANAGER' },
-    { path: '/projects', label: 'Projects', icon: Briefcase, minRole: 'USER' },
-    { path: '/assets', label: 'Asset Management', icon: Box, minRole: 'USER' },
-    { path: '/assets/list', label: 'Assets List', icon: Package, minRole: 'USER' },
-    { path: '/assets/allocations', label: 'Asset Allocations', icon: Users, minRole: 'USER' },
-    { path: '/assets/maintenance', label: 'Asset Maintenance', icon: Wrench, minRole: 'USER' },
-    { path: '/assets/depreciation', label: 'Asset Depreciation', icon: TrendingDown, minRole: 'USER' },
-    { path: '/documents', label: 'Documents', icon: FileText, minRole: 'USER' },
-    { path: '/communication/messages', label: 'Messages', icon: MessageSquare, minRole: 'USER' },
-    { path: '/communication/announcements', label: 'Announcements', icon: Megaphone, minRole: 'USER' },
-    { path: '/communication/channels', label: 'Channels', icon: Hash, minRole: 'USER' },
-    { path: '/notifications', label: 'Notifications', icon: Bell, minRole: 'USER' },
-    { path: '/departments', label: 'Departments', icon: Building2, minRole: 'USER' },
-    { path: '/users', label: 'Users', icon: Users, minRole: 'MANAGER' },
-    { path: '/invite', label: 'Invite Users', icon: Mail, minRole: 'MANAGER' },
-    { path: '/role-management', label: 'Role Management', icon: ShieldCheck, minRole: 'ADMIN' },
-    { path: '/roles', label: 'Roles & Permissions', icon: Shield, minRole: 'ADMIN' },
-    { path: '/permissions', label: 'Permission Matrix', icon: ShieldCheck, minRole: 'ADMIN' },
-    { path: '/workflows', label: 'Workflows', icon: Zap, minRole: 'USER' },
-    { path: '/approvals', label: 'Approvals', icon: CheckCircle, minRole: 'USER' },
-    { path: '/approval-dashboard', label: 'Approval Center', icon: CheckCircle, minRole: 'USER' },
-    { path: '/audit', label: 'Audit Logs', icon: FileText, minRole: 'MANAGER' },
-    { path: '/company', label: 'Company', icon: Settings, minRole: 'ADMIN' },
-    { path: '/system-options', label: 'System', icon: Settings, minRole: 'ADMIN' },
-    { path: '/reports', label: 'Reports', icon: BarChart3, minRole: 'USER' }
-  ];
+  // Define menu items with specific role access
+  const getMenuItems = () => {
+    const role = user.role;
+    const items = [];
 
-  const filteredMenuItems = menuItems.filter(item => {
-    // If item has specific roles, check if user has one of those roles
-    if (item.roles) {
-      return item.roles.includes(user.role);
+    // Dashboard - Everyone
+    items.push({ path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard });
+
+    // HR Manager specific items
+    if (['ADMIN', 'HR_MANAGER'].includes(role)) {
+      items.push(
+        { path: '/hr', label: 'HR Dashboard', icon: UserCheck },
+        { path: '/hr/employees', label: 'Employees', icon: Users },
+        { path: '/hr/salary-management', label: 'Salary Management', icon: DollarSign },
+        { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar },
+        { path: '/hr/payroll', label: 'Payroll Dashboard', icon: DollarSign },
+        { path: '/hr/payroll/cycles', label: 'Payroll Cycles', icon: Calendar },
+        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle }
+      );
     }
-    // Otherwise, check minimum role requirement
-    return hasRole(item.minRole);
-  });
+
+    // HR Staff specific items
+    if (['ADMIN', 'HR_MANAGER', 'HR_STAFF'].includes(role)) {
+      items.push(
+        { path: '/hr/employees', label: 'Employees', icon: Users },
+        { path: '/hr/attendance', label: 'Attendance', icon: Clock },
+        { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar },
+        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle }
+      );
+    }
+
+    // Employee self-service
+    if (role === 'EMPLOYEE') {
+      items.push(
+        { path: '/hr/attendance', label: 'My Attendance', icon: Clock },
+        { path: '/hr/leave-requests', label: 'My Leaves', icon: Calendar },
+        { path: '/employee/tasks', label: 'My Tasks', icon: Target },
+        { path: '/employee/work-reports', label: 'Work Reports', icon: ClipboardList },
+        { path: '/communication/messages', label: 'Messages', icon: MessageSquare },
+        { path: '/notifications', label: 'Notifications', icon: Bell }
+      );
+    }
+
+    // Finance Manager specific items
+    if (['ADMIN', 'FINANCE_MANAGER'].includes(role)) {
+      items.push(
+        { path: '/finance', label: 'Finance Dashboard', icon: DollarSign },
+        { path: '/finance/expense-categories', label: 'Expense Categories', icon: FileText },
+        { path: '/finance/approvals', label: 'Finance Approvals', icon: CheckCircle },
+        { path: '/accounting/ledger', label: 'General Ledger', icon: FileText },
+        { path: '/accounting/reports', label: 'Financial Reports', icon: BarChart3 }
+      );
+    }
+
+    // Accountant specific items
+    if (['ADMIN', 'FINANCE_MANAGER', 'ACCOUNTANT'].includes(role)) {
+      items.push(
+        { path: '/accounting/journal', label: 'Journal Entries', icon: FileText },
+        { path: '/accounting/ledger', label: 'Ledger', icon: FileText },
+        { path: '/accounting/charts', label: 'Chart of Accounts', icon: FileText }
+      );
+    }
+
+    // Inventory Manager specific items
+    if (['ADMIN', 'INVENTORY_MANAGER'].includes(role)) {
+      items.push(
+        { path: '/inventory', label: 'Inventory', icon: Package },
+        { path: '/inventory-dashboard', label: 'Inventory Analytics', icon: BarChart3 },
+        { path: '/warehouse', label: 'Warehouse', icon: Box },
+        { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart }
+      );
+    }
+
+    // Warehouse Staff specific items
+    if (['ADMIN', 'INVENTORY_MANAGER', 'WAREHOUSE_STAFF'].includes(role)) {
+      items.push(
+        { path: '/inventory', label: 'Inventory', icon: Package },
+        { path: '/warehouse/receipts', label: 'Receipts', icon: Package },
+        { path: '/warehouse/dispatch', label: 'Dispatch', icon: Truck }
+      );
+    }
+
+    // Sales Manager specific items
+    if (['ADMIN', 'SALES_MANAGER'].includes(role)) {
+      items.push(
+        { path: '/crm', label: 'CRM Dashboard', icon: Briefcase },
+        { path: '/crm/pipeline', label: 'Sales Pipeline', icon: Target },
+        { path: '/crm/customers', label: 'Customers', icon: Users },
+        { path: '/sales/analytics', label: 'Sales Analytics', icon: BarChart3 },
+        { path: '/sales/orders', label: 'Sales Orders', icon: Package }
+      );
+    }
+
+    // Sales Staff specific items
+    if (['ADMIN', 'SALES_MANAGER', 'SALES_STAFF'].includes(role)) {
+      items.push(
+        { path: '/crm/leads', label: 'My Leads', icon: Target },
+        { path: '/crm/customers', label: 'Customers', icon: Users },
+        { path: '/crm/contacts', label: 'Contacts', icon: User },
+        { path: '/sales/orders', label: 'Sales Orders', icon: Package },
+        { path: '/sales/quotations', label: 'Quotations', icon: FileText }
+      );
+    }
+
+    // Purchase Manager specific items
+    if (['ADMIN', 'PURCHASE_MANAGER'].includes(role)) {
+      items.push(
+        { path: '/purchase/vendors', label: 'Vendors', icon: Users },
+        { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart },
+        { path: '/purchase/requisitions', label: 'Requisitions', icon: FileText },
+        { path: '/purchase/analytics', label: 'Purchase Analytics', icon: BarChart3 }
+      );
+    }
+
+    // Project Manager specific items
+    if (['ADMIN', 'PROJECT_MANAGER', 'MANAGER'].includes(role)) {
+      items.push(
+        { path: '/projects', label: 'Projects', icon: Briefcase },
+        { path: '/projects/tasks', label: 'Project Tasks', icon: Target },
+        { path: '/employee/tasks', label: 'Task Management', icon: Target }
+      );
+    }
+
+    // Manager general access
+    if (['ADMIN', 'MANAGER', 'HR_MANAGER', 'FINANCE_MANAGER', 'SALES_MANAGER', 'INVENTORY_MANAGER', 'PURCHASE_MANAGER', 'PROJECT_MANAGER'].includes(role)) {
+      items.push(
+        { path: '/users', label: 'Users', icon: Users },
+        { path: '/departments', label: 'Departments', icon: Building2 },
+        { path: '/reports', label: 'Reports', icon: BarChart3 },
+        { path: '/approvals/dashboard', label: 'Approval Dashboard', icon: CheckCircle },
+        { path: '/employee/tasks', label: 'Team Tasks', icon: Target }
+      );
+    }
+
+    // USER role - basic access
+    if (role === 'USER') {
+      items.push(
+        { path: '/inventory', label: 'Inventory', icon: Package },
+        { path: '/documents', label: 'Documents', icon: FileText },
+        { path: '/communication/messages', label: 'Messages', icon: MessageSquare },
+        { path: '/notifications', label: 'Notifications', icon: Bell }
+      );
+    }
+
+    // Common items for most roles (Staff and above)
+    if (role !== 'EMPLOYEE' && role !== 'USER') {
+      items.push(
+        { path: '/assets', label: 'Assets', icon: Box },
+        { path: '/documents', label: 'Documents', icon: FileText },
+        { path: '/communication/messages', label: 'Messages', icon: MessageSquare },
+        { path: '/communication/announcements', label: 'Announcements', icon: Bell },
+        { path: '/notifications', label: 'Notifications', icon: Bell },
+        { path: '/approvals', label: 'My Approvals', icon: CheckCircle }
+      );
+    }
+
+    // Admin only items
+    if (role === 'ADMIN') {
+      items.push(
+        { path: '/role-management', label: 'Role Management', icon: ShieldCheck },
+        { path: '/roles', label: 'Roles & Permissions', icon: Shield },
+        { path: '/company', label: 'Company Settings', icon: Settings },
+        { path: '/system-options', label: 'System', icon: Settings },
+        { path: '/audit', label: 'Audit Logs', icon: FileText }
+      );
+    }
+
+    return items;
+  };
+
+  const menuItems = getMenuItems();
+
+  // Remove duplicates by path
+  const filteredMenuItems = Array.from(
+    new Map(menuItems.map(item => [item.path, item])).values()
+  );
 
   const handleLogout = () => {
     removeToken();
@@ -100,6 +204,17 @@ const Sidebar = () => {
     const roleConfig = {
       'ADMIN': { color: 'bg-gradient-to-r from-red-500 to-pink-500 text-white', icon: Crown },
       'MANAGER': { color: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white', icon: ZapIcon },
+      'HR_MANAGER': { color: 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white', icon: UserCheck },
+      'HR_STAFF': { color: 'bg-gradient-to-r from-purple-400 to-purple-600 text-white', icon: Users },
+      'FINANCE_MANAGER': { color: 'bg-gradient-to-r from-green-500 to-emerald-500 text-white', icon: DollarSign },
+      'ACCOUNTANT': { color: 'bg-gradient-to-r from-green-400 to-teal-500 text-white', icon: FileText },
+      'INVENTORY_MANAGER': { color: 'bg-gradient-to-r from-orange-500 to-amber-500 text-white', icon: Package },
+      'WAREHOUSE_STAFF': { color: 'bg-gradient-to-r from-orange-400 to-orange-600 text-white', icon: Box },
+      'SALES_MANAGER': { color: 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white', icon: Target },
+      'SALES_STAFF': { color: 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white', icon: Briefcase },
+      'PURCHASE_MANAGER': { color: 'bg-gradient-to-r from-violet-500 to-purple-500 text-white', icon: ShoppingCart },
+      'PROJECT_MANAGER': { color: 'bg-gradient-to-r from-indigo-500 to-blue-600 text-white', icon: Briefcase },
+      'EMPLOYEE': { color: 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white', icon: User },
       'USER': { color: 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white', icon: User }
     };
     const config = roleConfig[role] || roleConfig['USER'];
@@ -108,7 +223,7 @@ const Sidebar = () => {
     return (
       <div className={`${config.color} px-3 py-1.5 rounded-full text-xs font-semibold flex items-center space-x-1.5 shadow-sm`}>
         <IconComponent className="w-3 h-3" />
-        {!collapsed && <span>{role}</span>}
+        {!collapsed && <span>{role.replace('_', ' ')}</span>}
       </div>
     );
   };

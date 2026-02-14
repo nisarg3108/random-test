@@ -22,9 +22,10 @@ export default function WarehouseList() {
       if (filters.search) params.append('search', filters.search);
       
       const response = await api.get(`/warehouses?${params}`);
-      setWarehouses(response.data);
+      setWarehouses(response.data || []);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch warehouses');
+      setWarehouses([]);
     } finally {
       setLoading(false);
     }
@@ -84,24 +85,32 @@ export default function WarehouseList() {
           </tr>
         </thead>
         <tbody>
-          {warehouses.map(wh => (
-            <tr key={wh.id}>
-              <td>{wh.code}</td>
-              <td>{wh.name}</td>
-              <td>{wh.type}</td>
-              <td>{wh.city || 'N/A'}</td>
-              <td>{wh._count?.stockItems || 0}</td>
-              <td>
-                <span className={`status ${wh.isActive ? 'active' : 'inactive'}`}>
-                  {wh.isActive ? 'Active' : 'Inactive'}
-                </span>
-              </td>
-              <td>
-                <button className="btn-sm btn-info" onClick={() => {}}>View</button>
-                <button className="btn-sm btn-danger" onClick={() => handleDelete(wh.id)}>Delete</button>
+          {Array.isArray(warehouses) && warehouses.length > 0 ? (
+            warehouses.map(wh => (
+              <tr key={wh.id}>
+                <td>{wh.code}</td>
+                <td>{wh.name}</td>
+                <td>{wh.type}</td>
+                <td>{wh.city || 'N/A'}</td>
+                <td>{wh._count?.stockItems || 0}</td>
+                <td>
+                  <span className={`status ${wh.isActive ? 'active' : 'inactive'}`}>
+                    {wh.isActive ? 'Active' : 'Inactive'}
+                  </span>
+                </td>
+                <td>
+                  <button className="btn-sm btn-info" onClick={() => {}}>View</button>
+                  <button className="btn-sm btn-danger" onClick={() => handleDelete(wh.id)}>Delete</button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
+                No warehouses found
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 

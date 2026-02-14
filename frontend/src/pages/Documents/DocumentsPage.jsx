@@ -1,50 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
-  Box,
-  Button,
-  Typography,
-  Paper,
-  Breadcrumbs,
-  Link,
-  IconButton,
-  Menu,
-  MenuItem,
-  TextField,
-  InputAdornment,
-  Chip,
-  Grid,
-  Card,
-  CardContent,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Alert,
-  CircularProgress,
-  Tooltip
-} from '@mui/material';
-import {
-  Folder as FolderIcon,
-  InsertDriveFile as FileIcon,
-  Upload as UploadIcon,
-  CreateNewFolder as NewFolderIcon,
-  MoreVert as MoreIcon,
-  Search as SearchIcon,
-  Download as DownloadIcon,
-  Share as ShareIcon,
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  Restore as RestoreIcon,
-  CloudUpload as CloudUploadIcon,
-  Description as DescriptionIcon,
-  Image as ImageIcon,
-  PictureAsPdf as PdfIcon,
-  Archive as ArchiveIcon,
-  VideoLibrary as VideoIcon,
-  AudioFile as AudioIcon,
-  Home as HomeIcon
-} from '@mui/icons-material';
+  Folder,
+  File,
+  Upload,
+  FolderPlus,
+  MoreVertical,
+  Search,
+  Download,
+  Share2,
+  Trash2,
+  Edit,
+  RotateCcw,
+  Home,
+  FileText,
+  Image,
+  FileArchive,
+  Video,
+  Music
+} from 'lucide-react';
+import Layout from '../../components/layout/Layout';
 import { documentAPI, folderAPI } from '../../api/documents';
 import UploadDialog from '../../components/documents/UploadDialog';
 import FolderDialog from '../../components/documents/FolderDialog';
@@ -69,7 +44,7 @@ const DocumentsPage = () => {
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
   
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(null);
   const [menuItem, setMenuItem] = useState(null);
   const [menuType, setMenuType] = useState(null);
   
@@ -116,20 +91,15 @@ const DocumentsPage = () => {
 
   const buildBreadcrumbs = (folder) => {
     const crumbs = [{ id: null, name: 'Documents' }];
-    
     if (folder) {
       const pathParts = folder.path.split('/').filter(p => p);
-      let currentPath = '';
-      
       pathParts.forEach((part, index) => {
-        currentPath += '/' + part;
         crumbs.push({
           id: index === pathParts.length - 1 ? folder.id : null,
           name: part
         });
       });
     }
-    
     setBreadcrumbs(crumbs);
   };
 
@@ -148,18 +118,6 @@ const DocumentsPage = () => {
   const handleDocumentClick = async (document) => {
     setSelectedDocument(document);
     setDetailsDialogOpen(true);
-  };
-
-  const handleMenuOpen = (event, item, type) => {
-    setAnchorEl(event.currentTarget);
-    setMenuItem(item);
-    setMenuType(type);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setMenuItem(null);
-    setMenuType(null);
   };
 
   const handleDownload = async (document) => {
@@ -192,7 +150,7 @@ const DocumentsPage = () => {
       console.error('Error deleting:', err);
       setError(`Failed to delete ${type}`);
     }
-    handleMenuClose();
+    setMenuOpen(null);
   };
 
   const handleRestore = async (document) => {
@@ -204,326 +162,303 @@ const DocumentsPage = () => {
       console.error('Error restoring:', err);
       setError('Failed to restore document');
     }
-    handleMenuClose();
-  };
-
-  const handleUploadSuccess = () => {
-    setUploadDialogOpen(false);
-    setSuccess('Document uploaded successfully');
-    loadData(currentFolder?.id);
-  };
-
-  const handleFolderCreated = () => {
-    setFolderDialogOpen(false);
-    setSuccess('Folder created successfully');
-    loadData(currentFolder?.id);
+    setMenuOpen(null);
   };
 
   const getFileIcon = (mimeType) => {
-    if (mimeType.startsWith('image/')) return <ImageIcon color="primary" />;
-    if (mimeType === 'application/pdf') return <PdfIcon color="error" />;
-    if (mimeType.startsWith('video/')) return <VideoIcon color="secondary" />;
-    if (mimeType.startsWith('audio/')) return <AudioIcon color="info" />;
-    if (mimeType.includes('zip') || mimeType.includes('rar')) return <ArchiveIcon color="warning" />;
-    return <FileIcon color="action" />;
+    if (mimeType.startsWith('image/')) return <Image className="w-5 h-5 text-blue-600" />;
+    if (mimeType === 'application/pdf') return <FileText className="w-5 h-5 text-red-600" />;
+    if (mimeType.startsWith('video/')) return <Video className="w-5 h-5 text-purple-600" />;
+    if (mimeType.startsWith('audio/')) return <Music className="w-5 h-5 text-green-600" />;
+    if (mimeType.includes('zip') || mimeType.includes('rar')) return <FileArchive className="w-5 h-5 text-orange-600" />;
+    return <File className="w-5 h-5 text-gray-600" />;
   };
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
+      <Layout>
+        <div className="flex justify-center items-center min-h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" fontWeight="bold">
-          Document Management
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Button
-            variant="outlined"
-            startIcon={<NewFolderIcon />}
-            onClick={() => setFolderDialogOpen(true)}
-          >
-            New Folder
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<UploadIcon />}
-            onClick={() => setUploadDialogOpen(true)}
-          >
-            Upload
-          </Button>
-        </Box>
-      </Box>
-
-      {/* Alerts */}
-      {error && (
-        <Alert severity="error" onClose={() => setError(null)} sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert severity="success" onClose={() => setSuccess(null)} sx={{ mb: 2 }}>
-          {success}
-        </Alert>
-      )}
-
-      {/* Breadcrumbs */}
-      <Breadcrumbs sx={{ mb: 2 }}>
-        {breadcrumbs.map((crumb, index) => (
-          <Link
-            key={index}
-            component="button"
-            variant="body1"
-            onClick={() => handleBreadcrumbClick(crumb.id)}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-              color: index === breadcrumbs.length - 1 ? 'text.primary' : 'primary.main',
-              '&:hover': { textDecoration: 'underline' }
-            }}
-          >
-            {index === 0 && <HomeIcon sx={{ mr: 0.5, fontSize: 20 }} />}
-            {crumb.name}
-          </Link>
-        ))}
-      </Breadcrumbs>
-
-      {/* Search & Filters */}
-      <Box sx={{ mb: 3, display: 'flex', gap: 2, alignItems: 'center' }}>
-        <TextField
-          placeholder="Search documents..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          size="small"
-          sx={{ flexGrow: 1, maxWidth: 400 }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            )
-          }}
-        />
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Chip
-            label="Active"
-            color={selectedStatus === 'ACTIVE' ? 'primary' : 'default'}
-            onClick={() => setSelectedStatus('ACTIVE')}
-          />
-          <Chip
-            label="Archived"
-            color={selectedStatus === 'ARCHIVED' ? 'primary' : 'default'}
-            onClick={() => setSelectedStatus('ARCHIVED')}
-          />
-          <Chip
-            label="Deleted"
-            color={selectedStatus === 'DELETED' ? 'primary' : 'default'}
-            onClick={() => setSelectedStatus('DELETED')}
-          />
-        </Box>
-        <Button variant="text" onClick={() => loadData(currentFolder?.id)}>
-          Search
-        </Button>
-      </Box>
-
-      {/* Folders */}
-      {folders.length > 0 && (
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Folders
-          </Typography>
-          <Grid container spacing={2}>
-            {folders.map((folder) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={folder.id}>
-                <Card
-                  sx={{
-                    cursor: 'pointer',
-                    '&:hover': { boxShadow: 4 },
-                    transition: 'box-shadow 0.2s'
-                  }}
-                >
-                  <CardContent>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                      <Box
-                        sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}
-                        onClick={() => handleFolderClick(folder.id)}
-                      >
-                        <FolderIcon
-                          sx={{ fontSize: 40, color: folder.color || 'primary.main', mr: 2 }}
-                        />
-                        <Box>
-                          <Typography variant="subtitle1" fontWeight="bold">
-                            {folder.name}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {folder._count?.documents || 0} documents
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <IconButton
-                        size="small"
-                        onClick={(e) => handleMenuOpen(e, folder, 'folder')}
-                      >
-                        <MoreIcon />
-                      </IconButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      )}
-
-      {/* Documents */}
-      <Box>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Documents
-        </Typography>
-        {documents.length === 0 ? (
-          <Paper sx={{ p: 4, textAlign: 'center' }}>
-            <DescriptionIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
-            <Typography variant="h6" color="text.secondary">
-              No documents found
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Upload your first document to get started
-            </Typography>
-            <Button
-              variant="contained"
-              startIcon={<UploadIcon />}
-              onClick={() => setUploadDialogOpen(true)}
+    <Layout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Document Management</h1>
+            <p className="text-gray-600 mt-1">Manage and organize your documents</p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setFolderDialogOpen(true)}
+              className="btn-secondary flex items-center gap-2"
             >
-              Upload Document
-            </Button>
-          </Paper>
-        ) : (
-          <Grid container spacing={2}>
-            {documents.map((document) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={document.id}>
-                <Card
-                  sx={{
-                    cursor: 'pointer',
-                    '&:hover': { boxShadow: 4 },
-                    transition: 'box-shadow 0.2s'
-                  }}
-                >
-                  <CardContent>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                      <Box
-                        sx={{ display: 'flex', alignItems: 'start', flexGrow: 1 }}
-                        onClick={() => handleDocumentClick(document)}
-                      >
-                        <Box sx={{ mr: 2 }}>
-                          {getFileIcon(document.mimeType)}
-                        </Box>
-                        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                          <Tooltip title={document.name}>
-                            <Typography
-                              variant="subtitle2"
-                              fontWeight="bold"
-                              noWrap
-                              sx={{ mb: 0.5 }}
-                            >
-                              {document.name}
-                            </Typography>
-                          </Tooltip>
-                          <Typography variant="caption" color="text.secondary" display="block">
-                            {formatBytes(document.fileSize)}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary" display="block">
-                            v{document.version}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary" display="block">
-                            {formatDate(document.createdAt)}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <IconButton
-                        size="small"
-                        onClick={(e) => handleMenuOpen(e, document, 'document')}
-                      >
-                        <MoreIcon />
-                      </IconButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Box>
+              <FolderPlus className="w-4 h-4" />
+              New Folder
+            </button>
+            <button
+              onClick={() => setUploadDialogOpen(true)}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Upload className="w-4 h-4" />
+              Upload
+            </button>
+          </div>
+        </div>
 
-      {/* Context Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        {menuType === 'document' && selectedStatus === 'ACTIVE' && (
-          [
-            <MenuItem key="download" onClick={() => {
-              handleDownload(menuItem);
-              handleMenuClose();
-            }}>
-              <DownloadIcon sx={{ mr: 1 }} fontSize="small" />
-              Download
-            </MenuItem>,
-            <MenuItem key="share" onClick={handleMenuClose}>
-              <ShareIcon sx={{ mr: 1 }} fontSize="small" />
-              Share
-            </MenuItem>,
-            <MenuItem key="delete" onClick={() => handleDelete(menuItem, 'document')}>
-              <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
-              Move to Trash
-            </MenuItem>
-          ]
+        {/* Alerts */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex justify-between items-center">
+            <span>{error}</span>
+            <button onClick={() => setError(null)} className="text-red-700 hover:text-red-900">×</button>
+          </div>
         )}
-        {menuType === 'document' && selectedStatus === 'DELETED' && (
-          [
-            <MenuItem key="restore" onClick={() => handleRestore(menuItem)}>
-              <RestoreIcon sx={{ mr: 1 }} fontSize="small" />
-              Restore
-            </MenuItem>,
-            <MenuItem key="delete-permanent" onClick={() => handleDelete(menuItem, 'document', true)}>
-              <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
-              Delete Permanently
-            </MenuItem>
-          ]
+        {success && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex justify-between items-center">
+            <span>{success}</span>
+            <button onClick={() => setSuccess(null)} className="text-green-700 hover:text-green-900">×</button>
+          </div>
         )}
-        {menuType === 'folder' && (
-          [
-            <MenuItem key="edit" onClick={handleMenuClose}>
-              <EditIcon sx={{ mr: 1 }} fontSize="small" />
-              Edit
-            </MenuItem>,
-            <MenuItem key="delete" onClick={() => handleDelete(menuItem, 'folder')}>
-              <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
-              Delete
-            </MenuItem>
-          ]
+
+        {/* Breadcrumbs */}
+        <div className="flex items-center gap-2 text-sm">
+          {breadcrumbs.map((crumb, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <span className="text-gray-400">/</span>}
+              <button
+                onClick={() => handleBreadcrumbClick(crumb.id)}
+                className={`flex items-center gap-1 ${
+                  index === breadcrumbs.length - 1
+                    ? 'text-gray-900 font-medium'
+                    : 'text-blue-600 hover:text-blue-700'
+                }`}
+              >
+                {index === 0 && <Home className="w-4 h-4" />}
+                {crumb.name}
+              </button>
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Search & Filters */}
+        <div className="modern-card-elevated p-4">
+          <div className="flex gap-4 items-center flex-wrap">
+            <div className="flex-1 min-w-64">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search documents..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="input-field pl-10"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setSelectedStatus('ACTIVE')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  selectedStatus === 'ACTIVE'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Active
+              </button>
+              <button
+                onClick={() => setSelectedStatus('ARCHIVED')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  selectedStatus === 'ARCHIVED'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Archived
+              </button>
+              <button
+                onClick={() => setSelectedStatus('DELETED')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  selectedStatus === 'DELETED'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Deleted
+              </button>
+            </div>
+            <button
+              onClick={() => loadData(currentFolder?.id)}
+              className="btn-secondary"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+
+        {/* Folders */}
+        {folders.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Folders</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {folders.map((folder) => (
+                <div key={folder.id} className="modern-card-elevated p-4 hover:shadow-lg transition-shadow">
+                  <div className="flex justify-between items-start">
+                    <div
+                      onClick={() => handleFolderClick(folder.id)}
+                      className="flex items-center gap-3 flex-1 cursor-pointer"
+                    >
+                      <Folder className="w-10 h-10 text-blue-600" />
+                      <div>
+                        <p className="font-semibold text-gray-900">{folder.name}</p>
+                        <p className="text-sm text-gray-500">{folder._count?.documents || 0} documents</p>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <button
+                        onClick={() => setMenuOpen(menuOpen === folder.id ? null : folder.id)}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
+                        <MoreVertical className="w-5 h-5 text-gray-600" />
+                      </button>
+                      {menuOpen === folder.id && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                          <button
+                            onClick={() => handleDelete(folder, 'folder')}
+                            className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
-      </Menu>
+
+        {/* Documents */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Documents</h2>
+          {documents.length === 0 ? (
+            <div className="modern-card-elevated p-12 text-center">
+              <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No documents found</h3>
+              <p className="text-gray-600 mb-6">Upload your first document to get started</p>
+              <button
+                onClick={() => setUploadDialogOpen(true)}
+                className="btn-primary inline-flex items-center gap-2"
+              >
+                <Upload className="w-4 h-4" />
+                Upload Document
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {documents.map((document) => (
+                <div key={document.id} className="modern-card-elevated p-4 hover:shadow-lg transition-shadow">
+                  <div className="flex justify-between items-start mb-3">
+                    <div
+                      onClick={() => handleDocumentClick(document)}
+                      className="flex items-start gap-3 flex-1 cursor-pointer"
+                    >
+                      {getFileIcon(document.mimeType)}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-gray-900 truncate" title={document.name}>
+                          {document.name}
+                        </p>
+                        <p className="text-xs text-gray-500">{formatBytes(document.fileSize)}</p>
+                        <p className="text-xs text-gray-500">v{document.version}</p>
+                        <p className="text-xs text-gray-500">{formatDate(document.createdAt)}</p>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <button
+                        onClick={() => setMenuOpen(menuOpen === document.id ? null : document.id)}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
+                        <MoreVertical className="w-5 h-5 text-gray-600" />
+                      </button>
+                      {menuOpen === document.id && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                          {selectedStatus === 'ACTIVE' && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  handleDownload(document);
+                                  setMenuOpen(null);
+                                }}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <Download className="w-4 h-4" />
+                                Download
+                              </button>
+                              <button
+                                onClick={() => handleDelete(document, 'document')}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                Move to Trash
+                              </button>
+                            </>
+                          )}
+                          {selectedStatus === 'DELETED' && (
+                            <>
+                              <button
+                                onClick={() => handleRestore(document)}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <RotateCcw className="w-4 h-4" />
+                                Restore
+                              </button>
+                              <button
+                                onClick={() => handleDelete(document, 'document', true)}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 text-red-600"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                Delete Permanently
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Dialogs */}
       <UploadDialog
         open={uploadDialogOpen}
         onClose={() => setUploadDialogOpen(false)}
-        onSuccess={handleUploadSuccess}
+        onSuccess={() => {
+          setUploadDialogOpen(false);
+          setSuccess('Document uploaded successfully');
+          loadData(currentFolder?.id);
+        }}
         folderId={currentFolder?.id}
       />
       
       <FolderDialog
         open={folderDialogOpen}
         onClose={() => setFolderDialogOpen(false)}
-        onSuccess={handleFolderCreated}
+        onSuccess={() => {
+          setFolderDialogOpen(false);
+          setSuccess('Folder created successfully');
+          loadData(currentFolder?.id);
+        }}
         parentId={currentFolder?.id}
       />
       
@@ -535,7 +470,7 @@ const DocumentsPage = () => {
         onDelete={(doc) => handleDelete(doc, 'document')}
         onUpdate={() => loadData(currentFolder?.id)}
       />
-    </Box>
+    </Layout>
   );
 };
 

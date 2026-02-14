@@ -1,8 +1,14 @@
 import prisma from '../../config/db.js';
 
 export const createLead = async (data, tenantId, userId) => {
+  // Build name from firstName/lastName if name not provided
+  let leadName = data.name;
+  if (!leadName && (data.firstName || data.lastName)) {
+    leadName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+  }
+  
   // Validation
-  if (!data.name || data.name.trim().length === 0) {
+  if (!leadName || leadName.trim().length === 0) {
     throw new Error('Lead name is required');
   }
   
@@ -14,7 +20,7 @@ export const createLead = async (data, tenantId, userId) => {
     data: {
       tenantId,
       // Existing fields
-      name: data.name.trim(),
+      name: leadName.trim(),
       email: data.email || null,
       phone: data.phone || null,
       company: data.company || null,

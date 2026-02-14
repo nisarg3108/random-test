@@ -17,6 +17,7 @@ import InventoryDashboard from './pages/inventory/InventoryDashboard';
 import WarehouseList from './pages/inventory/WarehouseList';
 import WarehouseDashboard from './pages/inventory/WarehouseDashboard';
 import StockMovements from './pages/inventory/StockMovements';
+import InventoryApprovals from './pages/inventory/InventoryApprovals';
 
 // Manufacturing
 import BOMList from './pages/manufacturing/BOMList';
@@ -212,8 +213,12 @@ function App() {
         {/* Inventory Routes */}
         <Route path="/inventory" element={<ProtectedRoute><InventoryList /></ProtectedRoute>} />
         <Route path="/inventory-dashboard" element={<ProtectedRoute><InventoryDashboard /></ProtectedRoute>} />
+        <Route path="/inventory/approvals" element={<ProtectedRoute><InventoryApprovals /></ProtectedRoute>} />
         <Route path="/warehouses" element={<ProtectedRoute><WarehouseList /></ProtectedRoute>} />
+        <Route path="/warehouse" element={<ProtectedRoute><WarehouseList /></ProtectedRoute>} />
         <Route path="/warehouses/dashboard" element={<ProtectedRoute><WarehouseDashboard /></ProtectedRoute>} />
+        <Route path="/warehouse/receipts" element={<ProtectedRoute><GoodsReceiptList /></ProtectedRoute>} />
+        <Route path="/warehouse/dispatch" element={<ProtectedRoute><StockMovements /></ProtectedRoute>} />
         <Route path="/stock-movements" element={<ProtectedRoute><StockMovements /></ProtectedRoute>} />
         
         {/* Manufacturing Routes */}
@@ -222,14 +227,19 @@ function App() {
         
         {/* Accounting Routes */}
         <Route path="/accounting/chart-of-accounts" element={<ProtectedRoute><ChartOfAccounts /></ProtectedRoute>} />
+        <Route path="/accounting/charts" element={<ProtectedRoute><ChartOfAccounts /></ProtectedRoute>} />
         <Route path="/accounting/general-ledger" element={<ProtectedRoute><GeneralLedger /></ProtectedRoute>} />
+        <Route path="/accounting/ledger" element={<ProtectedRoute><GeneralLedger /></ProtectedRoute>} />
         <Route path="/accounting/journal-entry" element={<ProtectedRoute><JournalEntry /></ProtectedRoute>} />
+        <Route path="/accounting/journal" element={<ProtectedRoute><JournalEntry /></ProtectedRoute>} />
+        <Route path="/accounting/reports" element={<ProtectedRoute><ReportsDashboard /></ProtectedRoute>} />
         
         {/* HR Routes */}
         <Route path="/hr" element={<ProtectedRoute><HRDashboard /></ProtectedRoute>} />
         <Route path="/hr/employees" element={<ProtectedRoute><EmployeeList /></ProtectedRoute>} />
         <Route path="/hr/leave-requests" element={<ProtectedRoute><LeaveRequestList /></ProtectedRoute>} />
         <Route path="/hr/leave-types" element={<ProtectedRoute><LeaveTypeList /></ProtectedRoute>} />
+        <Route path="/hr/approvals" element={<ProtectedRoute><ApprovalsPage filterModule="HR" /></ProtectedRoute>} />
         
         {/* Attendance Routes */}
         <Route path="/hr/attendance" element={<ProtectedRoute><AttendanceDashboard /></ProtectedRoute>} />
@@ -324,6 +334,7 @@ function App() {
         {/* Workflow Routes */}
         <Route path="/workflows" element={<ProtectedRoute><WorkflowList /></ProtectedRoute>} />
         <Route path="/approvals" element={<ProtectedRoute><ApprovalsPage /></ProtectedRoute>} />
+        <Route path="/approvals/dashboard" element={<ProtectedRoute><ApprovalDashboardSimple /></ProtectedRoute>} />
         <Route path="/approval-queue" element={<ProtectedRoute><ApprovalQueue /></ProtectedRoute>} />
         <Route path="/approval-dashboard" element={<ProtectedRoute><ApprovalDashboardSimple /></ProtectedRoute>} />
         

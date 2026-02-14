@@ -26,9 +26,16 @@ class WarehouseService {
       throw new Error('Warehouse code already exists');
     }
 
+    // Map location to address if provided
+    const warehouseData = { ...data };
+    if (data.location && !data.address) {
+      warehouseData.address = data.location;
+      delete warehouseData.location;
+    }
+
     return await prisma.warehouse.create({
       data: {
-        ...data,
+        ...warehouseData,
         tenantId
       },
       include: {

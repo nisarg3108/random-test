@@ -6,6 +6,11 @@ class ChartOfAccountsService {
    * Create a new account
    */
   async createAccount(data, tenantId) {
+    // Validate required accountCode
+    if (!data.accountCode) {
+      throw new Error('Account code is required');
+    }
+
     // Check for duplicate account code
     const existing = await prisma.chartOfAccounts.findUnique({
       where: {

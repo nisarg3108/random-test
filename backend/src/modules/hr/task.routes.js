@@ -14,6 +14,7 @@ router.use(requireAuth);
 
 // Task routes
 router.post('/', createTaskController);
+router.get('/', getTeamTasksController); // Get all tasks
 router.get('/manager', getManagerTasksController);
 router.get('/team', getTeamTasksController);
 

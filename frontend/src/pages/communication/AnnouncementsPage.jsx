@@ -1,37 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  CardActions,
-  Chip,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  MenuItem,
-  Grid,
-  Badge,
-  Tooltip,
-  CircularProgress,
-  Alert,
-  Snackbar
-} from '@mui/material';
-import {
-  Add as AddIcon,
-  PushPin as PinIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Campaign as CampaignIcon,
-  Visibility as VisibilityIcon,
-  Close as CloseIcon,
-  AttachFile as AttachFileIcon
-} from '@mui/icons-material';
+import { Plus, Pin, Edit, Trash2, Megaphone, Eye, X, Paperclip, AlertCircle } from 'lucide-react';
+import Layout from '../../components/layout/Layout';
 import {
   getAnnouncements,
   createAnnouncement,
@@ -40,8 +9,6 @@ import {
   markAnnouncementAsRead
 } from '../../api/communication';
 import { useAnnouncementsWebSocket } from '../../hooks/useWebSocket';
-import FileUpload from '../../components/communication/FileUpload';
-import FilePreview from '../../components/communication/FilePreview';
 
 const AnnouncementsPage = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -49,47 +16,46 @@ const AnnouncementsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [viewDialog, setViewDialog] = useState(false);
-  const [newAnnouncementSnackbar, setNewAnnouncementSnackbar] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     priority: 'NORMAL',
     targetType: 'ALL',
     isPinned: false,
-    expiresAt: '',
-    attachments: []
+    expiresAt: ''
   });
 
-  // WebSocket for real-time announcements
   const { newAnnouncement } = useAnnouncementsWebSocket();
 
   const priorityColors = {
-    LOW: 'default',
-    NORMAL: 'info',
-    HIGH: 'warning',
-    URGENT: 'error'
+    LOW: 'bg-gray-100 text-gray-800',
+    NORMAL: 'bg-blue-100 text-blue-800',
+    HIGH: 'bg-orange-100 text-orange-800',
+    URGENT: 'bg-red-100 text-red-800'
+  };
+
+  const priorityBorders = {
+    LOW: 'border-gray-400',
+    NORMAL: 'border-blue-400',
+    HIGH: 'border-orange-400',
+    URGENT: 'border-red-400'
   };
 
   useEffect(() => {
     loadAnnouncements();
   }, []);
 
-  // Handle real-time announcements
   useEffect(() => {
     if (newAnnouncement) {
       setAnnouncements(prev => {
-        // Check if announcement already exists
         if (prev.some(a => a.id === newAnnouncement.id)) return prev;
-        // Add new announcement at the top (or sorted position if pinned)
-        const updatedAnnouncements = [newAnnouncement, ...prev];
-        // Re-sort: pinned first, then by date
-        return updatedAnnouncements.sort((a, b) => {
+        const updated = [newAnnouncement, ...prev];
+        return updated.sort((a, b) => {
           if (a.isPinned && !b.isPinned) return -1;
           if (!a.isPinned && b.isPinned) return 1;
           return new Date(b.createdAt) - new Date(a.createdAt);
         });
       });
-      setNewAnnouncementSnackbar(true);
     }
   }, [newAnnouncement]);
 
@@ -114,10 +80,7 @@ const AnnouncementsPage = () => {
         priority: announcement.priority,
         targetType: announcement.targetType,
         isPinned: announcement.isPinned,
-        expiresAt: announcement.expiresAt
-          ? new Date(announcement.expiresAt).toISOString().slice(0, 16)
-          : '',
-        attachments: announcement.attachments || []
+        expiresAt: announcement.expiresAt ? new Date(announcement.expiresAt).toISOString().slice(0, 16) : ''
       });
     } else {
       setSelectedAnnouncement(null);
@@ -127,19 +90,14 @@ const AnnouncementsPage = () => {
         priority: 'NORMAL',
         targetType: 'ALL',
         isPinned: false,
-        expiresAt: '',
-        attachments: []
+        expiresAt: ''
       });
     }
     setOpenDialog(true);
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedAnnouncement(null);
-  };
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const data = {
         ...formData,
@@ -153,7 +111,7 @@ const AnnouncementsPage = () => {
       }
 
       loadAnnouncements();
-      handleCloseDialog();
+      setOpenDialog(false);
     } catch (error) {
       console.error('Error saving announcement:', error);
     }
@@ -174,28 +132,22 @@ const AnnouncementsPage = () => {
     setSelectedAnnouncement(announcement);
     setViewDialog(true);
     
-    // Mark as read
     try {
       await markAnnouncementAsRead(announcement.id);
-      // Update local state
       setAnnouncements(announcements.map(a =>
-        a.id === announcement.id
-          ? { ...a, reads: [{ readAt: new Date() }] }
-          : a
+        a.id === announcement.id ? { ...a, reads: [{ readAt: new Date() }] } : a
       ));
     } catch (error) {
       console.error('Error marking as read:', error);
     }
   };
 
-  const isUnread = (announcement) => {
-    return !announcement.reads || announcement.reads.length === 0;
-  };
+  const isUnread = (announcement) => !announcement.reads || announcement.reads.length === 0;
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'long',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -209,353 +161,284 @@ const AnnouncementsPage = () => {
   });
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
-          <CampaignIcon sx={{ mr: 2, fontSize: 40 }} />
-          Announcements
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenDialog()}
-        >
-          New Announcement
-        </Button>
-      </Box>
+    <Layout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-primary-900 flex items-center">
+              <Megaphone className="w-8 h-8 mr-3 text-blue-600" />
+              Announcements
+            </h1>
+            <p className="text-primary-600 mt-1">Company-wide announcements and updates</p>
+          </div>
+          <button
+            onClick={() => handleOpenDialog()}
+            className="btn-modern btn-primary flex items-center space-x-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Announcement</span>
+          </button>
+        </div>
 
-      {/* Announcements List */}
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-          <CircularProgress />
-        </Box>
-      ) : sortedAnnouncements.length === 0 ? (
-        <Paper sx={{ p: 4, textAlign: 'center' }}>
-          <CampaignIcon sx={{ fontSize: 80, color: 'text.secondary', opacity: 0.3 }} />
-          <Typography variant="h6" color="text.secondary" sx={{ mt: 2 }}>
-            No announcements yet
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Create your first announcement to inform your team
-          </Typography>
-        </Paper>
-      ) : (
-        <Grid container spacing={3}>
-          {sortedAnnouncements.map((announcement) => (
-            <Grid item xs={12} key={announcement.id}>
-              <Card
-                sx={{
-                  position: 'relative',
-                  borderLeft: 4,
-                  borderColor: `${priorityColors[announcement.priority]}.main`,
-                  bgcolor: isUnread(announcement) ? 'action.hover' : 'background.paper'
-                }}
+        {/* Announcements List */}
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        ) : sortedAnnouncements.length === 0 ? (
+          <div className="modern-card-elevated text-center py-12">
+            <Megaphone className="w-20 h-20 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No announcements yet</h3>
+            <p className="text-gray-600">Create your first announcement to inform your team</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {sortedAnnouncements.map((announcement) => (
+              <div
+                key={announcement.id}
+                className={`modern-card-elevated border-l-4 ${priorityBorders[announcement.priority]} ${
+                  isUnread(announcement) ? 'bg-blue-50' : ''
+                }`}
               >
-                {announcement.isPinned && (
-                  <Chip
-                    icon={<PinIcon />}
-                    label="Pinned"
-                    color="primary"
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16
-                    }}
-                  />
-                )}
-                
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
                         {isUnread(announcement) && (
-                          <Badge color="primary" variant="dot" sx={{ mr: 1 }} />
+                          <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
                         )}
-                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                        <h3 className="text-lg font-semibold text-primary-900">
                           {announcement.title}
-                        </Typography>
-                        <Chip
-                          label={announcement.priority}
-                          color={priorityColors[announcement.priority]}
-                          size="small"
-                        />
-                      </Box>
+                        </h3>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[announcement.priority]}`}>
+                          {announcement.priority}
+                        </span>
+                        {announcement.isPinned && (
+                          <span className="flex items-center px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                            <Pin className="w-3 h-3 mr-1" />
+                            Pinned
+                          </span>
+                        )}
+                      </div>
                       
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      <p className="text-sm text-primary-600 mb-3">
                         Published {formatDate(announcement.publishedAt)}
                         {announcement.expiresAt && (
                           <> • Expires {formatDate(announcement.expiresAt)}</>
                         )}
-                      </Typography>
+                      </p>
                       
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}
-                      >
+                      <p className="text-primary-900 line-clamp-2">
                         {announcement.content}
-                      </Typography>
-                    </Box>
-                  </Box>
+                      </p>
+                    </div>
+                  </div>
                   
-                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                    <Chip
-                      label={`${announcement._count?.reads || 0} reads`}
-                      size="small"
-                      variant="outlined"
-                    />
-                    <Chip
-                      label={announcement.targetType}
-                      size="small"
-                      variant="outlined"
-                    />
-                  </Box>
-                </CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-2">
+                      <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                        {announcement._count?.reads || 0} reads
+                      </span>
+                      <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                        {announcement.targetType}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleView(announcement)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="View"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleOpenDialog(announcement)}
+                        className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="Edit"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(announcement.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Create/Edit Modal */}
+      {openDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="modern-card-elevated max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-primary-200 flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-primary-900">
+                {selectedAnnouncement ? 'Edit Announcement' : 'Create Announcement'}
+              </h3>
+              <button onClick={() => setOpenDialog(false)} className="text-gray-500 hover:text-gray-700">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Title *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="input-modern"
+                  placeholder="Enter announcement title"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Content *</label>
+                <textarea
+                  required
+                  rows={6}
+                  value={formData.content}
+                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                  className="input-modern"
+                  placeholder="Enter announcement content"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-primary-700 mb-1">Priority</label>
+                  <select
+                    value={formData.priority}
+                    onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                    className="input-modern"
+                  >
+                    <option value="LOW">Low</option>
+                    <option value="NORMAL">Normal</option>
+                    <option value="HIGH">High</option>
+                    <option value="URGENT">Urgent</option>
+                  </select>
+                </div>
                 
-                <CardActions sx={{ justifyContent: 'flex-end' }}>
-                  <Button
-                    size="small"
-                    startIcon={<VisibilityIcon />}
-                    onClick={() => handleView(announcement)}
+                <div>
+                  <label className="block text-sm font-medium text-primary-700 mb-1">Target Audience</label>
+                  <select
+                    value={formData.targetType}
+                    onChange={(e) => setFormData({ ...formData, targetType: e.target.value })}
+                    className="input-modern"
                   >
-                    View
-                  </Button>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleOpenDialog(announcement)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => handleDelete(announcement.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                    <option value="ALL">All Users</option>
+                    <option value="DEPARTMENT">Department</option>
+                    <option value="ROLE">Role</option>
+                    <option value="SPECIFIC_USERS">Specific Users</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-primary-700 mb-1">Expires At</label>
+                <input
+                  type="datetime-local"
+                  value={formData.expiresAt}
+                  onChange={(e) => setFormData({ ...formData, expiresAt: e.target.value })}
+                  className="input-modern"
+                />
+              </div>
+              
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isPinned: !formData.isPinned })}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                    formData.isPinned
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Pin className="w-4 h-4" />
+                  <span>{formData.isPinned ? 'Pinned' : 'Pin This'}</span>
+                </button>
+              </div>
+              
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setOpenDialog(false)}
+                  className="btn-modern btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn-modern btn-primary"
+                >
+                  {selectedAnnouncement ? 'Update' : 'Publish'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
-      {/* Create/Edit Dialog */}
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>
-          {selectedAnnouncement ? 'Edit Announcement' : 'Create Announcement'}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-              label="Title"
-              fullWidth
-              required
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            />
+      {/* View Modal */}
+      {viewDialog && selectedAnnouncement && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="modern-card-elevated max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-primary-200 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-primary-900">{selectedAnnouncement.title}</h3>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[selectedAnnouncement.priority]}`}>
+                  {selectedAnnouncement.priority}
+                </span>
+              </div>
+              <button onClick={() => setViewDialog(false)} className="text-gray-500 hover:text-gray-700">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
             
-            <TextField
-              label="Content"
-              fullWidth
-              required
-              multiline
-              rows={6}
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            />
-            
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Priority"
-                  fullWidth
-                  select
-                  value={formData.priority}
-                  onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                >
-                  <MenuItem value="LOW">Low</MenuItem>
-                  <MenuItem value="NORMAL">Normal</MenuItem>
-                  <MenuItem value="HIGH">High</MenuItem>
-                  <MenuItem value="URGENT">Urgent</MenuItem>
-                </TextField>
-              </Grid>
+            <div className="p-6">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 flex items-start">
+                <AlertCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-blue-800">
+                  Published {formatDate(selectedAnnouncement.publishedAt)}
+                  {selectedAnnouncement.expiresAt && (
+                    <> • Expires {formatDate(selectedAnnouncement.expiresAt)}</>
+                  )}
+                </div>
+              </div>
               
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Target Audience"
-                  fullWidth
-                  select
-                  value={formData.targetType}
-                  onChange={(e) => setFormData({ ...formData, targetType: e.target.value })}
-                >
-                  <MenuItem value="ALL">All Users</MenuItem>
-                  <MenuItem value="DEPARTMENT">Department</MenuItem>
-                  <MenuItem value="ROLE">Role</MenuItem>
-                  <MenuItem value="SPECIFIC_USERS">Specific Users</MenuItem>
-                </TextField>
-              </Grid>
-            </Grid>
-            
-            <TextField
-              label="Expires At"
-              type="datetime-local"
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              value={formData.expiresAt}
-              onChange={(e) => setFormData({ ...formData, expiresAt: e.target.value })}
-            />
-            
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Button
-                variant={formData.isPinned ? 'contained' : 'outlined'}
-                startIcon={<PinIcon />}
-                onClick={() => setFormData({ ...formData, isPinned: !formData.isPinned })}
-              >
-                {formData.isPinned ? 'Pinned' : 'Pin This'}
-              </Button>
-            </Box>
-            
-            {/* File Upload Section */}
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Attachments
-              </Typography>
-              <FileUpload
-                onFilesUploaded={(attachments) => {
-                  setFormData(prev => ({
-                    ...prev,
-                    attachments: [...prev.attachments, ...attachments]
-                  }));
-                }}
-                maxFiles={5}
-              />
-              
-              {formData.attachments.length > 0 && (
-                <Box sx={{ mt: 2 }}>
-                  <FilePreview
-                    attachments={formData.attachments}
-                    showDelete={true}
-                    onDelete={(attachment) => {
-                      setFormData(prev => ({
-                        ...prev,
-                        attachments: prev.attachments.filter(
-                          a => a.filename !== attachment.filename
-                        )
-                      }));
-                    }}
-                  />
-                </Box>
-              )}
-            </Box>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            disabled={!formData.title || !formData.content}
-          >
-            {selectedAnnouncement ? 'Update' : 'Publish'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* View Dialog */}
-      <Dialog
-        open={viewDialog}
-        onClose={() => setViewDialog(false)}
-        maxWidth="md"
-        fullWidth
-      >
-        {selectedAnnouncement && (
-          <>
-            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                {selectedAnnouncement.title}
-                <Chip
-                  label={selectedAnnouncement.priority}
-                  color={priorityColors[selectedAnnouncement.priority]}
-                  size="small"
-                />
-              </Box>
-              <IconButton onClick={() => setViewDialog(false)}>
-                <CloseIcon />
-              </IconButton>
-            </DialogTitle>
-            <DialogContent>
-              <Alert severity="info" sx={{ mb: 2 }}>
-                Published {formatDate(selectedAnnouncement.publishedAt)}
-                {selectedAnnouncement.expiresAt && (
-                  <> • Expires {formatDate(selectedAnnouncement.expiresAt)}</>
-                )}
-              </Alert>
-              
-              <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
+              <p className="text-primary-900 whitespace-pre-wrap mb-4">
                 {selectedAnnouncement.content}
-              </Typography>
+              </p>
               
-              {/* Display attachments */}
-              {selectedAnnouncement.attachments && selectedAnnouncement.attachments.length > 0 && (
-                <Box sx={{ mt: 3 }}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Attachments ({selectedAnnouncement.attachments.length})
-                  </Typography>
-                  <FilePreview attachments={selectedAnnouncement.attachments} />
-                </Box>
-              )}
-              
-              <Box sx={{ mt: 3, display: 'flex', gap: 1 }}>
-                <Chip
-                  label={`${selectedAnnouncement._count?.reads || 0} reads`}
-                  variant="outlined"
-                />
-                <Chip
-                  label={selectedAnnouncement.targetType}
-                  variant="outlined"
-                />
+              <div className="flex gap-2 pt-4 border-t border-primary-200">
+                <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                  {selectedAnnouncement._count?.reads || 0} reads
+                </span>
+                <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                  {selectedAnnouncement.targetType}
+                </span>
                 {selectedAnnouncement.isPinned && (
-                  <Chip
-                    icon={<PinIcon />}
-                    label="Pinned"
-                    color="primary"
-                  />
+                  <span className="flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                    <Pin className="w-3 h-3 mr-1" />
+                    Pinned
+                  </span>
                 )}
-              </Box>
-            </DialogContent>
-          </>
-        )}
-      </Dialog>
-
-      {/* New Announcement Notification */}
-      <Snackbar
-        open={newAnnouncementSnackbar}
-        autoHideDuration={5000}
-        onClose={() => setNewAnnouncementSnackbar(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert 
-          onClose={() => setNewAnnouncementSnackbar(false)} 
-          severity="info"
-          variant="filled"
-        >
-          New announcement received!
-        </Alert>
-      </Snackbar>
-    </Box>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </Layout>
   );
 };
 

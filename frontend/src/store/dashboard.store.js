@@ -34,7 +34,7 @@ export const useDashboardStore = create((set, get) => ({
       });
 
     } catch (error) {
-      console.warn('Real-time dashboard updates unavailable - using polling mode');
+      // Silently fall back to polling mode
       set({ isRealTimeConnected: false });
     }
   },

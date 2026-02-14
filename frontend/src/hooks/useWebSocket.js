@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { getToken } from '../store/auth.store';
 import { getOnlineUsers } from '../api/communication';
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
 
 export const useWebSocket = () => {
   const ws = useRef(null);
@@ -19,7 +19,10 @@ export const useWebSocket = () => {
     }
 
     try {
-      ws.current = new WebSocket(`${WS_URL}?token=${token}`);
+      const baseWsUrl = WS_URL.replace(/\/$/, '');
+      const wsUrl = `${baseWsUrl}/ws?token=${token}`;
+      console.log('Connecting to WebSocket:', wsUrl.replace(/token=[^&]+/, 'token=***'));
+      ws.current = new WebSocket(wsUrl);
 
       ws.current.onopen = () => {
         console.log('WebSocket connected');
@@ -66,7 +69,7 @@ export const useWebSocket = () => {
       };
 
       ws.current.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        // Silently handle WebSocket errors - fallback to polling
       };
     } catch (error) {
       console.error('Error creating WebSocket:', error);

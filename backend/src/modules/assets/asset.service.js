@@ -77,6 +77,11 @@ export const deleteAssetCategory = async (id, tenantId) => {
 // ========================================
 
 export const createAsset = async (data, tenantId) => {
+  // Validate required category
+  if (!data.categoryId) {
+    throw new Error('Asset category is required');
+  }
+
   // Fetch category to get default values
   const category = await prisma.assetCategory.findFirst({
     where: { 
@@ -89,16 +94,28 @@ export const createAsset = async (data, tenantId) => {
     throw new Error('Asset category not found');
   }
 
+  // Generate asset code if not provided
+  const assetCode = data.assetCode || `AST${Date.now()}`;
+  
+  // Map purchaseCost to purchasePrice if provided
+  const purchasePrice = data.purchasePrice || data.purchaseCost;
+
   // Apply category defaults if asset-specific values not provided
   const assetData = {
-    ...data,
+    name: data.name,
+    assetTag: data.assetTag,
+    assetCode,
+    purchaseDate: data.purchaseDate,
+    purchasePrice,
     tenantId,
-    currentValue: data.purchasePrice, // Initial value equals purchase price
-    
-    // Apply depreciation defaults from category if not specified
+    currentValue: purchasePrice,
     depreciationMethod: data.depreciationMethod || category.defaultDepreciationMethod,
     depreciationRate: data.depreciationRate !== undefined ? data.depreciationRate : category.defaultDepreciationRate,
     usefulLife: data.usefulLife !== undefined ? data.usefulLife : category.defaultUsefulLife,
+    salvageValue: data.salvageValue,
+    category: {
+      connect: { id: data.categoryId }
+    }
   };
 
   const asset = await prisma.asset.create({

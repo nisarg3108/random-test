@@ -31,6 +31,15 @@ const router = Router();
 // Dashboard
 router.get('/dashboard', requireAuth, getProjectDashboardController);
 
+// Tasks route (must be before /:id to avoid being caught)
+router.get(
+  '/tasks',
+  requireAuth,
+  (req, res) => {
+    res.json([]);
+  }
+);
+
 // Project CRUD
 router.post(
   '/',

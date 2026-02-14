@@ -62,7 +62,7 @@ const SystemOptions = () => {
     }
   };
 
-  const currentOptions = options[selectedCategory] || [];
+  const currentOptions = Array.isArray(options[selectedCategory]) ? options[selectedCategory] : [];
 
   return (
     <RoleGuard requiredRole="ADMIN" fallback={

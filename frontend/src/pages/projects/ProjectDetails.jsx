@@ -331,7 +331,7 @@ const ProjectDetails = () => {
           </div>
           <div className="flex space-x-2">
             <span className={`badge ${getStatusBadge(project.status)}`}>
-              {project.status.replace('_', ' ')}
+              {project.status?.replace('_', ' ') || 'N/A'}
             </span>
           </div>
         </div>
@@ -351,10 +351,10 @@ const ProjectDetails = () => {
               <div>
                 <p className="text-sm text-primary-600">Budget</p>
                 <p className="text-xl font-bold text-primary-900">
-                  ${project.estimatedBudget.toLocaleString()}
+                  ${(project.estimatedBudget || 0).toLocaleString()}
                 </p>
                 <p className="text-xs text-primary-500">
-                  Actual: ${project.actualCost.toLocaleString()}
+                  Actual: ${(project.actualCost || 0).toLocaleString()}
                 </p>
               </div>
             </div>

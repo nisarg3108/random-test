@@ -49,7 +49,6 @@ export const apiClient = {
     try {
       let url = endpoint;
       
-      // Handle query parameters
       if (config.params) {
         const searchParams = new URLSearchParams();
         Object.entries(config.params).forEach(([key, value]) => {
@@ -63,7 +62,6 @@ export const apiClient = {
         }
       }
       
-      // Pass responseType to authFetch for blob handling
       const response = await authFetch(url, { 
         method: 'GET', 
         responseType: config.responseType,
@@ -71,7 +69,9 @@ export const apiClient = {
       });
       return { data: response };
     } catch (error) {
-      console.error(`GET ${endpoint}:`, error.message);
+      if (!error.message?.includes('Access denied') && !error.message?.includes('403')) {
+        console.error(`GET ${endpoint}:`, error.message);
+      }
       throw error;
     }
   },

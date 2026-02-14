@@ -173,7 +173,18 @@ export const getCompanyConfig = async (req, res) => {
     });
 
     if (!config) {
-      return res.status(404).json({ error: 'Company configuration not found' });
+      // Return default config instead of 404
+      return res.json({
+        tenantId,
+        companyName: '',
+        industry: '',
+        size: 'SMALL',
+        enabledModules: [],
+        workflowConfig: {},
+        approvalLevels: {},
+        customFields: {},
+        businessRules: {}
+      });
     }
 
     res.json(config);

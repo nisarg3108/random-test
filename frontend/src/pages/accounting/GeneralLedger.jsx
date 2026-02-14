@@ -18,15 +18,19 @@ export default function GeneralLedger() {
 
   useEffect(() => {
     fetchAccounts();
+  }, []);
+
+  useEffect(() => {
     fetchLedger();
   }, [filters]);
 
   const fetchAccounts = async () => {
     try {
       const response = await api.get('/accounting/chart-of-accounts');
-      setAccounts(response.data);
+      setAccounts(response.data || []);
     } catch (err) {
       console.error('Failed to fetch accounts');
+      setAccounts([]);
     }
   };
 
@@ -40,10 +44,11 @@ export default function GeneralLedger() {
       if (filters.status) params.append('status', filters.status);
 
       const response = await api.get(`/accounting/general-ledger?${params}`);
-      setLedgerEntries(response.data.entries);
-      setSummary(response.data.summary);
+      setLedgerEntries(response.data?.entries || response.data || []);
+      setSummary(response.data?.summary || null);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch ledger');
+      setLedgerEntries([]);
     } finally {
       setLoading(false);
     }
@@ -68,7 +73,7 @@ export default function GeneralLedger() {
               onChange={(e) => setFilters({ ...filters, accountId: e.target.value })}
             >
               <option value="">All Accounts</option>
-              {accounts.map(a => (
+              {Array.isArray(accounts) && accounts.map(a => (
                 <option key={a.id} value={a.id}>
                   {a.accountNumber} - {a.name}
                 </option>
@@ -144,27 +149,35 @@ export default function GeneralLedger() {
             </tr>
           </thead>
           <tbody>
-            {ledgerEntries.map((entry, idx) => (
-              <tr key={idx}>
-                <td>{new Date(entry.transactionDate).toLocaleDateString()}</td>
-                <td>{entry.referenceNumber}</td>
-                <td>{entry.description}</td>
-                <td className={entry.debitAmount > 0 ? 'amount debit' : ''}>
-                  {entry.debitAmount > 0 ? `₹${entry.debitAmount.toLocaleString('en-IN')}` : '-'}
-                </td>
-                <td className={entry.creditAmount > 0 ? 'amount credit' : ''}>
-                  {entry.creditAmount > 0 ? `₹${entry.creditAmount.toLocaleString('en-IN')}` : '-'}
-                </td>
-                <td className={`amount ${entry.balance >= 0 ? 'debit' : 'credit'}`}>
-                  ₹{Math.abs(entry.balance).toLocaleString('en-IN')}
-                </td>
-                <td>
-                  <span className={`status ${entry.status.toLowerCase()}`}>
-                    {entry.status}
-                  </span>
+            {Array.isArray(ledgerEntries) && ledgerEntries.length > 0 ? (
+              ledgerEntries.map((entry, idx) => (
+                <tr key={idx}>
+                  <td>{new Date(entry.transactionDate).toLocaleDateString()}</td>
+                  <td>{entry.referenceNumber}</td>
+                  <td>{entry.description}</td>
+                  <td className={entry.debitAmount > 0 ? 'amount debit' : ''}>
+                    {entry.debitAmount > 0 ? `₹${entry.debitAmount.toLocaleString('en-IN')}` : '-'}
+                  </td>
+                  <td className={entry.creditAmount > 0 ? 'amount credit' : ''}>
+                    {entry.creditAmount > 0 ? `₹${entry.creditAmount.toLocaleString('en-IN')}` : '-'}
+                  </td>
+                  <td className={`amount ${entry.balance >= 0 ? 'debit' : 'credit'}`}>
+                    ₹{Math.abs(entry.balance).toLocaleString('en-IN')}
+                  </td>
+                  <td>
+                    <span className={`status ${entry.status.toLowerCase()}`}>
+                      {entry.status}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
+                  No ledger entries found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
