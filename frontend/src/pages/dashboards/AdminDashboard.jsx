@@ -10,6 +10,8 @@ import { dashboardAPI } from '../../api/dashboard.api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ApprovalWidget from '../../components/approvals/ApprovalWidget';
 import OverdueAllocationWidget from '../../components/assets/OverdueAllocationWidget';
+import ExpenseClaimsWidget from '../../components/dashboard/ExpenseClaimsWidget';
+import LeaveRequestWidget from '../../components/dashboard/LeaveRequestWidget';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -47,7 +49,6 @@ const AdminDashboard = () => {
       const activitiesData = activitiesRes.status === 'fulfilled' ? activitiesRes.value.data : [];
       const employees = employeesRes.status === 'fulfilled' ? employeesRes.value.data : [];
       
-      // Filter employees that are not admins or managers
       const regularEmployees = employees.filter(emp => {
         const user = users.find(u => u.email === emp.email);
         return !user || (user.role !== 'ADMIN' && user.role !== 'MANAGER');
@@ -64,10 +65,9 @@ const AdminDashboard = () => {
         userCount: users.filter(u => u.role === 'USER').length || 0
       });
 
-      setActivities(activitiesData.slice(0, 4)); // Show only 4 recent activities
+      setActivities(activitiesData.slice(0, 4));
     } catch (err) {
-      setError('Failed to load dashboard data');
-      console.error('Dashboard error:', err);
+      console.log('Dashboard data load error (some data may be restricted)');
     } finally {
       setLoading(false);
     }
@@ -328,6 +328,12 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Expense Claims and Leave Requests */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ExpenseClaimsWidget maxItems={5} />
+        <LeaveRequestWidget maxItems={5} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

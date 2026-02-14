@@ -33,10 +33,34 @@ import { requireAuth as authenticate } from '../../core/auth/auth.middleware.js'
 
 const router = express.Router();
 
-// ==================== DOCUMENT ROUTES ====================
+// ==================== SPECIFIC ROUTES (MUST BE BEFORE PARAMETERIZED ROUTES) ====================
 
 // Statistics
 router.get('/statistics', authenticate, getDocumentStatisticsController);
+
+// File Upload
+router.post('/upload', authenticate, uploadMiddleware, uploadDocumentController);
+
+// ==================== FOLDER ROUTES ====================
+
+router.post('/folders', authenticate, createFolderController);
+router.get('/folders', authenticate, listFoldersController);
+router.get('/folders/:id', authenticate, getFolderController);
+router.put('/folders/:id', authenticate, updateFolderController);
+router.delete('/folders/:id', authenticate, deleteFolderController);
+router.post('/folders/:id/permissions', authenticate, setFolderPermissionsController);
+
+// ==================== TEMPLATE ROUTES ====================
+
+router.post('/templates', authenticate, uploadMiddleware, createDocumentTemplateController);
+router.get('/templates', authenticate, listDocumentTemplatesController);
+router.post('/templates/:id/generate', authenticate, generateFromTemplateController);
+
+// ==================== SHARING ROUTES ====================
+
+router.delete('/shares/:shareId', authenticate, revokeDocumentShareController);
+
+// ==================== DOCUMENT ROUTES ====================
 
 // Document CRUD
 router.post('/', authenticate, createDocumentController);
@@ -46,8 +70,7 @@ router.put('/:id', authenticate, updateDocumentController);
 router.delete('/:id', authenticate, deleteDocumentController);
 router.post('/:id/restore', authenticate, restoreDocumentController);
 
-// File Upload & Download
-router.post('/upload', authenticate, uploadMiddleware, uploadDocumentController);
+// File Download
 router.get('/:id/download', authenticate, downloadDocumentController);
 
 // Version Control
@@ -59,31 +82,11 @@ router.get('/:id/versions/:versionNumber/download', authenticate, downloadVersio
 // Activity Log
 router.get('/:id/activities', authenticate, getDocumentActivitiesController);
 
-// ==================== FOLDER ROUTES ====================
-
-router.post('/folders', authenticate, createFolderController);
-router.get('/folders', authenticate, listFoldersController);
-router.get('/folders/:id', authenticate, getFolderController);
-router.put('/folders/:id', authenticate, updateFolderController);
-router.delete('/folders/:id', authenticate, deleteFolderController);
-
-// Folder Permissions
-router.post('/folders/:id/permissions', authenticate, setFolderPermissionsController);
-
-// ==================== SHARING ROUTES ====================
-
+// Sharing
 router.post('/:id/shares', authenticate, createDocumentShareController);
 router.get('/:id/shares', authenticate, listDocumentSharesController);
-router.delete('/shares/:shareId', authenticate, revokeDocumentShareController);
 
-// ==================== PERMISSION ROUTES ====================
-
+// Permissions
 router.post('/:id/permissions', authenticate, setDocumentPermissionsController);
-
-// ==================== TEMPLATE ROUTES ====================
-
-router.post('/templates', authenticate, uploadMiddleware, createDocumentTemplateController);
-router.get('/templates', authenticate, listDocumentTemplatesController);
-router.post('/templates/:id/generate', authenticate, generateFromTemplateController);
 
 export default router;

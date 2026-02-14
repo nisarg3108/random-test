@@ -29,9 +29,10 @@ export default function JournalEntry() {
       if (filters.search) params.append('search', filters.search);
 
       const response = await api.get(`/accounting/journal-entries?${params}`);
-      setEntries(response.data);
+      setEntries(response.data || []);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch entries');
+      setEntries([]);
     } finally {
       setLoading(false);
     }
@@ -104,14 +105,20 @@ export default function JournalEntry() {
       {error && <div className="alert-error">{error}</div>}
 
       <div className="entries-list">
-        {entries.map(entry => (
-          <JournalEntryCard
-            key={entry.id}
-            entry={entry}
-            onPost={() => handlePost(entry.id)}
-            onReverse={() => handleReverse(entry.id)}
-          />
-        ))}
+        {Array.isArray(entries) && entries.length > 0 ? (
+          entries.map(entry => (
+            <JournalEntryCard
+              key={entry.id}
+              entry={entry}
+              onPost={() => handlePost(entry.id)}
+              onReverse={() => handleReverse(entry.id)}
+            />
+          ))
+        ) : (
+          <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+            No journal entries found
+          </div>
+        )}
       </div>
 
       {showForm && (
@@ -216,9 +223,10 @@ function JournalEntryForm({ onClose, onSuccess }) {
   const fetchAccounts = async () => {
     try {
       const response = await api.get('/accounting/chart-of-accounts');
-      setAccounts(response.data);
+      setAccounts(response.data || []);
     } catch (err) {
       setError('Failed to load accounts');
+      setAccounts([]);
     }
   };
 
@@ -322,7 +330,7 @@ function JournalEntryForm({ onClose, onSuccess }) {
                         required
                       >
                         <option value="">Select Account</option>
-                        {accounts.map(a => (
+                        {Array.isArray(accounts) && accounts.map(a => (
                           <option key={a.id} value={a.id}>
                             {a.accountNumber} - {a.name}
                           </option>

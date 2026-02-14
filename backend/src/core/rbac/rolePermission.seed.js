@@ -5,6 +5,10 @@ export const assignPermissions = async (tenantId) => {
     where: { name: 'ADMIN', tenantId },
   });
 
+  const manager = await prisma.role.findFirst({
+    where: { name: 'MANAGER', tenantId },
+  });
+
   const user = await prisma.role.findFirst({
     where: { name: 'USER', tenantId },
   });
@@ -30,6 +34,32 @@ export const assignPermissions = async (tenantId) => {
         permissionId: perm.id,
       },
     });
+
+    // MANAGER permissions
+    if (manager && (
+      perm.code === 'user.view' ||
+      perm.code === 'inventory.view' ||
+      perm.code === 'department.view' ||
+      perm.code === 'employee.view' ||
+      perm.code === 'employee.view.all' ||
+      perm.code === 'leave.view' ||
+      perm.code === 'leave.approve' ||
+      perm.code === 'leaveType.view'
+    )) {
+      await prisma.rolePermission.upsert({
+        where: {
+          roleId_permissionId: {
+            roleId: manager.id,
+            permissionId: perm.id,
+          },
+        },
+        update: {},
+        create: {
+          roleId: manager.id,
+          permissionId: perm.id,
+        },
+      });
+    }
 
     // USER limited permissions
     if (

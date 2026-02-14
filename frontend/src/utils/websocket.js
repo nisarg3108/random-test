@@ -26,14 +26,20 @@ class WebSocketClient {
     return new Promise((resolve, reject) => {
       try {
         this.isConnecting = true;
-        const baseWsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
+        const baseWsUrl = (import.meta.env.VITE_WS_URL || 'ws://localhost:5000').replace(/\/$/, '');
         const wsUrl = `${baseWsUrl}/ws?token=${encodeURIComponent(token)}`;
         
         if (this.reconnectAttempts === 0) {
-          console.log('🔌 Attempting WebSocket connection...');
+          console.log('🔌 Attempting WebSocket connection to:', wsUrl.replace(/token=[^&]+/, 'token=***'));
         }
         
         this.ws = new WebSocket(wsUrl);
+        
+        // Suppress browser's native WebSocket error messages
+        this.ws.addEventListener('error', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
 
         const connectionTimeout = setTimeout(() => {
           if (this.reconnectAttempts === 1) {
@@ -80,9 +86,9 @@ class WebSocketClient {
         this.ws.onerror = (error) => {
           clearTimeout(connectionTimeout);
           this.isConnecting = false;
-          // Only log first error to avoid spam
-          if (this.reconnectAttempts <= 1) {
-            console.warn('⚠️ WebSocket connection failed - running in offline mode');
+          // Silently handle errors - only log on first attempt
+          if (this.reconnectAttempts === 0) {
+            console.info('ℹ️ WebSocket unavailable - using polling mode');
           }
           reject(error);
         };

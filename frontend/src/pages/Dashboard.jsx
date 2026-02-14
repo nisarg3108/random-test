@@ -4,6 +4,17 @@ import { useAuth } from '../hooks/useAuth';
 import UserDashboard from './dashboards/UserDashboard';
 import ManagerDashboard from './dashboards/ManagerDashboard';
 import AdminDashboard from './dashboards/AdminDashboard';
+import HRManagerDashboard from './dashboards/HRManagerDashboard';
+import HRStaffDashboard from './dashboards/HRStaffDashboard';
+import FinanceManagerDashboard from './dashboards/FinanceManagerDashboard';
+import AccountantDashboard from './dashboards/AccountantDashboard';
+import InventoryManagerDashboard from './dashboards/InventoryManagerDashboard';
+import WarehouseStaffDashboard from './dashboards/WarehouseStaffDashboard';
+import SalesManagerDashboard from './dashboards/SalesManagerDashboard';
+import SalesStaffDashboard from './dashboards/SalesStaffDashboard';
+import PurchaseManagerDashboard from './dashboards/PurchaseManagerDashboard';
+import ProjectManagerDashboard from './dashboards/ProjectManagerDashboard';
+import EmployeeDashboard from './dashboards/EmployeeDashboard';
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
@@ -30,15 +41,26 @@ const Dashboard = () => {
       );
     }
 
-    switch (user.role) {
-      case 'ADMIN':
-        return <AdminDashboard />;
-      case 'MANAGER':
-        return <ManagerDashboard />;
-      case 'USER':
-      default:
-        return <UserDashboard />;
-    }
+    // Role-to-Dashboard mapping
+    const dashboardMap = {
+      ADMIN: AdminDashboard,
+      MANAGER: ManagerDashboard,
+      HR_MANAGER: HRManagerDashboard,
+      HR_STAFF: HRStaffDashboard,
+      FINANCE_MANAGER: FinanceManagerDashboard,
+      ACCOUNTANT: AccountantDashboard,
+      INVENTORY_MANAGER: InventoryManagerDashboard,
+      WAREHOUSE_STAFF: WarehouseStaffDashboard,
+      SALES_MANAGER: SalesManagerDashboard,
+      SALES_STAFF: SalesStaffDashboard,
+      PURCHASE_MANAGER: PurchaseManagerDashboard,
+      PROJECT_MANAGER: ProjectManagerDashboard,
+      EMPLOYEE: EmployeeDashboard,
+      USER: UserDashboard
+    };
+
+    const DashboardComponent = dashboardMap[user.role] || UserDashboard;
+    return <DashboardComponent />;
   };
 
   return (

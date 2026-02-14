@@ -18,9 +18,10 @@ export default function ChartOfAccounts() {
     try {
       setLoading(true);
       const response = await api.get('/accounting/chart-of-accounts');
-      setAccounts(response.data);
+      setAccounts(response.data || []);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch accounts');
+      setAccounts([]);
     } finally {
       setLoading(false);
     }
@@ -51,6 +52,7 @@ export default function ChartOfAccounts() {
 
   // Build hierarchy tree
   const buildTree = (accounts, parentId = null) => {
+    if (!Array.isArray(accounts)) return [];
     return accounts.filter(a => a.parentAccountId === parentId).map(account => ({
       ...account,
       children: buildTree(accounts, account.id)
@@ -71,15 +73,21 @@ export default function ChartOfAccounts() {
       {error && <div className="alert-error">{error}</div>}
 
       <div className="accounts-tree">
-        {tree.map(account => (
-          <AccountNode
-            key={account.id}
-            account={account}
-            expanded={expandedAccounts.has(account.id)}
-            onToggleExpand={toggleExpand}
-            onDelete={handleDelete}
-          />
-        ))}
+        {Array.isArray(tree) && tree.length > 0 ? (
+          tree.map(account => (
+            <AccountNode
+              key={account.id}
+              account={account}
+              expanded={expandedAccounts.has(account.id)}
+              onToggleExpand={toggleExpand}
+              onDelete={handleDelete}
+            />
+          ))
+        ) : (
+          <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+            No accounts found. Click "Add Account" to create one.
+          </div>
+        )}
       </div>
 
       {showForm && (
@@ -228,7 +236,7 @@ function AccountForm({ parentAccounts, onClose, onSuccess }) {
               onChange={(e) => setFormData({ ...formData, parentAccountId: e.target.value })}
             >
               <option value="">No Parent</option>
-              {parentAccounts.map(a => (
+              {Array.isArray(parentAccounts) && parentAccounts.map(a => (
                 <option key={a.id} value={a.id}>
                   {a.accountNumber} - {a.name}
                 </option>

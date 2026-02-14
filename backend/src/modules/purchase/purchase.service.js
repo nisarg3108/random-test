@@ -53,9 +53,8 @@ export const getVendorById = async (id, tenantId) => {
 };
 
 export const createVendor = async (data, tenantId) => {
-  // Generate unique vendor code
-  const vendorCount = await prisma.vendor.count({ where: { tenantId } });
-  const vendorCode = `VEN-${String(vendorCount + 1).padStart(5, '0')}`;
+  // Generate unique vendor code using timestamp if not provided
+  const vendorCode = data.vendorCode || `VEN-${Date.now()}`;
 
   return await prisma.vendor.create({
     data: {
@@ -244,7 +243,15 @@ export const convertRequisitionToPO = async (id, tenantId, userId) => {
 export const listPurchaseOrders = async (tenantId, filters = {}) => {
   const where = { tenantId };
   
-  if (filters.status) where.status = filters.status;
+  // Handle multiple status values
+  if (filters.status) {
+    if (Array.isArray(filters.status)) {
+      where.status = { in: filters.status };
+    } else {
+      where.status = filters.status;
+    }
+  }
+  
   if (filters.paymentStatus) where.paymentStatus = filters.paymentStatus;
   if (filters.approvalStatus) where.approvalStatus = filters.approvalStatus;
   if (filters.vendorId) where.vendorId = filters.vendorId;

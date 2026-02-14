@@ -43,7 +43,6 @@ export const useInventoryStore = create((set, get) => ({
       });
 
     } catch (error) {
-      console.warn('Real-time inventory updates unavailable - using polling mode');
       set({ isRealTimeConnected: false });
     }
   },

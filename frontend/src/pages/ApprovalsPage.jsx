@@ -3,7 +3,7 @@ import { Check, X, Clock, AlertCircle, Plus } from 'lucide-react';
 import { useApprovalsStore } from '../store/approvals.store';
 import Layout from '../components/layout/Layout';
 
-const ApprovalsPage = () => {
+const ApprovalsPage = ({ filterModule = null }) => {
   const {
     approvals,
     loading,
@@ -20,6 +20,11 @@ const ApprovalsPage = () => {
   useEffect(() => {
     fetchApprovals();
   }, [fetchApprovals]);
+
+  // Filter approvals by module if specified
+  const filteredApprovals = filterModule 
+    ? approvals.filter(approval => approval.workflow.module === filterModule)
+    : approvals;
 
   const handleApprove = async (approvalId) => {
     setProcessing(approvalId);
@@ -104,7 +109,7 @@ const ApprovalsPage = () => {
         </div>
       )}
 
-      {approvals.length === 0 ? (
+      {filteredApprovals.length === 0 ? (
         <div className="text-center py-12">
           <Clock className="mx-auto h-12 w-12 text-gray-400" />
           <h3 className="mt-2 text-sm font-medium text-gray-900">No pending approvals</h3>
@@ -112,7 +117,7 @@ const ApprovalsPage = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {approvals.map((approval) => (
+          {filteredApprovals.map((approval) => (
             <div key={approval.id} className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">

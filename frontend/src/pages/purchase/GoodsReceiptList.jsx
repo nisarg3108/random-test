@@ -41,7 +41,7 @@ const GoodsReceiptList = () => {
   const fetchReceipts = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       const response = await axios.get(`${API_URL}/api/purchase/receipts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -55,7 +55,7 @@ const GoodsReceiptList = () => {
 
   const fetchPurchaseOrders = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       const response = await axios.get(`${API_URL}/api/purchase/orders?status=CONFIRMED&status=SHIPPED`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -77,7 +77,7 @@ const GoodsReceiptList = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       const response = await axios.get(`${API_URL}/api/purchase/orders/${poId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -113,7 +113,7 @@ const GoodsReceiptList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('ueorms_token');
 
     try {
       if (editing) {
@@ -152,7 +152,7 @@ const GoodsReceiptList = () => {
     if (!confirm('Are you sure you want to delete this goods receipt?')) return;
     
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ueorms_token');
       await axios.delete(`${API_URL}/api/purchase/receipts/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

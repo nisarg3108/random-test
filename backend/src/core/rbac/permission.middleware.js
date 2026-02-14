@@ -30,6 +30,32 @@ export const requirePermission = (permissionCode, options = {}) => {
       if (user?.role === 'ADMIN') {
         return next();
       }
+      
+      // Allow role-based access for common roles (backward compatibility)
+      const rolePermissionMap = {
+        'FINANCE_MANAGER': ['finance', 'accounting', 'expense'],
+        'ACCOUNTANT': ['accounting', 'finance'],
+        'INVENTORY_MANAGER': ['inventory', 'warehouse'],
+        'WAREHOUSE_STAFF': ['inventory', 'warehouse'],
+        'SALES_MANAGER': ['crm', 'sales'],
+        'SALES_STAFF': ['crm', 'sales'],
+        'PURCHASE_MANAGER': ['purchase'],
+        'PROJECT_MANAGER': ['projects'],
+        'HR_MANAGER': ['employees', 'hr'],
+        'MANAGER': ['tasks', 'employees']
+      };
+      
+      // Check if user's role grants access to required permissions
+      if (user?.role && rolePermissionMap[user.role]) {
+        const rolePermissions = rolePermissionMap[user.role];
+        const requiredPerms = Array.isArray(permissionCode) ? permissionCode : [permissionCode];
+        const hasRoleAccess = requiredPerms.some(perm => 
+          rolePermissions.some(rolePerm => perm.includes(rolePerm))
+        );
+        if (hasRoleAccess) {
+          return next();
+        }
+      }
 
       // Get user's roles and permissions
       const userRoles = await prisma.userRole.findMany({

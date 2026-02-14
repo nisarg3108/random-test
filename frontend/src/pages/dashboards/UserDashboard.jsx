@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useInventoryStore } from '../../store/inventory.store';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ExpenseClaimsWidget from '../../components/dashboard/ExpenseClaimsWidget';
+import LeaveRequestWidget from '../../components/dashboard/LeaveRequestWidget';
 import { Package, DollarSign, AlertTriangle, Plus, Eye, TrendingUp, Sparkles, BarChart3 } from 'lucide-react';
 
 const UserDashboard = () => {
@@ -130,6 +132,12 @@ const UserDashboard = () => {
             </div>
           </Link>
         </div>
+      </div>
+
+      {/* Expense Claims and Leave Requests */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <ExpenseClaimsWidget maxItems={5} />
+        <LeaveRequestWidget maxItems={5} />
       </div>
 
       {/* Enhanced Recent Items */}

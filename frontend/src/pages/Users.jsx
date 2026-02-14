@@ -38,8 +38,12 @@ const Users = () => {
       const response = await apiClient.get('/users');
       setUsers(response.data || []);
     } catch (err) {
-      setError('Failed to load users');
-      console.error('Load users error:', err);
+      if (err.message?.includes('Access denied') || err.message?.includes('403')) {
+        setError('You do not have permission to view users');
+      } else {
+        setError('Failed to load users');
+      }
+      setUsers([]);
     } finally {
       setLoading(false);
     }

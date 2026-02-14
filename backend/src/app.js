@@ -58,6 +58,7 @@ import reportRoutes from './modules/reports/report.routes.js';
 import reportingRoutes from './modules/reports/reporting.routes.js';
 import communicationRoutes from './modules/communication/communication.routes.js';
 import dataImportExportRoutes from './modules/utils/data-import-export.routes.js';
+import missingRoutes from './routes/missing-routes.js';
 
 const app = express();
 
@@ -149,6 +150,9 @@ app.use('/api/communication', communicationRoutes);
 
 // Data Import/Export Routes
 app.use('/api/data', dataImportExportRoutes);
+
+// Missing routes (minimal implementations)
+app.use('/api', missingRoutes);
 
 
 

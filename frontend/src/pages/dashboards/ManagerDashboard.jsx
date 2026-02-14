@@ -6,6 +6,8 @@ import { dashboardAPI } from '../../api/dashboard.api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ApprovalWidget from '../../components/approvals/ApprovalWidget';
 import OverdueAllocationWidget from '../../components/assets/OverdueAllocationWidget';
+import ExpenseClaimsWidget from '../../components/dashboard/ExpenseClaimsWidget';
+import LeaveRequestWidget from '../../components/dashboard/LeaveRequestWidget';
 import { Package, Building2, Clock, Zap, BarChart3, CheckCircle, Activity, TrendingUp, Sparkles, ArrowUpRight, Target } from 'lucide-react';
 
 const ManagerDashboard = () => {
@@ -200,6 +202,12 @@ const ManagerDashboard = () => {
             </div>
           </Link>
         </div>
+      </div>
+
+      {/* Expense Claims and Leave Requests */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <ExpenseClaimsWidget maxItems={5} />
+        <LeaveRequestWidget maxItems={5} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
