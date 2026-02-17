@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { setToken } from '../store/auth.store';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -12,11 +11,65 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
+  const [plans, setPlans] = useState([]);
+  const [selectedPlanId, setSelectedPlanId] = useState('');
+  const [customModules, setCustomModules] = useState([]);
+  const [provider, setProvider] = useState('STRIPE');
+  const [plansLoading, setPlansLoading] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+
+  const isCustomPlan = selectedPlanId === 'custom';
+
+  useEffect(() => {
+    const loadPlans = async () => {
+      setPlansLoading(true);
+      try {
+        const response = await fetch(`${API_BASE_URL}/billing/public/plans`);
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.message || 'Failed to load plans');
+        }
+
+        const publicPlans = Array.isArray(result.plans) ? result.plans : [];
+        setPlans([
+          ...publicPlans,
+          {
+            id: 'custom',
+            name: 'Custom Plan',
+            description: 'Choose only the modules you need.'
+          }
+        ]);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setPlansLoading(false);
+      }
+    };
+
+    loadPlans();
+  }, []);
+
+  const availableModules = [
+    { key: 'INVENTORY', label: 'Inventory Management' },
+    { key: 'HR', label: 'Human Resources' },
+    { key: 'PAYROLL', label: 'Payroll' },
+    { key: 'FINANCE', label: 'Finance & Accounting' },
+    { key: 'CRM', label: 'CRM' },
+    { key: 'SALES', label: 'Sales & Orders' },
+    { key: 'PURCHASE', label: 'Purchase Management' },
+    { key: 'PROJECTS', label: 'Projects' },
+    { key: 'ASSETS', label: 'Asset Management' },
+    { key: 'DOCUMENTS', label: 'Documents' },
+    { key: 'COMMUNICATION', label: 'Communication' },
+    { key: 'REPORTS', label: 'Reports & Analytics' },
+    { key: 'APPROVALS', label: 'Approvals' },
+    { key: 'WORKFLOWS', label: 'Workflows' },
+    { key: 'MANUFACTURING', label: 'Manufacturing' }
+  ];
 
   const validateForm = () => {
     const errors = {};
@@ -39,6 +92,14 @@ const Register = () => {
     
     if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';
+    }
+
+    if (!selectedPlanId) {
+      errors.plan = 'Please select a plan';
+    }
+
+    if (isCustomPlan && customModules.length === 0) {
+      errors.customModules = 'Select at least one module for the custom plan';
     }
     
     setValidationErrors(errors);
@@ -65,7 +126,7 @@ const Register = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,6 +135,9 @@ const Register = () => {
           companyName: formData.companyName,
           email: formData.email,
           password: formData.password,
+          planId: isCustomPlan ? undefined : selectedPlanId,
+          customModules: isCustomPlan ? customModules : undefined,
+          provider
         }),
       });
 
@@ -83,8 +147,11 @@ const Register = () => {
         throw new Error(result.message || 'Registration failed');
       }
 
-      setToken(result.token);
-      window.location.href = '/dashboard';
+      if (!result.redirectUrl) {
+        throw new Error('Missing payment redirect URL');
+      }
+
+      window.location.href = result.redirectUrl;
     } catch (err) {
       setError(err.message);
     } finally {
@@ -111,6 +178,23 @@ const Register = () => {
             {/* Company Name */}
             <div>
               <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-1">
+            {/* Payment Provider */}
+            <div>
+              <label htmlFor="provider" className="block text-sm font-medium text-gray-700 mb-1">
+                Payment Provider
+              </label>
+              <select
+                id="provider"
+                name="provider"
+                value={provider}
+                onChange={(e) => setProvider(e.target.value)}
+                className="input-modern"
+              >
+                <option value="STRIPE">Stripe</option>
+                <option value="RAZORPAY">Razorpay</option>
+              </select>
+            </div>
+
                 Company Name
               </label>
               <div className="relative">
@@ -189,6 +273,69 @@ const Register = () => {
                 <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>
               )}
             </div>
+
+            {/* Plan Selection */}
+            <div>
+              <label htmlFor="plan" className="block text-sm font-medium text-gray-700 mb-1">
+                Select Plan
+              </label>
+              <select
+                id="plan"
+                name="plan"
+                value={selectedPlanId}
+                onChange={(e) => {
+                  setSelectedPlanId(e.target.value);
+                  setCustomModules([]);
+                  if (validationErrors.plan) {
+                    setValidationErrors(prev => ({ ...prev, plan: '' }));
+                  }
+                }}
+                className={`input-modern ${validationErrors.plan ? 'border-red-300' : ''}`}
+                disabled={plansLoading}
+              >
+                <option value="">{plansLoading ? 'Loading plans...' : 'Choose a plan'}</option>
+                {plans.map((plan) => (
+                  <option key={plan.id} value={plan.id}>
+                    {plan.name}{plan.basePrice ? ` - ${plan.currency || 'USD'} ${plan.basePrice}` : ''}
+                  </option>
+                ))}
+              </select>
+              {validationErrors.plan && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.plan}</p>
+              )}
+            </div>
+
+            {isCustomPlan && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Custom Plan Modules
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {availableModules.map((module) => (
+                    <label key={module.key} className="flex items-center space-x-2 text-sm text-gray-700">
+                      <input
+                        type="checkbox"
+                        checked={customModules.includes(module.key)}
+                        onChange={(e) => {
+                          const updatedModules = e.target.checked
+                            ? [...customModules, module.key]
+                            : customModules.filter((item) => item !== module.key);
+                          setCustomModules(updatedModules);
+                          if (validationErrors.customModules) {
+                            setValidationErrors(prev => ({ ...prev, customModules: '' }));
+                          }
+                        }}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600"
+                      />
+                      <span>{module.label}</span>
+                    </label>
+                  ))}
+                </div>
+                {validationErrors.customModules && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.customModules}</p>
+                )}
+              </div>
+            )}
 
             {/* Confirm Password */}
             <div>

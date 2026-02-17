@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useCompanyStore } from '../../store/company.store';
 import { 
   LayoutDashboard, Package, Building2, Users, Mail, Shield, 
   ShieldCheck, Zap, CheckCircle, FileText, Settings, 
@@ -15,6 +16,18 @@ const Sidebar = () => {
   const location = useLocation();
   const { user, hasRole } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const { config, loading: companyLoading, fetchConfig } = useCompanyStore();
+
+  useEffect(() => {
+    if (!config && !companyLoading) {
+      fetchConfig();
+    }
+  }, [config, companyLoading, fetchConfig]);
+
+  const enabledModules = useMemo(() => {
+    if (!config?.enabledModules) return null;
+    return config.enabledModules.map((moduleKey) => String(moduleKey).toUpperCase());
+  }, [config?.enabledModules]);
 
   if (!user) return null;
 
@@ -29,34 +42,34 @@ const Sidebar = () => {
     // HR Manager specific items
     if (['ADMIN', 'HR_MANAGER'].includes(role)) {
       items.push(
-        { path: '/hr', label: 'HR Dashboard', icon: UserCheck },
-        { path: '/hr/employees', label: 'Employees', icon: Users },
-        { path: '/hr/salary-management', label: 'Salary Management', icon: DollarSign },
-        { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar },
-        { path: '/hr/payroll', label: 'Payroll Dashboard', icon: DollarSign },
-        { path: '/hr/payroll/cycles', label: 'Payroll Cycles', icon: Calendar },
-        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle }
+        { path: '/hr', label: 'HR Dashboard', icon: UserCheck, moduleKey: 'HR' },
+        { path: '/hr/employees', label: 'Employees', icon: Users, moduleKey: 'HR' },
+        { path: '/hr/salary-management', label: 'Salary Management', icon: DollarSign, moduleKey: 'PAYROLL' },
+        { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar, moduleKey: 'HR' },
+        { path: '/hr/payroll', label: 'Payroll Dashboard', icon: DollarSign, moduleKey: 'PAYROLL' },
+        { path: '/hr/payroll/cycles', label: 'Payroll Cycles', icon: Calendar, moduleKey: 'PAYROLL' },
+        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle, moduleKey: 'HR' }
       );
     }
 
     // HR Staff specific items
     if (['ADMIN', 'HR_MANAGER', 'HR_STAFF'].includes(role)) {
       items.push(
-        { path: '/hr/employees', label: 'Employees', icon: Users },
-        { path: '/hr/attendance', label: 'Attendance', icon: Clock },
-        { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar },
-        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle }
+        { path: '/hr/employees', label: 'Employees', icon: Users, moduleKey: 'HR' },
+        { path: '/hr/attendance', label: 'Attendance', icon: Clock, moduleKey: 'HR' },
+        { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar, moduleKey: 'HR' },
+        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle, moduleKey: 'HR' }
       );
     }
 
     // Employee self-service
     if (role === 'EMPLOYEE') {
       items.push(
-        { path: '/hr/attendance', label: 'My Attendance', icon: Clock },
-        { path: '/hr/leave-requests', label: 'My Leaves', icon: Calendar },
-        { path: '/employee/tasks', label: 'My Tasks', icon: Target },
-        { path: '/employee/work-reports', label: 'Work Reports', icon: ClipboardList },
-        { path: '/communication/messages', label: 'Messages', icon: MessageSquare },
+        { path: '/hr/attendance', label: 'My Attendance', icon: Clock, moduleKey: 'HR' },
+        { path: '/hr/leave-requests', label: 'My Leaves', icon: Calendar, moduleKey: 'HR' },
+        { path: '/employee/tasks', label: 'My Tasks', icon: Target, moduleKey: 'PROJECTS' },
+        { path: '/employee/work-reports', label: 'Work Reports', icon: ClipboardList, moduleKey: 'PROJECTS' },
+        { path: '/communication/messages', label: 'Messages', icon: MessageSquare, moduleKey: 'COMMUNICATION' },
         { path: '/notifications', label: 'Notifications', icon: Bell }
       );
     }
@@ -64,80 +77,80 @@ const Sidebar = () => {
     // Finance Manager specific items
     if (['ADMIN', 'FINANCE_MANAGER'].includes(role)) {
       items.push(
-        { path: '/finance', label: 'Finance Dashboard', icon: DollarSign },
-        { path: '/finance/expense-categories', label: 'Expense Categories', icon: FileText },
-        { path: '/finance/approvals', label: 'Finance Approvals', icon: CheckCircle },
-        { path: '/accounting/ledger', label: 'General Ledger', icon: FileText },
-        { path: '/accounting/reports', label: 'Financial Reports', icon: BarChart3 }
+        { path: '/finance', label: 'Finance Dashboard', icon: DollarSign, moduleKey: 'FINANCE' },
+        { path: '/finance/expense-categories', label: 'Expense Categories', icon: FileText, moduleKey: 'FINANCE' },
+        { path: '/finance/approvals', label: 'Finance Approvals', icon: CheckCircle, moduleKey: 'FINANCE' },
+        { path: '/accounting/ledger', label: 'General Ledger', icon: FileText, moduleKey: 'FINANCE' },
+        { path: '/accounting/reports', label: 'Financial Reports', icon: BarChart3, moduleKey: 'FINANCE' }
       );
     }
 
     // Accountant specific items
     if (['ADMIN', 'FINANCE_MANAGER', 'ACCOUNTANT'].includes(role)) {
       items.push(
-        { path: '/accounting/journal', label: 'Journal Entries', icon: FileText },
-        { path: '/accounting/ledger', label: 'Ledger', icon: FileText },
-        { path: '/accounting/charts', label: 'Chart of Accounts', icon: FileText }
+        { path: '/accounting/journal', label: 'Journal Entries', icon: FileText, moduleKey: 'FINANCE' },
+        { path: '/accounting/ledger', label: 'Ledger', icon: FileText, moduleKey: 'FINANCE' },
+        { path: '/accounting/charts', label: 'Chart of Accounts', icon: FileText, moduleKey: 'FINANCE' }
       );
     }
 
     // Inventory Manager specific items
     if (['ADMIN', 'INVENTORY_MANAGER'].includes(role)) {
       items.push(
-        { path: '/inventory', label: 'Inventory', icon: Package },
-        { path: '/inventory-dashboard', label: 'Inventory Analytics', icon: BarChart3 },
-        { path: '/warehouse', label: 'Warehouse', icon: Box },
-        { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart }
+        { path: '/inventory', label: 'Inventory', icon: Package, moduleKey: 'INVENTORY' },
+        { path: '/inventory-dashboard', label: 'Inventory Analytics', icon: BarChart3, moduleKey: 'INVENTORY' },
+        { path: '/warehouse', label: 'Warehouse', icon: Box, moduleKey: 'INVENTORY' },
+        { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart, moduleKey: 'PURCHASE' }
       );
     }
 
     // Warehouse Staff specific items
     if (['ADMIN', 'INVENTORY_MANAGER', 'WAREHOUSE_STAFF'].includes(role)) {
       items.push(
-        { path: '/inventory', label: 'Inventory', icon: Package },
-        { path: '/warehouse/receipts', label: 'Receipts', icon: Package },
-        { path: '/warehouse/dispatch', label: 'Dispatch', icon: Truck }
+        { path: '/inventory', label: 'Inventory', icon: Package, moduleKey: 'INVENTORY' },
+        { path: '/warehouse/receipts', label: 'Receipts', icon: Package, moduleKey: 'INVENTORY' },
+        { path: '/warehouse/dispatch', label: 'Dispatch', icon: Truck, moduleKey: 'INVENTORY' }
       );
     }
 
     // Sales Manager specific items
     if (['ADMIN', 'SALES_MANAGER'].includes(role)) {
       items.push(
-        { path: '/crm', label: 'CRM Dashboard', icon: Briefcase },
-        { path: '/crm/pipeline', label: 'Sales Pipeline', icon: Target },
-        { path: '/crm/customers', label: 'Customers', icon: Users },
-        { path: '/sales/analytics', label: 'Sales Analytics', icon: BarChart3 },
-        { path: '/sales/orders', label: 'Sales Orders', icon: Package }
+        { path: '/crm', label: 'CRM Dashboard', icon: Briefcase, moduleKey: 'CRM' },
+        { path: '/crm/pipeline', label: 'Sales Pipeline', icon: Target, moduleKey: 'CRM' },
+        { path: '/crm/customers', label: 'Customers', icon: Users, moduleKey: 'CRM' },
+        { path: '/sales/analytics', label: 'Sales Analytics', icon: BarChart3, moduleKey: 'SALES' },
+        { path: '/sales/orders', label: 'Sales Orders', icon: Package, moduleKey: 'SALES' }
       );
     }
 
     // Sales Staff specific items
     if (['ADMIN', 'SALES_MANAGER', 'SALES_STAFF'].includes(role)) {
       items.push(
-        { path: '/crm/leads', label: 'My Leads', icon: Target },
-        { path: '/crm/customers', label: 'Customers', icon: Users },
-        { path: '/crm/contacts', label: 'Contacts', icon: User },
-        { path: '/sales/orders', label: 'Sales Orders', icon: Package },
-        { path: '/sales/quotations', label: 'Quotations', icon: FileText }
+        { path: '/crm/leads', label: 'My Leads', icon: Target, moduleKey: 'CRM' },
+        { path: '/crm/customers', label: 'Customers', icon: Users, moduleKey: 'CRM' },
+        { path: '/crm/contacts', label: 'Contacts', icon: User, moduleKey: 'CRM' },
+        { path: '/sales/orders', label: 'Sales Orders', icon: Package, moduleKey: 'SALES' },
+        { path: '/sales/quotations', label: 'Quotations', icon: FileText, moduleKey: 'SALES' }
       );
     }
 
     // Purchase Manager specific items
     if (['ADMIN', 'PURCHASE_MANAGER'].includes(role)) {
       items.push(
-        { path: '/purchase/vendors', label: 'Vendors', icon: Users },
-        { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart },
-        { path: '/purchase/requisitions', label: 'Requisitions', icon: FileText },
-        { path: '/purchase/analytics', label: 'Purchase Analytics', icon: BarChart3 }
+        { path: '/purchase/vendors', label: 'Vendors', icon: Users, moduleKey: 'PURCHASE' },
+        { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart, moduleKey: 'PURCHASE' },
+        { path: '/purchase/requisitions', label: 'Requisitions', icon: FileText, moduleKey: 'PURCHASE' },
+        { path: '/purchase/analytics', label: 'Purchase Analytics', icon: BarChart3, moduleKey: 'PURCHASE' }
       );
     }
 
     // Project Manager specific items
     if (['ADMIN', 'PROJECT_MANAGER', 'MANAGER'].includes(role)) {
       items.push(
-        { path: '/projects', label: 'Projects', icon: Briefcase },
-        { path: '/projects/tasks', label: 'Project Tasks', icon: Target },
-        { path: '/employee/tasks', label: 'Task Management', icon: Target }
+        { path: '/projects', label: 'Projects', icon: Briefcase, moduleKey: 'PROJECTS' },
+        { path: '/projects/tasks', label: 'Project Tasks', icon: Target, moduleKey: 'PROJECTS' },
+        { path: '/employee/tasks', label: 'Task Management', icon: Target, moduleKey: 'PROJECTS' }
       );
     }
 
@@ -146,18 +159,18 @@ const Sidebar = () => {
       items.push(
         { path: '/users', label: 'Users', icon: Users },
         { path: '/departments', label: 'Departments', icon: Building2 },
-        { path: '/reports', label: 'Reports', icon: BarChart3 },
-        { path: '/approvals/dashboard', label: 'Approval Dashboard', icon: CheckCircle },
-        { path: '/employee/tasks', label: 'Team Tasks', icon: Target }
+        { path: '/reports', label: 'Reports', icon: BarChart3, moduleKey: 'REPORTS' },
+        { path: '/approvals/dashboard', label: 'Approval Dashboard', icon: CheckCircle, moduleKey: 'APPROVALS' },
+        { path: '/employee/tasks', label: 'Team Tasks', icon: Target, moduleKey: 'PROJECTS' }
       );
     }
 
     // USER role - basic access
     if (role === 'USER') {
       items.push(
-        { path: '/inventory', label: 'Inventory', icon: Package },
-        { path: '/documents', label: 'Documents', icon: FileText },
-        { path: '/communication/messages', label: 'Messages', icon: MessageSquare },
+        { path: '/inventory', label: 'Inventory', icon: Package, moduleKey: 'INVENTORY' },
+        { path: '/documents', label: 'Documents', icon: FileText, moduleKey: 'DOCUMENTS' },
+        { path: '/communication/messages', label: 'Messages', icon: MessageSquare, moduleKey: 'COMMUNICATION' },
         { path: '/notifications', label: 'Notifications', icon: Bell }
       );
     }
@@ -165,12 +178,12 @@ const Sidebar = () => {
     // Common items for most roles (Staff and above)
     if (role !== 'EMPLOYEE' && role !== 'USER') {
       items.push(
-        { path: '/assets', label: 'Assets', icon: Box },
-        { path: '/documents', label: 'Documents', icon: FileText },
-        { path: '/communication/messages', label: 'Messages', icon: MessageSquare },
-        { path: '/communication/announcements', label: 'Announcements', icon: Bell },
+        { path: '/assets', label: 'Assets', icon: Box, moduleKey: 'ASSETS' },
+        { path: '/documents', label: 'Documents', icon: FileText, moduleKey: 'DOCUMENTS' },
+        { path: '/communication/messages', label: 'Messages', icon: MessageSquare, moduleKey: 'COMMUNICATION' },
+        { path: '/communication/announcements', label: 'Announcements', icon: Bell, moduleKey: 'COMMUNICATION' },
         { path: '/notifications', label: 'Notifications', icon: Bell },
-        { path: '/approvals', label: 'My Approvals', icon: CheckCircle }
+        { path: '/approvals', label: 'My Approvals', icon: CheckCircle, moduleKey: 'APPROVALS' }
       );
     }
 
@@ -190,10 +203,16 @@ const Sidebar = () => {
 
   const menuItems = getMenuItems();
 
+  const isModuleEnabled = (moduleKey) => {
+    if (!moduleKey) return true;
+    if (!enabledModules) return true;
+    return enabledModules.includes(moduleKey);
+  };
+
   // Remove duplicates by path
   const filteredMenuItems = Array.from(
     new Map(menuItems.map(item => [item.path, item])).values()
-  );
+  ).filter((item) => isModuleEnabled(item.moduleKey));
 
   const handleLogout = () => {
     removeToken();

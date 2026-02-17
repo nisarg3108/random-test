@@ -1,6 +1,166 @@
 import { seedPermissions } from '../src/core/rbac/permissions.seed.js';
 import prisma from '../src/config/db.js';
 
+const seedPlans = async () => {
+  const plans = [
+    {
+      name: 'Starter Monthly',
+      description: 'Core modules for small product-based teams.',
+      billingCycle: 'MONTHLY',
+      currency: 'USD',
+      basePrice: 49,
+      seatPrice: 5,
+      modules: [
+        { moduleKey: 'INVENTORY', price: 0, included: true },
+        { moduleKey: 'SALES', price: 0, included: true },
+        { moduleKey: 'PURCHASE', price: 0, included: true },
+        { moduleKey: 'FINANCE', price: 0, included: true },
+        { moduleKey: 'REPORTS', price: 0, included: true }
+      ]
+    },
+    {
+      name: 'Starter Yearly',
+      description: 'Core modules for small product-based teams.',
+      billingCycle: 'YEARLY',
+      currency: 'USD',
+      basePrice: 499,
+      seatPrice: 50,
+      modules: [
+        { moduleKey: 'INVENTORY', price: 0, included: true },
+        { moduleKey: 'SALES', price: 0, included: true },
+        { moduleKey: 'PURCHASE', price: 0, included: true },
+        { moduleKey: 'FINANCE', price: 0, included: true },
+        { moduleKey: 'REPORTS', price: 0, included: true }
+      ]
+    },
+    {
+      name: 'Growth Monthly',
+      description: 'Adds HR, CRM, and assets for growing teams.',
+      billingCycle: 'MONTHLY',
+      currency: 'USD',
+      basePrice: 129,
+      seatPrice: 8,
+      modules: [
+        { moduleKey: 'INVENTORY', price: 0, included: true },
+        { moduleKey: 'SALES', price: 0, included: true },
+        { moduleKey: 'PURCHASE', price: 0, included: true },
+        { moduleKey: 'FINANCE', price: 0, included: true },
+        { moduleKey: 'REPORTS', price: 0, included: true },
+        { moduleKey: 'HR', price: 0, included: true },
+        { moduleKey: 'PAYROLL', price: 0, included: true },
+        { moduleKey: 'CRM', price: 0, included: true },
+        { moduleKey: 'ASSETS', price: 0, included: true },
+        { moduleKey: 'DOCUMENTS', price: 0, included: true }
+      ]
+    },
+    {
+      name: 'Growth Yearly',
+      description: 'Adds HR, CRM, and assets for growing teams.',
+      billingCycle: 'YEARLY',
+      currency: 'USD',
+      basePrice: 1299,
+      seatPrice: 80,
+      modules: [
+        { moduleKey: 'INVENTORY', price: 0, included: true },
+        { moduleKey: 'SALES', price: 0, included: true },
+        { moduleKey: 'PURCHASE', price: 0, included: true },
+        { moduleKey: 'FINANCE', price: 0, included: true },
+        { moduleKey: 'REPORTS', price: 0, included: true },
+        { moduleKey: 'HR', price: 0, included: true },
+        { moduleKey: 'PAYROLL', price: 0, included: true },
+        { moduleKey: 'CRM', price: 0, included: true },
+        { moduleKey: 'ASSETS', price: 0, included: true },
+        { moduleKey: 'DOCUMENTS', price: 0, included: true }
+      ]
+    },
+    {
+      name: 'Enterprise Monthly',
+      description: 'All modules including manufacturing and projects.',
+      billingCycle: 'MONTHLY',
+      currency: 'USD',
+      basePrice: 299,
+      seatPrice: 12,
+      modules: [
+        { moduleKey: 'INVENTORY', price: 0, included: true },
+        { moduleKey: 'SALES', price: 0, included: true },
+        { moduleKey: 'PURCHASE', price: 0, included: true },
+        { moduleKey: 'FINANCE', price: 0, included: true },
+        { moduleKey: 'REPORTS', price: 0, included: true },
+        { moduleKey: 'HR', price: 0, included: true },
+        { moduleKey: 'PAYROLL', price: 0, included: true },
+        { moduleKey: 'CRM', price: 0, included: true },
+        { moduleKey: 'ASSETS', price: 0, included: true },
+        { moduleKey: 'DOCUMENTS', price: 0, included: true },
+        { moduleKey: 'PROJECTS', price: 0, included: true },
+        { moduleKey: 'COMMUNICATION', price: 0, included: true },
+        { moduleKey: 'MANUFACTURING', price: 0, included: true },
+        { moduleKey: 'APPROVALS', price: 0, included: true },
+        { moduleKey: 'WORKFLOWS', price: 0, included: true }
+      ]
+    },
+    {
+      name: 'Enterprise Yearly',
+      description: 'All modules including manufacturing and projects.',
+      billingCycle: 'YEARLY',
+      currency: 'USD',
+      basePrice: 2999,
+      seatPrice: 120,
+      modules: [
+        { moduleKey: 'INVENTORY', price: 0, included: true },
+        { moduleKey: 'SALES', price: 0, included: true },
+        { moduleKey: 'PURCHASE', price: 0, included: true },
+        { moduleKey: 'FINANCE', price: 0, included: true },
+        { moduleKey: 'REPORTS', price: 0, included: true },
+        { moduleKey: 'HR', price: 0, included: true },
+        { moduleKey: 'PAYROLL', price: 0, included: true },
+        { moduleKey: 'CRM', price: 0, included: true },
+        { moduleKey: 'ASSETS', price: 0, included: true },
+        { moduleKey: 'DOCUMENTS', price: 0, included: true },
+        { moduleKey: 'PROJECTS', price: 0, included: true },
+        { moduleKey: 'COMMUNICATION', price: 0, included: true },
+        { moduleKey: 'MANUFACTURING', price: 0, included: true },
+        { moduleKey: 'APPROVALS', price: 0, included: true },
+        { moduleKey: 'WORKFLOWS', price: 0, included: true }
+      ]
+    }
+  ];
+
+  for (const plan of plans) {
+    const upserted = await prisma.plan.upsert({
+      where: { name: plan.name },
+      update: {
+        description: plan.description,
+        billingCycle: plan.billingCycle,
+        currency: plan.currency,
+        basePrice: plan.basePrice,
+        seatPrice: plan.seatPrice,
+        isActive: true
+      },
+      create: {
+        name: plan.name,
+        description: plan.description,
+        billingCycle: plan.billingCycle,
+        currency: plan.currency,
+        basePrice: plan.basePrice,
+        seatPrice: plan.seatPrice,
+        isActive: true
+      }
+    });
+
+    await prisma.planModule.deleteMany({ where: { planId: upserted.id } });
+    await prisma.planModule.createMany({
+      data: plan.modules.map((module) => ({
+        planId: upserted.id,
+        moduleKey: module.moduleKey,
+        price: module.price,
+        included: module.included
+      }))
+    });
+  }
+
+  console.log('Subscription plans seeded.');
+};
+
 const seedSampleCRM = async () => {
   if (process.env.SEED_SAMPLE_CRM !== 'true') {
     return;
@@ -178,6 +338,7 @@ async function main() {
   console.log('Seeding dynamic system options...');
   
   await seedPermissions();
+  await seedPlans();
   await seedSampleCRM();
   await seedDefaultPipeline();
   

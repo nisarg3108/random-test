@@ -4,6 +4,8 @@ import { loginApi } from '../api/auth.api';
 import { Mail, Lock, Eye, EyeOff, Github } from 'lucide-react';
 import { setToken } from '../store/auth.store';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -41,9 +43,25 @@ const Login = () => {
     try {
       const result = await loginApi({ email, password });
       setToken(result.token);
-      console.log('Token set:', result.token);
-      console.log('Is authenticated:', !!result.token);
-      // Force page refresh to ensure token is loaded
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/billing/subscription`, {
+          headers: {
+            Authorization: `Bearer ${result.token}`
+          }
+        });
+        if (response.ok) {
+          const billing = await response.json();
+          const status = billing?.subscription?.status;
+          if (status && status !== 'ACTIVE') {
+            window.location.href = '/subscription/billing';
+            return;
+          }
+        }
+      } catch (billingError) {
+        console.warn('Billing check failed, continuing to dashboard.', billingError);
+      }
+
       window.location.href = '/dashboard';
     } catch (err) {
       setError(err.message);

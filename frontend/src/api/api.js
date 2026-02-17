@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getToken, removeToken } from '../store/auth.store';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -21,7 +22,7 @@ const api = axios.create({
 // Add token to requests
 api.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('ueorms_token');
+    const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -92,7 +93,7 @@ api.interceptors.response.use(
 
     // Handle 401 unauthorized
     if (error.response?.status === 401) {
-      localStorage.removeItem('ueorms_token');
+      removeToken();
       window.location.href = '/';
     }
     

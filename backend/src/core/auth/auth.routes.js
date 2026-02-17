@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login } from './auth.controller.js';
+import { register, login, registerCheckout } from './auth.controller.js';
 
 const router = Router();
 
@@ -7,6 +7,11 @@ const router = Router();
  * POST /api/auth/register
  */
 router.post('/register', register);
+
+/**
+ * POST /api/auth/register/checkout
+ */
+router.post('/register/checkout', registerCheckout);
 
 /**
  * POST /api/auth/login

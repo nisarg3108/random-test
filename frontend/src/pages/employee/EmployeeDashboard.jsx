@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, DollarSign, FileText, User, AlertCircle } from 'lucide-react';
+import { getToken } from '../../store/auth.store';
 
 const EmployeeDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
@@ -12,9 +13,10 @@ const EmployeeDashboard = () => {
 
   const fetchDashboard = async () => {
     try {
+      const token = getToken();
       const response = await fetch('/api/employee/dashboard', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
       

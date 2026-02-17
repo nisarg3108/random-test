@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Send, X } from 'lucide-react';
+import { getToken } from '../../store/auth.store';
 
 const EmployeeLeaveRequest = () => {
   const [leaveTypes, setLeaveTypes] = useState([]);
@@ -18,9 +19,10 @@ const EmployeeLeaveRequest = () => {
 
   const fetchLeaveTypes = async () => {
     try {
+      const token = getToken();
       const response = await fetch('/api/leave-types', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
       const data = await response.json();
@@ -39,12 +41,13 @@ const EmployeeLeaveRequest = () => {
     try {
       console.log('Form data before submit:', formData);
       console.log('Leave type ID type:', typeof formData.leaveTypeId);
+      const token = getToken();
       
       const response = await fetch('/api/leave-requests', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       });

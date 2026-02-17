@@ -41,6 +41,153 @@ model CompanyConfig {
   tenant Tenant @relation(fields: [tenantId], references: [id])
 }
 
+model Plan {
+  id           String   @id @default(uuid())
+  name         String   @unique
+  description  String?
+  billingCycle String   // MONTHLY | YEARLY
+  currency     String   @default("USD")
+  basePrice    Float    @default(0)
+  seatPrice    Float    @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  modules       PlanModule[]
+  subscriptions Subscription[]
+}
+
+model PlanModule {
+  id         String   @id @default(uuid())
+  planId     String
+  moduleKey  String   // INVENTORY, SALES, HR, FINANCE, etc.
+  price      Float    @default(0)
+  included   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  plan Plan @relation(fields: [planId], references: [id])
+
+  @@unique([planId, moduleKey])
+}
+
+model Subscription {
+  id                     String   @id @default(uuid())
+  tenantId               String
+  planId                 String
+  status                 String   @default("ACTIVE") // ACTIVE | TRIALING | PAST_DUE | CANCELED
+  startAt                DateTime @default(now())
+  currentPeriodStart     DateTime @default(now())
+  currentPeriodEnd       DateTime
+  cancelAt               DateTime?
+  canceledAt             DateTime?
+  trialEndsAt            DateTime?
+  provider               String?  // STRIPE | RAZORPAY | MANUAL
+  providerSubscriptionId String?
+  providerCustomerId     String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  plan   Plan   @relation(fields: [planId], references: [id])
+  items  SubscriptionItem[]
+  payments SubscriptionPayment[]
+
+  @@index([tenantId])
+  @@index([planId])
+}
+
+model SubscriptionItem {
+  id             String   @id @default(uuid())
+  subscriptionId String
+  moduleKey      String
+  quantity       Int      @default(1)
+  unitPrice      Float    @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  @@unique([subscriptionId, moduleKey])
+}
+
+model SubscriptionPayment {
+  id                    String   @id @default(uuid())
+  subscriptionId        String
+  tenantId              String
+  amount                Float
+  currency              String   @default("USD")
+  status                String   @default("PENDING") // PENDING | SUCCEEDED | FAILED | REFUNDED
+  paymentMethodId       String?  // Stripe/Razorpay payment method ID
+  providerPaymentId     String?  // Stripe payment_intent_id or Razorpay payment_id
+  invoiceNumber         String?
+  description           String?
+  
+  // Payment Dates
+  scheduledFor          DateTime? // When payment is scheduled
+  attemptedAt           DateTime?
+  succeededAt           DateTime?
+  failedAt              DateTime?
+  refundedAt            DateTime?
+  
+  // Failure Details
+  failureCode           String?
+  failureMessage        String?
+  
+  // Metadata
+  metadata              Json?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  subscription          Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId])
+  @@index([tenantId])
+  @@index([status])
+}
+
+model BillingEvent {
+  id                    String   @id @default(uuid())
+  tenantId              String?
+  subscriptionId        String?
+  eventType             String   // charge.succeeded | charge.failed | customer.subscription.updated | etc.
+  provider              String   // STRIPE | RAZORPAY
+  providerEventId       String   @unique // Stripe event_id or Razorpay webhook_id
+  status                String   @default("RECEIVED") // RECEIVED | PROCESSED | FAILED
+  payload               Json     // Raw webhook payload
+  processedAt           DateTime?
+  errorMessage          String?
+  
+  createdAt             DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([subscriptionId])
+  @@index([eventType])
+  @@index([provider])
+}
+
+model PendingRegistration {
+  id           String   @id @default(uuid())
+  email        String
+  passwordHash String
+  companyName  String
+  planId       String?
+  customModules Json?
+  billingCycle String?
+  provider     String   // STRIPE | RAZORPAY
+  amount       Float
+  currency     String   @default("USD")
+  status       String   @default("PENDING") // PENDING | COMPLETED | EXPIRED
+  tenantId     String?
+  createdAt    DateTime @default(now())
+  completedAt  DateTime?
+  expiresAt    DateTime?
+
+  @@index([email])
+  @@index([status])
+  @@index([tenantId])
+}
+
 model User {
   id       String @id @default(uuid())
   email    String @unique
@@ -167,6 +314,7 @@ model Tenant {
 
   users   User[]
   config  CompanyConfig?
+  subscriptions Subscription[]
   items   Item[]
   invites UserInvite[]
   salesQuotations SalesQuotation[]

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
+import { getToken } from './store/auth.store';
 import Login from './auth/Login';
 import Register from './auth/Register';
 import ForgotPassword from './components/auth/ForgotPassword';
@@ -10,6 +11,7 @@ import InviteUser from './pages/InviteUser';
 import AcceptInvite from './pages/AcceptInvite';
 import { useDashboardStore } from './store/dashboard.store';
 import { useInventoryStore } from './store/inventory.store';
+import Landing from './pages/Landing';
 
 // Inventory
 import InventoryList from './pages/inventory/InventoryList';
@@ -59,6 +61,7 @@ import FinanceDashboard from './pages/finance/FinanceDashboard';
 import ExpenseCategoryList from './pages/finance/ExpenseCategoryList';
 import ExpenseClaimList from './pages/finance/ExpenseClaimList';
 import FinanceApprovals from './pages/finance/FinanceApprovals';
+import BillingDashboard from './pages/subscription/BillingDashboard';
 
 // CRM
 import Customers from './pages/crm/Customers';
@@ -163,7 +166,7 @@ function App() {
 
   useEffect(() => {
     // Initialize real-time connections when app starts
-    const token = localStorage.getItem('ueorms_token');
+    const token = getToken();
     if (token) {
       initializeDashboardRealTime();
       initializeInventoryRealTime();
@@ -179,7 +182,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
@@ -264,6 +268,8 @@ function App() {
         <Route path="/finance/expense-categories" element={<ProtectedRoute><ExpenseCategoryList /></ProtectedRoute>} />
         <Route path="/finance/expense-claims" element={<ProtectedRoute><ExpenseClaimList /></ProtectedRoute>} />
         <Route path="/finance/approvals" element={<ProtectedRoute><FinanceApprovals /></ProtectedRoute>} />
+        <Route path="/subscription/billing" element={<ProtectedRoute><BillingDashboard /></ProtectedRoute>} />
+        <Route path="/subscription/pricing" element={<ProtectedRoute><BillingDashboard /></ProtectedRoute>} />
 
         {/* CRM Routes */}
         <Route path="/crm" element={<ProtectedRoute><CRMDashboard /></ProtectedRoute>} />

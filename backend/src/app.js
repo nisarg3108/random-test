@@ -10,6 +10,8 @@ import healthRoutes from './routes/health.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import realtimeRoutes from './routes/realtime.routes.js';
 import { errorHandler } from './middlewares/error.middleware.js';
+import { requireModuleEntitlement } from './middlewares/entitlement.middleware.js';
+import { requireAuth } from './core/auth/auth.middleware.js';
 import protectedRoutes from './routes/protected.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import userRoutes from './users/user.routes.js';
@@ -58,6 +60,7 @@ import reportRoutes from './modules/reports/report.routes.js';
 import reportingRoutes from './modules/reports/reporting.routes.js';
 import communicationRoutes from './modules/communication/communication.routes.js';
 import dataImportExportRoutes from './modules/utils/data-import-export.routes.js';
+import billingRoutes from './modules/subscription/billing.routes.js';
 import missingRoutes from './routes/missing-routes.js';
 
 const app = express();
@@ -95,61 +98,91 @@ app.use('/api/protected', protectedRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/invites', inviteRoutes);
-app.use('/api/inventory', inventoryRoutes);
-app.use('/api/items', inventoryRoutes);
-app.use('/api/warehouses', warehouseRoutes);
-app.use('/api/stock-movements', stockMovementRoutes);
+
+/* Module Routes with Entitlement Checks */
+
+// Inventory Module Routes
+app.use('/api/inventory', requireAuth, requireModuleEntitlement('INVENTORY'), inventoryRoutes);
+app.use('/api/items', requireAuth, requireModuleEntitlement('INVENTORY'), inventoryRoutes);
+app.use('/api/warehouses', requireAuth, requireModuleEntitlement('INVENTORY'), warehouseRoutes);
+app.use('/api/stock-movements', requireAuth, requireModuleEntitlement('INVENTORY'), stockMovementRoutes);
+
+// Core Routes (no entitlement checks)
 app.use('/api/departments', departmentRoutes);
 app.use('/api/audit-logs', auditRoutes);
 app.use('/api/system-options', systemOptionsRoutes);
 app.use('/api/rbac', rbacRoutes);
-app.use('/api/employees', employeeRoutes);
-app.use('/api/leave-types', leaveTypeRoutes);
-app.use('/api/leave-requests', leaveRequestRoutes);
-app.use('/api/employee', employeeDashboardRoutes);
-app.use('/api/payroll', payrollRoutes);
-app.use('/api/hr/disbursements', disbursementRoutes);
-app.use('/api/tasks', taskRoutes);
-app.use('/api/attendance', attendanceRoutes);
-app.use('/api/expense-categories', expenseCategoryRoutes);
-app.use('/api/expense-claims', expenseClaimRoutes);
-app.use('/api/finance-dashboard', financeDashboardRoutes);
-app.use('/api/finance', financeRoutes);
-app.use('/api/accounting', accountingRoutes);
+
+// HR Module Routes
+app.use('/api/employees', requireAuth, requireModuleEntitlement('HR'), employeeRoutes);
+app.use('/api/leave-types', requireAuth, requireModuleEntitlement('HR'), leaveTypeRoutes);
+app.use('/api/leave-requests', requireAuth, requireModuleEntitlement('HR'), leaveRequestRoutes);
+app.use('/api/employee', requireAuth, requireModuleEntitlement('HR'), employeeDashboardRoutes);
+app.use('/api/payroll', requireAuth, requireModuleEntitlement('PAYROLL'), payrollRoutes);
+app.use('/api/hr/disbursements', requireAuth, requireModuleEntitlement('PAYROLL'), disbursementRoutes);
+app.use('/api/tasks', requireAuth, requireModuleEntitlement('HR'), taskRoutes);
+app.use('/api/attendance', requireAuth, requireModuleEntitlement('HR'), attendanceRoutes);
+
+// Finance Module Routes
+app.use('/api/expense-categories', requireAuth, requireModuleEntitlement('FINANCE'), expenseCategoryRoutes);
+app.use('/api/expense-claims', requireAuth, requireModuleEntitlement('FINANCE'), expenseClaimRoutes);
+app.use('/api/finance-dashboard', requireAuth, requireModuleEntitlement('FINANCE'), financeDashboardRoutes);
+app.use('/api/finance', requireAuth, requireModuleEntitlement('FINANCE'), financeRoutes);
+app.use('/api/accounting', requireAuth, requireModuleEntitlement('FINANCE'), accountingRoutes);
+
+// Notification Routes (no entitlement checks - system-wide)
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/auth', passwordResetRoutes);
+
+// Company Routes (no entitlement checks - core)
 app.use('/api/company', companyRoutes);
 app.use('/api/branches', branchRoutes);
-app.use('/api/crm', crmRoutes);
-app.use('/api/sales', salesRoutes);
-app.use('/api/purchase', purchaseRoutes);
-app.use('/api/ap', apRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/projects', projectMemberRoutes);
-app.use('/api/timesheets', timesheetRoutes);
-app.use('/api/manufacturing', manufacturingRoutes);
 
-app.use('/api/workflows', workflowRoutes);
-app.use('/api/approvals', approvalRoutes);
+// CRM Module Routes
+app.use('/api/crm', requireAuth, requireModuleEntitlement('CRM'), crmRoutes);
+
+// Sales Module Routes
+app.use('/api/sales', requireAuth, requireModuleEntitlement('SALES'), salesRoutes);
+
+// Purchase Module Routes
+app.use('/api/purchase', requireAuth, requireModuleEntitlement('PURCHASE'), purchaseRoutes);
+
+// Accounts Payable Module Routes
+app.use('/api/ap', requireAuth, requireModuleEntitlement('PURCHASE'), apRoutes);
+
+// Projects Module Routes
+app.use('/api/projects', requireAuth, requireModuleEntitlement('PROJECTS'), projectRoutes);
+app.use('/api/projects', requireAuth, requireModuleEntitlement('PROJECTS'), projectMemberRoutes);
+app.use('/api/timesheets', requireAuth, requireModuleEntitlement('PROJECTS'), timesheetRoutes);
+
+// Manufacturing Module Routes
+app.use('/api/manufacturing', requireAuth, requireModuleEntitlement('MANUFACTURING'), manufacturingRoutes);
+
+// Workflow & Approvals Routes
+app.use('/api/workflows', requireAuth, requireModuleEntitlement('WORKFLOWS'), workflowRoutes);
+app.use('/api/approvals', requireAuth, requireModuleEntitlement('APPROVALS'), approvalRoutes);
 
 // Asset Management Routes
-app.use('/api/assets', assetRoutes);
-app.use('/api/asset-allocations', allocationRoutes);
-app.use('/api/asset-maintenance', maintenanceRoutes);
-app.use('/api/asset-depreciation', depreciationRoutes);
+app.use('/api/assets', requireAuth, requireModuleEntitlement('ASSETS'), assetRoutes);
+app.use('/api/asset-allocations', requireAuth, requireModuleEntitlement('ASSETS'), allocationRoutes);
+app.use('/api/asset-maintenance', requireAuth, requireModuleEntitlement('ASSETS'), maintenanceRoutes);
+app.use('/api/asset-depreciation', requireAuth, requireModuleEntitlement('ASSETS'), depreciationRoutes);
 
 // Document Management Routes
-app.use('/api/documents', documentRoutes);
+app.use('/api/documents', requireAuth, requireModuleEntitlement('DOCUMENTS'), documentRoutes);
 
 // Reports & Analytics Routes
-app.use('/api/reports', reportRoutes);
-app.use('/api/reporting', reportingRoutes);
+app.use('/api/reports', requireAuth, requireModuleEntitlement('REPORTS'), reportRoutes);
+app.use('/api/reporting', requireAuth, requireModuleEntitlement('REPORTS'), reportingRoutes);
 
 // Communication Module Routes
-app.use('/api/communication', communicationRoutes);
+app.use('/api/communication', requireAuth, requireModuleEntitlement('COMMUNICATION'), communicationRoutes);
 
-// Data Import/Export Routes
+// Data Import/Export Routes (no entitlement checks - core utility)
 app.use('/api/data', dataImportExportRoutes);
+
+// Billing & Subscription Routes
+app.use('/api/billing', billingRoutes);
 
 // Missing routes (minimal implementations)
 app.use('/api', missingRoutes);

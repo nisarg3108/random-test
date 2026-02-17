@@ -3,6 +3,7 @@ import { Star, Plus, Search, Edit, Trash2 } from 'lucide-react';
 import Layout from '../../components/layout/Layout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import axios from 'axios';
+import { getToken } from '../../store/auth.store';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
 
@@ -40,7 +41,7 @@ const SupplierEvaluation = () => {
   const fetchEvaluations = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = getToken();
       const response = await axios.get(`${API_URL}/api/purchase/evaluations`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -54,7 +55,7 @@ const SupplierEvaluation = () => {
 
   const fetchVendors = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getToken();
       const response = await axios.get(`${API_URL}/api/purchase/vendors`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -66,7 +67,7 @@ const SupplierEvaluation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = getToken();
 
     const payload = {
       ...formData,
@@ -98,7 +99,7 @@ const SupplierEvaluation = () => {
     if (!window.confirm('Delete this evaluation?')) return;
     
     try {
-      const token = localStorage.getItem('token');
+      const token = getToken();
       await axios.delete(`${API_URL}/api/purchase/evaluations/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });

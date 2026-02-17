@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { syncCompanyModulesFromSubscription } from '../subscription/subscription.utils.js';
 const prisma = new PrismaClient();
 
 // Get workflow templates by industry
@@ -173,7 +174,11 @@ export const getCompanyConfig = async (req, res) => {
     });
 
     if (!config) {
-      // Return default config instead of 404
+      const syncedConfig = await syncCompanyModulesFromSubscription(tenantId);
+      if (syncedConfig) {
+        return res.json(syncedConfig);
+      }
+
       return res.json({
         tenantId,
         companyName: '',
@@ -185,6 +190,13 @@ export const getCompanyConfig = async (req, res) => {
         customFields: {},
         businessRules: {}
       });
+    }
+
+    if (!config.enabledModules || config.enabledModules.length === 0) {
+      const syncedConfig = await syncCompanyModulesFromSubscription(tenantId);
+      if (syncedConfig) {
+        return res.json(syncedConfig);
+      }
     }
 
     res.json(config);

@@ -110,6 +110,12 @@ const CompanySettings = () => {
               </div>
               <div className="flex space-x-3">
                 <a
+                  href="/subscription/billing"
+                  className="bg-slate-800 text-white px-6 py-3 rounded-lg hover:bg-slate-900 transition-colors font-medium"
+                >
+                  Manage Billing
+                </a>
+                <a
                   href="/company/setup"
                   className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
                 >
