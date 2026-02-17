@@ -198,7 +198,17 @@ export const changePlanController = async (req, res) => {
     // Get current subscription
     const currentSubscription = await prisma.subscription.findFirst({
       where: { tenantId },
-      include: { plan: true }
+      include: { 
+        plan: true,
+        tenant: {
+          include: {
+            users: {
+              where: { role: 'ADMIN' },
+              take: 1
+            }
+          }
+        }
+      }
     });
 
     if (!currentSubscription) {
@@ -208,49 +218,99 @@ export const changePlanController = async (req, res) => {
       });
     }
 
-    // Update subscription in database
-    const updatedSubscription = await prisma.subscription.update({
-      where: { id: currentSubscription.id },
-      data: { planId: newPlan.id },
-      include: {
-        plan: { include: { modules: true } },
-        items: true
+    // Check if user is already on this plan
+    if (currentSubscription.planId === planId) {
+      return res.status(400).json({
+        message: 'You are already subscribed to this plan',
+        error: 'SAME_PLAN'
+      });
+    }
+
+    // Calculate the price difference or new plan cost
+    // For simplicity, we'll charge the full price of the new plan
+    // In production, you'd calculate prorated amounts
+    const amount = newPlan.basePrice;
+
+    if (amount <= 0) {
+      return res.status(400).json({
+        message: 'Invalid plan pricing',
+        error: 'INVALID_PRICING'
+      });
+    }
+
+    // Get admin email for payment
+    const adminEmail = currentSubscription.tenant.users[0]?.email;
+    if (!adminEmail) {
+      return res.status(400).json({
+        message: 'No admin email found',
+        error: 'NO_ADMIN_EMAIL'
+      });
+    }
+
+    // Create payment session based on provider
+    let checkoutSession;
+    
+    if (provider === 'STRIPE') {
+      checkoutSession = await stripeService.createPlanChangeCheckoutSession({
+        tenantId,
+        subscriptionId: currentSubscription.id,
+        currentPlanId: currentSubscription.planId,
+        newPlanId: newPlan.id,
+        amount,
+        currency: newPlan.currency,
+        email: adminEmail,
+        successUrl: `${process.env.FRONTEND_URL}/subscription/billing?payment=success`,
+        cancelUrl: `${process.env.FRONTEND_URL}/subscription/billing?payment=cancelled`
+      });
+    } else if (provider === 'RAZORPAY') {
+      // Get or create Razorpay customer
+      let customerId = currentSubscription.providerCustomerId;
+      
+      if (!customerId) {
+        const customer = await razorpayService.createCustomer({
+          email: adminEmail,
+          name: currentSubscription.tenant.name
+        });
+        customerId = customer.id;
+        
+        // Update subscription with customer ID
+        await prisma.subscription.update({
+          where: { id: currentSubscription.id },
+          data: { providerCustomerId: customerId }
+        });
       }
-    });
 
-    // Update subscription items to match new plan modules
-    await prisma.subscriptionItem.deleteMany({
-      where: { subscriptionId: updatedSubscription.id }
-    });
-
-    await prisma.subscriptionItem.createMany({
-      data: newPlan.modules.map(module => ({
-        subscriptionId: updatedSubscription.id,
-        moduleKey: module.moduleKey,
-        quantity: 1,
-        unitPrice: module.price
-      }))
-    });
-
-    await syncCompanyModulesFromSubscription(tenantId);
-
-    // Handle provider-specific plan changes if needed
-    if (currentSubscription.provider === 'STRIPE' && currentSubscription.providerSubscriptionId) {
-      // Stripe plan change would be handled here
-      console.log(`[Billing] Stripe plan change for subscription: ${currentSubscription.providerSubscriptionId}`);
-    } else if (currentSubscription.provider === 'RAZORPAY' && currentSubscription.providerSubscriptionId) {
-      // Razorpay plan change would be handled here
-      console.log(`[Billing] Razorpay plan change for subscription: ${currentSubscription.providerSubscriptionId}`);
+      checkoutSession = await razorpayService.createPlanChangePaymentLink({
+        tenantId,
+        subscriptionId: currentSubscription.id,
+        currentPlanId: currentSubscription.planId,
+        newPlanId: newPlan.id,
+        amount,
+        description: `Plan Change: ${currentSubscription.plan.name} → ${newPlan.name}`,
+        customerId
+      });
+    } else {
+      return res.status(400).json({
+        message: 'Invalid payment provider',
+        error: 'INVALID_PROVIDER'
+      });
     }
 
     res.json({
-      message: 'Plan changed successfully',
-      subscription: updatedSubscription
+      message: 'Plan change initiated. Please complete payment.',
+      checkoutUrl: checkoutSession.url || checkoutSession.short_url,
+      sessionId: checkoutSession.id,
+      amount,
+      currency: newPlan.currency,
+      newPlan: {
+        id: newPlan.id,
+        name: newPlan.name
+      }
     });
   } catch (error) {
     console.error('[Billing Controller] Error changing plan:', error);
     res.status(500).json({
-      message: 'Failed to change plan',
+      message: 'Failed to initiate plan change',
       error: error.message
     });
   }

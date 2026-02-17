@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import prisma from '../../config/db.js';
 import { syncCompanyModulesFromSubscription } from './subscription.utils.js';
 import { finalizePendingRegistration } from '../../core/auth/auth.service.js';
+import * as invoiceService from './invoice.service.js';
 
 let razorpayClient = null;
 
@@ -203,6 +204,45 @@ export const createPaymentLink = async (customerId, amount, description, notes =
 };
 
 /**
+ * Create a payment link for plan change
+ */
+export const createPlanChangePaymentLink = async ({
+  tenantId,
+  subscriptionId,
+  currentPlanId,
+  newPlanId,
+  amount,
+  description,
+  customerId
+}) => {
+  try {
+    const link = await getRazorpayClient().invoices.create({
+      customer_id: customerId,
+      amount: Math.round(amount * 100), // Convert to paise
+      currency: 'INR',
+      description: description || 'Plan Change - UEORMS Subscription',
+      notes: {
+        type: 'plan_change',
+        tenantId,
+        subscriptionId,
+        currentPlanId,
+        newPlanId
+      }
+    });
+
+    return {
+      id: link.id,
+      short_url: link.short_url,
+      amount: link.amount / 100,
+      status: link.status
+    };
+  } catch (error) {
+    console.error('[Razorpay] Error creating plan change payment link:', error);
+    throw new Error(`Failed to create plan change payment link: ${error.message}`);
+  }
+};
+
+/**
  * Verify Razorpay webhook signature
  */
 export const verifyWebhookSignature = (body, signature) => {
@@ -221,10 +261,23 @@ export const verifyWebhookSignature = (body, signature) => {
 export const handleRazorpayWebhookEvent = async (event) => {
   try {
     const { id, event: eventType, payload } = event;
+    
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║         RAZORPAY WEBHOOK RECEIVED                         ║');
+    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('[Razorpay] Event Type:', eventType);
+    console.log('[Razorpay] Event ID:', id);
+    console.log('[Razorpay] Timestamp:', new Date().toISOString());
+    
     const payloadRoot = payload?.payload || {};
     const paymentEntity = payloadRoot.payment?.entity || null;
     const subscriptionEntity = payloadRoot.subscription?.entity || null;
     const invoiceEntity = payloadRoot.invoice?.entity || null;
+    
+    if (paymentEntity) {
+      console.log('[Razorpay] Payment ID:', paymentEntity.id);
+      console.log('[Razorpay] Amount:', paymentEntity.amount / 100, paymentEntity.currency);
+    }
     
     // Extract tenantId and pendingRegistrationId from various sources
     const tenantId =
@@ -318,10 +371,21 @@ const handlePaymentAuthorized = async (payment, billingEventId) => {
   const { id: paymentId, amount, currency, notes } = payment;
 
   if (notes?.pendingRegistrationId) {
+    console.log('\n========================================');
+    console.log('[Razorpay Webhook] Pending Registration Payment');
+    console.log('========================================');
+    console.log('[Razorpay] Registration ID:', notes.pendingRegistrationId);
+    console.log('[Razorpay] Payment ID:', paymentId);
+    console.log('[Razorpay] Amount:', amount / 100, currency);
+    
     const subscription = await finalizePendingRegistration(notes.pendingRegistrationId, 'RAZORPAY');
 
     if (subscription) {
-      await prisma.subscriptionPayment.create({
+      console.log('[Razorpay] ✅ Registration completed');
+      console.log('[Razorpay] Subscription ID:', subscription.id);
+      console.log('[Razorpay] Tenant ID:', subscription.tenantId);
+      
+      const paymentRecord = await prisma.subscriptionPayment.create({
         data: {
           subscriptionId: subscription.id,
           tenantId: subscription.tenantId,
@@ -329,11 +393,82 @@ const handlePaymentAuthorized = async (payment, billingEventId) => {
           currency,
           status: 'SUCCEEDED',
           providerPaymentId: paymentId,
+          invoiceNumber: `INV-${Date.now()}-${subscription.tenantId.slice(0, 6).toUpperCase()}`,
           succeededAt: new Date()
         }
       });
 
+      console.log('[Razorpay] ✅ Payment record created:', paymentRecord.id);
+
       await syncCompanyModulesFromSubscription(subscription.tenantId);
+      console.log('[Razorpay] ✅ Company modules synced');
+
+      // Send invoice email
+      console.log('\n[Razorpay] Checking email configuration...');
+      console.log('[Razorpay] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
+      console.log('[Razorpay] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+      
+      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+        try {
+          const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
+            where: { id: paymentRecord.id },
+            include: {
+              subscription: {
+                include: {
+                  plan: true,
+                  tenant: {
+                    include: {
+                      users: {
+                        where: { role: 'ADMIN' },
+                        take: 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+          // Get admin user email
+          const adminEmail = paymentWithDetails?.subscription?.tenant?.users?.[0]?.email;
+          console.log('[Razorpay] Admin email:', adminEmail || '❌ Not found');
+          
+          if (adminEmail) {
+            console.log('[Razorpay] 📧 Starting automatic invoice email send...');
+            
+            // Add email to tenant data
+            const paymentWithEmail = {
+              ...paymentWithDetails,
+              subscription: {
+                ...paymentWithDetails.subscription,
+                tenant: {
+                  ...paymentWithDetails.subscription.tenant,
+                  email: adminEmail
+                }
+              }
+            };
+
+            console.log('[Razorpay] Generating PDF...');
+            const pdfBuffer = await invoiceService.generateInvoicePDF(paymentWithEmail);
+            console.log('[Razorpay] ✅ PDF generated, size:', pdfBuffer.length, 'bytes');
+            
+            console.log('[Razorpay] Sending email to:', adminEmail);
+            await invoiceService.sendInvoiceEmail(paymentWithEmail, pdfBuffer);
+            console.log(`[Razorpay] ✅✅✅ Invoice email sent successfully to ${adminEmail}`);
+            console.log('[Razorpay] Payment ID:', paymentRecord.id);
+          } else {
+            console.log('[Razorpay] ⚠️  No admin email found, skipping invoice email');
+          }
+        } catch (error) {
+          console.error('[Razorpay] ❌ Error generating/sending invoice:', error.message);
+          console.error('[Razorpay] Stack:', error.stack);
+        }
+      }
+      
+      console.log('========================================\n');
+    } else {
+      console.log('[Razorpay] ❌ Failed to finalize registration');
+      console.log('========================================\n');
     }
 
     return;
@@ -343,18 +478,38 @@ const handlePaymentAuthorized = async (payment, billingEventId) => {
 
   // Find subscription by tenant
   const subscription = await prisma.subscription.findFirst({
-    where: { tenantId: notes.tenantId }
+    where: { tenantId: notes.tenantId },
+    include: {
+      plan: true,
+      tenant: {
+        include: {
+          users: {
+            where: { role: 'ADMIN' },
+            take: 1
+          }
+        }
+      }
+    }
   });
 
   if (subscription) {
+    console.log('\n========================================');
+    console.log('[Razorpay Webhook] Processing Payment');
+    console.log('========================================');
+    console.log('[Razorpay] Payment ID:', paymentId);
+    console.log('[Razorpay] Amount:', amount / 100, currency);
+    console.log('[Razorpay] Subscription ID:', subscription.id);
+    console.log('[Razorpay] Tenant ID:', notes.tenantId);
+    
     if (subscription.status !== 'ACTIVE') {
       await prisma.subscription.update({
         where: { id: subscription.id },
         data: { status: 'ACTIVE' }
       });
+      console.log('[Razorpay] ✅ Subscription activated');
     }
 
-    await prisma.subscriptionPayment.create({
+    const paymentRecord = await prisma.subscriptionPayment.create({
       data: {
         subscriptionId: subscription.id,
         tenantId: notes.tenantId,
@@ -362,11 +517,74 @@ const handlePaymentAuthorized = async (payment, billingEventId) => {
         currency,
         status: 'SUCCEEDED',
         providerPaymentId: paymentId,
+        invoiceNumber: `INV-${Date.now()}-${notes.tenantId.slice(0, 6).toUpperCase()}`,
         succeededAt: new Date()
       }
     });
 
+    console.log('[Razorpay] ✅ Payment record created:', paymentRecord.id);
+
     await syncCompanyModulesFromSubscription(subscription.tenantId);
+    console.log('[Razorpay] ✅ Company modules synced');
+
+    // Send invoice email
+    console.log('\n[Razorpay] Checking email configuration...');
+    console.log('[Razorpay] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
+    console.log('[Razorpay] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+    console.log('[Razorpay] Admin users found:', subscription.tenant?.users?.length || 0);
+    
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      try {
+        // Get admin user email
+        const adminEmail = subscription.tenant?.users?.[0]?.email;
+        console.log('[Razorpay] Admin email:', adminEmail || '❌ Not found');
+        
+        if (adminEmail) {
+          console.log('[Razorpay] 📧 Starting automatic invoice email send...');
+          
+          const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
+            where: { id: paymentRecord.id },
+            include: {
+              subscription: {
+                include: {
+                  plan: true,
+                  tenant: true
+                }
+              }
+            }
+          });
+
+          // Add email to tenant data
+          const paymentWithEmail = {
+            ...paymentWithDetails,
+            subscription: {
+              ...paymentWithDetails.subscription,
+              tenant: {
+                ...paymentWithDetails.subscription.tenant,
+                email: adminEmail
+              }
+            }
+          };
+
+          console.log('[Razorpay] Generating PDF...');
+          const pdfBuffer = await invoiceService.generateInvoicePDF(paymentWithEmail);
+          console.log('[Razorpay] ✅ PDF generated, size:', pdfBuffer.length, 'bytes');
+          
+          console.log('[Razorpay] Sending email to:', adminEmail);
+          await invoiceService.sendInvoiceEmail(paymentWithEmail, pdfBuffer);
+          console.log(`[Razorpay] ✅✅✅ Invoice email sent successfully to ${adminEmail}`);
+          console.log('[Razorpay] Payment ID:', paymentRecord.id);
+        } else {
+          console.log('[Razorpay] ⚠️  No admin email found for tenant, skipping invoice email');
+          console.log('[Razorpay] Tenant ID:', subscription.tenantId);
+        }
+      } catch (error) {
+        console.error('[Razorpay] ❌ Error generating/sending invoice:', error.message);
+        console.error('[Razorpay] Stack:', error.stack);
+      }
+    }
+    
+    console.log('========================================\n');
   }
 };
 
@@ -386,7 +604,7 @@ const handlePaymentCaptured = async (payment, billingEventId) => {
     const subscription = await finalizePendingRegistration(notes.pendingRegistrationId, 'RAZORPAY');
 
     if (subscription) {
-      await prisma.subscriptionPayment.create({
+      const payment = await prisma.subscriptionPayment.create({
         data: {
           subscriptionId: subscription.id,
           tenantId: subscription.tenantId,
@@ -394,12 +612,58 @@ const handlePaymentCaptured = async (payment, billingEventId) => {
           currency,
           status: 'SUCCEEDED',
           providerPaymentId: paymentId,
+          invoiceNumber: `INV-${Date.now()}-${subscription.tenantId.slice(0, 6).toUpperCase()}`,
           succeededAt: new Date()
         }
       });
 
+      console.log('[Razorpay] Payment recorded:', payment.id);
       await syncCompanyModulesFromSubscription(subscription.tenantId);
       console.log('[Razorpay] Pending registration completed successfully');
+
+      // Send invoice email
+      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+        try {
+          const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
+            where: { id: payment.id },
+            include: {
+              subscription: {
+                include: {
+                  plan: true,
+                  tenant: {
+                    include: {
+                      users: {
+                        where: { role: 'ADMIN' },
+                        take: 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+          const adminEmail = paymentWithDetails?.subscription?.tenant?.users?.[0]?.email;
+          if (adminEmail) {
+            const paymentWithEmail = {
+              ...paymentWithDetails,
+              subscription: {
+                ...paymentWithDetails.subscription,
+                tenant: {
+                  ...paymentWithDetails.subscription.tenant,
+                  email: adminEmail
+                }
+              }
+            };
+
+            const pdfBuffer = await invoiceService.generateInvoicePDF(paymentWithEmail);
+            await invoiceService.sendInvoiceEmail(paymentWithEmail, pdfBuffer);
+            console.log(`[Razorpay] ✅ Invoice email sent to ${adminEmail}`);
+          }
+        } catch (error) {
+          console.error('[Razorpay] Error sending invoice:', error.message);
+        }
+      }
     }
 
     return;
@@ -478,6 +742,12 @@ const handleInvoicePaid = async (invoice, billingEventId) => {
 
   console.log('[Razorpay] Invoice paid:', invoiceId, 'Amount:', amount_paid / 100, currency);
 
+  // Handle plan change payment
+  if (notes?.type === 'plan_change') {
+    await handlePlanChangePayment(invoice, billingEventId);
+    return;
+  }
+
   // Handle pending registration payment
   if (notes?.pendingRegistrationId) {
     console.log('[Razorpay] Processing pending registration from invoice:', notes.pendingRegistrationId);
@@ -538,6 +808,78 @@ const handleInvoicePaid = async (invoice, billingEventId) => {
 
     await syncCompanyModulesFromSubscription(subscription.tenantId);
     console.log('[Razorpay] Invoice payment recorded successfully');
+  }
+};
+
+/**
+ * Handle plan change payment completion (Razorpay)
+ */
+const handlePlanChangePayment = async (invoice, billingEventId) => {
+  if (!invoice) return;
+  
+  const { id: invoiceId, amount_paid, currency, notes, payment_id } = invoice;
+  const { tenantId, subscriptionId, newPlanId } = notes;
+
+  console.log('[Razorpay] Processing plan change payment:', { tenantId, subscriptionId, newPlanId });
+
+  if (!tenantId || !subscriptionId || !newPlanId) {
+    console.error('[Razorpay] Missing required notes for plan change');
+    return;
+  }
+
+  try {
+    // Get the new plan details
+    const newPlan = await prisma.plan.findUnique({
+      where: { id: newPlanId },
+      include: { modules: true }
+    });
+
+    if (!newPlan) {
+      console.error('[Razorpay] New plan not found:', newPlanId);
+      return;
+    }
+
+    // Update subscription plan
+    const updatedSubscription = await prisma.subscription.update({
+      where: { id: subscriptionId },
+      data: { planId: newPlan.id }
+    });
+
+    // Update subscription items
+    await prisma.subscriptionItem.deleteMany({
+      where: { subscriptionId }
+    });
+
+    await prisma.subscriptionItem.createMany({
+      data: newPlan.modules.map(module => ({
+        subscriptionId,
+        moduleKey: module.moduleKey,
+        quantity: 1,
+        unitPrice: module.price
+      }))
+    });
+
+    // Record payment
+    await prisma.subscriptionPayment.create({
+      data: {
+        subscriptionId,
+        tenantId,
+        amount: amount_paid / 100, // Convert from paise
+        currency,
+        status: 'SUCCEEDED',
+        providerPaymentId: payment_id || invoiceId,
+        invoiceNumber: invoiceId,
+        succeededAt: new Date()
+      }
+    });
+
+    // Sync company modules
+    await syncCompanyModulesFromSubscription(tenantId);
+
+    console.log('[Razorpay] Plan change completed successfully');
+  } catch (error) {
+    console.error('[Razorpay] Error processing plan change payment:', error);
+    throw error;
   }
 };
 

@@ -2,6 +2,7 @@ import Stripe from 'stripe';
 import prisma from '../../config/db.js';
 import { syncCompanyModulesFromSubscription } from './subscription.utils.js';
 import { finalizePendingRegistration } from '../../core/auth/auth.service.js';
+import * as invoiceService from './invoice.service.js';
 
 let stripeClient = null;
 
@@ -108,6 +109,53 @@ export const createCheckoutSession = async ({
           unit_amount: Math.round(amount * 100),
           product_data: {
             name: 'UEORMS Subscription'
+          }
+        }
+      }
+    ]
+  });
+
+  return { id: session.id, url: session.url };
+};
+
+/**
+ * Create a checkout session for plan change
+ */
+export const createPlanChangeCheckoutSession = async ({
+  tenantId,
+  subscriptionId,
+  currentPlanId,
+  newPlanId,
+  amount,
+  currency = 'USD',
+  email,
+  successUrl,
+  cancelUrl
+}) => {
+  if (!amount || amount <= 0) {
+    throw new Error('Plan change amount must be greater than zero');
+  }
+
+  const session = await getStripeClient().checkout.sessions.create({
+    mode: 'payment',
+    customer_email: email,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    metadata: {
+      type: 'plan_change',
+      tenantId,
+      subscriptionId,
+      currentPlanId,
+      newPlanId
+    },
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: currency.toLowerCase(),
+          unit_amount: Math.round(amount * 100),
+          product_data: {
+            name: 'Plan Change - UEORMS Subscription'
           }
         }
       }
@@ -256,6 +304,17 @@ export const getStripePriceId = (planName) => {
  */
 export const handleStripeWebhookEvent = async (event) => {
   try {
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║          STRIPE WEBHOOK RECEIVED                          ║');
+    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('[Stripe] Event Type:', event.type);
+    console.log('[Stripe] Event ID:', event.id);
+    console.log('[Stripe] Timestamp:', new Date().toISOString());
+    
+    if (event.data?.object?.amount_paid) {
+      console.log('[Stripe] Amount:', event.data.object.amount_paid / 100, event.data.object.currency);
+    }
+    
     // Store the event in database
     const billingEvent = await prisma.billingEvent.upsert({
       where: { providerEventId: event.id },
@@ -316,9 +375,18 @@ export const handleStripeWebhookEvent = async (event) => {
  * Handle checkout session completed
  */
 const handleCheckoutSessionCompleted = async (session, billingEventId) => {
-  const pendingRegistrationId = session?.metadata?.pendingRegistrationId;
+  const { metadata } = session;
   
   console.log('[Stripe] Checkout session completed:', session.id);
+  
+  // Check if this is a plan change payment
+  if (metadata?.type === 'plan_change') {
+    await handlePlanChangePayment(session, billingEventId);
+    return;
+  }
+
+  // Otherwise, handle as regular registration payment
+  const pendingRegistrationId = metadata?.pendingRegistrationId;
   
   if (!pendingRegistrationId) {
     console.log('[Stripe] No pendingRegistrationId found in session metadata');
@@ -344,7 +412,7 @@ const handleCheckoutSessionCompleted = async (session, billingEventId) => {
   }
 
   if (session.amount_total && session.currency) {
-    await prisma.subscriptionPayment.create({
+    const payment = await prisma.subscriptionPayment.create({
       data: {
         subscriptionId: subscription.id,
         tenantId: subscription.tenantId,
@@ -352,12 +420,179 @@ const handleCheckoutSessionCompleted = async (session, billingEventId) => {
         currency: session.currency.toUpperCase(),
         status: 'SUCCEEDED',
         providerPaymentId: session.payment_intent || null,
+        invoiceNumber: `INV-${Date.now()}-${subscription.tenantId.slice(0, 6).toUpperCase()}`,
         succeededAt: new Date()
       }
     });
 
+    console.log('[Stripe] Payment recorded:', payment.id);
     await syncCompanyModulesFromSubscription(subscription.tenantId);
-    console.log('[Stripe] Payment recorded and modules synced');
+    console.log('[Stripe] Modules synced');
+
+    // Send invoice email
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      try {
+        const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
+          where: { id: payment.id },
+          include: {
+            subscription: {
+              include: {
+                plan: true,
+                tenant: {
+                  include: {
+                    users: {
+                      where: { role: 'ADMIN' },
+                      take: 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        const adminEmail = paymentWithDetails?.subscription?.tenant?.users?.[0]?.email;
+        if (adminEmail) {
+          const paymentWithEmail = {
+            ...paymentWithDetails,
+            subscription: {
+              ...paymentWithDetails.subscription,
+              tenant: {
+                ...paymentWithDetails.subscription.tenant,
+                email: adminEmail
+              }
+            }
+          };
+
+          const pdfBuffer = await invoiceService.generateInvoicePDF(paymentWithEmail);
+          await invoiceService.sendInvoiceEmail(paymentWithEmail, pdfBuffer);
+          console.log(`[Stripe] ✅ Invoice email sent to ${adminEmail}`);
+        }
+      } catch (error) {
+        console.error('[Stripe] Error sending invoice:', error.message);
+      }
+    }
+  }
+};
+
+/**
+ * Handle plan change payment completion
+ */
+const handlePlanChangePayment = async (session, billingEventId) => {
+  const { metadata } = session;
+  const { tenantId, subscriptionId, newPlanId } = metadata;
+
+  console.log('[Stripe] Processing plan change payment:', { tenantId, subscriptionId, newPlanId });
+
+  if (!tenantId || !subscriptionId || !newPlanId) {
+    console.error('[Stripe] Missing required metadata for plan change');
+    return;
+  }
+
+  try {
+    // Get the new plan details
+    const newPlan = await prisma.plan.findUnique({
+      where: { id: newPlanId },
+      include: { modules: true }
+    });
+
+    if (!newPlan) {
+      console.error('[Stripe] New plan not found:', newPlanId);
+      return;
+    }
+
+    // Update subscription plan
+    const updatedSubscription = await prisma.subscription.update({
+      where: { id: subscriptionId },
+      data: { planId: newPlan.id }
+    });
+
+    // Update subscription items
+    await prisma.subscriptionItem.deleteMany({
+      where: { subscriptionId }
+    });
+
+    await prisma.subscriptionItem.createMany({
+      data: newPlan.modules.map(module => ({
+        subscriptionId,
+        moduleKey: module.moduleKey,
+        quantity: 1,
+        unitPrice: module.price
+      }))
+    });
+
+    // Record payment
+    if (session.amount_total && session.currency) {
+      const payment = await prisma.subscriptionPayment.create({
+        data: {
+          subscriptionId,
+          tenantId,
+          amount: session.amount_total / 100,
+          currency: session.currency.toUpperCase(),
+          status: 'SUCCEEDED',
+          providerPaymentId: session.payment_intent || null,
+          description: 'Plan Change Payment',
+          invoiceNumber: `INV-${Date.now()}-${tenantId.slice(0, 6).toUpperCase()}`,
+          succeededAt: new Date()
+        }
+      });
+
+      console.log('[Stripe] Plan change payment recorded:', payment.id);
+
+      // Generate invoice and send email
+      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+        try {
+          const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
+            where: { id: payment.id },
+            include: {
+              subscription: {
+                include: {
+                  plan: true,
+                  tenant: {
+                    include: {
+                      users: {
+                        where: { role: 'ADMIN' },
+                        take: 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+          const adminEmail = paymentWithDetails?.subscription?.tenant?.users?.[0]?.email;
+          if (adminEmail) {
+            const paymentWithEmail = {
+              ...paymentWithDetails,
+              subscription: {
+                ...paymentWithDetails.subscription,
+                tenant: {
+                  ...paymentWithDetails.subscription.tenant,
+                  email: adminEmail
+                }
+              }
+            };
+
+            const pdfBuffer = await invoiceService.generateInvoicePDF(paymentWithEmail);
+            await invoiceService.sendInvoiceEmail(paymentWithEmail, pdfBuffer);
+            console.log(`[Stripe] ✅ Invoice email sent to ${adminEmail} for plan change`);
+          } else {
+            console.log('[Stripe] No admin email found for plan change invoice');
+          }
+        } catch (error) {
+          console.error('[Stripe] Error sending invoice for plan change:', error.message);
+        }
+      }
+    }
+
+    // Sync company modules
+    await syncCompanyModulesFromSubscription(tenantId);
+
+    console.log('[Stripe] Plan change completed successfully');
+  } catch (error) {
+    console.error('[Stripe] Error processing plan change payment:', error);
+    throw error;
   }
 };
 
@@ -379,14 +614,22 @@ const handleChargeSucceeded = async (charge, billingEventId) => {
   });
 
   if (subscription) {
+    console.log('\n========================================');
+    console.log('[Stripe] Processing Charge');
+    console.log('========================================');
+    console.log('[Stripe] Charge ID:', chargeId);
+    console.log('[Stripe] Amount:', amount / 100, currency);
+    console.log('[Stripe] Tenant ID:', metadata.tenantId);
+    
     if (subscription.status !== 'ACTIVE') {
       await prisma.subscription.update({
         where: { id: subscription.id },
         data: { status: 'ACTIVE' }
       });
+      console.log('[Stripe] ✅ Subscription activated');
     }
 
-    await prisma.subscriptionPayment.create({
+    const payment = await prisma.subscriptionPayment.create({
       data: {
         subscriptionId: subscription.id,
         tenantId: metadata.tenantId,
@@ -394,12 +637,77 @@ const handleChargeSucceeded = async (charge, billingEventId) => {
         currency,
         status: 'SUCCEEDED',
         providerPaymentId: chargeId,
+        description: 'Subscription Payment',
+        invoiceNumber: `INV-${Date.now()}-${metadata.tenantId.slice(0, 6).toUpperCase()}`,
         succeededAt: new Date()
       }
     });
 
+    console.log('[Stripe] ✅ Payment recorded:', payment.id);
     await syncCompanyModulesFromSubscription(subscription.tenantId);
-    console.log('[Stripe] Charge payment recorded successfully');
+    console.log('[Stripe] ✅ Modules synced');
+
+    // Generate invoice and send email
+    console.log('\n[Stripe] Checking email configuration...');
+    console.log('[Stripe] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
+    console.log('[Stripe] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+    
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      try {
+        const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
+          where: { id: payment.id },
+          include: {
+            subscription: {
+              include: {
+                plan: true,
+                tenant: {
+                  include: {
+                    users: {
+                      where: { role: 'ADMIN' },
+                      take: 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        const adminEmail = paymentWithDetails?.subscription?.tenant?.users?.[0]?.email;
+        console.log('[Stripe] Admin email:', adminEmail || '❌ Not found');
+        
+        if (adminEmail) {
+          console.log('[Stripe] 📧 Starting automatic invoice email send...');
+          
+          const paymentWithEmail = {
+            ...paymentWithDetails,
+            subscription: {
+              ...paymentWithDetails.subscription,
+              tenant: {
+                ...paymentWithDetails.subscription.tenant,
+                email: adminEmail
+              }
+            }
+          };
+
+          console.log('[Stripe] Generating PDF...');
+          const pdfBuffer = await invoiceService.generateInvoicePDF(paymentWithEmail);
+          console.log('[Stripe] ✅ PDF generated, size:', pdfBuffer.length, 'bytes');
+          
+          console.log('[Stripe] Sending email to:', adminEmail);
+          await invoiceService.sendInvoiceEmail(paymentWithEmail, pdfBuffer);
+          console.log(`[Stripe] ✅✅✅ Invoice email sent successfully to ${adminEmail}`);
+          console.log('[Stripe] Payment ID:', payment.id);
+        } else {
+          console.log('[Stripe] ⚠️  No admin email found, skipping invoice');
+        }
+      } catch (error) {
+        console.error('[Stripe] ❌ Error sending invoice:', error.message);
+        console.error('[Stripe] Stack:', error.stack);
+      }
+    }
+    
+    console.log('========================================\n');
   }
 };
 
@@ -478,6 +786,10 @@ const handleSubscriptionDeleted = async (stripeSubscription, billingEventId) => 
  * Handle invoice payment succeeded
  */
 const handleInvoicePaymentSucceeded = async (invoice, billingEventId) => {
+  console.log('\n========================================');
+  console.log('[Stripe Webhook] Invoice Payment Succeeded');
+  console.log('========================================');
+  
   const {
     subscription: stripeSubscriptionId,
     subscription_id,
@@ -486,28 +798,120 @@ const handleInvoicePaymentSucceeded = async (invoice, billingEventId) => {
     id: invoiceId,
   } = invoice;
 
+  console.log('[Stripe] Invoice ID:', invoiceId);
+  console.log('[Stripe] Amount:', amount_paid / 100, currency);
+
   const providerSubscriptionId = stripeSubscriptionId || subscription_id;
-  if (!providerSubscriptionId) return;
+  if (!providerSubscriptionId) {
+    console.log('[Stripe] ❌ No subscription ID found in invoice');
+    return;
+  }
+
+  console.log('[Stripe] Looking up subscription:', providerSubscriptionId);
 
   const subscription = await prisma.subscription.findFirst({
-    where: { providerSubscriptionId }
+    where: { providerSubscriptionId },
+    include: {
+      plan: true,
+      tenant: {
+        include: {
+          users: {
+            where: { role: 'ADMIN' },
+            take: 1
+          }
+        }
+      }
+    }
   });
 
-  if (subscription) {
-    await prisma.subscriptionPayment.create({
-      data: {
-        subscriptionId: subscription.id,
-        tenantId: subscription.tenantId,
-        amount: amount_paid / 100,
-        currency,
-        status: 'SUCCEEDED',
-        invoiceNumber: invoiceId,
-        succeededAt: new Date()
-      }
-    });
-
-    await syncCompanyModulesFromSubscription(subscription.tenantId);
+  if (!subscription) {
+    console.log('[Stripe] ❌ Subscription not found in database');
+    return;
   }
+
+  console.log('[Stripe] ✅ Subscription found:', subscription.id);
+  console.log('[Stripe] Tenant ID:', subscription.tenantId);
+  console.log('[Stripe] Admin users found:', subscription.tenant?.users?.length || 0);
+
+  const payment = await prisma.subscriptionPayment.create({
+    data: {
+      subscriptionId: subscription.id,
+      tenantId: subscription.tenantId,
+      amount: amount_paid / 100,
+      currency,
+      status: 'SUCCEEDED',
+      description: 'Subscription Payment',
+      invoiceNumber: `INV-${Date.now()}-${subscription.tenantId.slice(0, 6).toUpperCase()}`,
+      succeededAt: new Date()
+    }
+  });
+
+  console.log('[Stripe] ✅ Payment record created:', payment.id);
+
+  await syncCompanyModulesFromSubscription(subscription.tenantId);
+  console.log('[Stripe] ✅ Company modules synced');
+
+  // Generate invoice PDF and send email if email is configured
+  console.log('\n[Stripe] Checking email configuration...');
+  console.log('[Stripe] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
+  console.log('[Stripe] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+  
+  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    try {
+      // Get admin user email
+      const adminEmail = subscription.tenant?.users?.[0]?.email;
+      console.log('[Stripe] Admin email:', adminEmail || '❌ Not found');
+      
+      if (adminEmail) {
+        console.log('[Stripe] 📧 Starting automatic invoice email send...');
+        
+        // Fetch payment with full details for PDF generation
+        const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
+          where: { id: payment.id },
+          include: {
+            subscription: {
+              include: {
+                plan: true,
+                tenant: true
+              }
+            }
+          }
+        });
+
+        // Add email to tenant data
+        const paymentWithEmail = {
+          ...paymentWithDetails,
+          subscription: {
+            ...paymentWithDetails.subscription,
+            tenant: {
+              ...paymentWithDetails.subscription.tenant,
+              email: adminEmail
+            }
+          }
+        };
+
+        console.log('[Stripe] Generating PDF...');
+        const pdfBuffer = await invoiceService.generateInvoicePDF(paymentWithEmail);
+        console.log('[Stripe] ✅ PDF generated, size:', pdfBuffer.length, 'bytes');
+        
+        console.log('[Stripe] Sending email to:', adminEmail);
+        await invoiceService.sendInvoiceEmail(paymentWithEmail, pdfBuffer);
+        console.log(`[Stripe] ✅✅✅ Invoice email sent successfully to ${adminEmail}`);
+        console.log('[Stripe] Payment ID:', payment.id);
+      } else {
+        console.log('[Stripe] ⚠️  No admin email found for tenant, skipping invoice email');
+        console.log('[Stripe] Tenant ID:', subscription.tenantId);
+      }
+    } catch (error) {
+      console.error('[Stripe] ❌ Error generating/sending invoice:', error.message);
+      console.error('[Stripe] Stack:', error.stack);
+      // Don't fail the webhook if email fails
+    }
+  } else {
+    console.log('[Stripe] ⚠️  Email not configured, skipping invoice email');
+  }
+  
+  console.log('========================================\n');
 };
 
 /**

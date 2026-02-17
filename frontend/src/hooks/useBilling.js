@@ -7,6 +7,9 @@ import {
   getBillingMetrics,
   getCurrentSubscription,
   getPaymentHistory,
+  getInvoices,
+  downloadInvoice as downloadInvoiceApi,
+  resendInvoiceEmail as resendInvoiceEmailApi,
 } from '../api/billing.api.js';
 
 export const useBilling = () => {
@@ -15,6 +18,7 @@ export const useBilling = () => {
   const [payments, setPayments] = useState([]);
   const [events, setEvents] = useState([]);
   const [metrics, setMetrics] = useState(null);
+  const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -49,6 +53,12 @@ export const useBilling = () => {
     return data;
   }, []);
 
+  const fetchInvoices = useCallback(async () => {
+    const data = await getInvoices();
+    setInvoices(data.data || []);
+    return data;
+  }, []);
+
   const refresh = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -60,13 +70,14 @@ export const useBilling = () => {
         fetchPayments(),
         fetchEvents(),
         fetchMetrics(),
+        fetchInvoices(),
       ]);
     } catch (err) {
       setError(err.message || 'Failed to load billing information');
     } finally {
       setLoading(false);
     }
-  }, [fetchEvents, fetchMetrics, fetchPayments, fetchPlans, fetchSubscription]);
+  }, [fetchEvents, fetchMetrics, fetchPayments, fetchPlans, fetchSubscription, fetchInvoices]);
 
   const handleCancelSubscription = useCallback(async (atPeriodEnd = true) => {
     setActionLoading(true);
@@ -91,7 +102,15 @@ export const useBilling = () => {
     setError(null);
 
     try {
-      await changeSubscriptionPlan(planId, provider);
+      const response = await changeSubscriptionPlan(planId, provider);
+      
+      // If backend returns a checkout URL, redirect to payment
+      if (response.checkoutUrl) {
+        window.location.href = response.checkoutUrl;
+        return true;
+      }
+      
+      // Otherwise refresh data (shouldn't happen with new flow)
       await Promise.all([fetchSubscription(), fetchPayments(), fetchMetrics()]);
       return true;
     } catch (err) {
@@ -101,6 +120,36 @@ export const useBilling = () => {
       setActionLoading(false);
     }
   }, [fetchMetrics, fetchPayments, fetchSubscription]);
+
+  const handleDownloadInvoice = useCallback(async (paymentId) => {
+    try {
+      const blob = await downloadInvoiceApi(paymentId);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `invoice-${paymentId}.html`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      return true;
+    } catch (err) {
+      setError(err.message || 'Failed to download invoice');
+      return false;
+    }
+  }, []);
+
+  const handleResendInvoiceEmail = useCallback(async (paymentId) => {
+    setActionLoading(true);
+    setError(null);
+    try {
+      await resendInvoiceEmailApi(paymentId);
+      return true;
+    } catch (err) {
+      setError(err.message || 'Failed to resend invoice email');
+      return false;
+    } finally {
+      setActionLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     refresh();
@@ -112,11 +161,14 @@ export const useBilling = () => {
     payments,
     events,
     metrics,
+    invoices,
     loading,
     error,
     actionLoading,
     refresh,
     cancelSubscription: handleCancelSubscription,
     changePlan: handleChangePlan,
+    downloadInvoice: handleDownloadInvoice,
+    resendInvoiceEmail: handleResendInvoiceEmail,
   };
 };

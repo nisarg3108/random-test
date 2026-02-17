@@ -61,7 +61,7 @@ import FinanceDashboard from './pages/finance/FinanceDashboard';
 import ExpenseCategoryList from './pages/finance/ExpenseCategoryList';
 import ExpenseClaimList from './pages/finance/ExpenseClaimList';
 import FinanceApprovals from './pages/finance/FinanceApprovals';
-import BillingDashboard from './pages/subscription/BillingDashboard';
+import BillingDashboard from './pages/subscription/BillingDashboardEnhanced';
 
 // CRM
 import Customers from './pages/crm/Customers';

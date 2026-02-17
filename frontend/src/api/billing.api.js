@@ -39,3 +39,30 @@ export const getBillingMetrics = async () => {
   const response = await apiClient.get('/billing/metrics');
   return response.data;
 };
+
+/**
+ * Invoice API Functions
+ */
+
+export const getInvoices = async () => {
+  const response = await apiClient.get('/billing/invoices');
+  return response.data;
+};
+
+export const getInvoiceByPaymentId = async (paymentId) => {
+  const response = await apiClient.get(`/billing/invoices/${paymentId}`);
+  return response.data;
+};
+
+export const downloadInvoice = async (paymentId) => {
+  const response = await apiClient.get(`/billing/invoices/${paymentId}/download`, {
+    responseType: 'blob'
+  });
+  return response.data;
+};
+
+export const resendInvoiceEmail = async (paymentId) => {
+  const response = await apiClient.post(`/billing/invoices/${paymentId}/resend`);
+  return response.data;
+};
+
