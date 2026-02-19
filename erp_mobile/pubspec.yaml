@@ -1,0 +1,67 @@
+name: erp_mobile
+description: UEORMS ERP Mobile Application for Android & iOS
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # HTTP & Networking
+  http: ^1.2.1
+  dio: ^5.4.3+1
+
+  # State Management
+  provider: ^6.1.2
+
+  # Local Storage / Secure Storage
+  flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.3
+
+  # Navigation
+  go_router: ^13.2.4
+
+  # UI Components
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  fl_chart: ^0.67.0
+  intl: ^0.19.0
+
+  # Forms & Validation
+  reactive_forms: ^17.0.1
+
+  # Date/Time Picker
+  table_calendar: ^3.1.2
+
+  # PDF & File Handling
+  open_file: ^3.3.2
+
+  # Connectivity
+  connectivity_plus: ^6.0.3
+
+  # App Icon & Splash
+
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.9
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/lottie/

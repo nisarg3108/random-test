@@ -1,4 +1,5 @@
 import { createPendingRegistration, loginUser, registerUser } from './auth.service.js';
+import prisma from '../../config/db.js';
 import * as stripeService from '../../modules/subscription/stripe.service.js';
 import * as razorpayService from '../../modules/subscription/razorpay.service.js';
 
@@ -74,6 +75,30 @@ export const login = async (req, res, next) => {
   try {
     const result = await loginUser(req.body);
     res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get current authenticated user
+ */
+export const getMe = async (req, res, next) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      include: { employee: { select: { name: true } } },
+    });
+    res.status(200).json({
+      user: {
+        id: req.user.id,
+        email: req.user.email,
+        role: req.user.role,
+        tenantId: req.user.tenantId,
+        name: user?.employee?.name || req.user.email,
+        avatar: null,
+      },
+    });
   } catch (error) {
     next(error);
   }

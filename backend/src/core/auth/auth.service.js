@@ -339,7 +339,10 @@ export const loginUser = async ({ email, password }) => {
     throw error;
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({
+    where: { email },
+    include: { employee: { select: { name: true } } },
+  });
   if (!user) {
     const error = new Error('Invalid credentials');
     error.status = 401;
@@ -369,5 +372,13 @@ export const loginUser = async ({ email, password }) => {
   return {
     message: 'Login successful',
     token,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.employee?.name || user.email,
+      role: user.role,
+      tenantId: user.tenantId,
+      avatar: null,
+    },
   };
 };
