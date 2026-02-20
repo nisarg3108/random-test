@@ -185,7 +185,7 @@ class EmailService {
         subject,
         html,
         ...(includeAttachment ? {
-          attachments: [{ filename, content: attachment }]
+          attachments: [{ filename, content: Buffer.isBuffer(attachment) ? attachment.toString('base64') : attachment }]
         } : {})
       };
 

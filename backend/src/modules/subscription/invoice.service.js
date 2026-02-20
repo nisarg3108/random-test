@@ -339,8 +339,7 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
     attachments: [
       {
         filename: `invoice-${invoiceNumber}.pdf`,
-        content: pdfBuffer,
-        contentType: 'application/pdf'
+        content: pdfBuffer.toString('base64')
       }
     ]
   };
