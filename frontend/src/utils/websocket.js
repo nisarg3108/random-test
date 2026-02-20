@@ -8,21 +8,6 @@ class WebSocketClient {
     this.listeners = new Map();
     this.isConnecting = false;
     this.hasGivenUp = false;
-    this.pingInterval = null;
-  }
-
-  startPingInterval() {
-    this.stopPingInterval();
-    this.pingInterval = setInterval(() => {
-      this.ping();
-    }, 30000);
-  }
-
-  stopPingInterval() {
-    if (this.pingInterval) {
-      clearInterval(this.pingInterval);
-      this.pingInterval = null;
-    }
   }
 
   connect(token) {
@@ -63,7 +48,7 @@ class WebSocketClient {
           this.ws.close();
           this.isConnecting = false;
           reject(new Error('Connection timeout'));
-        }, 15000);
+        }, 5000);
 
         this.ws.onopen = () => {
           console.log('✅ WebSocket connected successfully');
@@ -71,7 +56,6 @@ class WebSocketClient {
           this.reconnectAttempts = 0;
           this.hasGivenUp = false;
           this.isConnecting = false;
-          this.startPingInterval();
           
           // Resubscribe to previous subscriptions
           this.subscriptions.forEach(endpoint => {
@@ -93,7 +77,6 @@ class WebSocketClient {
         this.ws.onclose = (event) => {
           clearTimeout(connectionTimeout);
           this.isConnecting = false;
-          this.stopPingInterval();
           if (this.reconnectAttempts === 0 && !this.hasGivenUp) {
             console.log('🔌 WebSocket disconnected. Code:', event.code);
           }
@@ -103,7 +86,6 @@ class WebSocketClient {
         this.ws.onerror = (error) => {
           clearTimeout(connectionTimeout);
           this.isConnecting = false;
-          this.stopPingInterval();
           // Silently handle errors - only log on first attempt
           if (this.reconnectAttempts === 0) {
             console.info('ℹ️ WebSocket unavailable - using polling mode');
@@ -216,7 +198,6 @@ class WebSocketClient {
   }
 
   disconnect() {
-    this.stopPingInterval();
     if (this.ws) {
       this.ws.close();
       this.ws = null;

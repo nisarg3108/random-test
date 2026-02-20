@@ -5,13 +5,11 @@ import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { env } from './config/env.js';
 import dbTestRoutes from './routes/db-test.routes.js';
 import healthRoutes from './routes/health.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import realtimeRoutes from './routes/realtime.routes.js';
 import { errorHandler } from './middlewares/error.middleware.js';
-import rateLimitMiddleware from './middlewares/rateLimit.middleware.js';
 import { requireModuleEntitlement } from './middlewares/entitlement.middleware.js';
 import { requireAuth } from './core/auth/auth.middleware.js';
 import protectedRoutes from './routes/protected.routes.js';
@@ -24,7 +22,6 @@ import warehouseRoutes from './modules/inventory/warehouse.routes.js';
 import stockMovementRoutes from './modules/inventory/stock-movement.routes.js';
 import departmentRoutes from './core/department/department.routes.js';
 import auditRoutes from './core/audit/audit.routes.js';
-import auditMiddleware from './core/audit/audit.middleware.js';
 import systemOptionsRoutes from './core/system/systemOptions.routes.js';
 import rbacRoutes from './core/rbac/rbac.routes.js';
 import approvalRoutes from './core/workflow/approval.routes.js';
@@ -78,33 +75,12 @@ const __dirname = dirname(__filename);
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
-
-// Build allowed origins list from FRONTEND_URL (supports comma-separated values)
-const allowedOrigins = (env.frontendUrl || '')
-  .split(',')
-  .map(o => o.trim())
-  .filter(Boolean);
-
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, server-to-server)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    // In development, allow all
-    if (env.nodeEnv === 'development') return callback(null, true);
-    return callback(new Error(`CORS: Origin '${origin}' not allowed`));
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  origin: '*',
+  credentials: true
 }));
-
-// Handle preflight for all routes
-app.options('*', cors());
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(auditMiddleware);
-app.use(rateLimitMiddleware);
 
 // Serve uploaded files
 app.use('/uploads', (req, res, next) => {
