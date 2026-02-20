@@ -72,12 +72,25 @@ COMPANY_EMAIL_DOMAIN=company.com
 DEFAULT_PLAN=Starter Monthly
 ```
 
+## Step 7: Configure Webhooks
+
+After deployment, set up payment webhooks:
+
+**Your webhook URLs will be:**
+```
+https://your-app-name.up.railway.app/api/billing/webhooks/stripe
+https://your-app-name.up.railway.app/api/billing/webhooks/razorpay
+```
+
+📖 **See `WEBHOOK_SETUP.md` for detailed webhook configuration**
+
 ## Verify Migration
 
 Check Railway logs to ensure:
 - ✅ Database connection successful
 - ✅ Migrations applied
 - ✅ Server running
+- ✅ Webhooks configured (if using billing)
 
 ## Rollback (if needed)
 

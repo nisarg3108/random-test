@@ -26,7 +26,7 @@ class WebSocketClient {
     return new Promise((resolve, reject) => {
       try {
         this.isConnecting = true;
-        const baseWsUrl = (import.meta.env.VITE_WS_URL || 'ws://localhost:5000').replace(/\/$/, '');
+        const baseWsUrl = (import.meta.env.VITE_WS_URL || 'ws://localhost:5000').replace(/\/ws\/?$/, '').replace(/\/$/, '');
         const wsUrl = `${baseWsUrl}/ws?token=${encodeURIComponent(token)}`;
         
         if (this.reconnectAttempts === 0) {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { getToken } from '../store/auth.store';
 import { getOnlineUsers } from '../api/communication';
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
+const WS_URL = (import.meta.env.VITE_WS_URL || 'ws://localhost:5000').replace(/\/ws\/?$/, '');
 
 export const useWebSocket = () => {
   const ws = useRef(null);

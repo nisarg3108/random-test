@@ -8,8 +8,8 @@ export const testWebSocketConnection = async () => {
   }
 
   return new Promise((resolve) => {
-    const baseWsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
-    const wsUrl = `${baseWsUrl}?token=${encodeURIComponent(token)}`;
+    const baseWsUrl = (import.meta.env.VITE_WS_URL || 'ws://localhost:5000').replace(/\/ws\/?$/, '');
+    const wsUrl = `${baseWsUrl}/ws?token=${encodeURIComponent(token)}`;
     const testWs = new WebSocket(wsUrl);
     
     const timeout = setTimeout(() => {
