@@ -430,7 +430,7 @@ const handleCheckoutSessionCompleted = async (session, billingEventId) => {
     console.log('[Stripe] Modules synced');
 
     // Send invoice email
-    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    if (process.env.RESEND_API_KEY) {
       try {
         const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
           where: { id: payment.id },
@@ -540,7 +540,7 @@ const handlePlanChangePayment = async (session, billingEventId) => {
       console.log('[Stripe] Plan change payment recorded:', payment.id);
 
       // Generate invoice and send email
-      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      if (process.env.RESEND_API_KEY) {
         try {
           const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
             where: { id: payment.id },
@@ -649,10 +649,9 @@ const handleChargeSucceeded = async (charge, billingEventId) => {
 
     // Generate invoice and send email
     console.log('\n[Stripe] Checking email configuration...');
-    console.log('[Stripe] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
-    console.log('[Stripe] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+    console.log('[Stripe] RESEND_API_KEY:', process.env.RESEND_API_KEY ? '✅ Configured' : '❌ Not configured');
     
-    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    if (process.env.RESEND_API_KEY) {
       try {
         const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
           where: { id: payment.id },
@@ -853,10 +852,9 @@ const handleInvoicePaymentSucceeded = async (invoice, billingEventId) => {
 
   // Generate invoice PDF and send email if email is configured
   console.log('\n[Stripe] Checking email configuration...');
-  console.log('[Stripe] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
-  console.log('[Stripe] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+  console.log('[Stripe] RESEND_API_KEY:', process.env.RESEND_API_KEY ? '✅ Configured' : '❌ Not configured');
   
-  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+  if (process.env.RESEND_API_KEY) {
     try {
       // Get admin user email
       const adminEmail = subscription.tenant?.users?.[0]?.email;

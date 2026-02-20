@@ -446,43 +446,22 @@ class EmailQueueService {
         return {
           healthy: false,
           configured: false,
-          message: 'SMTP not configured',
+          message: 'Resend not configured',
           details: {
-            host: process.env.SMTP_HOST || 'not set',
-            port: process.env.SMTP_PORT || 'not set',
-            user: process.env.SMTP_USER || 'not set'
+            resendApiKey: process.env.RESEND_API_KEY ? 'set' : 'not set'
           }
         };
       }
 
-      // Test SMTP connection
-      try {
-        await this.emailService.transporter.verify();
-        
-        return {
-          healthy: true,
-          configured: true,
-          message: 'SMTP connection healthy',
-          details: {
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
-            user: process.env.SMTP_USER,
-            secure: process.env.SMTP_SECURE === 'true'
-          }
-        };
-      } catch (verifyError) {
-        return {
-          healthy: false,
-          configured: true,
-          message: 'SMTP connection failed',
-          error: verifyError.message,
-          details: {
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
-            user: process.env.SMTP_USER
-          }
-        };
-      }
+      return {
+        healthy: true,
+        configured: true,
+        message: 'Resend email service healthy',
+        details: {
+          resendApiKey: 'configured',
+          from: process.env.RESEND_FROM || 'onboarding@resend.dev'
+        }
+      };
     } catch (error) {
       return {
         healthy: false,

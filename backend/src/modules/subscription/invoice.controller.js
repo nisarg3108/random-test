@@ -109,9 +109,9 @@ export const resendInvoiceEmail = async (req, res) => {
     console.log('[Invoice Controller] User email:', userEmail);
     console.log('[Invoice Controller] Tenant ID:', tenantId);
 
-    // Check SMTP configuration
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.error('[Invoice Controller] SMTP not configured');
+    // Check Resend configuration
+    if (!process.env.RESEND_API_KEY) {
+      console.error('[Invoice Controller] Resend not configured');
       return res.status(503).json({ 
         success: false, 
         error: 'Email service not configured. Please contact administrator.' 

@@ -405,10 +405,9 @@ const handlePaymentAuthorized = async (payment, billingEventId) => {
 
       // Send invoice email
       console.log('\n[Razorpay] Checking email configuration...');
-      console.log('[Razorpay] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
-      console.log('[Razorpay] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+      console.log('[Razorpay] RESEND_API_KEY:', process.env.RESEND_API_KEY ? '✅ Configured' : '❌ Not configured');
       
-      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      if (process.env.RESEND_API_KEY) {
         try {
           const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
             where: { id: paymentRecord.id },
@@ -529,11 +528,10 @@ const handlePaymentAuthorized = async (payment, billingEventId) => {
 
     // Send invoice email
     console.log('\n[Razorpay] Checking email configuration...');
-    console.log('[Razorpay] SMTP_USER:', process.env.SMTP_USER ? '✅ Configured' : '❌ Not configured');
-    console.log('[Razorpay] SMTP_PASS:', process.env.SMTP_PASS ? '✅ Configured' : '❌ Not configured');
+    console.log('[Razorpay] RESEND_API_KEY:', process.env.RESEND_API_KEY ? '✅ Configured' : '❌ Not configured');
     console.log('[Razorpay] Admin users found:', subscription.tenant?.users?.length || 0);
     
-    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    if (process.env.RESEND_API_KEY) {
       try {
         // Get admin user email
         const adminEmail = subscription.tenant?.users?.[0]?.email;
@@ -622,7 +620,7 @@ const handlePaymentCaptured = async (payment, billingEventId) => {
       console.log('[Razorpay] Pending registration completed successfully');
 
       // Send invoice email
-      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      if (process.env.RESEND_API_KEY) {
         try {
           const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
             where: { id: payment.id },

@@ -1,6 +1,6 @@
 import PDFDocument from 'pdfkit';
 import prisma from '../../config/db.js';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 /**
  * Generate invoice PDF
@@ -163,15 +163,8 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
   console.log('[Invoice Service] Payment ID:', payment.id);
   console.log('[Invoice Service] Tenant email:', payment.subscription?.tenant?.email);
   
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: process.env.SMTP_PORT || 587,
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
-  });
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const FROM_ADDRESS = process.env.RESEND_FROM || 'onboarding@resend.dev';
 
   const tenant = payment.subscription?.tenant;
   const recipientEmail = tenant?.email;
@@ -192,8 +185,8 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
   });
 
   const mailOptions = {
-    from: `"Billing Team" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
-    to: recipientEmail,
+    from: FROM_ADDRESS,
+    to: [recipientEmail],
     subject: `Invoice ${invoiceNumber} - Payment Confirmation`,
     html: `
       <!DOCTYPE html>
@@ -353,12 +346,13 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
   };
 
   try {
-    console.log('[Invoice Service] Attempting to send email...');
-    const info = await transporter.sendMail(mailOptions);
+    console.log('[Invoice Service] Attempting to send email via Resend...');
+    const { data, error: sendError } = await resend.emails.send(mailOptions);
+    if (sendError) throw new Error(sendError.message);
     console.log(`[Invoice Service] ✅ Email sent successfully!`);
-    console.log(`[Invoice Service] Message ID: ${info.messageId}`);
+    console.log(`[Invoice Service] Message ID: ${data.id}`);
     console.log(`[Invoice Service] Recipient: ${recipientEmail}`);
-    return { success: true, messageId: info.messageId };
+    return { success: true, messageId: data.id };
   } catch (error) {
     console.error('[Invoice Service] ❌ Failed to send invoice email');
     console.error('[Invoice Service] Error:', error.message);
