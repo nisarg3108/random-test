@@ -3,22 +3,12 @@ echo ========================================
 echo Railway Database Migration Fix Script
 echo ========================================
 echo.
-echo BEFORE RUNNING: Get your PUBLIC DATABASE_URL from:
-echo   Railway Dashboard → PostgreSQL service → Connect tab → Public URL
-echo.
-set /p DB_URL="Paste your Railway PUBLIC DATABASE_URL here: "
-
-if "%DB_URL%"=="" (
-    echo Error: DATABASE_URL is required.
-    pause
-    exit /b 1
-)
 
 cd backend
 
 echo.
 echo Step 1: Generating Prisma Client...
-set DATABASE_URL=%DB_URL%
+set DATABASE_URL=postgresql://postgres:PHMfhwXSttXRKzsFHFtooLdiyXgRSYcl@trolley.proxy.rlwy.net:33836/railway
 call npx prisma generate
 if %errorlevel% neq 0 (
     echo Error: Failed to generate Prisma client
@@ -27,8 +17,8 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo Step 2: Resolving failed migration (20260202032023_add_asset_management)...
-call npx prisma migrate resolve --rolled-back 20260202032023_add_asset_management
+echo Step 2: Marking partial migration as applied (tables already exist)...
+call npx prisma migrate resolve --applied 20260202032023_add_asset_management
 if %errorlevel% neq 0 (
     echo Warning: Resolve failed - migration may already be resolved. Continuing...
 )

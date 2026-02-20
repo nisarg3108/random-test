@@ -66,6 +66,7 @@ import communicationRoutes from './modules/communication/communication.routes.js
 import dataImportExportRoutes from './modules/utils/data-import-export.routes.js';
 import billingRoutes from './modules/subscription/billing.routes.js';
 import missingRoutes from './routes/missing-routes.js';
+import seedRoutes from './routes/seed.routes.js';
 
 const app = express();
 
@@ -199,6 +200,11 @@ app.use('/api/billing', billingRoutes);
 
 // Missing routes (minimal implementations)
 app.use('/api', missingRoutes);
+
+// Seed route (production only)
+if (process.env.NODE_ENV === 'production') {
+  app.use('/api/admin', seedRoutes);
+}
 
 
 

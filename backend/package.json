@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "npx prisma migrate deploy && node src/server.js",
+    "start": "node src/server.js",
     "seed": "node prisma/seed.js",
     "test:comprehensive": "node COMPREHENSIVE_ERP_SYSTEM_TEST.js",
     "test": "npm run test:comprehensive"

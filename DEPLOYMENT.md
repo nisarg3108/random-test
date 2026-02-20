@@ -1,142 +1,216 @@
-# 🚀 ERP System Deployment Guide
+# Deployment Guide: Vercel + Railway
 
-## Quick Deployment Steps
+## Overview
+- **Frontend**: Deploy to Vercel
+- **Backend**: Deploy to Railway (with PostgreSQL)
 
-### 1. Prepare for Deployment
-```bash
-deploy-prep.bat
+---
+
+## 🚂 Part 1: Deploy Backend to Railway
+
+### Step 1: Create Railway Account
+1. Go to [railway.app](https://railway.app)
+2. Sign up with GitHub
+
+### Step 2: Create New Project
+1. Click "New Project"
+2. Select "Deploy PostgreSQL"
+3. Wait for PostgreSQL to provision
+
+### Step 3: Add Backend Service
+1. Click "New" → "GitHub Repo"
+2. Select your ERP-SYSTEM-PROJECT repository
+3. Set root directory: `backend`
+
+### Step 4: Configure Environment Variables
+In Railway backend service settings, add:
+
 ```
-
-### 2. Deploy Backend (Railway - Recommended)
-
-1. **Create Railway Account**: Go to [railway.app](https://railway.app)
-2. **Create New Project**: Click "New Project" → "Deploy from GitHub repo"
-3. **Connect Repository**: Select your ERP-SYSTEM-PROJECT repository
-4. **Configure Service**:
-   - Select `backend` folder as root directory
-   - Railway will auto-detect Node.js
-5. **Add Database**:
-   - Click "New" → "Database" → "PostgreSQL"
-   - Copy the DATABASE_URL from the database service
-6. **Set Environment Variables**:
-   ```
-   DATABASE_URL=<your-railway-postgres-url>
-   JWT_SECRET=dacba2ba6cd86441390b431766e96db7e099af09786675097e9a45ea98f38d253f7118d7be7d9360171b55f79dbcbb440f6d2ce99aeb59244df2961bc74a62ad
-   JWT_EXPIRES_IN=7d
-   NODE_ENV=production
-   PORT=5000
-   ```
-7. **Deploy**: Railway will automatically deploy your backend
-
-### 3. Deploy Frontend (Vercel - Recommended)
-
-1. **Create Vercel Account**: Go to [vercel.com](https://vercel.com)
-2. **Import Project**: Click "New Project" → Import from Git
-3. **Configure Build**:
-   - Framework Preset: Vite
-   - Root Directory: `frontend`
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-4. **Set Environment Variables**:
-   ```
-   VITE_API_URL=https://your-railway-backend-url.railway.app/api
-   ```
-5. **Deploy**: Vercel will build and deploy your frontend
-
-### 4. Database Setup
-
-After backend deployment, run database migrations:
-```bash
-# Connect to your Railway backend terminal and run:
-npx prisma migrate deploy
-npx prisma db seed
-```
-
-## Alternative Deployment Options
-
-### Backend Alternatives
-- **Render**: Similar to Railway, free tier available
-- **Heroku**: Classic choice, requires credit card
-- **AWS EC2**: More control, requires AWS knowledge
-
-### Frontend Alternatives
-- **Netlify**: Similar to Vercel, drag-and-drop deployment
-- **GitHub Pages**: Free for public repos
-- **AWS S3 + CloudFront**: Professional setup
-
-### Database Alternatives
-- **Neon**: Serverless PostgreSQL
-- **Supabase**: PostgreSQL with additional features
-- **PlanetScale**: MySQL alternative
-
-## Environment Variables Reference
-
-### Backend (.env)
-```env
-DATABASE_URL="postgresql://username:password@host:port/database"
-JWT_SECRET="your-secure-jwt-secret"
-JWT_EXPIRES_IN="7d"
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+JWT_SECRET=your-secure-random-string-min-32-chars
+JWT_EXPIRES_IN=7d
 PORT=5000
-NODE_ENV="production"
+NODE_ENV=production
+FRONTEND_URL=https://your-app.vercel.app
+SEED_KEY=your-secure-seed-key-change-this
 ```
 
-### Frontend (.env.production)
-```env
-VITE_API_URL=https://your-backend-url.com/api
+**Important**: 
+- `${{Postgres.DATABASE_URL}}` automatically references your Railway PostgreSQL
+- Generate a secure JWT_SECRET (use: `openssl rand -base64 32`)
+- Update FRONTEND_URL after deploying to Vercel
+
+### Step 5: Configure Build Settings
+Railway auto-detects Node.js. Verify:
+- **Build Command**: `npm install && npx prisma generate`
+- **Start Command**: `npx prisma migrate deploy && npm start`
+
+### Step 6: Deploy
+1. Click "Deploy"
+2. Wait for build to complete
+3. Copy your Railway URL (e.g., `https://your-app.railway.app`)
+
+---
+
+## ▲ Part 2: Deploy Frontend to Vercel
+
+### Step 1: Create Vercel Account
+1. Go to [vercel.com](https://vercel.com)
+2. Sign up with GitHub
+
+### Step 2: Import Project
+1. Click "Add New" → "Project"
+2. Import your ERP-SYSTEM-PROJECT repository
+3. Configure:
+   - **Framework Preset**: Vite
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+
+### Step 3: Add Environment Variable
+In Vercel project settings → Environment Variables:
+
+```
+VITE_API_URL=https://your-railway-app.railway.app/api
 ```
 
-## Post-Deployment Checklist
+Replace with your actual Railway backend URL from Part 1, Step 6.
 
-- [ ] Backend is accessible at your Railway URL
-- [ ] Frontend is accessible at your Vercel URL
-- [ ] Database connection is working
-- [ ] User registration/login works
-- [ ] API endpoints respond correctly
-- [ ] CORS is configured for your frontend domain
+### Step 4: Deploy
+1. Click "Deploy"
+2. Wait for deployment
+3. Copy your Vercel URL (e.g., `https://your-app.vercel.app`)
 
-## Troubleshooting
+---
 
-### Common Issues
+## 🔄 Part 3: Update CORS Settings
 
-1. **CORS Errors**
-   - Update CORS settings in `backend/src/app.js`
-   - Add your frontend domain to allowed origins
+### Update Backend CORS
+Go back to Railway → Backend Service → Variables:
 
-2. **Database Connection Issues**
-   - Verify DATABASE_URL format
-   - Ensure database is running and accessible
+Update `FRONTEND_URL` to your Vercel URL:
+```
+FRONTEND_URL=https://your-app.vercel.app
+```
 
-3. **Build Failures**
-   - Check Node.js version compatibility
-   - Verify all dependencies are installed
+Redeploy the backend service.
 
-4. **Environment Variables**
-   - Ensure all required variables are set
-   - Check variable names match exactly
+---
 
-## Custom Domain Setup
+## ✅ Part 4: Verify Deployment
 
-### Frontend (Vercel)
-1. Go to Project Settings → Domains
-2. Add your custom domain
-3. Configure DNS records as instructed
+### Test Backend
+```bash
+curl https://your-railway-app.railway.app/api/health
+```
 
-### Backend (Railway)
-1. Go to Service Settings → Networking
-2. Add custom domain
-3. Configure DNS records
+Expected response:
+```json
+{
+  "status": "ok",
+  "database": "connected"
+}
+```
 
-## Monitoring & Maintenance
+### Test Frontend
+1. Open your Vercel URL
+2. Try logging in
+3. Check browser console for errors
 
-- Monitor application logs in Railway/Vercel dashboards
-- Set up uptime monitoring (UptimeRobot, Pingdom)
-- Regular database backups
-- Keep dependencies updated
+---
 
-## Support
+## 🔧 Troubleshooting
 
-For deployment issues:
-1. Check service provider documentation
-2. Review application logs
-3. Verify environment variables
-4. Test API endpoints manually
+### Database Connection Issues
+- Verify `DATABASE_URL` in Railway matches PostgreSQL service
+- Check Railway logs: `railway logs`
+
+### CORS Errors
+- Ensure `FRONTEND_URL` in Railway matches your Vercel domain
+- Check backend CORS settings in `src/app.js`
+
+### Build Failures
+
+**Frontend**:
+- Check Node.js version (should be 18+)
+- Verify all dependencies in `package.json`
+
+**Backend**:
+- Ensure Prisma generates correctly
+- Check migration files in `prisma/migrations`
+
+### Environment Variables Not Working
+- Restart services after adding variables
+- Verify variable names match exactly (case-sensitive)
+
+---
+
+## 📝 Post-Deployment Setup
+
+### 1. Initialize Database
+The migrations run automatically on first deploy.
+
+### 2. Seed Database
+
+**After backend is deployed, trigger seed via API:**
+```bash
+curl -X POST https://your-railway-app.railway.app/api/admin/seed \
+  -H "Authorization: Bearer your-seed-key-from-env"
+```
+
+**Or manually create admin via API:**
+```bash
+curl -X POST https://your-railway-app.railway.app/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@example.com",
+    "password": "SecurePassword123!",
+    "name": "Admin User",
+    "role": "ADMIN"
+  }'
+```
+
+### 3. Initialize Workflows
+Login as admin and navigate to Finance > Finance Approvals, then click "Initialize Workflow".
+
+---
+
+## 🔄 Continuous Deployment
+
+Both platforms auto-deploy on git push:
+- **Vercel**: Deploys on push to main branch
+- **Railway**: Deploys on push to main branch
+
+To disable auto-deploy, check platform settings.
+
+---
+
+## 💰 Cost Estimates
+
+### Railway (Backend + Database)
+- **Hobby Plan**: $5/month (500 hours)
+- **Pro Plan**: $20/month (unlimited)
+
+### Vercel (Frontend)
+- **Hobby**: Free (personal projects)
+- **Pro**: $20/month (commercial use)
+
+---
+
+## 🔐 Security Checklist
+
+- [ ] Change default JWT_SECRET
+- [ ] Use strong database password
+- [ ] Enable Railway/Vercel 2FA
+- [ ] Set up custom domain with HTTPS
+- [ ] Review CORS settings
+- [ ] Enable rate limiting
+- [ ] Set up monitoring/alerts
+
+---
+
+## 📚 Additional Resources
+
+- [Railway Docs](https://docs.railway.app)
+- [Vercel Docs](https://vercel.com/docs)
+- [Prisma Deployment](https://www.prisma.io/docs/guides/deployment)
