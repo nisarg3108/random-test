@@ -1,7 +1,6 @@
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env.js';
-import prisma from '../config/db.js';
 
 class RealTimeServer {
   constructor() {
@@ -45,7 +44,7 @@ class RealTimeServer {
     console.log('🔌 WebSocket server initialized on path /ws');
   }
 
-  async handleConnection(ws, request) {
+  handleConnection(ws, request) {
     try {
       const url = new URL(request.url, `http://${request.headers.host}`);
       const token = url.searchParams.get('token');
@@ -56,24 +55,31 @@ class RealTimeServer {
         return;
       }
 
-      const decoded = jwt.verify(token, env.jwtSecret);
-      const resolvedUserId = decoded.userId || decoded.id;
-      const user = await prisma.user.findUnique({
-        where: { id: resolvedUserId },
-        include: { tenant: true }
-      });
-
-      if (!user) {
-        console.warn('⚠️ WebSocket connection rejected: Invalid user');
-        ws.close(1008, 'Invalid user');
+      // Verify JWT synchronously — no DB lookup so the handshake completes immediately
+      let decoded;
+      try {
+        decoded = jwt.verify(token, env.jwtSecret);
+      } catch (err) {
+        console.warn('⚠️ WebSocket connection rejected: Invalid token');
+        ws.close(1008, 'Invalid token');
         return;
       }
 
-      const clientId = `${user.id}_${Date.now()}`;
+      const userId = decoded.userId || decoded.id;
+      const tenantId = decoded.tenantId;
+      const email = decoded.email || userId;
+
+      if (!userId || !tenantId) {
+        console.warn('⚠️ WebSocket connection rejected: Token missing userId/tenantId');
+        ws.close(1008, 'Invalid token claims');
+        return;
+      }
+
+      const clientId = `${userId}_${Date.now()}`;
       this.clients.set(clientId, {
         ws,
-        userId: user.id,
-        tenantId: user.tenantId,
+        userId,
+        tenantId,
         subscriptions: new Set()
       });
 
@@ -82,7 +88,7 @@ class RealTimeServer {
       ws.on('pong', () => { ws.isAlive = true; });
 
       // Broadcast online status
-      this.broadcastUserOnlineStatus(user.id, user.tenantId, true);
+      this.broadcastUserOnlineStatus(userId, tenantId, true);
 
       ws.on('message', (data) => {
         this.handleMessage(clientId, data);
@@ -93,11 +99,11 @@ class RealTimeServer {
       });
 
       ws.send(JSON.stringify({ type: 'connected', clientId }));
-      console.log(`✅ WebSocket client connected: ${user.email} (${clientId})`);
+      console.log(`✅ WebSocket client connected: ${email} (${clientId})`);
 
     } catch (error) {
       console.error('❌ WebSocket connection error:', error.message);
-      if (ws.readyState === 1) {
+      if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
         ws.close(1008, 'Authentication failed');
       }
     }
