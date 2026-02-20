@@ -176,6 +176,11 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
   }
   
   console.log('[Invoice Service] Sending to:', recipientEmail);
+  // If RESEND_TO_OVERRIDE is set (used when domain not yet verified), send there instead
+  const finalRecipient = process.env.RESEND_TO_OVERRIDE || recipientEmail;
+  if (process.env.RESEND_TO_OVERRIDE) {
+    console.log('[Invoice Service] RESEND_TO_OVERRIDE active, redirecting to:', finalRecipient);
+  }
   
   const invoiceNumber = payment.invoiceNumber || `INV-${payment.id.slice(0, 8).toUpperCase()}`;
   const invoiceDate = new Date(payment.createdAt).toLocaleDateString('en-US', {
@@ -186,7 +191,7 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
 
   const mailOptions = {
     from: FROM_ADDRESS,
-    to: [recipientEmail],
+    to: [finalRecipient],
     subject: `Invoice ${invoiceNumber} - Payment Confirmation`,
     html: `
       <!DOCTYPE html>

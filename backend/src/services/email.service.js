@@ -31,10 +31,13 @@ class EmailService {
   async sendEmail({ to, cc, bcc, subject, html, text, tenantId }) {
     this.ensureConfigured();
 
+    // Use RESEND_TO_OVERRIDE when domain is not yet verified (Resend free plan restriction)
+    const finalTo = process.env.RESEND_TO_OVERRIDE || to;
+
     try {
       const { data, error } = await this.resend.emails.send({
         from: process.env.RESEND_FROM || 'onboarding@resend.dev',
-        to: Array.isArray(to) ? to : [to],
+        to: Array.isArray(finalTo) ? finalTo : [finalTo],
         ...(cc ? { cc: Array.isArray(cc) ? cc : [cc] } : {}),
         ...(bcc ? { bcc: Array.isArray(bcc) ? bcc : [bcc] } : {}),
         subject,
