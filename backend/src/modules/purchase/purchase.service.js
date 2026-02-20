@@ -1,4 +1,5 @@
 import prisma from '../../config/db.js';
+import integrationEventManager from '../integration/events/integrationEventManager.js';
 
 // ==================== VENDORS ====================
 
@@ -395,6 +396,11 @@ const updatePOStatusFromReceipts = async (purchaseOrderId) => {
       where: { id: purchaseOrderId },
       data: { status: 'RECEIVED' }
     });
+
+    integrationEventManager.emitPurchaseOrderReceived(
+      purchaseOrderId,
+      purchaseOrder.tenantId
+    );
   }
 };
 

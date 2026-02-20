@@ -1,4 +1,5 @@
 import prisma from '../../config/db.js';
+import integrationEventManager from '../integration/events/integrationEventManager.js';
 
 const QUOTATION_STATUSES = ['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED'];
 const ORDER_STATUSES = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
@@ -210,6 +211,7 @@ export const createSalesOrder = async (data, tenantId) => {
 
 export const updateSalesOrder = async (id, data, tenantId) => {
   const updates = {};
+  let previousStatus;
 
   if (data.customerName !== undefined) {
     const customerName = normalizeString(data.customerName);
@@ -237,13 +239,34 @@ export const updateSalesOrder = async (id, data, tenantId) => {
   if (data.total !== undefined) updates.total = parseMoney(data.total, 'Total');
 
   if (data.status !== undefined) {
+    const existingOrder = await prisma.salesOrder.findFirst({
+      where: { id, tenantId },
+      select: { status: true }
+    });
+
+    if (!existingOrder) {
+      throw new Error('Sales order not found');
+    }
+
+    previousStatus = existingOrder.status;
     updates.status = ensureStatus(data.status, ORDER_STATUSES, 'Order status');
   }
 
-  return prisma.salesOrder.update({
+  const updatedOrder = await prisma.salesOrder.update({
     where: { id, tenantId },
     data: updates
   });
+
+  if (previousStatus && updatedOrder.status !== previousStatus) {
+    if (updatedOrder.status === 'CONFIRMED') {
+      integrationEventManager.emitSalesOrderConfirmed(updatedOrder.id, tenantId);
+    }
+    if (updatedOrder.status === 'DELIVERED') {
+      integrationEventManager.emitSalesOrderCompleted(updatedOrder.id, tenantId);
+    }
+  }
+
+  return updatedOrder;
 };
 
 export const deleteSalesOrder = (id, tenantId) => {

@@ -73,6 +73,16 @@ router.get('/disbursements', authenticate, payrollController.getDisbursements);
 router.put('/disbursements/:id/status', authenticate, payrollController.updateDisbursementStatus);
 
 // ==========================================
+// PAYROLL CONFIG ROUTES
+// ==========================================
+
+// Get payroll statutory config (PF/ESI/gratuity rates)
+router.get('/config', authenticate, payrollController.getPayrollConfig);
+
+// Update payroll statutory config
+router.put('/config', authenticate, payrollController.updatePayrollConfig);
+
+// ==========================================
 // REPORTS ROUTES
 // ==========================================
 

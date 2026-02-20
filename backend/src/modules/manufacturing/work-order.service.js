@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import integrationEventManager from '../integration/events/integrationEventManager.js';
 const prisma = new PrismaClient();
 
 class WorkOrderService {
@@ -213,7 +214,7 @@ class WorkOrderService {
       throw new Error('Produced quantity must be greater than 0');
     }
 
-    return await prisma.workOrder.update({
+    const updatedWorkOrder = await prisma.workOrder.update({
       where: { id },
       data: {
         status: 'COMPLETED',
@@ -224,6 +225,10 @@ class WorkOrderService {
         completedAt: new Date()
       }
     });
+
+    integrationEventManager.emitWorkOrderCompleted(id, tenantId);
+
+    return updatedWorkOrder;
   }
 
   /**

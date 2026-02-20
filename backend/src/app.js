@@ -10,6 +10,7 @@ import healthRoutes from './routes/health.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import realtimeRoutes from './routes/realtime.routes.js';
 import { errorHandler } from './middlewares/error.middleware.js';
+import rateLimitMiddleware from './middlewares/rateLimit.middleware.js';
 import { requireModuleEntitlement } from './middlewares/entitlement.middleware.js';
 import { requireAuth } from './core/auth/auth.middleware.js';
 import protectedRoutes from './routes/protected.routes.js';
@@ -22,6 +23,7 @@ import warehouseRoutes from './modules/inventory/warehouse.routes.js';
 import stockMovementRoutes from './modules/inventory/stock-movement.routes.js';
 import departmentRoutes from './core/department/department.routes.js';
 import auditRoutes from './core/audit/audit.routes.js';
+import auditMiddleware from './core/audit/audit.middleware.js';
 import systemOptionsRoutes from './core/system/systemOptions.routes.js';
 import rbacRoutes from './core/rbac/rbac.routes.js';
 import approvalRoutes from './core/workflow/approval.routes.js';
@@ -58,6 +60,8 @@ import depreciationRoutes from './modules/assets/depreciation.routes.js';
 import documentRoutes from './modules/documents/document.routes.js';
 import reportRoutes from './modules/reports/report.routes.js';
 import reportingRoutes from './modules/reports/reporting.routes.js';
+import integrationRoutes from './modules/integration/integration.routes.js';
+import integrationEventManager from './modules/integration/events/integrationEventManager.js';
 import communicationRoutes from './modules/communication/communication.routes.js';
 import dataImportExportRoutes from './modules/utils/data-import-export.routes.js';
 import billingRoutes from './modules/subscription/billing.routes.js';
@@ -78,6 +82,8 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(auditMiddleware);
+app.use(rateLimitMiddleware);
 
 // Serve uploaded files
 app.use('/uploads', (req, res, next) => {
@@ -177,6 +183,13 @@ app.use('/api/reporting', requireAuth, requireModuleEntitlement('REPORTS'), repo
 
 // Communication Module Routes
 app.use('/api/communication', requireAuth, requireModuleEntitlement('COMMUNICATION'), communicationRoutes);
+
+// ===============================================
+// INTEGRATION LAYER ROUTES (CRITICAL - NO ENTITLEMENT)
+// ===============================================
+// Integration handles cross-module synchronization
+// Requires authentication but not module-specific entitlement
+app.use('/api/integration', integrationRoutes);
 
 // Data Import/Export Routes (no entitlement checks - core utility)
 app.use('/api/data', dataImportExportRoutes);

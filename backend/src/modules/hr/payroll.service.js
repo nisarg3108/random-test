@@ -1,7 +1,125 @@
 import prisma from '../../config/db.js';
 import SalaryComponentCalculator from '../../utils/salaryComponentCalculator.js';
+import integrationEventManager from '../integration/events/integrationEventManager.js';
 
 class PayrollService {
+  // ==========================================
+  // PAYROLL RULES & DEDUCTIONS
+  // ==========================================
+
+  async getPayrollRules(tenantId) {
+    const config = await prisma.companyConfig.findUnique({
+      where: { tenantId },
+      select: { businessRules: true },
+    });
+
+    const payrollRules = config?.businessRules?.payroll || {};
+
+    return {
+      pfRate: payrollRules.pfRate ?? 0.12,
+      pfWageLimit: payrollRules.pfWageLimit ?? 15000,
+      esiRate: payrollRules.esiRate ?? 0.0075,
+      esiWageLimit: payrollRules.esiWageLimit ?? 21000,
+      gratuityEnabled: payrollRules.gratuityEnabled ?? false,
+      gratuityMinYears: payrollRules.gratuityMinYears ?? 5,
+      gratuityDaysFactor: payrollRules.gratuityDaysFactor ?? 15,
+      gratuityDivisor: payrollRules.gratuityDivisor ?? 26,
+    };
+  }
+
+  async updatePayrollConfig(tenantId, configUpdates) {
+    const allowed = [
+      'pfRate', 'pfWageLimit', 'esiRate', 'esiWageLimit',
+      'gratuityEnabled', 'gratuityMinYears', 'gratuityDaysFactor', 'gratuityDivisor',
+    ];
+
+    const sanitized = Object.fromEntries(
+      Object.entries(configUpdates).filter(([k]) => allowed.includes(k))
+    );
+
+    if (Object.keys(sanitized).length === 0) {
+      throw new Error('No valid payroll config fields provided');
+    }
+
+    const existing = await prisma.companyConfig.findUnique({
+      where: { tenantId },
+    });
+
+    const currentRules = existing?.businessRules || {};
+    const updatedPayroll = { ...(currentRules.payroll || {}), ...sanitized };
+
+    const updated = await prisma.companyConfig.upsert({
+      where: { tenantId },
+      update: {
+        businessRules: { ...currentRules, payroll: updatedPayroll },
+      },
+      create: {
+        tenantId,
+        businessRules: { payroll: updatedPayroll },
+      },
+    });
+
+    return { payroll: updated.businessRules?.payroll };
+  }
+
+  async calculateStatutoryDeductions({ basicSalary, grossSalary, tenantId }) {
+    const rules = await this.getPayrollRules(tenantId);
+
+    const pfBase = Math.min(basicSalary, rules.pfWageLimit);
+    const pfAmount = pfBase > 0 ? pfBase * rules.pfRate : 0;
+
+    const esiAmount =
+      grossSalary <= rules.esiWageLimit ? grossSalary * rules.esiRate : 0;
+
+    const ptAnnual = await this.calculateTax(
+      grossSalary * 12,
+      'PROFESSIONAL_TAX',
+      tenantId
+    );
+    const ptAmount = ptAnnual.tax > 0 ? ptAnnual.tax / 12 : 0;
+
+    return {
+      PROFESSIONAL_TAX: Math.round(ptAmount),
+      PF: Math.round(pfAmount),
+      ESI: Math.round(esiAmount),
+    };
+  }
+
+  calculateGratuityAccrual({ basicSalary, joiningDate, rules }) {
+    if (!rules.gratuityEnabled || !joiningDate) {
+      return 0;
+    }
+
+    const tenureMs = Date.now() - new Date(joiningDate).getTime();
+    const tenureYears = tenureMs / (1000 * 60 * 60 * 24 * 365);
+
+    if (tenureYears < rules.gratuityMinYears) {
+      return 0;
+    }
+
+    const dailyBasic = basicSalary / rules.gratuityDivisor;
+    const gratuityAnnual = dailyBasic * rules.gratuityDaysFactor;
+
+    return Math.round(gratuityAnnual / 12);
+  }
+
+  mergeDeductions(base, additions) {
+    const merged = { ...(base || {}) };
+
+    Object.entries(additions).forEach(([key, value]) => {
+      if (!merged[key] && value > 0) {
+        merged[key] = value;
+      }
+    });
+
+    const total = Object.values(merged).reduce(
+      (sum, amount) => sum + (Number(amount) || 0),
+      0
+    );
+
+    return { merged, total };
+  }
+
   // ==========================================
   // SALARY COMPONENTS
   // ==========================================
@@ -316,16 +434,43 @@ class PayrollService {
       const annualIncome = grossSalary * 12;
       const taxResult = await this.calculateTax(annualIncome, 'INCOME_TAX', tenantId);
       const monthlyTax = taxResult.tax / 12;
-      
-      const totalDeduction = componentResults.deductionsTotal + monthlyTax;
+
+      const statutoryDeductions = await this.calculateStatutoryDeductions({
+        basicSalary: calculatedBasic,
+        grossSalary,
+        tenantId,
+      });
+
+      const rules = await this.getPayrollRules(tenantId);
+      const gratuityAccrual = this.calculateGratuityAccrual({
+        basicSalary: calculatedBasic,
+        joiningDate: employee.joiningDate,
+        rules,
+      });
+
+      const deductionMerge = this.mergeDeductions(
+        componentResults.deductions,
+        {
+          ...statutoryDeductions,
+          ...(gratuityAccrual > 0 ? { GRATUITY: gratuityAccrual } : {}),
+        }
+      );
+
+      const totalDeduction = deductionMerge.total + monthlyTax;
       const netSalary = grossSalary - totalDeduction;
       
       // Generate payslip number
       const payslipNumber = `PAY-${cycle.name.replace(/\s/g, '-')}-${employee.employeeCode}`;
       
       // Separate PF and Insurance for backward compatibility fields
-      const pfDeduction = componentResults.deductions.PF || componentResults.deductions.PROVIDENT_FUND || 0;
-      const insuranceDeduction = componentResults.deductions.INSURANCE || componentResults.deductions.ESI || 0;
+      const pfDeduction =
+        deductionMerge.merged.PF ||
+        deductionMerge.merged.PROVIDENT_FUND ||
+        0;
+      const insuranceDeduction =
+        deductionMerge.merged.INSURANCE ||
+        deductionMerge.merged.ESI ||
+        0;
       
       const payslip = await prisma.payslip.create({
         data: {
@@ -341,7 +486,7 @@ class PayrollService {
           taxDeductions: monthlyTax,
           providentFund: pfDeduction,
           insurance: insuranceDeduction,
-          otherDeductions: componentResults.deductions,
+          otherDeductions: deductionMerge.merged,
           totalDeductions: totalDeduction,
           netSalary,
           workingDays,
@@ -380,6 +525,12 @@ class PayrollService {
         processedAt: new Date()
       }
     });
+    
+      integrationEventManager.emitPayrollProcessed(
+        cycleId,
+        tenantId,
+        payslips.length
+      );
 
     return {
       cycle: await this.getPayrollCycleById(cycleId, tenantId),

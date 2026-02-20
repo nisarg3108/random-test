@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import integrationEventManager from '../integration/events/integrationEventManager.js';
+import { calculateOutCost, calculateWeightedAvgCost } from './inventory-costing.service.js';
 const prisma = new PrismaClient();
 
 class StockMovementService {
@@ -193,20 +195,62 @@ class StockMovementService {
       throw new Error('Movement is not in PENDING status');
     }
 
-    return await prisma.$transaction(async (tx) => {
+    const updatedMovement = await prisma.$transaction(async (tx) => {
+      let resolvedMovement = movement;
+
+      if (movement.type === 'OUT' || (movement.type === 'ADJUSTMENT' && movement.quantity < 0)) {
+        if (!movement.unitCost || movement.unitCost <= 0) {
+          const qty = Math.abs(movement.quantity);
+          const cost = await calculateOutCost({
+            tx,
+            tenantId,
+            itemId: movement.itemId,
+            warehouseId: movement.warehouseId,
+            quantity: qty,
+          });
+
+          resolvedMovement = await tx.stockMovement.update({
+            where: { id },
+            data: {
+              unitCost: cost.unitCost,
+              totalCost: cost.totalCost,
+            },
+          });
+        }
+      }
+
+      if (movement.type === 'ADJUSTMENT' && movement.quantity > 0) {
+        if (!movement.unitCost || movement.unitCost <= 0) {
+          const avg = await calculateWeightedAvgCost({
+            tx,
+            tenantId,
+            itemId: movement.itemId,
+            warehouseId: movement.warehouseId,
+          });
+
+          resolvedMovement = await tx.stockMovement.update({
+            where: { id },
+            data: {
+              unitCost: avg.unitCost,
+              totalCost: avg.unitCost * movement.quantity,
+            },
+          });
+        }
+      }
+
       // Process based on movement type
-      switch (movement.type) {
+      switch (resolvedMovement.type) {
         case 'IN':
-          await this.processStockIn(tx, movement, tenantId);
+          await this.processStockIn(tx, resolvedMovement, tenantId);
           break;
         case 'OUT':
-          await this.processStockOut(tx, movement, tenantId);
+          await this.processStockOut(tx, resolvedMovement, tenantId);
           break;
         case 'ADJUSTMENT':
-          await this.processStockAdjustment(tx, movement, tenantId);
+          await this.processStockAdjustment(tx, resolvedMovement, tenantId);
           break;
         case 'TRANSFER':
-          await this.processStockTransfer(tx, movement, tenantId);
+          await this.processStockTransfer(tx, resolvedMovement, tenantId);
           break;
       }
 
@@ -220,6 +264,10 @@ class StockMovementService {
         }
       });
     });
+
+    integrationEventManager.emitInventoryMovementCompleted(id, tenantId);
+
+    return updatedMovement;
   }
 
   /**

@@ -239,6 +239,32 @@ class PayrollController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  // ==========================================
+  // PAYROLL CONFIG
+  // ==========================================
+
+  async getPayrollConfig(req, res) {
+    try {
+      const { tenantId } = req.user;
+      const config = await payrollService.getPayrollRules(tenantId);
+      res.json(config);
+    } catch (error) {
+      console.error('Get payroll config error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async updatePayrollConfig(req, res) {
+    try {
+      const { tenantId } = req.user;
+      const result = await payrollService.updatePayrollConfig(tenantId, req.body);
+      res.json(result);
+    } catch (error) {
+      console.error('Update payroll config error:', error);
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 
 export default new PayrollController();
