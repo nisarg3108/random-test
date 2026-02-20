@@ -26,6 +26,22 @@ class RealTimeServer {
       console.error('❌ WebSocket server error:', error);
     });
 
+    // Server-side heartbeat: ping all clients every 30s, terminate dead ones
+    this.heartbeatInterval = setInterval(() => {
+      this.wss.clients.forEach((ws) => {
+        if (ws.isAlive === false) {
+          ws.terminate();
+          return;
+        }
+        ws.isAlive = false;
+        ws.ping();
+      });
+    }, 30000);
+
+    this.wss.on('close', () => {
+      clearInterval(this.heartbeatInterval);
+    });
+
     console.log('🔌 WebSocket server initialized on path /ws');
   }
 
@@ -60,6 +76,10 @@ class RealTimeServer {
         tenantId: user.tenantId,
         subscriptions: new Set()
       });
+
+      // Mark alive for heartbeat
+      ws.isAlive = true;
+      ws.on('pong', () => { ws.isAlive = true; });
 
       // Broadcast online status
       this.broadcastUserOnlineStatus(user.id, user.tenantId, true);
