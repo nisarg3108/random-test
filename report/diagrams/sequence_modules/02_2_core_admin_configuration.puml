@@ -1,0 +1,30 @@
+@startuml UEORMS_Sequence_02
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Admin
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Auth + RBAC\n(requireAuth / permission middleware)" as AuthRBAC
+control "Email Service + Queue" as Email
+control "Company + Branch Services" as Company
+control "Users + Invite + Department + SystemOptions" as CoreAdmin
+database "PostgreSQL via Prisma" as DB
+
+== 2) Core Admin Configuration ==
+Admin -> Client : Configure company / branches / options / departments / users
+Client -> API : /api/company, /api/branches, /api/system-options, /api/departments, /api/users
+API -> AuthRBAC : auth + role/permission validation
+AuthRBAC --> API : authorized
+API -> Company : company setup, approval matrix, custom fields, branch CRUD
+Company -> DB : CompanyConfig, ApprovalMatrix, CustomField, Branch
+DB --> Company : persisted config
+API -> CoreAdmin : user invite, role assignment, department/system option updates
+CoreAdmin -> DB : UserInvite, UserRole, Department, SystemOption
+CoreAdmin -> Email : invitation email
+CoreAdmin --> API : admin configuration result
+API --> Client : setup saved
+
+
+@enduml

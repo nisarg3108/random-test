@@ -1,0 +1,337 @@
+@startuml UEORMS_Full_Sequence_Diagram
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Guest
+actor Admin
+actor Employee
+actor Manager
+actor "HR Manager" as HRM
+actor "Finance Manager" as FinM
+actor "Inventory Manager" as InvM
+actor "Sales Manager" as SalesM
+actor "Purchase Manager" as PurM
+actor "Project Manager" as ProjM
+
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Auth + RBAC\n(requireAuth / permission middleware)" as AuthRBAC
+control "Subscription Entitlement\n(requireModuleEntitlement)" as Entitlement
+control "Workflow Engine + Approval Service" as WF
+control "Realtime Gateway\n(WebSocket /ws)" as RT
+control "Notification Service" as Notify
+control "Email Service + Queue" as Email
+control "Billing Service" as Billing
+entity "Stripe / Razorpay" as Gateway
+control "Integration Service" as Integr
+control "Integration Event Manager" as EventBus
+control "Scheduler (cron jobs)" as Scheduler
+
+control "Company + Branch Services" as Company
+control "Users + Invite + Department + SystemOptions" as CoreAdmin
+control "HR Service" as HR
+control "Attendance Service" as Attend
+control "Payroll + Disbursement Services" as Payroll
+control "Finance + Accounting Services" as Finance
+control "Inventory + Warehouse Services" as Inventory
+control "Manufacturing Service" as Mfg
+control "CRM Service" as CRM
+control "Sales Service" as Sales
+control "Purchase Service" as Purchase
+control "AP Service" as AP
+control "Projects + Team Services" as Projects
+control "Timesheet Service" as Timesheet
+control "Assets Services\n(asset/allocation/maintenance/depreciation)" as Assets
+control "Documents Service" as Docs
+control "Communication Service" as Comm
+control "Reports + Reporting Services" as Reports
+control "Data Import/Export Service" as DataIO
+
+database "PostgreSQL via Prisma" as DB
+
+== 1) Onboarding, Authentication, and Subscription ==
+Guest -> Client : Register / Register+Checkout
+Client -> API : POST /api/auth/register or /register/checkout
+API -> Billing : fetch public plans / create pending registration
+Billing -> DB : Plan, PendingRegistration, Subscription init
+DB --> Billing : plan + registration context
+Billing --> API : plan decision + payment context
+API -> AuthRBAC : create tenant/admin user + hash password + issue JWT
+AuthRBAC -> DB : Tenant, User, Role/UserRole inserts
+DB --> AuthRBAC : user + tenant created
+AuthRBAC --> API : token + identity
+API -> Email : send welcome/verification
+API --> Client : onboarding success + JWT
+
+Guest -> Client : Login
+Client -> API : POST /api/auth/login
+API -> AuthRBAC : validate credentials + roles + permissions
+AuthRBAC -> DB : User + RolePermission lookup
+DB --> AuthRBAC : auth context
+AuthRBAC --> API : JWT + claims
+API --> Client : login success
+
+Guest -> Client : Forgot password
+Client -> API : POST /api/auth/forgot-password -> verify-otp -> reset-password
+API -> AuthRBAC : OTP reset flow
+AuthRBAC -> DB : PasswordReset + User update
+API -> Email : send OTP mail
+API --> Client : password reset completed
+
+== 2) Core Admin Configuration ==
+Admin -> Client : Configure company / branches / options / departments / users
+Client -> API : /api/company, /api/branches, /api/system-options, /api/departments, /api/users
+API -> AuthRBAC : auth + role/permission validation
+AuthRBAC --> API : authorized
+API -> Company : company setup, approval matrix, custom fields, branch CRUD
+Company -> DB : CompanyConfig, ApprovalMatrix, CustomField, Branch
+DB --> Company : persisted config
+API -> CoreAdmin : user invite, role assignment, department/system option updates
+CoreAdmin -> DB : UserInvite, UserRole, Department, SystemOption
+CoreAdmin -> Email : invitation email
+CoreAdmin --> API : admin configuration result
+API --> Client : setup saved
+
+== 3) Cross-Cutting Guard Flow (all secured modules) ==
+Employee -> Client : Access module endpoint
+Client -> API : any /api/{module}
+API -> AuthRBAC : requireAuth + permission check
+AuthRBAC --> API : user context
+API -> Entitlement : verify module included in active subscription
+Entitlement -> DB : Subscription + SubscriptionItem + Plan lookup
+DB --> Entitlement : entitlement decision
+Entitlement --> API : allowed / forbidden
+API --> Client : proceed or 403
+
+== 4) Workflow/Approval Pattern Used by Business Modules ==
+Employee -> Client : Submit approval-based transaction
+Client -> API : e.g. leave/expense/stock/requisition/timesheet request
+API -> WF : create workflow request + first approval step
+WF -> DB : WorkflowRequest + Approval (PENDING)
+DB --> WF : approval chain state
+WF -> Notify : notify approver queue
+Notify -> DB : Notification insert
+Notify -> RT : push approval event
+WF --> API : request submitted
+API --> Client : pending approval
+
+Manager -> Client : Approve / Reject
+Client -> API : POST /api/approvals/:id/approve|reject
+API -> WF : resolve approval action
+WF -> DB : Approval status + request status progression
+alt approved and more steps
+  WF -> DB : create next approval step
+else approved final
+  WF -> Notify : notify requester + downstream module completion
+end
+WF --> API : approval result
+API --> Client : action completed
+
+== 5) HR, Attendance, Payroll, Disbursement ==
+HRM -> Client : Employee/Leave operations
+Client -> API : /api/employees, /api/leave-types, /api/leave-requests
+API -> HR : employee + leave service flows
+HR -> DB : Employee, LeaveType, LeaveRequest, Task, WorkReport
+DB --> HR : HR transaction data
+HR -> WF : leave approval workflow trigger
+WF -> Notify : approver + requester notifications
+API --> Client : HR result
+
+Employee -> Client : Clock in/out, view attendance
+Client -> API : /api/attendance/clock-in, /clock-out, /reports
+API -> Attend : time tracking, shifts, overtime, reports
+Attend -> DB : Attendance, TimeTracking, ShiftAssignment, OvertimeRecord, AttendanceReport
+Attend -> WF : overtime approval requests
+Attend -> Notify : attendance/ot alerts
+API --> Client : attendance status
+
+HRM -> Client : Run payroll
+Client -> API : /api/payroll/cycles, generate-payslips, disbursements
+API -> Payroll : payroll cycle calculation + payslip generation
+Payroll -> DB : PayrollCycle, Payslip, SalaryComponent, TaxConfiguration, SalaryDisbursement
+Payroll -> WF : payslip/finance approvals where configured
+Payroll -> Integr : sync payroll to GL
+Integr -> EventBus : emit payroll:cycle:processed
+EventBus -> Finance : payroll accounting sync trigger
+Payroll -> Email : payslip/disbursement notices
+Payroll --> API : payroll outputs
+API --> Client : payroll completed
+
+== 6) Finance and Accounting ==
+Employee -> Client : Submit expense claim
+Client -> API : /api/expense-claims
+API -> Finance : create expense claim
+Finance -> DB : ExpenseCategory, ExpenseClaim
+Finance -> WF : expense approval request
+WF -> Notify : finance approval queue
+API --> Client : claim submitted
+
+FinM -> Client : Accounting operations
+Client -> API : /api/accounting/* + /api/finance-dashboard
+API -> Finance : chart of accounts, journals, posting, reversals, dashboard
+Finance -> DB : ChartOfAccounts, JournalEntry, JournalEntryLine, LedgerEntry, FiscalYear
+Finance -> Reports : financial aggregates for dashboard
+Finance --> API : accounting result
+API --> Client : finance response
+
+== 7) Inventory and Manufacturing ==
+InvM -> Client : Manage items/warehouses/stock movement
+Client -> API : /api/inventory, /api/warehouses, /api/stock-movements
+API -> Inventory : item + warehouse + stock movement services
+Inventory -> DB : Item, Warehouse, WarehouseStock, StockMovement, LotBatch
+Inventory -> WF : approval for configured stock/item actions
+Inventory -> RT : inventory update broadcast
+Inventory -> Integr : sync inventory movement to GL
+Integr -> EventBus : inventory:movement:completed
+EventBus -> Finance : integration posting trigger
+API --> Client : inventory result
+
+InvM -> Client : Manufacturing execution
+Client -> API : /api/manufacturing/bom and /work-orders
+API -> Mfg : BOM, work order, operations, material issue/consume
+Mfg -> DB : BillOfMaterials, BOMItem, WorkOrder, WorkOrderOperation, WorkOrderMaterial, ProductionBatch
+Mfg -> Integr : sync manufacturing cost to GL
+Integr -> EventBus : manufacturing:workorder:completed
+EventBus -> Finance : manufacturing accounting sync
+API --> Client : manufacturing result
+
+== 8) CRM and Sales ==
+SalesM -> Client : CRM lifecycle
+Client -> API : /api/crm/customers contacts leads deals pipelines activities attachments communications
+API -> CRM : customer lifecycle + pipeline + activity orchestration
+CRM -> DB : Customer, Contact, Lead, Deal, Pipeline, PipelineStage, Activity, Attachment, Communication, Tag
+CRM -> Notify : reminders/overdue/upcoming activity notifications
+CRM --> API : CRM result
+API --> Client : CRM updated
+
+SalesM -> Client : Sales lifecycle
+Client -> API : /api/sales/quotations orders invoices trackings payments analytics
+API -> Sales : quotation->order->invoice conversions and tracking
+Sales -> DB : SalesQuotation, SalesOrder, SalesInvoice, InvoicePayment, SalesOrderTracking
+Sales -> Integr : sync sales order completion to AR/GL
+Integr -> EventBus : sales:order:completed
+EventBus -> Finance : revenue posting sync
+Sales -> Reports : sales analytics/forecast/export jobs
+Sales --> API : sales output
+API --> Client : sales completed
+
+== 9) Purchase and Accounts Payable ==
+PurM -> Client : Procurement lifecycle
+Client -> API : /api/purchase/vendors requisitions orders receipts evaluations analytics
+API -> Purchase : requisition->PO->receipt workflows
+Purchase -> DB : Vendor, PurchaseRequisition, PurchaseOrder, GoodsReceipt, SupplierEvaluation
+Purchase -> WF : requisition/PO approvals
+Purchase -> Inventory : stock updates on receipt
+Purchase -> Integr : AP/GL sync on receipt/invoice
+Integr -> EventBus : purchase:order:received
+EventBus -> AP : AP sync trigger
+API --> Client : purchase result
+
+FinM -> Client : AP operations
+Client -> API : /api/ap/bills payments aging vendor statement
+API -> AP : bill lifecycle + three-way match + payments
+AP -> DB : APBill, Payment
+AP -> WF : bill approval chain
+AP -> Finance : payable postings
+AP -> Notify : due/overdue reminders
+API --> Client : AP result
+
+== 10) Projects and Timesheets ==
+ProjM -> Client : Project operations
+Client -> API : /api/projects + members + dashboard
+API -> Projects : project/milestone/resource/budget/team capacity
+Projects -> DB : Project, ProjectMember, ProjectMilestone, ProjectMilestoneDependency, ProjectResource, ProjectBudget, ProjectTimeLog
+Projects --> API : project outputs
+API --> Client : project updated
+
+Employee -> Client : Timesheet entry and submission
+Client -> API : /api/timesheets
+API -> Timesheet : create/update/submit/approve/reject flows
+Timesheet -> DB : ProjectTimesheet
+Timesheet -> WF : timesheet approval steps
+Timesheet -> Notify : approver + employee notifications
+API --> Client : timesheet status
+
+== 11) Assets, Documents, Communication ==
+Employee -> Client : Asset operations
+Client -> API : /api/assets, /api/asset-allocations, /api/asset-maintenance, /api/asset-depreciation
+API -> Assets : asset CRUD, allocation/return, maintenance, depreciation
+Assets -> DB : AssetCategory, Asset, AssetAllocation, AssetMaintenance, AssetDepreciation
+Assets -> Scheduler : overdue allocation checks
+Scheduler -> Notify : overdue alerts
+Scheduler -> Email : overdue notification emails
+API --> Client : asset result
+
+Employee -> Client : Document operations
+Client -> API : /api/documents/*
+API -> Docs : folders, docs, versions, templates, shares, permissions, activities
+Docs -> DB : DocumentFolder, Document, DocumentVersion, DocumentTemplate, DocumentShare, DocumentPermission, DocumentFolderPermission, DocumentActivity, DocumentComment
+Docs -> Notify : share/permission notifications
+API --> Client : document result
+
+Employee -> Client : Messaging/announcements/channels/email templates
+Client -> API : /api/communication/*
+API -> Comm : conversations, messages, reactions, announcements, channels, email logs/queue
+Comm -> DB : Conversation, ConversationParticipant, Message, MessageReaction, MessageReadReceipt, Announcement, AnnouncementRead, ChatChannel, ChatChannelMember, EmailTemplate, EmailLog, EmailQueue
+Comm -> RT : live message/typing/read/reaction broadcast
+Comm -> Email : queued email dispatch
+API --> Client : communication result
+
+== 12) Reporting, Import/Export, and Integration API ==
+FinM -> Client : Reports and analytics
+Client -> API : /api/reports and /api/reporting
+API -> Reports : financial/hr/inventory/custom/scheduled reports
+Reports -> DB : ReportTemplate, Report, ReportSchedule + source domain tables
+Reports -> DataIO : export pipeline (pdf/excel/csv)
+Reports --> API : report payload/files
+API --> Client : report response
+
+Admin -> Client : Bulk import/export
+Client -> API : /api/data/import/* and /api/data/export/*
+API -> DataIO : parse/validate/import or export templates/data
+DataIO -> DB : upsert/query operational tables
+DataIO --> API : import/export results
+API --> Client : data utility response
+
+Admin -> Client : Manual integration controls
+Client -> API : /api/integration/sync-* /status /config /batch-sync
+API -> Integr : cross-module sync actions
+Integr -> DB : integration read/write + status
+Integr -> EventBus : emit integration lifecycle events
+Integr --> API : sync status
+API --> Client : integration response
+
+== 13) Subscription Webhooks and External Billing ==
+Gateway -> API : POST /api/billing/webhooks/stripe|razorpay
+API -> Billing : validate signature/event + idempotency check
+Billing -> DB : BillingEvent find/create/update
+alt event not processed
+  Billing -> DB : update subscription/payment state
+  Billing -> Notify : subscription/billing notification
+  Billing -> Email : invoice email / failure notice
+else already processed
+  Billing --> API : idempotent ack
+end
+API --> Gateway : webhook acknowledged
+
+== 14) Realtime and Scheduled System Activities ==
+Client -> RT : connect /ws?token=JWT and subscribe endpoints
+RT -> AuthRBAC : token verify + user resolve
+AuthRBAC -> DB : user/tenant lookup
+RT --> Client : connected + live stream
+
+Scheduler -> Assets : midnight overdue allocation scan
+Assets -> DB : find and mark overdue allocations
+Assets -> Notify : create overdue notifications
+Assets -> Email : send overdue emails
+
+Scheduler -> Attend : end-of-day absent marking
+Attend -> DB : create ABSENT records when no attendance + no approved leave
+
+== 15) Unified Observability ==
+API -> DB : write AuditLog for critical actions
+Notify -> DB : persist notifications/read states
+RT --> Client : dashboard/activity/module realtime updates
+
+@enduml

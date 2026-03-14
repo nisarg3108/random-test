@@ -1,0 +1,44 @@
+@startuml UEORMS_Sequence_11
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Employee
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Realtime Gateway\n(WebSocket /ws)" as RT
+control "Notification Service" as Notify
+control "Email Service + Queue" as Email
+control "Scheduler (cron jobs)" as Scheduler
+control "Assets Services\n(asset/allocation/maintenance/depreciation)" as Assets
+control "Documents Service" as Docs
+control "Communication Service" as Comm
+database "PostgreSQL via Prisma" as DB
+
+== 11) Assets, Documents, Communication ==
+Employee -> Client : Asset operations
+Client -> API : /api/assets, /api/asset-allocations, /api/asset-maintenance, /api/asset-depreciation
+API -> Assets : asset CRUD, allocation/return, maintenance, depreciation
+Assets -> DB : AssetCategory, Asset, AssetAllocation, AssetMaintenance, AssetDepreciation
+Assets -> Scheduler : overdue allocation checks
+Scheduler -> Notify : overdue alerts
+Scheduler -> Email : overdue notification emails
+API --> Client : asset result
+
+Employee -> Client : Document operations
+Client -> API : /api/documents/*
+API -> Docs : folders, docs, versions, templates, shares, permissions, activities
+Docs -> DB : DocumentFolder, Document, DocumentVersion, DocumentTemplate, DocumentShare, DocumentPermission, DocumentFolderPermission, DocumentActivity, DocumentComment
+Docs -> Notify : share/permission notifications
+API --> Client : document result
+
+Employee -> Client : Messaging/announcements/channels/email templates
+Client -> API : /api/communication/*
+API -> Comm : conversations, messages, reactions, announcements, channels, email logs/queue
+Comm -> DB : Conversation, ConversationParticipant, Message, MessageReaction, MessageReadReceipt, Announcement, AnnouncementRead, ChatChannel, ChatChannelMember, EmailTemplate, EmailLog, EmailQueue
+Comm -> RT : live message/typing/read/reaction broadcast
+Comm -> Email : queued email dispatch
+API --> Client : communication result
+
+
+@enduml

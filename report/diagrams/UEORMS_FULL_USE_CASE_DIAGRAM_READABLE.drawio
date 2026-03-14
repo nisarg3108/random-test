@@ -1,0 +1,229 @@
+<mxfile host="app.diagrams.net" modified="2026-03-14T00:00:00.000Z" agent="GPT-5.3-Codex" version="24.7.17" etag="ueorms-readable">
+  <diagram id="overview" name="00 Overview">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="UEORMS SaaS ERP - Readable Use Case Pack" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#2f4f6f;strokeWidth=2;fontSize=26;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="40" width="1680" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="Pages in this file:&lt;br&gt;01 Access &amp;amp; Core Setup (UC01-UC14)&lt;br&gt;02 Subscription &amp;amp; Billing (UC15-UC19)&lt;br&gt;03 Workflow / Audit / Notifications (UC20-UC29)&lt;br&gt;04 HR &amp;amp; Payroll (UC30-UC47)&lt;br&gt;05 Finance &amp;amp; Accounting (UC48-UC55)&lt;br&gt;06 Inventory &amp;amp; Manufacturing (UC56-UC65)&lt;br&gt;07 CRM &amp;amp; Sales (UC66-UC78)&lt;br&gt;08 Purchase &amp;amp; Accounts Payable (UC79-UC92)&lt;br&gt;09 Projects &amp;amp; Timesheets (UC93-UC99)&lt;br&gt;10 Assets / Documents / Communication (UC100-UC113)&lt;br&gt;11 Reports / Data / Integration (UC114-UC121)&lt;br&gt;12 Actors and Key Relations" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=10;spacingLeft=12;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="120" y="150" width="1680" height="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="This version is intentionally split for easy reading and quick editing in diagrams.net" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#d6b656;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="120" y="600" width="1680" height="70" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="access" name="01 Access and Core Setup">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Access, Tenant, and Core Setup (UC01-UC14)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC01 Register Account&lt;br&gt;UC02 Register + Checkout&lt;br&gt;UC03 Login&lt;br&gt;UC04 View Own Profile&lt;br&gt;UC05 Reset Password (OTP)&lt;br&gt;UC06 Invite User&lt;br&gt;UC07 Accept Invite" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="UC08 Manage Users&lt;br&gt;UC09 Manage Roles and Permissions&lt;br&gt;UC10 Manage Departments&lt;br&gt;UC11 Configure Company Setup&lt;br&gt;UC12 Manage Branches&lt;br&gt;UC13 Configure System Options&lt;br&gt;UC14 View Role-Based Dashboard" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="320" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="billing" name="02 Subscription and Billing">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Subscription and Billing (UC15-UC19)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC15 View Public Plans&lt;br&gt;UC16 Manage Subscription (view/change/cancel)&lt;br&gt;UC17 View Billing History and Metrics&lt;br&gt;UC18 Download/Resend Invoices&lt;br&gt;UC19 Handle Billing Webhooks" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=17;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="1720" height="250" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="workflow" name="03 Workflow Audit Notifications">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Workflow, Audit, and Notifications (UC20-UC29)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC20 Configure Workflows&lt;br&gt;UC21 Submit Workflow Request&lt;br&gt;UC22 Review Pending Approvals&lt;br&gt;UC23 Approve Request&lt;br&gt;UC24 Reject Request" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="840" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="UC25 View My Requests&lt;br&gt;UC26 View Audit Logs&lt;br&gt;UC27 Receive Notifications&lt;br&gt;UC28 Mark Notifications as Read&lt;br&gt;UC29 Stream Realtime Activities" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="980" y="150" width="840" height="260" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="hr" name="04 HR and Payroll">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="HR and Payroll (UC30-UC47)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC30 Manage Employees&lt;br&gt;UC31 Assign Managers&lt;br&gt;UC32 Manage Leave Types&lt;br&gt;UC33 Submit Leave Request&lt;br&gt;UC34 Approve Leave Request&lt;br&gt;UC35 Clock In/Out&lt;br&gt;UC36 Manage Shifts&lt;br&gt;UC37 Manage Overtime Policies&lt;br&gt;UC38 Approve Overtime" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="560" height="430" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="UC39 Generate Attendance Reports&lt;br&gt;UC40 Manage Tasks and Work Reports&lt;br&gt;UC41 Manage Salary Components&lt;br&gt;UC42 Manage Tax Configuration&lt;br&gt;UC43 Run Payroll Cycle&lt;br&gt;UC44 Generate and Approve Payslips" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="680" y="140" width="560" height="430" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="UC45 Manage Disbursements&lt;br&gt;UC46 Reconcile Payroll Payments&lt;br&gt;UC47 Generate Payment Files" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="140" width="560" height="430" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="finance" name="05 Finance and Accounting">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Finance and Accounting (UC48-UC55)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC48 Manage Expense Categories&lt;br&gt;UC49 Submit Expense Claims&lt;br&gt;UC50 Approve Expense Claims&lt;br&gt;UC51 Manage Chart of Accounts&lt;br&gt;UC52 Manage Journal Entries&lt;br&gt;UC53 Post/Reverse Journal Entries&lt;br&gt;UC54 View General Ledger&lt;br&gt;UC55 View Finance Dashboard" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="1720" height="320" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="inventory" name="06 Inventory and Manufacturing">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Inventory and Manufacturing (UC56-UC65)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC56 Manage Items&lt;br&gt;UC57 Manage Warehouses&lt;br&gt;UC58 Transfer Warehouse/Branch Stock&lt;br&gt;UC59 Manage Stock Movements&lt;br&gt;UC60 Approve/Cancel Stock Movement" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="840" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="UC61 Manage BOM Lifecycle&lt;br&gt;UC62 Manage Work Orders&lt;br&gt;UC63 Manage Operations&lt;br&gt;UC64 Issue/Consume Materials&lt;br&gt;UC65 View Inventory/Production Stats" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="980" y="150" width="840" height="280" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="crm" name="07 CRM and Sales">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="CRM and Sales (UC66-UC78)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC66 Manage Customers and Contacts&lt;br&gt;UC67 Manage Leads and Convert Lead&lt;br&gt;UC68 Manage Deals and Pipelines&lt;br&gt;UC69 Track CRM Activities&lt;br&gt;UC70 Manage CRM Attachments and Communications&lt;br&gt;UC71 Manage Quotations&lt;br&gt;UC72 Convert Quotation to Order" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="370" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="UC73 Manage Sales Orders&lt;br&gt;UC74 Convert Order to Invoice&lt;br&gt;UC75 Manage Sales Invoices and Invoice Payments&lt;br&gt;UC76 Track Sales Orders&lt;br&gt;UC77 View/Export/Schedule Sales Analytics&lt;br&gt;UC78 View Sales Forecast" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="370" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="purchase" name="08 Purchase and AP">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Purchase and Accounts Payable (UC79-UC92)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC79 Manage Vendors&lt;br&gt;UC80 Manage Purchase Requisitions&lt;br&gt;UC81 Approve/Reject Requisitions&lt;br&gt;UC82 Convert Requisition to PO&lt;br&gt;UC83 Manage Purchase Orders&lt;br&gt;UC84 Approve Purchase Orders&lt;br&gt;UC85 Manage Goods Receipts" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="380" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="UC86 Manage Supplier Evaluations&lt;br&gt;UC87 View Purchase Analytics&lt;br&gt;UC88 Manage AP Bills&lt;br&gt;UC89 Perform Three-Way Match&lt;br&gt;UC90 Approve/Reject AP Bills&lt;br&gt;UC91 Manage AP Payments&lt;br&gt;UC92 Generate Aging and Vendor Statements" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="380" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="projects" name="09 Projects and Timesheets">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Projects and Timesheets (UC93-UC99)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC93 Manage Projects&lt;br&gt;UC94 Manage Milestones/Resources/Budgets&lt;br&gt;UC95 Manage Project Members and Team Capacity&lt;br&gt;UC96 Log and Update Timesheets&lt;br&gt;UC97 Submit Timesheets&lt;br&gt;UC98 Approve/Reject Timesheets&lt;br&gt;UC99 View Project Dashboard" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="1720" height="310" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="assetsdocscomms" name="10 Assets Docs Communication">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Assets, Documents, and Communication (UC100-UC113)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC100 Manage Asset Categories and Assets&lt;br&gt;UC101 Allocate/Return Assets&lt;br&gt;UC102 Monitor Overdue Allocations&lt;br&gt;UC103 Manage Asset Maintenance&lt;br&gt;UC104 Calculate Asset Depreciation&lt;br&gt;UC105 Manage Documents and Folders&lt;br&gt;UC106 Manage Document Versions and Templates" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="380" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="UC107 Manage Shares and Permissions&lt;br&gt;UC108 View Document Activities/Stats&lt;br&gt;UC109 Manage Conversations and Channels&lt;br&gt;UC110 Send Messages/Reactions&lt;br&gt;UC111 Send Announcements&lt;br&gt;UC112 Manage Email Templates and Email Queue&lt;br&gt;UC113 Upload/Search Communication Files" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="380" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="reports" name="11 Reports Data Integration">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Reports, Data Utilities, and Integration (UC114-UC121)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="UC114 Generate Financial/HR/Inventory Reports&lt;br&gt;UC115 Build Custom Reports&lt;br&gt;UC116 Save and Export Reports&lt;br&gt;UC117 Schedule Reports&lt;br&gt;UC118 Import Operational Data&lt;br&gt;UC119 Export Operational Data&lt;br&gt;UC120 Run Cross-Module Sync&lt;br&gt;UC121 Monitor Integration Status/Config" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="1720" height="320" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="actors" name="12 Actors and Relations">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Actors and Key include/extend Relations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="Internal Actors:&lt;br&gt;Guest, Authenticated User, Tenant Admin, Manager, HR Manager, HR Staff, Employee, Finance Manager, Accountant, Inventory Manager, Warehouse Staff, Sales Manager, Sales Staff, Purchase Manager, Project Manager" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="External Actors:&lt;br&gt;Auditor, Payment Gateway (Stripe/Razorpay), Email Service, Banking System, Integration Worker, Realtime Gateway" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Include examples:&lt;br&gt;UC02 includes UC15&lt;br&gt;UC08 includes UC06&lt;br&gt;UC88 includes UC89&lt;br&gt;UC109 includes UC110&lt;br&gt;&lt;br&gt;Extend examples:&lt;br&gt;UC45 extends UC46 and UC47&lt;br&gt;UC80 extends UC81 and UC82&lt;br&gt;UC114 extends UC116 and UC117&lt;br&gt;UC118 extends UC120" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#fff8e1;strokeColor=#d6b656;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="420" width="1720" height="270" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

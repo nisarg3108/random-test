@@ -1,0 +1,2144 @@
+erDiagram
+  Activity {
+    String id "PK"
+    String tenantId
+    String type
+    String subject
+    String description
+    String status
+    String priority
+    DateTime dueDate
+    String dueTime
+    DateTime reminderAt
+    DateTime completedAt
+    String completedBy
+    String assignedTo "FK"
+    String createdBy "FK"
+    String customerId "FK"
+    String contactId "FK"
+    String leadId "FK"
+    String dealId "FK"
+    String outcome
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Announcement {
+    String id "PK"
+    String tenantId
+    String title
+    String content
+    String priority
+    String targetType
+    Json targetIds
+    Json attachments
+    String publishedBy
+    DateTime publishedAt
+    DateTime expiresAt
+    Boolean isPinned
+    Boolean isActive
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  AnnouncementRead {
+    String id "PK"
+    String announcementId "FK"
+    String userId
+    DateTime readAt
+  }
+  APBill {
+    String id "PK"
+    String tenantId
+    String billNumber "UQ"
+    String vendorId "FK"
+    String purchaseOrderId "FK"
+    DateTime billDate
+    DateTime dueDate
+    String invoiceNumber
+    DateTime invoiceDate
+    Float subtotal
+    Float taxAmount
+    Float discountAmount
+    Float shippingCost
+    Float totalAmount
+    Float paidAmount
+    Float balanceAmount
+    Json items
+    String status
+    String approvalStatus
+    Boolean matchedToPO
+    Boolean matchedToReceipt
+    Boolean threeWayMatched
+    String paymentTerms
+    Boolean glPosted
+    DateTime glPostDate
+    String glJournalId
+    String approvedBy
+    DateTime approvedAt
+    String notes
+    String internalNotes
+    Json attachments
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Approval {
+    String id "PK"
+    String workflowId "FK"
+    String workflowRequestId "FK"
+    String workflowStepId "FK"
+    Int stepOrder
+    String permission
+    Json data
+    String tenantId
+    String approvedBy
+    DateTime approvedAt
+    String status
+    String comment
+    String rejectionReason
+    DateTime createdAt
+  }
+  ApprovalMatrix {
+    String id "PK"
+    String tenantId
+    String module
+    Json conditions
+    Json approvers
+    DateTime createdAt
+  }
+  Asset {
+    String id "PK"
+    String tenantId
+    String categoryId "FK"
+    String assetCode
+    String name
+    String description
+    DateTime purchaseDate
+    Float purchasePrice
+    String vendor
+    String invoiceNumber
+    String serialNumber
+    String model
+    String manufacturer
+    String location
+    String status
+    String condition
+    String depreciationMethod
+    Float depreciationRate
+    Int usefulLife
+    Float salvageValue
+    Int totalExpectedUnits
+    Int unitsProducedToDate
+    Float currentValue
+    Float accumulatedDepreciation
+    DateTime warrantyExpiry
+    DateTime insuranceExpiry
+    String insuranceProvider
+    String insurancePolicyNo
+    String notes
+    Json tags
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  AssetAllocation {
+    String id "PK"
+    String tenantId
+    String assetId "FK"
+    String employeeId "FK"
+    DateTime allocatedDate
+    DateTime returnDate
+    DateTime expectedReturnDate
+    String status
+    String purpose
+    String allocatedBy
+    String location
+    String returnCondition
+    String returnNotes
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  AssetCategory {
+    String id "PK"
+    String tenantId
+    String name
+    String code
+    String description
+    String defaultDepreciationMethod
+    Float defaultDepreciationRate
+    Int defaultUsefulLife
+    Boolean isActive
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  AssetDepreciation {
+    String id "PK"
+    String tenantId
+    String assetId "FK"
+    DateTime period
+    Int year
+    Int month
+    Float openingValue
+    Float depreciationAmount
+    Float closingValue
+    Float accumulatedDepreciation
+    String method
+    Float rate
+    Int unitsProduced
+    String notes
+    DateTime createdAt
+  }
+  AssetMaintenance {
+    String id "PK"
+    String tenantId
+    String assetId "FK"
+    String maintenanceType
+    DateTime scheduledDate
+    DateTime completedDate
+    String status
+    String statusBeforeMaintenance
+    String description
+    String performedBy
+    Float cost
+    String conditionBefore
+    String conditionAfter
+    DateTime nextMaintenanceDate
+    String notes
+    Json attachments
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Attachment {
+    String id "PK"
+    String tenantId
+    String fileName
+    Int fileSize
+    String mimeType
+    String fileUrl
+    String customerId "FK"
+    String dealId "FK"
+    String communicationId "FK"
+    String uploadedBy "FK"
+    DateTime createdAt
+  }
+  Attendance {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    DateTime date
+    DateTime checkIn
+    DateTime checkOut
+    String status
+    Float workHours
+    Float overtimeHours
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  AttendanceReport {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    DateTime reportDate
+    Int month
+    Int year
+    Int totalWorkingDays
+    Int presentDays
+    Int absentDays
+    Int leaveDays
+    Int halfDays
+    Int workFromHomeDays
+    Float totalWorkHours
+    Float totalOvertimeHours
+    Float attendancePercentage
+    String status
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  AuditLog {
+    String id "PK"
+    String userId
+    String tenantId
+    String action
+    String entity
+    String entityId
+    Json meta
+    DateTime timestamp
+  }
+  BillingEvent {
+    String id "PK"
+    String tenantId
+    String subscriptionId
+    String eventType
+    String provider
+    String providerEventId "UQ"
+    String status
+    Json payload
+    DateTime processedAt
+    String errorMessage
+    DateTime createdAt
+  }
+  BillOfMaterials {
+    String id "PK"
+    String tenantId
+    String bomNumber
+    String productId
+    String version
+    String name
+    String description
+    Float quantity
+    String unit
+    Float materialCost
+    Float laborCost
+    Float overheadCost
+    Float totalCost
+    String status
+    Boolean isActive
+    Boolean isDefault
+    DateTime effectiveFrom
+    DateTime effectiveTo
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  BOMItem {
+    String id "PK"
+    String bomId "FK"
+    String itemId
+    Int sequence
+    Float quantity
+    String unit
+    String warehouseId
+    Float unitCost
+    Float totalCost
+    Json alternativeItems
+    Float scrapPercentage
+    String notes
+    DateTime createdAt
+  }
+  Branch {
+    String id "PK"
+    String tenantId
+    String code
+    String name
+    String type
+    String address
+    String city
+    String state
+    String country
+    String postalCode
+    String phone
+    String email
+    String managerId
+    Boolean isActive
+    Boolean isMainBranch
+    Json operatingHours
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ChartOfAccounts {
+    String id "PK"
+    String tenantId
+    String accountCode
+    String accountName
+    String accountType
+    String category
+    String parentId "FK"
+    String description
+    Boolean isActive
+    Boolean isSystem
+    String normalBalance
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ChatChannel {
+    String id "PK"
+    String tenantId
+    String name
+    String description
+    String type
+    String departmentId
+    String projectId
+    String createdBy
+    Boolean isArchived
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ChatChannelMember {
+    String id "PK"
+    String channelId "FK"
+    String userId
+    String role
+    Boolean isMuted
+    DateTime joinedAt
+  }
+  Communication {
+    String id "PK"
+    String tenantId
+    String type
+    String subject
+    String notes
+    DateTime occurredAt
+    String createdBy "FK"
+    String customerId "FK"
+    String contactId "FK"
+    String leadId "FK"
+    String direction
+    Int duration
+    String outcome
+    String emailFrom
+    String emailTo
+    String emailCc
+    String meetingLocation
+    String[] meetingAttendees
+    String dealId "FK"
+    String activityId "FK"
+    Boolean hasAttachments
+    Int attachmentCount
+    String[] tags
+    Json customFields
+    DateTime createdAt
+  }
+  CompanyConfig {
+    String id "PK"
+    String tenantId "FK,UQ"
+    String companyName
+    String industry
+    String size
+    String country
+    String currency
+    String timezone
+    String fiscalYear
+    Json workflowConfig
+    Json enabledModules
+    Json approvalLevels
+    Json customFields
+    Json businessRules
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Contact {
+    String id "PK"
+    String tenantId
+    String customerId "FK"
+    String name
+    String email
+    String phone
+    String title
+    String status
+    String firstName
+    String lastName
+    String jobTitle
+    String department
+    String role
+    String mobilePhone
+    String workPhone
+    String linkedinUrl
+    String twitterHandle
+    Boolean isPrimary
+    String ownerId "FK"
+    String preferredChannel
+    DateTime lastContactDate
+    DateTime birthday
+    DateTime anniversary
+    Boolean emailOptIn
+    Boolean smsOptIn
+    Boolean doNotCall
+    String[] tags
+    Json customFields
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Conversation {
+    String id "PK"
+    String tenantId
+    String type
+    String name
+    String description
+    String createdBy
+    Boolean isArchived
+    DateTime lastMessageAt
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ConversationParticipant {
+    String id "PK"
+    String conversationId "FK"
+    String userId
+    String role
+    Boolean isMuted
+    DateTime lastReadAt
+    DateTime joinedAt
+  }
+  Customer {
+    String id "PK"
+    String tenantId
+    String name
+    String industry
+    String website
+    String status
+    String notes
+    String type
+    String companySize
+    Float annualRevenue
+    String currencyCode
+    String primaryEmail
+    String primaryPhone
+    Json billingAddress
+    Json shippingAddress
+    String ownerId "FK"
+    String accountManager
+    String category
+    String source
+    DateTime firstContactDate
+    DateTime lastContactDate
+    String preferredChannel
+    String timezone
+    String[] tags
+    Json customFields
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  CustomerNote {
+    String id "PK"
+    String tenantId
+    String customerId "FK"
+    String title
+    String content
+    Boolean isPinned
+    String createdBy "FK"
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  CustomField {
+    String id "PK"
+    String tenantId
+    String module
+    String fieldName
+    String fieldType
+    Json options
+    Boolean required
+    DateTime createdAt
+  }
+  Deal {
+    String id "PK"
+    String tenantId
+    String customerId "FK"
+    String name
+    String stage
+    Float value
+    DateTime expectedCloseDate
+    String status
+    String notes
+    String dealNumber "UQ"
+    String pipelineId "FK"
+    Int stageOrder
+    Int probability
+    Float amount
+    String currencyCode
+    Float discount
+    Float tax
+    Float total
+    Json products
+    String ownerId "FK"
+    String[] teamMembers
+    DateTime createdDate
+    DateTime closedDate
+    DateTime firstContactDate
+    DateTime lastActivityDate
+    String[] competitors
+    String wonReason
+    String lostReason
+    String lostToCompetitor
+    String leadId
+    String source
+    String[] tags
+    Json customFields
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Department {
+    String id "PK"
+    String tenantId
+    String name
+    String description
+    String location
+    String managerId
+    Float budget
+    String status
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Document {
+    String id "PK"
+    String tenantId
+    String folderId "FK"
+    String name
+    String description
+    String fileName
+    Int fileSize
+    String mimeType
+    String storagePath
+    String storageProvider
+    String checksum
+    String[] tags
+    Json metadata
+    Int version
+    Boolean isLatest
+    String status
+    Boolean isPublic
+    Int downloadCount
+    Int viewCount
+    Boolean isTemplate
+    String templateId "FK"
+    String createdBy
+    String updatedBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  DocumentActivity {
+    String id "PK"
+    String documentId "FK"
+    String shareId "FK"
+    String tenantId
+    String userId
+    String action
+    Json details
+    String ipAddress
+    String userAgent
+    DateTime createdAt
+  }
+  DocumentComment {
+    String id "PK"
+    String documentId "FK"
+    String userId
+    String content
+    String parentId "FK"
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  DocumentFolder {
+    String id "PK"
+    String tenantId
+    String name
+    String description
+    String parentId "FK"
+    String path
+    String color
+    String icon
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  DocumentFolderPermission {
+    String id "PK"
+    String folderId "FK"
+    String userId
+    String roleId
+    Boolean canView
+    Boolean canEdit
+    Boolean canDelete
+    Boolean canCreate
+    Boolean canManage
+    DateTime createdAt
+  }
+  DocumentPermission {
+    String id "PK"
+    String documentId "FK"
+    String userId
+    String roleId
+    Boolean canView
+    Boolean canEdit
+    Boolean canDelete
+    Boolean canShare
+    Boolean canManage
+    DateTime createdAt
+  }
+  DocumentShare {
+    String id "PK"
+    String documentId "FK"
+    String shareType
+    String shareToken "UQ"
+    DateTime expiresAt
+    String password
+    Int maxDownloads
+    Int downloadCount
+    String sharedWith
+    Boolean canView
+    Boolean canDownload
+    Boolean canEdit
+    Boolean canShare
+    Boolean isActive
+    String createdBy
+    DateTime createdAt
+  }
+  DocumentTemplate {
+    String id "PK"
+    String tenantId
+    String name
+    String description
+    String category
+    String fileName
+    String storagePath
+    Int fileSize
+    String mimeType
+    Json fields
+    Int usageCount
+    Boolean isActive
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  DocumentVersion {
+    String id "PK"
+    String documentId "FK"
+    Int versionNumber
+    String fileName
+    Int fileSize
+    String storagePath
+    String checksum
+    String changeLog
+    String createdBy
+    DateTime createdAt
+  }
+  EmailLog {
+    String id "PK"
+    String tenantId
+    String to
+    String cc
+    String bcc
+    String subject
+    String body
+    String templateId
+    String status
+    DateTime sentAt
+    DateTime failedAt
+    String errorMessage
+    Json metadata
+    DateTime createdAt
+  }
+  EmailQueue {
+    String id "PK"
+    String tenantId
+    String to
+    String cc
+    String bcc
+    String subject
+    String body
+    String templateId
+    Json variables
+    String status
+    Int priority
+    Int attempts
+    Int maxAttempts
+    DateTime scheduledAt
+    DateTime processingAt
+    DateTime sentAt
+    DateTime failedAt
+    DateTime cancelledAt
+    String lastError
+    Json errorLog
+    Json metadata
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  EmailTemplate {
+    String id "PK"
+    String tenantId
+    String name
+    String code
+    String subject
+    String body
+    Json variables
+    Boolean isSystem
+    Boolean isActive
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Employee {
+    String id "PK"
+    String tenantId
+    String userId "FK,UQ"
+    String departmentId "FK"
+    String managerId "FK"
+    String employeeCode
+    String name
+    String email
+    String phone
+    String designation
+    DateTime joiningDate
+    String status
+    DateTime createdAt
+  }
+  ExpenseCategory {
+    String id "PK"
+    String tenantId
+    String name
+    String code
+    Boolean active
+    DateTime createdAt
+  }
+  ExpenseClaim {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String categoryId "FK"
+    String title
+    Float amount
+    String description
+    String receiptUrl
+    DateTime expenseDate
+    String status
+    DateTime createdAt
+  }
+  FiscalYear {
+    String id "PK"
+    String tenantId
+    String name
+    DateTime startDate
+    DateTime endDate
+    Boolean isClosed
+    String closedBy
+    DateTime closedAt
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  GoodsReceipt {
+    String id "PK"
+    String tenantId
+    String receiptNumber "UQ"
+    String purchaseOrderId "FK"
+    DateTime receivedDate
+    String receivedBy
+    Json items
+    String status
+    String qualityStatus
+    String warehouseLocation
+    String notes
+    Json attachments
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  InvoicePayment {
+    String id "PK"
+    String tenantId
+    String invoiceId "FK"
+    Float amount
+    DateTime paymentDate
+    String paymentMethod
+    String referenceNumber
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Item {
+    String id "PK"
+    String name
+    String sku
+    Float price
+    Int quantity
+    String description
+    String category
+    String tenantId "FK"
+    DateTime createdAt
+  }
+  JournalEntry {
+    String id "PK"
+    String tenantId
+    String entryNumber
+    DateTime entryDate
+    DateTime postingDate
+    String type
+    String description
+    String referenceType
+    String referenceId
+    String status
+    Float totalDebit
+    Float totalCredit
+    String createdBy
+    String approvedBy
+    DateTime approvedAt
+    String postedBy
+    DateTime postedAt
+    String reversedBy
+    DateTime reversedAt
+    String reversingEntryId
+    Json attachments
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  JournalEntryLine {
+    String id "PK"
+    String journalEntryId "FK"
+    String accountId "FK"
+    Int lineNumber
+    String description
+    Float debit
+    Float credit
+    String departmentId
+    String projectId
+    String costCenter
+    DateTime createdAt
+  }
+  Lead {
+    String id "PK"
+    String tenantId
+    String name
+    String email
+    String phone
+    String company
+    String source
+    String status
+    String notes
+    String customerId "FK"
+    String contactId "FK"
+    String firstName
+    String lastName
+    String jobTitle
+    Int leadScore
+    String rating
+    String priority
+    String campaign
+    String medium
+    String referrer
+    Float budget
+    String timeline
+    String authority
+    String need
+    String ownerId "FK"
+    DateTime assignedAt
+    DateTime convertedAt
+    String conversionSource
+    String dealId "FK"
+    DateTime firstContactDate
+    DateTime lastContactDate
+    DateTime lastActivityDate
+    DateTime disqualifiedAt
+    String disqualifiedBy
+    String disqualifiedReason
+    String[] tags
+    Json customFields
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  LeaveIntegration {
+    String id "PK"
+    String tenantId
+    String leaveRequestId
+    String employeeId "FK"
+    DateTime leaveDate
+    String status
+    String attendanceStatus
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  LeaveRequest {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String leaveTypeId "FK"
+    DateTime startDate
+    DateTime endDate
+    String reason
+    String status
+    DateTime createdAt
+  }
+  LeaveType {
+    String id "PK"
+    String tenantId
+    String name
+    String code
+    Int maxDays
+    Boolean paid
+    Boolean requiresApproval
+    DateTime createdAt
+  }
+  LedgerEntry {
+    String id "PK"
+    String tenantId
+    String accountId "FK"
+    DateTime date
+    String description
+    Float debit
+    Float credit
+    Float balance
+    String referenceType
+    String referenceId
+    String journalEntryId
+    DateTime createdAt
+  }
+  LotBatch {
+    String id "PK"
+    String tenantId
+    String itemId
+    String lotNumber
+    String batchNumber
+    String serialNumber
+    DateTime manufacturingDate
+    DateTime expiryDate
+    Float quantity
+    Float remainingQty
+    String supplier
+    String purchaseOrderId
+    String status
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Message {
+    String id "PK"
+    String conversationId "FK"
+    String senderId
+    String content
+    String type
+    Json attachments
+    Boolean isEdited
+    Boolean isDeleted
+    Json mentionedUserIds
+    String replyToId
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  MessageReaction {
+    String id "PK"
+    String messageId "FK"
+    String userId
+    String emoji
+    DateTime createdAt
+  }
+  MessageReadReceipt {
+    String id "PK"
+    String messageId "FK"
+    String userId
+    DateTime readAt
+  }
+  Notification {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String type
+    String title
+    String message
+    Boolean isRead
+    DateTime createdAt
+  }
+  OvertimePolicy {
+    String id "PK"
+    String tenantId
+    String shiftId "FK"
+    String name
+    String code
+    Float dailyThreshold
+    Float weeklyThreshold
+    Float monthlyThreshold
+    Float overtimeRate
+    Float weekendRate
+    Float holidayRate
+    Boolean isActive
+    String description
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  OvertimeRecord {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String overtimePolicyId "FK"
+    DateTime date
+    Float overtimeHours
+    Float overtimeRate
+    Float overtimeAmount
+    String reason
+    String approvalStatus
+    String approvedBy
+    DateTime approvedAt
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  PasswordReset {
+    String id "PK"
+    String email
+    String otp
+    DateTime expiresAt
+    Boolean used
+    DateTime createdAt
+  }
+  Payment {
+    String id "PK"
+    String tenantId
+    String paymentNumber "UQ"
+    String vendorId "FK"
+    DateTime paymentDate
+    Float amount
+    String paymentMethod
+    String referenceNumber
+    String bankAccount
+    String status
+    DateTime clearedDate
+    Json allocations
+    Boolean glPosted
+    DateTime glPostDate
+    String glJournalId
+    String notes
+    Json attachments
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  PayrollCycle {
+    String id "PK"
+    String tenantId
+    String name
+    DateTime startDate
+    DateTime endDate
+    DateTime paymentDate
+    String status
+    Float totalGross
+    Float totalDeductions
+    Float totalNet
+    String processedBy
+    DateTime processedAt
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Payslip {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String payrollCycleId "FK"
+    String payslipNumber "UQ"
+    Float basicSalary
+    Json allowances
+    Float bonuses
+    Float overtime
+    Float grossSalary
+    Float taxDeductions
+    Float providentFund
+    Float insurance
+    Json otherDeductions
+    Float totalDeductions
+    Float netSalary
+    Int workingDays
+    Float presentDays
+    Float absentDays
+    Int leaveDays
+    Float overtimeHours
+    String status
+    DateTime generatedAt
+    String approvedBy
+    DateTime approvedAt
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  PendingRegistration {
+    String id "PK"
+    String email
+    String passwordHash
+    String companyName
+    String planId
+    Json customModules
+    String billingCycle
+    String provider
+    Float amount
+    String currency
+    String status
+    String tenantId
+    DateTime createdAt
+    DateTime completedAt
+    DateTime expiresAt
+  }
+  Permission {
+    String id "PK"
+    String code "UQ"
+    String label
+  }
+  Pipeline {
+    String id "PK"
+    String tenantId
+    String name
+    String description
+    Boolean isDefault
+    Boolean isActive
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  PipelineStage {
+    String id "PK"
+    String tenantId
+    String pipelineId "FK"
+    String name
+    Int order
+    Int probability
+    String color
+    Boolean isClosedWon
+    Boolean isClosedLost
+    Int daysInStage
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Plan {
+    String id "PK"
+    String name "UQ"
+    String description
+    String billingCycle
+    String currency
+    Float basePrice
+    Float seatPrice
+    Boolean isActive
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  PlanModule {
+    String id "PK"
+    String planId "FK"
+    String moduleKey
+    Float price
+    Boolean included
+    DateTime createdAt
+  }
+  ProductionBatch {
+    String id "PK"
+    String tenantId
+    String workOrderId
+    String batchNumber
+    String productId
+    Float quantity
+    String unit
+    DateTime manufacturingDate
+    DateTime expiryDate
+    String qualityStatus
+    String qcBy
+    DateTime qcAt
+    String qcNotes
+    String warehouseId
+    String status
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Project {
+    String id "PK"
+    String tenantId
+    String projectCode "UQ"
+    String projectName
+    String description
+    String clientName
+    String projectManager
+    String status
+    String priority
+    String type
+    DateTime startDate
+    DateTime endDate
+    DateTime actualStartDate
+    DateTime actualEndDate
+    Float estimatedBudget
+    Float actualCost
+    Float progressPercent
+    Float totalPlannedHours
+    Float totalActualHours
+    Float totalResourceCost
+    Float budgetVariance
+    Int scheduleVariance
+    Float utilizationPercent
+    String healthScore
+    String riskLevel
+    String departmentId "FK"
+    Json teamMembers
+    String documentFolderId
+    String financeAccountId
+    Json customFields
+    String notes
+    Json attachments
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ProjectBudget {
+    String id "PK"
+    String tenantId
+    String projectId "FK"
+    String category
+    String description
+    Float plannedAmount
+    Float actualAmount
+    Float variance
+    String budgetPeriod
+    DateTime transactionDate
+    String notes
+    Json attachments
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ProjectMember {
+    String id "PK"
+    String tenantId
+    String projectId "FK"
+    String employeeId
+    String userId
+    String role
+    Float allocationPercent
+    DateTime startDate
+    DateTime endDate
+    String status
+    Float hourlyRate
+    Json permissions
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ProjectMilestone {
+    String id "PK"
+    String tenantId
+    String projectId "FK"
+    String milestoneName
+    String description
+    String status
+    DateTime startDate
+    DateTime dueDate
+    DateTime completedDate
+    Float progressPercent
+    String assignedTo
+    Json deliverables
+    Boolean isCriticalPath
+    Boolean isAutoScheduled
+    String notes
+    Json attachments
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ProjectMilestoneDependency {
+    String id "PK"
+    String tenantId
+    String predecessorId "FK"
+    String successorId "FK"
+    String dependencyType
+    Int lagDays
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ProjectResource {
+    String id "PK"
+    String tenantId
+    String projectId "FK"
+    String resourceType
+    String resourceName
+    String employeeId
+    Float allocationPercent
+    DateTime startDate
+    DateTime endDate
+    Float costPerUnit
+    Float units
+    Float totalCost
+    Float plannedHours
+    Float actualHours
+    Float availableHours
+    Float quantity
+    Float quantityUsed
+    String quantityUnit
+    String status
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ProjectTimeLog {
+    String id "PK"
+    String tenantId
+    String projectId "FK"
+    String employeeId
+    String timesheetId "FK"
+    DateTime logDate
+    Float hoursWorked
+    String taskDescription
+    String milestoneId
+    Boolean billable
+    Float hourlyRate
+    Float totalCost
+    String status
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ProjectTimesheet {
+    String id "PK"
+    String tenantId
+    String employeeId
+    DateTime weekStartDate
+    DateTime weekEndDate
+    String status
+    Float totalHours
+    Float billableHours
+    DateTime submittedAt
+    String submittedBy
+    DateTime approvedAt
+    String approvedBy
+    DateTime rejectedAt
+    String rejectedBy
+    String rejectionReason
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  PurchaseOrder {
+    String id "PK"
+    String tenantId
+    String poNumber "UQ"
+    String requisitionId "FK"
+    String vendorId "FK"
+    String title
+    String description
+    DateTime orderDate
+    DateTime expectedDeliveryDate
+    DateTime actualDeliveryDate
+    String status
+    Json items
+    Float subtotal
+    Float taxAmount
+    Float discountAmount
+    Float shippingCost
+    Float totalAmount
+    String paymentTerms
+    String paymentStatus
+    Float paidAmount
+    String shippingAddress
+    String shippingMethod
+    String trackingNumber
+    String approvalStatus
+    String approvedBy
+    DateTime approvedAt
+    String workflowId
+    String notes
+    Json attachments
+    String internalNotes
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  PurchaseRequisition {
+    String id "PK"
+    String tenantId
+    String requisitionNumber "UQ"
+    String requestedBy
+    String departmentId
+    String vendorId "FK"
+    String title
+    String description
+    String priority
+    DateTime requestedDate
+    DateTime requiredDate
+    String status
+    String approvalStatus
+    String approvedBy
+    DateTime approvedAt
+    String rejectionReason
+    Json items
+    Float totalAmount
+    String budgetCode
+    String workflowId
+    String notes
+    Json attachments
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Report {
+    String id "PK"
+    String tenantId
+    String templateId "FK"
+    String name
+    String type
+    Json parameters
+    Json data
+    String generatedBy
+    DateTime generatedAt
+    DateTime createdAt
+  }
+  ReportSchedule {
+    String id "PK"
+    String tenantId
+    String templateId
+    String name
+    String frequency
+    Json recipients
+    Boolean isActive
+    DateTime lastRunAt
+    DateTime nextRunAt
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ReportTemplate {
+    String id "PK"
+    String tenantId
+    String name
+    String type
+    String category
+    String description
+    Boolean isSystem
+    Boolean isActive
+    Json config
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Role {
+    String id "PK"
+    String name
+    String tenantId
+  }
+  RolePermission {
+    String roleId "PK,FK"
+    String permissionId "PK,FK"
+  }
+  SalaryComponent {
+    String id "PK"
+    String tenantId
+    String name
+    String code
+    String type
+    String calculationType
+    Float value
+    String formula
+    Boolean isTaxable
+    Boolean isActive
+    String description
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SalaryDisbursement {
+    String id "PK"
+    String tenantId
+    String payrollCycleId "FK"
+    String employeeId "FK"
+    Float amount
+    String paymentMethod
+    String bankAccount
+    String transactionRef
+    String status
+    DateTime paymentDate
+    DateTime completedAt
+    String failureReason
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SalaryStructure {
+    String id "PK"
+    String tenantId
+    String employeeId "FK,UQ"
+    Float basicSalary
+    Json allowances
+    Json deductions
+    Float netSalary
+    DateTime effectiveFrom
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SalesInvoice {
+    String id "PK"
+    String tenantId "FK"
+    String customerId "FK"
+    String dealId "FK"
+    String invoiceNumber
+    String customerName
+    String customerEmail
+    String orderId
+    DateTime issueDate
+    DateTime dueDate
+    Json items
+    Float subtotal
+    Float tax
+    Float discount
+    Float total
+    Float amountPaid
+    String status
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SalesOrder {
+    String id "PK"
+    String tenantId "FK"
+    String customerId "FK"
+    String dealId "FK"
+    String orderNumber
+    String customerName
+    String customerEmail
+    String quotationId
+    DateTime orderDate
+    DateTime expectedDelivery
+    Json items
+    Float subtotal
+    Float tax
+    Float discount
+    Float total
+    String status
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SalesOrderTracking {
+    String id "PK"
+    String tenantId "FK"
+    String salesOrderId "FK"
+    String status
+    String carrier
+    String trackingNumber
+    String location
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SalesQuotation {
+    String id "PK"
+    String tenantId "FK"
+    String customerId "FK"
+    String dealId "FK"
+    String customerName
+    String customerEmail
+    String title
+    String description
+    Json items
+    Float subtotal
+    Float tax
+    Float discount
+    Float total
+    String status
+    DateTime validUntil
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Shift {
+    String id "PK"
+    String tenantId
+    String name
+    String code
+    String startTime
+    String endTime
+    Int breakDuration
+    String workingDays
+    Boolean isActive
+    String description
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  ShiftAssignment {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String shiftId "FK"
+    DateTime assignedFrom
+    DateTime assignedTo
+    String status
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  StockMovement {
+    String id "PK"
+    String tenantId
+    String movementNumber
+    String type
+    String reason
+    String itemId
+    String fromWarehouseId
+    String toWarehouseId
+    String warehouseId "FK"
+    Float quantity
+    String lotNumber
+    String batchNumber
+    String serialNumber
+    DateTime expiryDate
+    String referenceType
+    String referenceId
+    Float unitCost
+    Float totalCost
+    String status
+    String approvedBy
+    DateTime approvedAt
+    String notes
+    String createdBy
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Subscription {
+    String id "PK"
+    String tenantId "FK"
+    String planId "FK"
+    String status
+    DateTime startAt
+    DateTime currentPeriodStart
+    DateTime currentPeriodEnd
+    DateTime cancelAt
+    DateTime canceledAt
+    DateTime trialEndsAt
+    String provider
+    String providerSubscriptionId
+    String providerCustomerId
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SubscriptionItem {
+    String id "PK"
+    String subscriptionId "FK"
+    String moduleKey
+    Int quantity
+    Float unitPrice
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SubscriptionPayment {
+    String id "PK"
+    String subscriptionId "FK"
+    String tenantId
+    Float amount
+    String currency
+    String status
+    String paymentMethodId
+    String providerPaymentId
+    String invoiceNumber
+    String description
+    DateTime scheduledFor
+    DateTime attemptedAt
+    DateTime succeededAt
+    DateTime failedAt
+    DateTime refundedAt
+    String failureCode
+    String failureMessage
+    Json metadata
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SupplierEvaluation {
+    String id "PK"
+    String tenantId
+    String vendorId "FK"
+    String evaluatedBy
+    DateTime evaluationDate
+    String evaluationPeriod
+    Float qualityRating
+    Float deliveryRating
+    Float priceRating
+    Float serviceRating
+    Float communicationRating
+    Float overallRating
+    Float onTimeDeliveryRate
+    Float defectRate
+    String responseTime
+    String strengths
+    String weaknesses
+    String recommendations
+    String status
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  SystemOption {
+    String id "PK"
+    String category
+    String key
+    String value
+    String label
+    String tenantId
+    Boolean isActive
+    DateTime createdAt
+  }
+  Tag {
+    String id "PK"
+    String tenantId
+    String name
+    String color
+    String category
+    Int usageCount
+    DateTime createdAt
+  }
+  Task {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String assignedBy "FK"
+    String title
+    String description
+    String priority
+    String status
+    DateTime dueDate
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  TaxConfiguration {
+    String id "PK"
+    String tenantId
+    String name
+    String taxType
+    Json slabs
+    Json deductionRules
+    Boolean isActive
+    DateTime effectiveFrom
+    DateTime effectiveTo
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Tenant {
+    String id "PK"
+    String name
+    DateTime createdAt
+  }
+  TimeTracking {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    DateTime date
+    DateTime checkInTime
+    DateTime checkOutTime
+    String checkInLocation
+    String checkOutLocation
+    Float workHours
+    Float breakHours
+    String status
+    Boolean isLate
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  User {
+    String id "PK"
+    String email "UQ"
+    String password
+    String role
+    String status
+    String tenantId "FK"
+    String departmentId "FK"
+    String managerId
+    DateTime createdAt
+  }
+  UserInvite {
+    String id "PK"
+    String email
+    String role
+    String token "UQ"
+    Boolean used
+    DateTime expiresAt
+    String tenantId "FK"
+    DateTime createdAt
+  }
+  UserRole {
+    String userId "PK,FK"
+    String roleId "PK,FK"
+  }
+  Vendor {
+    String id "PK"
+    String tenantId
+    String vendorCode "UQ"
+    String name
+    String contactPerson
+    String email
+    String phone
+    String address
+    String city
+    String state
+    String country
+    String postalCode
+    String website
+    String taxId
+    String paymentTerms
+    Float creditLimit
+    String currency
+    String status
+    String category
+    String bankName
+    String accountNumber
+    String swiftCode
+    Float rating
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Warehouse {
+    String id "PK"
+    String tenantId
+    String branchId "FK"
+    String code
+    String name
+    String type
+    String address
+    String city
+    String state
+    String country
+    String postalCode
+    Float capacity
+    String unit
+    String managerId
+    String phone
+    Boolean isActive
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  WarehouseStock {
+    String id "PK"
+    String tenantId
+    String warehouseId "FK"
+    String itemId
+    Float quantity
+    Float reservedQty
+    Float availableQty
+    String binLocation
+    String zone
+    Float reorderPoint
+    Float reorderQty
+    Float minStock
+    Float maxStock
+    Float lastPurchasePrice
+    Float avgCost
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  Workflow {
+    String id "PK"
+    String tenantId
+    String module
+    String action
+    String status
+    DateTime createdAt
+  }
+  WorkflowRequest {
+    String id "PK"
+    String tenantId
+    String workflowId
+    String module
+    String action
+    Json payload
+    String status
+    String createdBy
+    String requestedBy
+    DateTime createdAt
+  }
+  WorkflowStep {
+    String id "PK"
+    String workflowId "FK"
+    Int stepOrder
+    String permission
+  }
+  WorkflowTemplate {
+    String id "PK"
+    String name
+    String description
+    String industry
+    String module
+    Json steps
+    Boolean isDefault
+    DateTime createdAt
+  }
+  WorkOrder {
+    String id "PK"
+    String tenantId
+    String workOrderNumber
+    String bomId "FK"
+    String productId
+    Float plannedQty
+    Float producedQty
+    Float scrappedQty
+    DateTime scheduledStart
+    DateTime scheduledEnd
+    DateTime actualStart
+    DateTime actualEnd
+    String warehouseId
+    String workCenter
+    String status
+    String priority
+    Float estimatedCost
+    Float actualCost
+    String salesOrderId
+    String projectId
+    String assignedTo
+    String notes
+    String createdBy
+    String completedBy
+    DateTime completedAt
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  WorkOrderMaterial {
+    String id "PK"
+    String workOrderId "FK"
+    String itemId
+    Float plannedQty
+    Float issuedQty
+    Float consumedQty
+    Float returnedQty
+    String warehouseId
+    Float unitCost
+    Float totalCost
+    String status
+    String issuedBy
+    DateTime issuedAt
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  WorkOrderOperation {
+    String id "PK"
+    String workOrderId "FK"
+    Int sequence
+    String operationName
+    String description
+    String workCenter
+    Float estimatedHours
+    Float actualHours
+    String assignedTo
+    Float laborCost
+    String status
+    DateTime startedAt
+    DateTime completedAt
+    String notes
+    DateTime createdAt
+    DateTime updatedAt
+  }
+  WorkReport {
+    String id "PK"
+    String tenantId
+    String employeeId "FK"
+    String taskId "FK"
+    String title
+    String description
+    DateTime workDate
+    Float hoursSpent
+    Json attachments
+    DateTime createdAt
+  }
+  CompanyConfig o|--|| Tenant : tenant:tenantId
+  PlanModule }o--|| Plan : plan:planId
+  Subscription }o--|| Tenant : tenant:tenantId
+  Subscription }o--|| Plan : plan:planId
+  SubscriptionItem }o--|| Subscription : subscription:subscriptionId
+  SubscriptionPayment }o--|| Subscription : subscription:subscriptionId
+  User }o--|| Tenant : tenant:tenantId
+  User }o--o| Department : department:departmentId
+  RolePermission }o--|| Role : role:roleId
+  RolePermission }o--|| Permission : permission:permissionId
+  UserRole }o--|| User : user:userId
+  UserRole }o--|| Role : role:roleId
+  WorkflowStep }o--|| Workflow : workflow:workflowId
+  Item }o--|| Tenant : tenant:tenantId
+  SalesQuotation }o--|| Tenant : tenant:tenantId
+  SalesQuotation }o--o| Customer : customer:customerId
+  SalesQuotation }o--o| Deal : deal:dealId
+  SalesOrder }o--|| Tenant : tenant:tenantId
+  SalesOrder }o--o| Customer : customer:customerId
+  SalesOrder }o--o| Deal : deal:dealId
+  SalesInvoice }o--|| Tenant : tenant:tenantId
+  SalesInvoice }o--o| Customer : customer:customerId
+  SalesInvoice }o--o| Deal : deal:dealId
+  InvoicePayment }o--|| SalesInvoice : invoice:invoiceId
+  SalesOrderTracking }o--|| Tenant : tenant:tenantId
+  SalesOrderTracking }o--|| SalesOrder : order:salesOrderId
+  UserInvite }o--|| Tenant : tenant:tenantId
+  Approval }o--|| Workflow : workflow:workflowId
+  Approval }o--o| WorkflowRequest : workflowRequest:workflowRequestId
+  Approval }o--o| WorkflowStep : workflowStep:workflowStepId
+  Employee o|--|| User : user:userId
+  Employee }o--|| Department : department:departmentId
+  Employee }o--o| Employee : manager:managerId
+  LeaveRequest }o--|| Employee : employee:employeeId
+  LeaveRequest }o--|| LeaveType : leaveType:leaveTypeId
+  ExpenseClaim }o--|| Employee : employee:employeeId
+  ExpenseClaim }o--|| ExpenseCategory : category:categoryId
+  Task }o--|| Employee : employee:employeeId
+  Task }o--|| Employee : assigner:assignedBy
+  SalaryStructure o|--|| Employee : employee:employeeId
+  WorkReport }o--|| Employee : employee:employeeId
+  WorkReport }o--o| Task : task:taskId
+  Notification }o--|| Employee : employee:employeeId
+  Customer }o--o| User : owner:ownerId
+  Contact }o--|| Customer : customer:customerId
+  Contact }o--o| User : owner:ownerId
+  Lead }o--o| Customer : customer:customerId
+  Lead }o--o| Contact : contact:contactId
+  Lead }o--o| Deal : deal:dealId
+  Lead }o--o| User : owner:ownerId
+  Deal }o--|| Customer : customer:customerId
+  Deal }o--o| User : owner:ownerId
+  Deal }o--o| Pipeline : pipeline:pipelineId
+  Communication }o--o| Customer : customer:customerId
+  Communication }o--o| Contact : contact:contactId
+  Communication }o--o| Lead : lead:leadId
+  Communication }o--o| Deal : deal:dealId
+  Communication }o--o| Activity : activity:activityId
+  Communication }o--o| User : creator:createdBy
+  PipelineStage }o--|| Pipeline : pipeline:pipelineId
+  Activity }o--o| Customer : customer:customerId
+  Activity }o--o| Contact : contact:contactId
+  Activity }o--o| Lead : lead:leadId
+  Activity }o--o| Deal : deal:dealId
+  Activity }o--o| User : assignee:assignedTo
+  Activity }o--|| User : creator:createdBy
+  CustomerNote }o--|| Customer : customer:customerId
+  CustomerNote }o--|| User : creator:createdBy
+  Attachment }o--o| Customer : customer:customerId
+  Attachment }o--o| Deal : deal:dealId
+  Attachment }o--o| Communication : communication:communicationId
+  Attachment }o--|| User : uploader:uploadedBy
+  PurchaseRequisition }o--o| Vendor : vendor:vendorId
+  PurchaseOrder }o--|| Vendor : vendor:vendorId
+  PurchaseOrder }o--o| PurchaseRequisition : requisition:requisitionId
+  GoodsReceipt }o--|| PurchaseOrder : purchaseOrder:purchaseOrderId
+  SupplierEvaluation }o--|| Vendor : vendor:vendorId
+  APBill }o--|| Vendor : vendor:vendorId
+  APBill }o--o| PurchaseOrder : purchaseOrder:purchaseOrderId
+  Payment }o--|| Vendor : vendor:vendorId
+  Project }o--o| Department : department:departmentId
+  ProjectMember }o--|| Project : project:projectId
+  ProjectMilestone }o--|| Project : project:projectId
+  ProjectMilestoneDependency }o--|| ProjectMilestone : predecessor:predecessorId
+  ProjectMilestoneDependency }o--|| ProjectMilestone : successor:successorId
+  ProjectResource }o--|| Project : project:projectId
+  ProjectBudget }o--|| Project : project:projectId
+  ProjectTimeLog }o--|| Project : project:projectId
+  ProjectTimeLog }o--o| ProjectTimesheet : timesheet:timesheetId
+  Attendance }o--|| Employee : employee:employeeId
+  Payslip }o--|| Employee : employee:employeeId
+  Payslip }o--|| PayrollCycle : payrollCycle:payrollCycleId
+  SalaryDisbursement }o--|| PayrollCycle : payrollCycle:payrollCycleId
+  SalaryDisbursement }o--|| Employee : employee:employeeId
+  ShiftAssignment }o--|| Employee : employee:employeeId
+  ShiftAssignment }o--|| Shift : shift:shiftId
+  TimeTracking }o--|| Employee : employee:employeeId
+  OvertimePolicy }o--o| Shift : shift:shiftId
+  OvertimeRecord }o--|| Employee : employee:employeeId
+  OvertimeRecord }o--|| OvertimePolicy : overtimePolicy:overtimePolicyId
+  AttendanceReport }o--|| Employee : employee:employeeId
+  LeaveIntegration }o--|| Employee : employee:employeeId
+  Asset }o--|| AssetCategory : category:categoryId
+  AssetAllocation }o--|| Asset : asset:assetId
+  AssetAllocation }o--|| Employee : employee:employeeId
+  AssetMaintenance }o--|| Asset : asset:assetId
+  AssetDepreciation }o--|| Asset : asset:assetId
+  DocumentFolder }o--o| DocumentFolder : parent:parentId
+  Document }o--o| DocumentFolder : folder:folderId
+  Document }o--o| DocumentTemplate : template:templateId
+  DocumentVersion }o--|| Document : document:documentId
+  DocumentShare }o--|| Document : document:documentId
+  DocumentPermission }o--|| Document : document:documentId
+  DocumentFolderPermission }o--|| DocumentFolder : folder:folderId
+  DocumentActivity }o--o| Document : document:documentId
+  DocumentActivity }o--o| DocumentShare : share:shareId
+  DocumentComment }o--|| Document : document:documentId
+  DocumentComment }o--o| DocumentComment : parent:parentId
+  Report }o--o| ReportTemplate : template:templateId
+  ConversationParticipant }o--|| Conversation : conversation:conversationId
+  Message }o--|| Conversation : conversation:conversationId
+  MessageReaction }o--|| Message : message:messageId
+  MessageReadReceipt }o--|| Message : message:messageId
+  AnnouncementRead }o--|| Announcement : announcement:announcementId
+  ChatChannelMember }o--|| ChatChannel : channel:channelId
+  Warehouse }o--o| Branch : branch:branchId
+  WarehouseStock }o--|| Warehouse : warehouse:warehouseId
+  StockMovement }o--o| Warehouse : warehouse:warehouseId
+  ChartOfAccounts }o--o| ChartOfAccounts : parent:parentId
+  JournalEntryLine }o--|| JournalEntry : journalEntry:journalEntryId
+  JournalEntryLine }o--|| ChartOfAccounts : account:accountId
+  LedgerEntry }o--|| ChartOfAccounts : account:accountId
+  BOMItem }o--|| BillOfMaterials : bom:bomId
+  WorkOrder }o--|| BillOfMaterials : bom:bomId
+  WorkOrderOperation }o--|| WorkOrder : workOrder:workOrderId
+  WorkOrderMaterial }o--|| WorkOrder : workOrder:workOrderId

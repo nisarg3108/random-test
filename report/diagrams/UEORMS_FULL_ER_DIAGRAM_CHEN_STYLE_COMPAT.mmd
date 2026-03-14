@@ -1,0 +1,2553 @@
+flowchart LR
+%% Compatible Chen-style (older Mermaid-safe)
+E_Activity[Activity]
+A_Activity_id((id PK))
+A_Activity_tenantId((tenantId))
+A_Activity_type((type))
+A_Activity_subject((subject))
+A_Activity_description((description))
+A_Activity_status((status))
+A_Activity_priority((priority))
+A_Activity_dueDate((dueDate))
+A_Activity_dueTime((dueTime))
+A_Activity_reminderAt((reminderAt))
+A_Activity_completedAt((completedAt))
+A_Activity_completedBy((completedBy))
+A_Activity_assignedTo((assignedTo))
+A_Activity_createdBy((createdBy))
+A_Activity_customerId((customerId))
+A_Activity_contactId((contactId))
+A_Activity_leadId((leadId))
+A_Activity_dealId((dealId))
+A_Activity_outcome((outcome))
+A_Activity_notes((notes))
+A_Activity_createdAt((createdAt))
+A_Activity_updatedAt((updatedAt))
+
+E_Announcement[Announcement]
+A_Announcement_id((id PK))
+A_Announcement_tenantId((tenantId))
+A_Announcement_title((title))
+A_Announcement_content((content))
+A_Announcement_priority((priority))
+A_Announcement_targetType((targetType))
+A_Announcement_targetIds((targetIds))
+A_Announcement_attachments((attachments))
+A_Announcement_publishedBy((publishedBy))
+A_Announcement_publishedAt((publishedAt))
+A_Announcement_expiresAt((expiresAt))
+A_Announcement_isPinned((isPinned))
+A_Announcement_isActive((isActive))
+A_Announcement_createdAt((createdAt))
+A_Announcement_updatedAt((updatedAt))
+
+E_AnnouncementRead[AnnouncementRead]
+A_AnnouncementRead_id((id PK))
+A_AnnouncementRead_announcementId((announcementId))
+A_AnnouncementRead_userId((userId))
+A_AnnouncementRead_readAt((readAt))
+
+E_APBill[APBill]
+A_APBill_id((id PK))
+A_APBill_tenantId((tenantId))
+A_APBill_billNumber((billNumber))
+A_APBill_vendorId((vendorId))
+A_APBill_purchaseOrderId((purchaseOrderId))
+A_APBill_billDate((billDate))
+A_APBill_dueDate((dueDate))
+A_APBill_invoiceNumber((invoiceNumber))
+A_APBill_invoiceDate((invoiceDate))
+A_APBill_subtotal((subtotal))
+A_APBill_taxAmount((taxAmount))
+A_APBill_discountAmount((discountAmount))
+A_APBill_shippingCost((shippingCost))
+A_APBill_totalAmount((totalAmount))
+A_APBill_paidAmount((paidAmount))
+A_APBill_balanceAmount((balanceAmount))
+A_APBill_items((items))
+A_APBill_status((status))
+A_APBill_approvalStatus((approvalStatus))
+A_APBill_matchedToPO((matchedToPO))
+A_APBill_matchedToReceipt((matchedToReceipt))
+A_APBill_threeWayMatched((threeWayMatched))
+A_APBill_paymentTerms((paymentTerms))
+A_APBill_glPosted((glPosted))
+A_APBill_glPostDate((glPostDate))
+A_APBill_glJournalId((glJournalId))
+A_APBill_approvedBy((approvedBy))
+A_APBill_approvedAt((approvedAt))
+A_APBill_notes((notes))
+A_APBill_internalNotes((internalNotes))
+A_APBill_attachments((attachments))
+A_APBill_createdBy((createdBy))
+A_APBill_createdAt((createdAt))
+A_APBill_updatedAt((updatedAt))
+
+E_Approval[Approval]
+A_Approval_id((id PK))
+A_Approval_workflowId((workflowId))
+A_Approval_workflowRequestId((workflowRequestId))
+A_Approval_workflowStepId((workflowStepId))
+A_Approval_stepOrder((stepOrder))
+A_Approval_permission((permission))
+A_Approval_data((data))
+A_Approval_tenantId((tenantId))
+A_Approval_approvedBy((approvedBy))
+A_Approval_approvedAt((approvedAt))
+A_Approval_status((status))
+A_Approval_comment((comment))
+A_Approval_rejectionReason((rejectionReason))
+A_Approval_createdAt((createdAt))
+
+E_ApprovalMatrix[ApprovalMatrix]
+A_ApprovalMatrix_id((id PK))
+A_ApprovalMatrix_tenantId((tenantId))
+A_ApprovalMatrix_module((module))
+A_ApprovalMatrix_conditions((conditions))
+A_ApprovalMatrix_approvers((approvers))
+A_ApprovalMatrix_createdAt((createdAt))
+
+E_Asset[Asset]
+A_Asset_id((id PK))
+A_Asset_tenantId((tenantId))
+A_Asset_categoryId((categoryId))
+A_Asset_assetCode((assetCode))
+A_Asset_name((name))
+A_Asset_description((description))
+A_Asset_purchaseDate((purchaseDate))
+A_Asset_purchasePrice((purchasePrice))
+A_Asset_vendor((vendor))
+A_Asset_invoiceNumber((invoiceNumber))
+A_Asset_serialNumber((serialNumber))
+A_Asset_model((model))
+A_Asset_manufacturer((manufacturer))
+A_Asset_location((location))
+A_Asset_status((status))
+A_Asset_condition((condition))
+A_Asset_depreciationMethod((depreciationMethod))
+A_Asset_depreciationRate((depreciationRate))
+A_Asset_usefulLife((usefulLife))
+A_Asset_salvageValue((salvageValue))
+A_Asset_totalExpectedUnits((totalExpectedUnits))
+A_Asset_unitsProducedToDate((unitsProducedToDate))
+A_Asset_currentValue((currentValue))
+A_Asset_accumulatedDepreciation((accumulatedDepreciation))
+A_Asset_warrantyExpiry((warrantyExpiry))
+A_Asset_insuranceExpiry((insuranceExpiry))
+A_Asset_insuranceProvider((insuranceProvider))
+A_Asset_insurancePolicyNo((insurancePolicyNo))
+A_Asset_notes((notes))
+A_Asset_tags((tags))
+A_Asset_createdAt((createdAt))
+A_Asset_updatedAt((updatedAt))
+
+E_AssetAllocation[AssetAllocation]
+A_AssetAllocation_id((id PK))
+A_AssetAllocation_tenantId((tenantId))
+A_AssetAllocation_assetId((assetId))
+A_AssetAllocation_employeeId((employeeId))
+A_AssetAllocation_allocatedDate((allocatedDate))
+A_AssetAllocation_returnDate((returnDate))
+A_AssetAllocation_expectedReturnDate((expectedReturnDate))
+A_AssetAllocation_status((status))
+A_AssetAllocation_purpose((purpose))
+A_AssetAllocation_allocatedBy((allocatedBy))
+A_AssetAllocation_location((location))
+A_AssetAllocation_returnCondition((returnCondition))
+A_AssetAllocation_returnNotes((returnNotes))
+A_AssetAllocation_notes((notes))
+A_AssetAllocation_createdAt((createdAt))
+A_AssetAllocation_updatedAt((updatedAt))
+
+E_AssetCategory[AssetCategory]
+A_AssetCategory_id((id PK))
+A_AssetCategory_tenantId((tenantId))
+A_AssetCategory_name((name))
+A_AssetCategory_code((code))
+A_AssetCategory_description((description))
+A_AssetCategory_defaultDepreciationMethod((defaultDepreciationMethod))
+A_AssetCategory_defaultDepreciationRate((defaultDepreciationRate))
+A_AssetCategory_defaultUsefulLife((defaultUsefulLife))
+A_AssetCategory_isActive((isActive))
+A_AssetCategory_createdAt((createdAt))
+A_AssetCategory_updatedAt((updatedAt))
+
+E_AssetDepreciation[AssetDepreciation]
+A_AssetDepreciation_id((id PK))
+A_AssetDepreciation_tenantId((tenantId))
+A_AssetDepreciation_assetId((assetId))
+A_AssetDepreciation_period((period))
+A_AssetDepreciation_year((year))
+A_AssetDepreciation_month((month))
+A_AssetDepreciation_openingValue((openingValue))
+A_AssetDepreciation_depreciationAmount((depreciationAmount))
+A_AssetDepreciation_closingValue((closingValue))
+A_AssetDepreciation_accumulatedDepreciation((accumulatedDepreciation))
+A_AssetDepreciation_method((method))
+A_AssetDepreciation_rate((rate))
+A_AssetDepreciation_unitsProduced((unitsProduced))
+A_AssetDepreciation_notes((notes))
+A_AssetDepreciation_createdAt((createdAt))
+
+E_AssetMaintenance[AssetMaintenance]
+A_AssetMaintenance_id((id PK))
+A_AssetMaintenance_tenantId((tenantId))
+A_AssetMaintenance_assetId((assetId))
+A_AssetMaintenance_maintenanceType((maintenanceType))
+A_AssetMaintenance_scheduledDate((scheduledDate))
+A_AssetMaintenance_completedDate((completedDate))
+A_AssetMaintenance_status((status))
+A_AssetMaintenance_statusBeforeMaintenance((statusBeforeMaintenance))
+A_AssetMaintenance_description((description))
+A_AssetMaintenance_performedBy((performedBy))
+A_AssetMaintenance_cost((cost))
+A_AssetMaintenance_conditionBefore((conditionBefore))
+A_AssetMaintenance_conditionAfter((conditionAfter))
+A_AssetMaintenance_nextMaintenanceDate((nextMaintenanceDate))
+A_AssetMaintenance_notes((notes))
+A_AssetMaintenance_attachments((attachments))
+A_AssetMaintenance_createdAt((createdAt))
+A_AssetMaintenance_updatedAt((updatedAt))
+
+E_Attachment[Attachment]
+A_Attachment_id((id PK))
+A_Attachment_tenantId((tenantId))
+A_Attachment_fileName((fileName))
+A_Attachment_fileSize((fileSize))
+A_Attachment_mimeType((mimeType))
+A_Attachment_fileUrl((fileUrl))
+A_Attachment_customerId((customerId))
+A_Attachment_dealId((dealId))
+A_Attachment_communicationId((communicationId))
+A_Attachment_uploadedBy((uploadedBy))
+A_Attachment_createdAt((createdAt))
+
+E_Attendance[Attendance]
+A_Attendance_id((id PK))
+A_Attendance_tenantId((tenantId))
+A_Attendance_employeeId((employeeId))
+A_Attendance_date((date))
+A_Attendance_checkIn((checkIn))
+A_Attendance_checkOut((checkOut))
+A_Attendance_status((status))
+A_Attendance_workHours((workHours))
+A_Attendance_overtimeHours((overtimeHours))
+A_Attendance_notes((notes))
+A_Attendance_createdAt((createdAt))
+A_Attendance_updatedAt((updatedAt))
+
+E_AttendanceReport[AttendanceReport]
+A_AttendanceReport_id((id PK))
+A_AttendanceReport_tenantId((tenantId))
+A_AttendanceReport_employeeId((employeeId))
+A_AttendanceReport_reportDate((reportDate))
+A_AttendanceReport_month((month))
+A_AttendanceReport_year((year))
+A_AttendanceReport_totalWorkingDays((totalWorkingDays))
+A_AttendanceReport_presentDays((presentDays))
+A_AttendanceReport_absentDays((absentDays))
+A_AttendanceReport_leaveDays((leaveDays))
+A_AttendanceReport_halfDays((halfDays))
+A_AttendanceReport_workFromHomeDays((workFromHomeDays))
+A_AttendanceReport_totalWorkHours((totalWorkHours))
+A_AttendanceReport_totalOvertimeHours((totalOvertimeHours))
+A_AttendanceReport_attendancePercentage((attendancePercentage))
+A_AttendanceReport_status((status))
+A_AttendanceReport_notes((notes))
+A_AttendanceReport_createdAt((createdAt))
+A_AttendanceReport_updatedAt((updatedAt))
+
+E_AuditLog[AuditLog]
+A_AuditLog_id((id PK))
+A_AuditLog_userId((userId))
+A_AuditLog_tenantId((tenantId))
+A_AuditLog_action((action))
+A_AuditLog_entity((entity))
+A_AuditLog_entityId((entityId))
+A_AuditLog_meta((meta))
+A_AuditLog_timestamp((timestamp))
+
+E_BillingEvent[BillingEvent]
+A_BillingEvent_id((id PK))
+A_BillingEvent_tenantId((tenantId))
+A_BillingEvent_subscriptionId((subscriptionId))
+A_BillingEvent_eventType((eventType))
+A_BillingEvent_provider((provider))
+A_BillingEvent_providerEventId((providerEventId))
+A_BillingEvent_status((status))
+A_BillingEvent_payload((payload))
+A_BillingEvent_processedAt((processedAt))
+A_BillingEvent_errorMessage((errorMessage))
+A_BillingEvent_createdAt((createdAt))
+
+E_BillOfMaterials[BillOfMaterials]
+A_BillOfMaterials_id((id PK))
+A_BillOfMaterials_tenantId((tenantId))
+A_BillOfMaterials_bomNumber((bomNumber))
+A_BillOfMaterials_productId((productId))
+A_BillOfMaterials_version((version))
+A_BillOfMaterials_name((name))
+A_BillOfMaterials_description((description))
+A_BillOfMaterials_quantity((quantity))
+A_BillOfMaterials_unit((unit))
+A_BillOfMaterials_materialCost((materialCost))
+A_BillOfMaterials_laborCost((laborCost))
+A_BillOfMaterials_overheadCost((overheadCost))
+A_BillOfMaterials_totalCost((totalCost))
+A_BillOfMaterials_status((status))
+A_BillOfMaterials_isActive((isActive))
+A_BillOfMaterials_isDefault((isDefault))
+A_BillOfMaterials_effectiveFrom((effectiveFrom))
+A_BillOfMaterials_effectiveTo((effectiveTo))
+A_BillOfMaterials_createdBy((createdBy))
+A_BillOfMaterials_createdAt((createdAt))
+A_BillOfMaterials_updatedAt((updatedAt))
+
+E_BOMItem[BOMItem]
+A_BOMItem_id((id PK))
+A_BOMItem_bomId((bomId))
+A_BOMItem_itemId((itemId))
+A_BOMItem_sequence((sequence))
+A_BOMItem_quantity((quantity))
+A_BOMItem_unit((unit))
+A_BOMItem_warehouseId((warehouseId))
+A_BOMItem_unitCost((unitCost))
+A_BOMItem_totalCost((totalCost))
+A_BOMItem_alternativeItems((alternativeItems))
+A_BOMItem_scrapPercentage((scrapPercentage))
+A_BOMItem_notes((notes))
+A_BOMItem_createdAt((createdAt))
+
+E_Branch[Branch]
+A_Branch_id((id PK))
+A_Branch_tenantId((tenantId))
+A_Branch_code((code))
+A_Branch_name((name))
+A_Branch_type((type))
+A_Branch_address((address))
+A_Branch_city((city))
+A_Branch_state((state))
+A_Branch_country((country))
+A_Branch_postalCode((postalCode))
+A_Branch_phone((phone))
+A_Branch_email((email))
+A_Branch_managerId((managerId))
+A_Branch_isActive((isActive))
+A_Branch_isMainBranch((isMainBranch))
+A_Branch_operatingHours((operatingHours))
+A_Branch_createdAt((createdAt))
+A_Branch_updatedAt((updatedAt))
+
+E_ChartOfAccounts[ChartOfAccounts]
+A_ChartOfAccounts_id((id PK))
+A_ChartOfAccounts_tenantId((tenantId))
+A_ChartOfAccounts_accountCode((accountCode))
+A_ChartOfAccounts_accountName((accountName))
+A_ChartOfAccounts_accountType((accountType))
+A_ChartOfAccounts_category((category))
+A_ChartOfAccounts_parentId((parentId))
+A_ChartOfAccounts_description((description))
+A_ChartOfAccounts_isActive((isActive))
+A_ChartOfAccounts_isSystem((isSystem))
+A_ChartOfAccounts_normalBalance((normalBalance))
+A_ChartOfAccounts_createdAt((createdAt))
+A_ChartOfAccounts_updatedAt((updatedAt))
+
+E_ChatChannel[ChatChannel]
+A_ChatChannel_id((id PK))
+A_ChatChannel_tenantId((tenantId))
+A_ChatChannel_name((name))
+A_ChatChannel_description((description))
+A_ChatChannel_type((type))
+A_ChatChannel_departmentId((departmentId))
+A_ChatChannel_projectId((projectId))
+A_ChatChannel_createdBy((createdBy))
+A_ChatChannel_isArchived((isArchived))
+A_ChatChannel_createdAt((createdAt))
+A_ChatChannel_updatedAt((updatedAt))
+
+E_ChatChannelMember[ChatChannelMember]
+A_ChatChannelMember_id((id PK))
+A_ChatChannelMember_channelId((channelId))
+A_ChatChannelMember_userId((userId))
+A_ChatChannelMember_role((role))
+A_ChatChannelMember_isMuted((isMuted))
+A_ChatChannelMember_joinedAt((joinedAt))
+
+E_Communication[Communication]
+A_Communication_id((id PK))
+A_Communication_tenantId((tenantId))
+A_Communication_type((type))
+A_Communication_subject((subject))
+A_Communication_notes((notes))
+A_Communication_occurredAt((occurredAt))
+A_Communication_createdBy((createdBy))
+A_Communication_customerId((customerId))
+A_Communication_contactId((contactId))
+A_Communication_leadId((leadId))
+A_Communication_direction((direction))
+A_Communication_duration((duration))
+A_Communication_outcome((outcome))
+A_Communication_emailFrom((emailFrom))
+A_Communication_emailTo((emailTo))
+A_Communication_emailCc((emailCc))
+A_Communication_meetingLocation((meetingLocation))
+A_Communication_meetingAttendees((meetingAttendees))
+A_Communication_dealId((dealId))
+A_Communication_activityId((activityId))
+A_Communication_hasAttachments((hasAttachments))
+A_Communication_attachmentCount((attachmentCount))
+A_Communication_tags((tags))
+A_Communication_customFields((customFields))
+A_Communication_createdAt((createdAt))
+
+E_CompanyConfig[CompanyConfig]
+A_CompanyConfig_id((id PK))
+A_CompanyConfig_tenantId((tenantId))
+A_CompanyConfig_companyName((companyName))
+A_CompanyConfig_industry((industry))
+A_CompanyConfig_size((size))
+A_CompanyConfig_country((country))
+A_CompanyConfig_currency((currency))
+A_CompanyConfig_timezone((timezone))
+A_CompanyConfig_fiscalYear((fiscalYear))
+A_CompanyConfig_workflowConfig((workflowConfig))
+A_CompanyConfig_enabledModules((enabledModules))
+A_CompanyConfig_approvalLevels((approvalLevels))
+A_CompanyConfig_customFields((customFields))
+A_CompanyConfig_businessRules((businessRules))
+A_CompanyConfig_createdAt((createdAt))
+A_CompanyConfig_updatedAt((updatedAt))
+
+E_Contact[Contact]
+A_Contact_id((id PK))
+A_Contact_tenantId((tenantId))
+A_Contact_customerId((customerId))
+A_Contact_name((name))
+A_Contact_email((email))
+A_Contact_phone((phone))
+A_Contact_title((title))
+A_Contact_status((status))
+A_Contact_firstName((firstName))
+A_Contact_lastName((lastName))
+A_Contact_jobTitle((jobTitle))
+A_Contact_department((department))
+A_Contact_role((role))
+A_Contact_mobilePhone((mobilePhone))
+A_Contact_workPhone((workPhone))
+A_Contact_linkedinUrl((linkedinUrl))
+A_Contact_twitterHandle((twitterHandle))
+A_Contact_isPrimary((isPrimary))
+A_Contact_ownerId((ownerId))
+A_Contact_preferredChannel((preferredChannel))
+A_Contact_lastContactDate((lastContactDate))
+A_Contact_birthday((birthday))
+A_Contact_anniversary((anniversary))
+A_Contact_emailOptIn((emailOptIn))
+A_Contact_smsOptIn((smsOptIn))
+A_Contact_doNotCall((doNotCall))
+A_Contact_tags((tags))
+A_Contact_customFields((customFields))
+A_Contact_createdAt((createdAt))
+A_Contact_updatedAt((updatedAt))
+
+E_Conversation[Conversation]
+A_Conversation_id((id PK))
+A_Conversation_tenantId((tenantId))
+A_Conversation_type((type))
+A_Conversation_name((name))
+A_Conversation_description((description))
+A_Conversation_createdBy((createdBy))
+A_Conversation_isArchived((isArchived))
+A_Conversation_lastMessageAt((lastMessageAt))
+A_Conversation_createdAt((createdAt))
+A_Conversation_updatedAt((updatedAt))
+
+E_ConversationParticipant[ConversationParticipant]
+A_ConversationParticipant_id((id PK))
+A_ConversationParticipant_conversationId((conversationId))
+A_ConversationParticipant_userId((userId))
+A_ConversationParticipant_role((role))
+A_ConversationParticipant_isMuted((isMuted))
+A_ConversationParticipant_lastReadAt((lastReadAt))
+A_ConversationParticipant_joinedAt((joinedAt))
+
+E_Customer[Customer]
+A_Customer_id((id PK))
+A_Customer_tenantId((tenantId))
+A_Customer_name((name))
+A_Customer_industry((industry))
+A_Customer_website((website))
+A_Customer_status((status))
+A_Customer_notes((notes))
+A_Customer_type((type))
+A_Customer_companySize((companySize))
+A_Customer_annualRevenue((annualRevenue))
+A_Customer_currencyCode((currencyCode))
+A_Customer_primaryEmail((primaryEmail))
+A_Customer_primaryPhone((primaryPhone))
+A_Customer_billingAddress((billingAddress))
+A_Customer_shippingAddress((shippingAddress))
+A_Customer_ownerId((ownerId))
+A_Customer_accountManager((accountManager))
+A_Customer_category((category))
+A_Customer_source((source))
+A_Customer_firstContactDate((firstContactDate))
+A_Customer_lastContactDate((lastContactDate))
+A_Customer_preferredChannel((preferredChannel))
+A_Customer_timezone((timezone))
+A_Customer_tags((tags))
+A_Customer_customFields((customFields))
+A_Customer_createdAt((createdAt))
+A_Customer_updatedAt((updatedAt))
+
+E_CustomerNote[CustomerNote]
+A_CustomerNote_id((id PK))
+A_CustomerNote_tenantId((tenantId))
+A_CustomerNote_customerId((customerId))
+A_CustomerNote_title((title))
+A_CustomerNote_content((content))
+A_CustomerNote_isPinned((isPinned))
+A_CustomerNote_createdBy((createdBy))
+A_CustomerNote_createdAt((createdAt))
+A_CustomerNote_updatedAt((updatedAt))
+
+E_CustomField[CustomField]
+A_CustomField_id((id PK))
+A_CustomField_tenantId((tenantId))
+A_CustomField_module((module))
+A_CustomField_fieldName((fieldName))
+A_CustomField_fieldType((fieldType))
+A_CustomField_options((options))
+A_CustomField_required((required))
+A_CustomField_createdAt((createdAt))
+
+E_Deal[Deal]
+A_Deal_id((id PK))
+A_Deal_tenantId((tenantId))
+A_Deal_customerId((customerId))
+A_Deal_name((name))
+A_Deal_stage((stage))
+A_Deal_value((value))
+A_Deal_expectedCloseDate((expectedCloseDate))
+A_Deal_status((status))
+A_Deal_notes((notes))
+A_Deal_dealNumber((dealNumber))
+A_Deal_pipelineId((pipelineId))
+A_Deal_stageOrder((stageOrder))
+A_Deal_probability((probability))
+A_Deal_amount((amount))
+A_Deal_currencyCode((currencyCode))
+A_Deal_discount((discount))
+A_Deal_tax((tax))
+A_Deal_total((total))
+A_Deal_products((products))
+A_Deal_ownerId((ownerId))
+A_Deal_teamMembers((teamMembers))
+A_Deal_createdDate((createdDate))
+A_Deal_closedDate((closedDate))
+A_Deal_firstContactDate((firstContactDate))
+A_Deal_lastActivityDate((lastActivityDate))
+A_Deal_competitors((competitors))
+A_Deal_wonReason((wonReason))
+A_Deal_lostReason((lostReason))
+A_Deal_lostToCompetitor((lostToCompetitor))
+A_Deal_leadId((leadId))
+A_Deal_source((source))
+A_Deal_tags((tags))
+A_Deal_customFields((customFields))
+A_Deal_createdAt((createdAt))
+A_Deal_updatedAt((updatedAt))
+
+E_Department[Department]
+A_Department_id((id PK))
+A_Department_tenantId((tenantId))
+A_Department_name((name))
+A_Department_description((description))
+A_Department_location((location))
+A_Department_managerId((managerId))
+A_Department_budget((budget))
+A_Department_status((status))
+A_Department_createdAt((createdAt))
+A_Department_updatedAt((updatedAt))
+
+E_Document[Document]
+A_Document_id((id PK))
+A_Document_tenantId((tenantId))
+A_Document_folderId((folderId))
+A_Document_name((name))
+A_Document_description((description))
+A_Document_fileName((fileName))
+A_Document_fileSize((fileSize))
+A_Document_mimeType((mimeType))
+A_Document_storagePath((storagePath))
+A_Document_storageProvider((storageProvider))
+A_Document_checksum((checksum))
+A_Document_tags((tags))
+A_Document_metadata((metadata))
+A_Document_version((version))
+A_Document_isLatest((isLatest))
+A_Document_status((status))
+A_Document_isPublic((isPublic))
+A_Document_downloadCount((downloadCount))
+A_Document_viewCount((viewCount))
+A_Document_isTemplate((isTemplate))
+A_Document_templateId((templateId))
+A_Document_createdBy((createdBy))
+A_Document_updatedBy((updatedBy))
+A_Document_createdAt((createdAt))
+A_Document_updatedAt((updatedAt))
+
+E_DocumentActivity[DocumentActivity]
+A_DocumentActivity_id((id PK))
+A_DocumentActivity_documentId((documentId))
+A_DocumentActivity_shareId((shareId))
+A_DocumentActivity_tenantId((tenantId))
+A_DocumentActivity_userId((userId))
+A_DocumentActivity_action((action))
+A_DocumentActivity_details((details))
+A_DocumentActivity_ipAddress((ipAddress))
+A_DocumentActivity_userAgent((userAgent))
+A_DocumentActivity_createdAt((createdAt))
+
+E_DocumentComment[DocumentComment]
+A_DocumentComment_id((id PK))
+A_DocumentComment_documentId((documentId))
+A_DocumentComment_userId((userId))
+A_DocumentComment_content((content))
+A_DocumentComment_parentId((parentId))
+A_DocumentComment_createdAt((createdAt))
+A_DocumentComment_updatedAt((updatedAt))
+
+E_DocumentFolder[DocumentFolder]
+A_DocumentFolder_id((id PK))
+A_DocumentFolder_tenantId((tenantId))
+A_DocumentFolder_name((name))
+A_DocumentFolder_description((description))
+A_DocumentFolder_parentId((parentId))
+A_DocumentFolder_path((path))
+A_DocumentFolder_color((color))
+A_DocumentFolder_icon((icon))
+A_DocumentFolder_createdBy((createdBy))
+A_DocumentFolder_createdAt((createdAt))
+A_DocumentFolder_updatedAt((updatedAt))
+
+E_DocumentFolderPermission[DocumentFolderPermission]
+A_DocumentFolderPermission_id((id PK))
+A_DocumentFolderPermission_folderId((folderId))
+A_DocumentFolderPermission_userId((userId))
+A_DocumentFolderPermission_roleId((roleId))
+A_DocumentFolderPermission_canView((canView))
+A_DocumentFolderPermission_canEdit((canEdit))
+A_DocumentFolderPermission_canDelete((canDelete))
+A_DocumentFolderPermission_canCreate((canCreate))
+A_DocumentFolderPermission_canManage((canManage))
+A_DocumentFolderPermission_createdAt((createdAt))
+
+E_DocumentPermission[DocumentPermission]
+A_DocumentPermission_id((id PK))
+A_DocumentPermission_documentId((documentId))
+A_DocumentPermission_userId((userId))
+A_DocumentPermission_roleId((roleId))
+A_DocumentPermission_canView((canView))
+A_DocumentPermission_canEdit((canEdit))
+A_DocumentPermission_canDelete((canDelete))
+A_DocumentPermission_canShare((canShare))
+A_DocumentPermission_canManage((canManage))
+A_DocumentPermission_createdAt((createdAt))
+
+E_DocumentShare[DocumentShare]
+A_DocumentShare_id((id PK))
+A_DocumentShare_documentId((documentId))
+A_DocumentShare_shareType((shareType))
+A_DocumentShare_shareToken((shareToken))
+A_DocumentShare_expiresAt((expiresAt))
+A_DocumentShare_password((password))
+A_DocumentShare_maxDownloads((maxDownloads))
+A_DocumentShare_downloadCount((downloadCount))
+A_DocumentShare_sharedWith((sharedWith))
+A_DocumentShare_canView((canView))
+A_DocumentShare_canDownload((canDownload))
+A_DocumentShare_canEdit((canEdit))
+A_DocumentShare_canShare((canShare))
+A_DocumentShare_isActive((isActive))
+A_DocumentShare_createdBy((createdBy))
+A_DocumentShare_createdAt((createdAt))
+
+E_DocumentTemplate[DocumentTemplate]
+A_DocumentTemplate_id((id PK))
+A_DocumentTemplate_tenantId((tenantId))
+A_DocumentTemplate_name((name))
+A_DocumentTemplate_description((description))
+A_DocumentTemplate_category((category))
+A_DocumentTemplate_fileName((fileName))
+A_DocumentTemplate_storagePath((storagePath))
+A_DocumentTemplate_fileSize((fileSize))
+A_DocumentTemplate_mimeType((mimeType))
+A_DocumentTemplate_fields((fields))
+A_DocumentTemplate_usageCount((usageCount))
+A_DocumentTemplate_isActive((isActive))
+A_DocumentTemplate_createdBy((createdBy))
+A_DocumentTemplate_createdAt((createdAt))
+A_DocumentTemplate_updatedAt((updatedAt))
+
+E_DocumentVersion[DocumentVersion]
+A_DocumentVersion_id((id PK))
+A_DocumentVersion_documentId((documentId))
+A_DocumentVersion_versionNumber((versionNumber))
+A_DocumentVersion_fileName((fileName))
+A_DocumentVersion_fileSize((fileSize))
+A_DocumentVersion_storagePath((storagePath))
+A_DocumentVersion_checksum((checksum))
+A_DocumentVersion_changeLog((changeLog))
+A_DocumentVersion_createdBy((createdBy))
+A_DocumentVersion_createdAt((createdAt))
+
+E_EmailLog[EmailLog]
+A_EmailLog_id((id PK))
+A_EmailLog_tenantId((tenantId))
+A_EmailLog_to((to))
+A_EmailLog_cc((cc))
+A_EmailLog_bcc((bcc))
+A_EmailLog_subject((subject))
+A_EmailLog_body((body))
+A_EmailLog_templateId((templateId))
+A_EmailLog_status((status))
+A_EmailLog_sentAt((sentAt))
+A_EmailLog_failedAt((failedAt))
+A_EmailLog_errorMessage((errorMessage))
+A_EmailLog_metadata((metadata))
+A_EmailLog_createdAt((createdAt))
+
+E_EmailQueue[EmailQueue]
+A_EmailQueue_id((id PK))
+A_EmailQueue_tenantId((tenantId))
+A_EmailQueue_to((to))
+A_EmailQueue_cc((cc))
+A_EmailQueue_bcc((bcc))
+A_EmailQueue_subject((subject))
+A_EmailQueue_body((body))
+A_EmailQueue_templateId((templateId))
+A_EmailQueue_variables((variables))
+A_EmailQueue_status((status))
+A_EmailQueue_priority((priority))
+A_EmailQueue_attempts((attempts))
+A_EmailQueue_maxAttempts((maxAttempts))
+A_EmailQueue_scheduledAt((scheduledAt))
+A_EmailQueue_processingAt((processingAt))
+A_EmailQueue_sentAt((sentAt))
+A_EmailQueue_failedAt((failedAt))
+A_EmailQueue_cancelledAt((cancelledAt))
+A_EmailQueue_lastError((lastError))
+A_EmailQueue_errorLog((errorLog))
+A_EmailQueue_metadata((metadata))
+A_EmailQueue_createdAt((createdAt))
+A_EmailQueue_updatedAt((updatedAt))
+
+E_EmailTemplate[EmailTemplate]
+A_EmailTemplate_id((id PK))
+A_EmailTemplate_tenantId((tenantId))
+A_EmailTemplate_name((name))
+A_EmailTemplate_code((code))
+A_EmailTemplate_subject((subject))
+A_EmailTemplate_body((body))
+A_EmailTemplate_variables((variables))
+A_EmailTemplate_isSystem((isSystem))
+A_EmailTemplate_isActive((isActive))
+A_EmailTemplate_createdBy((createdBy))
+A_EmailTemplate_createdAt((createdAt))
+A_EmailTemplate_updatedAt((updatedAt))
+
+E_Employee[Employee]
+A_Employee_id((id PK))
+A_Employee_tenantId((tenantId))
+A_Employee_userId((userId))
+A_Employee_departmentId((departmentId))
+A_Employee_managerId((managerId))
+A_Employee_employeeCode((employeeCode))
+A_Employee_name((name))
+A_Employee_email((email))
+A_Employee_phone((phone))
+A_Employee_designation((designation))
+A_Employee_joiningDate((joiningDate))
+A_Employee_status((status))
+A_Employee_createdAt((createdAt))
+
+E_ExpenseCategory[ExpenseCategory]
+A_ExpenseCategory_id((id PK))
+A_ExpenseCategory_tenantId((tenantId))
+A_ExpenseCategory_name((name))
+A_ExpenseCategory_code((code))
+A_ExpenseCategory_active((active))
+A_ExpenseCategory_createdAt((createdAt))
+
+E_ExpenseClaim[ExpenseClaim]
+A_ExpenseClaim_id((id PK))
+A_ExpenseClaim_tenantId((tenantId))
+A_ExpenseClaim_employeeId((employeeId))
+A_ExpenseClaim_categoryId((categoryId))
+A_ExpenseClaim_title((title))
+A_ExpenseClaim_amount((amount))
+A_ExpenseClaim_description((description))
+A_ExpenseClaim_receiptUrl((receiptUrl))
+A_ExpenseClaim_expenseDate((expenseDate))
+A_ExpenseClaim_status((status))
+A_ExpenseClaim_createdAt((createdAt))
+
+E_FiscalYear[FiscalYear]
+A_FiscalYear_id((id PK))
+A_FiscalYear_tenantId((tenantId))
+A_FiscalYear_name((name))
+A_FiscalYear_startDate((startDate))
+A_FiscalYear_endDate((endDate))
+A_FiscalYear_isClosed((isClosed))
+A_FiscalYear_closedBy((closedBy))
+A_FiscalYear_closedAt((closedAt))
+A_FiscalYear_createdAt((createdAt))
+A_FiscalYear_updatedAt((updatedAt))
+
+E_GoodsReceipt[GoodsReceipt]
+A_GoodsReceipt_id((id PK))
+A_GoodsReceipt_tenantId((tenantId))
+A_GoodsReceipt_receiptNumber((receiptNumber))
+A_GoodsReceipt_purchaseOrderId((purchaseOrderId))
+A_GoodsReceipt_receivedDate((receivedDate))
+A_GoodsReceipt_receivedBy((receivedBy))
+A_GoodsReceipt_items((items))
+A_GoodsReceipt_status((status))
+A_GoodsReceipt_qualityStatus((qualityStatus))
+A_GoodsReceipt_warehouseLocation((warehouseLocation))
+A_GoodsReceipt_notes((notes))
+A_GoodsReceipt_attachments((attachments))
+A_GoodsReceipt_createdAt((createdAt))
+A_GoodsReceipt_updatedAt((updatedAt))
+
+E_InvoicePayment[InvoicePayment]
+A_InvoicePayment_id((id PK))
+A_InvoicePayment_tenantId((tenantId))
+A_InvoicePayment_invoiceId((invoiceId))
+A_InvoicePayment_amount((amount))
+A_InvoicePayment_paymentDate((paymentDate))
+A_InvoicePayment_paymentMethod((paymentMethod))
+A_InvoicePayment_referenceNumber((referenceNumber))
+A_InvoicePayment_notes((notes))
+A_InvoicePayment_createdAt((createdAt))
+A_InvoicePayment_updatedAt((updatedAt))
+
+E_Item[Item]
+A_Item_id((id PK))
+A_Item_name((name))
+A_Item_sku((sku))
+A_Item_price((price))
+A_Item_quantity((quantity))
+A_Item_description((description))
+A_Item_category((category))
+A_Item_tenantId((tenantId))
+A_Item_createdAt((createdAt))
+
+E_JournalEntry[JournalEntry]
+A_JournalEntry_id((id PK))
+A_JournalEntry_tenantId((tenantId))
+A_JournalEntry_entryNumber((entryNumber))
+A_JournalEntry_entryDate((entryDate))
+A_JournalEntry_postingDate((postingDate))
+A_JournalEntry_type((type))
+A_JournalEntry_description((description))
+A_JournalEntry_referenceType((referenceType))
+A_JournalEntry_referenceId((referenceId))
+A_JournalEntry_status((status))
+A_JournalEntry_totalDebit((totalDebit))
+A_JournalEntry_totalCredit((totalCredit))
+A_JournalEntry_createdBy((createdBy))
+A_JournalEntry_approvedBy((approvedBy))
+A_JournalEntry_approvedAt((approvedAt))
+A_JournalEntry_postedBy((postedBy))
+A_JournalEntry_postedAt((postedAt))
+A_JournalEntry_reversedBy((reversedBy))
+A_JournalEntry_reversedAt((reversedAt))
+A_JournalEntry_reversingEntryId((reversingEntryId))
+A_JournalEntry_attachments((attachments))
+A_JournalEntry_createdAt((createdAt))
+A_JournalEntry_updatedAt((updatedAt))
+
+E_JournalEntryLine[JournalEntryLine]
+A_JournalEntryLine_id((id PK))
+A_JournalEntryLine_journalEntryId((journalEntryId))
+A_JournalEntryLine_accountId((accountId))
+A_JournalEntryLine_lineNumber((lineNumber))
+A_JournalEntryLine_description((description))
+A_JournalEntryLine_debit((debit))
+A_JournalEntryLine_credit((credit))
+A_JournalEntryLine_departmentId((departmentId))
+A_JournalEntryLine_projectId((projectId))
+A_JournalEntryLine_costCenter((costCenter))
+A_JournalEntryLine_createdAt((createdAt))
+
+E_Lead[Lead]
+A_Lead_id((id PK))
+A_Lead_tenantId((tenantId))
+A_Lead_name((name))
+A_Lead_email((email))
+A_Lead_phone((phone))
+A_Lead_company((company))
+A_Lead_source((source))
+A_Lead_status((status))
+A_Lead_notes((notes))
+A_Lead_customerId((customerId))
+A_Lead_contactId((contactId))
+A_Lead_firstName((firstName))
+A_Lead_lastName((lastName))
+A_Lead_jobTitle((jobTitle))
+A_Lead_leadScore((leadScore))
+A_Lead_rating((rating))
+A_Lead_priority((priority))
+A_Lead_campaign((campaign))
+A_Lead_medium((medium))
+A_Lead_referrer((referrer))
+A_Lead_budget((budget))
+A_Lead_timeline((timeline))
+A_Lead_authority((authority))
+A_Lead_need((need))
+A_Lead_ownerId((ownerId))
+A_Lead_assignedAt((assignedAt))
+A_Lead_convertedAt((convertedAt))
+A_Lead_conversionSource((conversionSource))
+A_Lead_dealId((dealId))
+A_Lead_firstContactDate((firstContactDate))
+A_Lead_lastContactDate((lastContactDate))
+A_Lead_lastActivityDate((lastActivityDate))
+A_Lead_disqualifiedAt((disqualifiedAt))
+A_Lead_disqualifiedBy((disqualifiedBy))
+A_Lead_disqualifiedReason((disqualifiedReason))
+A_Lead_tags((tags))
+A_Lead_customFields((customFields))
+A_Lead_createdAt((createdAt))
+A_Lead_updatedAt((updatedAt))
+
+E_LeaveIntegration[LeaveIntegration]
+A_LeaveIntegration_id((id PK))
+A_LeaveIntegration_tenantId((tenantId))
+A_LeaveIntegration_leaveRequestId((leaveRequestId))
+A_LeaveIntegration_employeeId((employeeId))
+A_LeaveIntegration_leaveDate((leaveDate))
+A_LeaveIntegration_status((status))
+A_LeaveIntegration_attendanceStatus((attendanceStatus))
+A_LeaveIntegration_createdAt((createdAt))
+A_LeaveIntegration_updatedAt((updatedAt))
+
+E_LeaveRequest[LeaveRequest]
+A_LeaveRequest_id((id PK))
+A_LeaveRequest_tenantId((tenantId))
+A_LeaveRequest_employeeId((employeeId))
+A_LeaveRequest_leaveTypeId((leaveTypeId))
+A_LeaveRequest_startDate((startDate))
+A_LeaveRequest_endDate((endDate))
+A_LeaveRequest_reason((reason))
+A_LeaveRequest_status((status))
+A_LeaveRequest_createdAt((createdAt))
+
+E_LeaveType[LeaveType]
+A_LeaveType_id((id PK))
+A_LeaveType_tenantId((tenantId))
+A_LeaveType_name((name))
+A_LeaveType_code((code))
+A_LeaveType_maxDays((maxDays))
+A_LeaveType_paid((paid))
+A_LeaveType_requiresApproval((requiresApproval))
+A_LeaveType_createdAt((createdAt))
+
+E_LedgerEntry[LedgerEntry]
+A_LedgerEntry_id((id PK))
+A_LedgerEntry_tenantId((tenantId))
+A_LedgerEntry_accountId((accountId))
+A_LedgerEntry_date((date))
+A_LedgerEntry_description((description))
+A_LedgerEntry_debit((debit))
+A_LedgerEntry_credit((credit))
+A_LedgerEntry_balance((balance))
+A_LedgerEntry_referenceType((referenceType))
+A_LedgerEntry_referenceId((referenceId))
+A_LedgerEntry_journalEntryId((journalEntryId))
+A_LedgerEntry_createdAt((createdAt))
+
+E_LotBatch[LotBatch]
+A_LotBatch_id((id PK))
+A_LotBatch_tenantId((tenantId))
+A_LotBatch_itemId((itemId))
+A_LotBatch_lotNumber((lotNumber))
+A_LotBatch_batchNumber((batchNumber))
+A_LotBatch_serialNumber((serialNumber))
+A_LotBatch_manufacturingDate((manufacturingDate))
+A_LotBatch_expiryDate((expiryDate))
+A_LotBatch_quantity((quantity))
+A_LotBatch_remainingQty((remainingQty))
+A_LotBatch_supplier((supplier))
+A_LotBatch_purchaseOrderId((purchaseOrderId))
+A_LotBatch_status((status))
+A_LotBatch_notes((notes))
+A_LotBatch_createdAt((createdAt))
+A_LotBatch_updatedAt((updatedAt))
+
+E_Message[Message]
+A_Message_id((id PK))
+A_Message_conversationId((conversationId))
+A_Message_senderId((senderId))
+A_Message_content((content))
+A_Message_type((type))
+A_Message_attachments((attachments))
+A_Message_isEdited((isEdited))
+A_Message_isDeleted((isDeleted))
+A_Message_mentionedUserIds((mentionedUserIds))
+A_Message_replyToId((replyToId))
+A_Message_createdAt((createdAt))
+A_Message_updatedAt((updatedAt))
+
+E_MessageReaction[MessageReaction]
+A_MessageReaction_id((id PK))
+A_MessageReaction_messageId((messageId))
+A_MessageReaction_userId((userId))
+A_MessageReaction_emoji((emoji))
+A_MessageReaction_createdAt((createdAt))
+
+E_MessageReadReceipt[MessageReadReceipt]
+A_MessageReadReceipt_id((id PK))
+A_MessageReadReceipt_messageId((messageId))
+A_MessageReadReceipt_userId((userId))
+A_MessageReadReceipt_readAt((readAt))
+
+E_Notification[Notification]
+A_Notification_id((id PK))
+A_Notification_tenantId((tenantId))
+A_Notification_employeeId((employeeId))
+A_Notification_type((type))
+A_Notification_title((title))
+A_Notification_message((message))
+A_Notification_isRead((isRead))
+A_Notification_createdAt((createdAt))
+
+E_OvertimePolicy[OvertimePolicy]
+A_OvertimePolicy_id((id PK))
+A_OvertimePolicy_tenantId((tenantId))
+A_OvertimePolicy_shiftId((shiftId))
+A_OvertimePolicy_name((name))
+A_OvertimePolicy_code((code))
+A_OvertimePolicy_dailyThreshold((dailyThreshold))
+A_OvertimePolicy_weeklyThreshold((weeklyThreshold))
+A_OvertimePolicy_monthlyThreshold((monthlyThreshold))
+A_OvertimePolicy_overtimeRate((overtimeRate))
+A_OvertimePolicy_weekendRate((weekendRate))
+A_OvertimePolicy_holidayRate((holidayRate))
+A_OvertimePolicy_isActive((isActive))
+A_OvertimePolicy_description((description))
+A_OvertimePolicy_createdAt((createdAt))
+A_OvertimePolicy_updatedAt((updatedAt))
+
+E_OvertimeRecord[OvertimeRecord]
+A_OvertimeRecord_id((id PK))
+A_OvertimeRecord_tenantId((tenantId))
+A_OvertimeRecord_employeeId((employeeId))
+A_OvertimeRecord_overtimePolicyId((overtimePolicyId))
+A_OvertimeRecord_date((date))
+A_OvertimeRecord_overtimeHours((overtimeHours))
+A_OvertimeRecord_overtimeRate((overtimeRate))
+A_OvertimeRecord_overtimeAmount((overtimeAmount))
+A_OvertimeRecord_reason((reason))
+A_OvertimeRecord_approvalStatus((approvalStatus))
+A_OvertimeRecord_approvedBy((approvedBy))
+A_OvertimeRecord_approvedAt((approvedAt))
+A_OvertimeRecord_createdAt((createdAt))
+A_OvertimeRecord_updatedAt((updatedAt))
+
+E_PasswordReset[PasswordReset]
+A_PasswordReset_id((id PK))
+A_PasswordReset_email((email))
+A_PasswordReset_otp((otp))
+A_PasswordReset_expiresAt((expiresAt))
+A_PasswordReset_used((used))
+A_PasswordReset_createdAt((createdAt))
+
+E_Payment[Payment]
+A_Payment_id((id PK))
+A_Payment_tenantId((tenantId))
+A_Payment_paymentNumber((paymentNumber))
+A_Payment_vendorId((vendorId))
+A_Payment_paymentDate((paymentDate))
+A_Payment_amount((amount))
+A_Payment_paymentMethod((paymentMethod))
+A_Payment_referenceNumber((referenceNumber))
+A_Payment_bankAccount((bankAccount))
+A_Payment_status((status))
+A_Payment_clearedDate((clearedDate))
+A_Payment_allocations((allocations))
+A_Payment_glPosted((glPosted))
+A_Payment_glPostDate((glPostDate))
+A_Payment_glJournalId((glJournalId))
+A_Payment_notes((notes))
+A_Payment_attachments((attachments))
+A_Payment_createdBy((createdBy))
+A_Payment_createdAt((createdAt))
+A_Payment_updatedAt((updatedAt))
+
+E_PayrollCycle[PayrollCycle]
+A_PayrollCycle_id((id PK))
+A_PayrollCycle_tenantId((tenantId))
+A_PayrollCycle_name((name))
+A_PayrollCycle_startDate((startDate))
+A_PayrollCycle_endDate((endDate))
+A_PayrollCycle_paymentDate((paymentDate))
+A_PayrollCycle_status((status))
+A_PayrollCycle_totalGross((totalGross))
+A_PayrollCycle_totalDeductions((totalDeductions))
+A_PayrollCycle_totalNet((totalNet))
+A_PayrollCycle_processedBy((processedBy))
+A_PayrollCycle_processedAt((processedAt))
+A_PayrollCycle_notes((notes))
+A_PayrollCycle_createdAt((createdAt))
+A_PayrollCycle_updatedAt((updatedAt))
+
+E_Payslip[Payslip]
+A_Payslip_id((id PK))
+A_Payslip_tenantId((tenantId))
+A_Payslip_employeeId((employeeId))
+A_Payslip_payrollCycleId((payrollCycleId))
+A_Payslip_payslipNumber((payslipNumber))
+A_Payslip_basicSalary((basicSalary))
+A_Payslip_allowances((allowances))
+A_Payslip_bonuses((bonuses))
+A_Payslip_overtime((overtime))
+A_Payslip_grossSalary((grossSalary))
+A_Payslip_taxDeductions((taxDeductions))
+A_Payslip_providentFund((providentFund))
+A_Payslip_insurance((insurance))
+A_Payslip_otherDeductions((otherDeductions))
+A_Payslip_totalDeductions((totalDeductions))
+A_Payslip_netSalary((netSalary))
+A_Payslip_workingDays((workingDays))
+A_Payslip_presentDays((presentDays))
+A_Payslip_absentDays((absentDays))
+A_Payslip_leaveDays((leaveDays))
+A_Payslip_overtimeHours((overtimeHours))
+A_Payslip_status((status))
+A_Payslip_generatedAt((generatedAt))
+A_Payslip_approvedBy((approvedBy))
+A_Payslip_approvedAt((approvedAt))
+A_Payslip_notes((notes))
+A_Payslip_createdAt((createdAt))
+A_Payslip_updatedAt((updatedAt))
+
+E_PendingRegistration[PendingRegistration]
+A_PendingRegistration_id((id PK))
+A_PendingRegistration_email((email))
+A_PendingRegistration_passwordHash((passwordHash))
+A_PendingRegistration_companyName((companyName))
+A_PendingRegistration_planId((planId))
+A_PendingRegistration_customModules((customModules))
+A_PendingRegistration_billingCycle((billingCycle))
+A_PendingRegistration_provider((provider))
+A_PendingRegistration_amount((amount))
+A_PendingRegistration_currency((currency))
+A_PendingRegistration_status((status))
+A_PendingRegistration_tenantId((tenantId))
+A_PendingRegistration_createdAt((createdAt))
+A_PendingRegistration_completedAt((completedAt))
+A_PendingRegistration_expiresAt((expiresAt))
+
+E_Permission[Permission]
+A_Permission_id((id PK))
+A_Permission_code((code))
+A_Permission_label((label))
+
+E_Pipeline[Pipeline]
+A_Pipeline_id((id PK))
+A_Pipeline_tenantId((tenantId))
+A_Pipeline_name((name))
+A_Pipeline_description((description))
+A_Pipeline_isDefault((isDefault))
+A_Pipeline_isActive((isActive))
+A_Pipeline_createdAt((createdAt))
+A_Pipeline_updatedAt((updatedAt))
+
+E_PipelineStage[PipelineStage]
+A_PipelineStage_id((id PK))
+A_PipelineStage_tenantId((tenantId))
+A_PipelineStage_pipelineId((pipelineId))
+A_PipelineStage_name((name))
+A_PipelineStage_order((order))
+A_PipelineStage_probability((probability))
+A_PipelineStage_color((color))
+A_PipelineStage_isClosedWon((isClosedWon))
+A_PipelineStage_isClosedLost((isClosedLost))
+A_PipelineStage_daysInStage((daysInStage))
+A_PipelineStage_createdAt((createdAt))
+A_PipelineStage_updatedAt((updatedAt))
+
+E_Plan[Plan]
+A_Plan_id((id PK))
+A_Plan_name((name))
+A_Plan_description((description))
+A_Plan_billingCycle((billingCycle))
+A_Plan_currency((currency))
+A_Plan_basePrice((basePrice))
+A_Plan_seatPrice((seatPrice))
+A_Plan_isActive((isActive))
+A_Plan_createdAt((createdAt))
+A_Plan_updatedAt((updatedAt))
+
+E_PlanModule[PlanModule]
+A_PlanModule_id((id PK))
+A_PlanModule_planId((planId))
+A_PlanModule_moduleKey((moduleKey))
+A_PlanModule_price((price))
+A_PlanModule_included((included))
+A_PlanModule_createdAt((createdAt))
+
+E_ProductionBatch[ProductionBatch]
+A_ProductionBatch_id((id PK))
+A_ProductionBatch_tenantId((tenantId))
+A_ProductionBatch_workOrderId((workOrderId))
+A_ProductionBatch_batchNumber((batchNumber))
+A_ProductionBatch_productId((productId))
+A_ProductionBatch_quantity((quantity))
+A_ProductionBatch_unit((unit))
+A_ProductionBatch_manufacturingDate((manufacturingDate))
+A_ProductionBatch_expiryDate((expiryDate))
+A_ProductionBatch_qualityStatus((qualityStatus))
+A_ProductionBatch_qcBy((qcBy))
+A_ProductionBatch_qcAt((qcAt))
+A_ProductionBatch_qcNotes((qcNotes))
+A_ProductionBatch_warehouseId((warehouseId))
+A_ProductionBatch_status((status))
+A_ProductionBatch_createdAt((createdAt))
+A_ProductionBatch_updatedAt((updatedAt))
+
+E_Project[Project]
+A_Project_id((id PK))
+A_Project_tenantId((tenantId))
+A_Project_projectCode((projectCode))
+A_Project_projectName((projectName))
+A_Project_description((description))
+A_Project_clientName((clientName))
+A_Project_projectManager((projectManager))
+A_Project_status((status))
+A_Project_priority((priority))
+A_Project_type((type))
+A_Project_startDate((startDate))
+A_Project_endDate((endDate))
+A_Project_actualStartDate((actualStartDate))
+A_Project_actualEndDate((actualEndDate))
+A_Project_estimatedBudget((estimatedBudget))
+A_Project_actualCost((actualCost))
+A_Project_progressPercent((progressPercent))
+A_Project_totalPlannedHours((totalPlannedHours))
+A_Project_totalActualHours((totalActualHours))
+A_Project_totalResourceCost((totalResourceCost))
+A_Project_budgetVariance((budgetVariance))
+A_Project_scheduleVariance((scheduleVariance))
+A_Project_utilizationPercent((utilizationPercent))
+A_Project_healthScore((healthScore))
+A_Project_riskLevel((riskLevel))
+A_Project_departmentId((departmentId))
+A_Project_teamMembers((teamMembers))
+A_Project_documentFolderId((documentFolderId))
+A_Project_financeAccountId((financeAccountId))
+A_Project_customFields((customFields))
+A_Project_notes((notes))
+A_Project_attachments((attachments))
+A_Project_createdBy((createdBy))
+A_Project_createdAt((createdAt))
+A_Project_updatedAt((updatedAt))
+
+E_ProjectBudget[ProjectBudget]
+A_ProjectBudget_id((id PK))
+A_ProjectBudget_tenantId((tenantId))
+A_ProjectBudget_projectId((projectId))
+A_ProjectBudget_category((category))
+A_ProjectBudget_description((description))
+A_ProjectBudget_plannedAmount((plannedAmount))
+A_ProjectBudget_actualAmount((actualAmount))
+A_ProjectBudget_variance((variance))
+A_ProjectBudget_budgetPeriod((budgetPeriod))
+A_ProjectBudget_transactionDate((transactionDate))
+A_ProjectBudget_notes((notes))
+A_ProjectBudget_attachments((attachments))
+A_ProjectBudget_createdBy((createdBy))
+A_ProjectBudget_createdAt((createdAt))
+A_ProjectBudget_updatedAt((updatedAt))
+
+E_ProjectMember[ProjectMember]
+A_ProjectMember_id((id PK))
+A_ProjectMember_tenantId((tenantId))
+A_ProjectMember_projectId((projectId))
+A_ProjectMember_employeeId((employeeId))
+A_ProjectMember_userId((userId))
+A_ProjectMember_role((role))
+A_ProjectMember_allocationPercent((allocationPercent))
+A_ProjectMember_startDate((startDate))
+A_ProjectMember_endDate((endDate))
+A_ProjectMember_status((status))
+A_ProjectMember_hourlyRate((hourlyRate))
+A_ProjectMember_permissions((permissions))
+A_ProjectMember_notes((notes))
+A_ProjectMember_createdAt((createdAt))
+A_ProjectMember_updatedAt((updatedAt))
+
+E_ProjectMilestone[ProjectMilestone]
+A_ProjectMilestone_id((id PK))
+A_ProjectMilestone_tenantId((tenantId))
+A_ProjectMilestone_projectId((projectId))
+A_ProjectMilestone_milestoneName((milestoneName))
+A_ProjectMilestone_description((description))
+A_ProjectMilestone_status((status))
+A_ProjectMilestone_startDate((startDate))
+A_ProjectMilestone_dueDate((dueDate))
+A_ProjectMilestone_completedDate((completedDate))
+A_ProjectMilestone_progressPercent((progressPercent))
+A_ProjectMilestone_assignedTo((assignedTo))
+A_ProjectMilestone_deliverables((deliverables))
+A_ProjectMilestone_isCriticalPath((isCriticalPath))
+A_ProjectMilestone_isAutoScheduled((isAutoScheduled))
+A_ProjectMilestone_notes((notes))
+A_ProjectMilestone_attachments((attachments))
+A_ProjectMilestone_createdBy((createdBy))
+A_ProjectMilestone_createdAt((createdAt))
+A_ProjectMilestone_updatedAt((updatedAt))
+
+E_ProjectMilestoneDependency[ProjectMilestoneDependency]
+A_ProjectMilestoneDependency_id((id PK))
+A_ProjectMilestoneDependency_tenantId((tenantId))
+A_ProjectMilestoneDependency_predecessorId((predecessorId))
+A_ProjectMilestoneDependency_successorId((successorId))
+A_ProjectMilestoneDependency_dependencyType((dependencyType))
+A_ProjectMilestoneDependency_lagDays((lagDays))
+A_ProjectMilestoneDependency_createdAt((createdAt))
+A_ProjectMilestoneDependency_updatedAt((updatedAt))
+
+E_ProjectResource[ProjectResource]
+A_ProjectResource_id((id PK))
+A_ProjectResource_tenantId((tenantId))
+A_ProjectResource_projectId((projectId))
+A_ProjectResource_resourceType((resourceType))
+A_ProjectResource_resourceName((resourceName))
+A_ProjectResource_employeeId((employeeId))
+A_ProjectResource_allocationPercent((allocationPercent))
+A_ProjectResource_startDate((startDate))
+A_ProjectResource_endDate((endDate))
+A_ProjectResource_costPerUnit((costPerUnit))
+A_ProjectResource_units((units))
+A_ProjectResource_totalCost((totalCost))
+A_ProjectResource_plannedHours((plannedHours))
+A_ProjectResource_actualHours((actualHours))
+A_ProjectResource_availableHours((availableHours))
+A_ProjectResource_quantity((quantity))
+A_ProjectResource_quantityUsed((quantityUsed))
+A_ProjectResource_quantityUnit((quantityUnit))
+A_ProjectResource_status((status))
+A_ProjectResource_notes((notes))
+A_ProjectResource_createdAt((createdAt))
+A_ProjectResource_updatedAt((updatedAt))
+
+E_ProjectTimeLog[ProjectTimeLog]
+A_ProjectTimeLog_id((id PK))
+A_ProjectTimeLog_tenantId((tenantId))
+A_ProjectTimeLog_projectId((projectId))
+A_ProjectTimeLog_employeeId((employeeId))
+A_ProjectTimeLog_timesheetId((timesheetId))
+A_ProjectTimeLog_logDate((logDate))
+A_ProjectTimeLog_hoursWorked((hoursWorked))
+A_ProjectTimeLog_taskDescription((taskDescription))
+A_ProjectTimeLog_milestoneId((milestoneId))
+A_ProjectTimeLog_billable((billable))
+A_ProjectTimeLog_hourlyRate((hourlyRate))
+A_ProjectTimeLog_totalCost((totalCost))
+A_ProjectTimeLog_status((status))
+A_ProjectTimeLog_notes((notes))
+A_ProjectTimeLog_createdAt((createdAt))
+A_ProjectTimeLog_updatedAt((updatedAt))
+
+E_ProjectTimesheet[ProjectTimesheet]
+A_ProjectTimesheet_id((id PK))
+A_ProjectTimesheet_tenantId((tenantId))
+A_ProjectTimesheet_employeeId((employeeId))
+A_ProjectTimesheet_weekStartDate((weekStartDate))
+A_ProjectTimesheet_weekEndDate((weekEndDate))
+A_ProjectTimesheet_status((status))
+A_ProjectTimesheet_totalHours((totalHours))
+A_ProjectTimesheet_billableHours((billableHours))
+A_ProjectTimesheet_submittedAt((submittedAt))
+A_ProjectTimesheet_submittedBy((submittedBy))
+A_ProjectTimesheet_approvedAt((approvedAt))
+A_ProjectTimesheet_approvedBy((approvedBy))
+A_ProjectTimesheet_rejectedAt((rejectedAt))
+A_ProjectTimesheet_rejectedBy((rejectedBy))
+A_ProjectTimesheet_rejectionReason((rejectionReason))
+A_ProjectTimesheet_notes((notes))
+A_ProjectTimesheet_createdAt((createdAt))
+A_ProjectTimesheet_updatedAt((updatedAt))
+
+E_PurchaseOrder[PurchaseOrder]
+A_PurchaseOrder_id((id PK))
+A_PurchaseOrder_tenantId((tenantId))
+A_PurchaseOrder_poNumber((poNumber))
+A_PurchaseOrder_requisitionId((requisitionId))
+A_PurchaseOrder_vendorId((vendorId))
+A_PurchaseOrder_title((title))
+A_PurchaseOrder_description((description))
+A_PurchaseOrder_orderDate((orderDate))
+A_PurchaseOrder_expectedDeliveryDate((expectedDeliveryDate))
+A_PurchaseOrder_actualDeliveryDate((actualDeliveryDate))
+A_PurchaseOrder_status((status))
+A_PurchaseOrder_items((items))
+A_PurchaseOrder_subtotal((subtotal))
+A_PurchaseOrder_taxAmount((taxAmount))
+A_PurchaseOrder_discountAmount((discountAmount))
+A_PurchaseOrder_shippingCost((shippingCost))
+A_PurchaseOrder_totalAmount((totalAmount))
+A_PurchaseOrder_paymentTerms((paymentTerms))
+A_PurchaseOrder_paymentStatus((paymentStatus))
+A_PurchaseOrder_paidAmount((paidAmount))
+A_PurchaseOrder_shippingAddress((shippingAddress))
+A_PurchaseOrder_shippingMethod((shippingMethod))
+A_PurchaseOrder_trackingNumber((trackingNumber))
+A_PurchaseOrder_approvalStatus((approvalStatus))
+A_PurchaseOrder_approvedBy((approvedBy))
+A_PurchaseOrder_approvedAt((approvedAt))
+A_PurchaseOrder_workflowId((workflowId))
+A_PurchaseOrder_notes((notes))
+A_PurchaseOrder_attachments((attachments))
+A_PurchaseOrder_internalNotes((internalNotes))
+A_PurchaseOrder_createdBy((createdBy))
+A_PurchaseOrder_createdAt((createdAt))
+A_PurchaseOrder_updatedAt((updatedAt))
+
+E_PurchaseRequisition[PurchaseRequisition]
+A_PurchaseRequisition_id((id PK))
+A_PurchaseRequisition_tenantId((tenantId))
+A_PurchaseRequisition_requisitionNumber((requisitionNumber))
+A_PurchaseRequisition_requestedBy((requestedBy))
+A_PurchaseRequisition_departmentId((departmentId))
+A_PurchaseRequisition_vendorId((vendorId))
+A_PurchaseRequisition_title((title))
+A_PurchaseRequisition_description((description))
+A_PurchaseRequisition_priority((priority))
+A_PurchaseRequisition_requestedDate((requestedDate))
+A_PurchaseRequisition_requiredDate((requiredDate))
+A_PurchaseRequisition_status((status))
+A_PurchaseRequisition_approvalStatus((approvalStatus))
+A_PurchaseRequisition_approvedBy((approvedBy))
+A_PurchaseRequisition_approvedAt((approvedAt))
+A_PurchaseRequisition_rejectionReason((rejectionReason))
+A_PurchaseRequisition_items((items))
+A_PurchaseRequisition_totalAmount((totalAmount))
+A_PurchaseRequisition_budgetCode((budgetCode))
+A_PurchaseRequisition_workflowId((workflowId))
+A_PurchaseRequisition_notes((notes))
+A_PurchaseRequisition_attachments((attachments))
+A_PurchaseRequisition_createdAt((createdAt))
+A_PurchaseRequisition_updatedAt((updatedAt))
+
+E_Report[Report]
+A_Report_id((id PK))
+A_Report_tenantId((tenantId))
+A_Report_templateId((templateId))
+A_Report_name((name))
+A_Report_type((type))
+A_Report_parameters((parameters))
+A_Report_data((data))
+A_Report_generatedBy((generatedBy))
+A_Report_generatedAt((generatedAt))
+A_Report_createdAt((createdAt))
+
+E_ReportSchedule[ReportSchedule]
+A_ReportSchedule_id((id PK))
+A_ReportSchedule_tenantId((tenantId))
+A_ReportSchedule_templateId((templateId))
+A_ReportSchedule_name((name))
+A_ReportSchedule_frequency((frequency))
+A_ReportSchedule_recipients((recipients))
+A_ReportSchedule_isActive((isActive))
+A_ReportSchedule_lastRunAt((lastRunAt))
+A_ReportSchedule_nextRunAt((nextRunAt))
+A_ReportSchedule_createdBy((createdBy))
+A_ReportSchedule_createdAt((createdAt))
+A_ReportSchedule_updatedAt((updatedAt))
+
+E_ReportTemplate[ReportTemplate]
+A_ReportTemplate_id((id PK))
+A_ReportTemplate_tenantId((tenantId))
+A_ReportTemplate_name((name))
+A_ReportTemplate_type((type))
+A_ReportTemplate_category((category))
+A_ReportTemplate_description((description))
+A_ReportTemplate_isSystem((isSystem))
+A_ReportTemplate_isActive((isActive))
+A_ReportTemplate_config((config))
+A_ReportTemplate_createdBy((createdBy))
+A_ReportTemplate_createdAt((createdAt))
+A_ReportTemplate_updatedAt((updatedAt))
+
+E_Role[Role]
+A_Role_id((id PK))
+A_Role_name((name))
+A_Role_tenantId((tenantId))
+
+E_RolePermission[RolePermission]
+A_RolePermission_roleId((roleId PK))
+A_RolePermission_permissionId((permissionId PK))
+
+E_SalaryComponent[SalaryComponent]
+A_SalaryComponent_id((id PK))
+A_SalaryComponent_tenantId((tenantId))
+A_SalaryComponent_name((name))
+A_SalaryComponent_code((code))
+A_SalaryComponent_type((type))
+A_SalaryComponent_calculationType((calculationType))
+A_SalaryComponent_value((value))
+A_SalaryComponent_formula((formula))
+A_SalaryComponent_isTaxable((isTaxable))
+A_SalaryComponent_isActive((isActive))
+A_SalaryComponent_description((description))
+A_SalaryComponent_createdAt((createdAt))
+A_SalaryComponent_updatedAt((updatedAt))
+
+E_SalaryDisbursement[SalaryDisbursement]
+A_SalaryDisbursement_id((id PK))
+A_SalaryDisbursement_tenantId((tenantId))
+A_SalaryDisbursement_payrollCycleId((payrollCycleId))
+A_SalaryDisbursement_employeeId((employeeId))
+A_SalaryDisbursement_amount((amount))
+A_SalaryDisbursement_paymentMethod((paymentMethod))
+A_SalaryDisbursement_bankAccount((bankAccount))
+A_SalaryDisbursement_transactionRef((transactionRef))
+A_SalaryDisbursement_status((status))
+A_SalaryDisbursement_paymentDate((paymentDate))
+A_SalaryDisbursement_completedAt((completedAt))
+A_SalaryDisbursement_failureReason((failureReason))
+A_SalaryDisbursement_notes((notes))
+A_SalaryDisbursement_createdAt((createdAt))
+A_SalaryDisbursement_updatedAt((updatedAt))
+
+E_SalaryStructure[SalaryStructure]
+A_SalaryStructure_id((id PK))
+A_SalaryStructure_tenantId((tenantId))
+A_SalaryStructure_employeeId((employeeId))
+A_SalaryStructure_basicSalary((basicSalary))
+A_SalaryStructure_allowances((allowances))
+A_SalaryStructure_deductions((deductions))
+A_SalaryStructure_netSalary((netSalary))
+A_SalaryStructure_effectiveFrom((effectiveFrom))
+A_SalaryStructure_createdAt((createdAt))
+A_SalaryStructure_updatedAt((updatedAt))
+
+E_SalesInvoice[SalesInvoice]
+A_SalesInvoice_id((id PK))
+A_SalesInvoice_tenantId((tenantId))
+A_SalesInvoice_customerId((customerId))
+A_SalesInvoice_dealId((dealId))
+A_SalesInvoice_invoiceNumber((invoiceNumber))
+A_SalesInvoice_customerName((customerName))
+A_SalesInvoice_customerEmail((customerEmail))
+A_SalesInvoice_orderId((orderId))
+A_SalesInvoice_issueDate((issueDate))
+A_SalesInvoice_dueDate((dueDate))
+A_SalesInvoice_items((items))
+A_SalesInvoice_subtotal((subtotal))
+A_SalesInvoice_tax((tax))
+A_SalesInvoice_discount((discount))
+A_SalesInvoice_total((total))
+A_SalesInvoice_amountPaid((amountPaid))
+A_SalesInvoice_status((status))
+A_SalesInvoice_createdAt((createdAt))
+A_SalesInvoice_updatedAt((updatedAt))
+
+E_SalesOrder[SalesOrder]
+A_SalesOrder_id((id PK))
+A_SalesOrder_tenantId((tenantId))
+A_SalesOrder_customerId((customerId))
+A_SalesOrder_dealId((dealId))
+A_SalesOrder_orderNumber((orderNumber))
+A_SalesOrder_customerName((customerName))
+A_SalesOrder_customerEmail((customerEmail))
+A_SalesOrder_quotationId((quotationId))
+A_SalesOrder_orderDate((orderDate))
+A_SalesOrder_expectedDelivery((expectedDelivery))
+A_SalesOrder_items((items))
+A_SalesOrder_subtotal((subtotal))
+A_SalesOrder_tax((tax))
+A_SalesOrder_discount((discount))
+A_SalesOrder_total((total))
+A_SalesOrder_status((status))
+A_SalesOrder_notes((notes))
+A_SalesOrder_createdAt((createdAt))
+A_SalesOrder_updatedAt((updatedAt))
+
+E_SalesOrderTracking[SalesOrderTracking]
+A_SalesOrderTracking_id((id PK))
+A_SalesOrderTracking_tenantId((tenantId))
+A_SalesOrderTracking_salesOrderId((salesOrderId))
+A_SalesOrderTracking_status((status))
+A_SalesOrderTracking_carrier((carrier))
+A_SalesOrderTracking_trackingNumber((trackingNumber))
+A_SalesOrderTracking_location((location))
+A_SalesOrderTracking_notes((notes))
+A_SalesOrderTracking_createdAt((createdAt))
+A_SalesOrderTracking_updatedAt((updatedAt))
+
+E_SalesQuotation[SalesQuotation]
+A_SalesQuotation_id((id PK))
+A_SalesQuotation_tenantId((tenantId))
+A_SalesQuotation_customerId((customerId))
+A_SalesQuotation_dealId((dealId))
+A_SalesQuotation_customerName((customerName))
+A_SalesQuotation_customerEmail((customerEmail))
+A_SalesQuotation_title((title))
+A_SalesQuotation_description((description))
+A_SalesQuotation_items((items))
+A_SalesQuotation_subtotal((subtotal))
+A_SalesQuotation_tax((tax))
+A_SalesQuotation_discount((discount))
+A_SalesQuotation_total((total))
+A_SalesQuotation_status((status))
+A_SalesQuotation_validUntil((validUntil))
+A_SalesQuotation_createdAt((createdAt))
+A_SalesQuotation_updatedAt((updatedAt))
+
+E_Shift[Shift]
+A_Shift_id((id PK))
+A_Shift_tenantId((tenantId))
+A_Shift_name((name))
+A_Shift_code((code))
+A_Shift_startTime((startTime))
+A_Shift_endTime((endTime))
+A_Shift_breakDuration((breakDuration))
+A_Shift_workingDays((workingDays))
+A_Shift_isActive((isActive))
+A_Shift_description((description))
+A_Shift_createdAt((createdAt))
+A_Shift_updatedAt((updatedAt))
+
+E_ShiftAssignment[ShiftAssignment]
+A_ShiftAssignment_id((id PK))
+A_ShiftAssignment_tenantId((tenantId))
+A_ShiftAssignment_employeeId((employeeId))
+A_ShiftAssignment_shiftId((shiftId))
+A_ShiftAssignment_assignedFrom((assignedFrom))
+A_ShiftAssignment_assignedTo((assignedTo))
+A_ShiftAssignment_status((status))
+A_ShiftAssignment_createdAt((createdAt))
+A_ShiftAssignment_updatedAt((updatedAt))
+
+E_StockMovement[StockMovement]
+A_StockMovement_id((id PK))
+A_StockMovement_tenantId((tenantId))
+A_StockMovement_movementNumber((movementNumber))
+A_StockMovement_type((type))
+A_StockMovement_reason((reason))
+A_StockMovement_itemId((itemId))
+A_StockMovement_fromWarehouseId((fromWarehouseId))
+A_StockMovement_toWarehouseId((toWarehouseId))
+A_StockMovement_warehouseId((warehouseId))
+A_StockMovement_quantity((quantity))
+A_StockMovement_lotNumber((lotNumber))
+A_StockMovement_batchNumber((batchNumber))
+A_StockMovement_serialNumber((serialNumber))
+A_StockMovement_expiryDate((expiryDate))
+A_StockMovement_referenceType((referenceType))
+A_StockMovement_referenceId((referenceId))
+A_StockMovement_unitCost((unitCost))
+A_StockMovement_totalCost((totalCost))
+A_StockMovement_status((status))
+A_StockMovement_approvedBy((approvedBy))
+A_StockMovement_approvedAt((approvedAt))
+A_StockMovement_notes((notes))
+A_StockMovement_createdBy((createdBy))
+A_StockMovement_createdAt((createdAt))
+A_StockMovement_updatedAt((updatedAt))
+
+E_Subscription[Subscription]
+A_Subscription_id((id PK))
+A_Subscription_tenantId((tenantId))
+A_Subscription_planId((planId))
+A_Subscription_status((status))
+A_Subscription_startAt((startAt))
+A_Subscription_currentPeriodStart((currentPeriodStart))
+A_Subscription_currentPeriodEnd((currentPeriodEnd))
+A_Subscription_cancelAt((cancelAt))
+A_Subscription_canceledAt((canceledAt))
+A_Subscription_trialEndsAt((trialEndsAt))
+A_Subscription_provider((provider))
+A_Subscription_providerSubscriptionId((providerSubscriptionId))
+A_Subscription_providerCustomerId((providerCustomerId))
+A_Subscription_createdAt((createdAt))
+A_Subscription_updatedAt((updatedAt))
+
+E_SubscriptionItem[SubscriptionItem]
+A_SubscriptionItem_id((id PK))
+A_SubscriptionItem_subscriptionId((subscriptionId))
+A_SubscriptionItem_moduleKey((moduleKey))
+A_SubscriptionItem_quantity((quantity))
+A_SubscriptionItem_unitPrice((unitPrice))
+A_SubscriptionItem_createdAt((createdAt))
+A_SubscriptionItem_updatedAt((updatedAt))
+
+E_SubscriptionPayment[SubscriptionPayment]
+A_SubscriptionPayment_id((id PK))
+A_SubscriptionPayment_subscriptionId((subscriptionId))
+A_SubscriptionPayment_tenantId((tenantId))
+A_SubscriptionPayment_amount((amount))
+A_SubscriptionPayment_currency((currency))
+A_SubscriptionPayment_status((status))
+A_SubscriptionPayment_paymentMethodId((paymentMethodId))
+A_SubscriptionPayment_providerPaymentId((providerPaymentId))
+A_SubscriptionPayment_invoiceNumber((invoiceNumber))
+A_SubscriptionPayment_description((description))
+A_SubscriptionPayment_scheduledFor((scheduledFor))
+A_SubscriptionPayment_attemptedAt((attemptedAt))
+A_SubscriptionPayment_succeededAt((succeededAt))
+A_SubscriptionPayment_failedAt((failedAt))
+A_SubscriptionPayment_refundedAt((refundedAt))
+A_SubscriptionPayment_failureCode((failureCode))
+A_SubscriptionPayment_failureMessage((failureMessage))
+A_SubscriptionPayment_metadata((metadata))
+A_SubscriptionPayment_createdAt((createdAt))
+A_SubscriptionPayment_updatedAt((updatedAt))
+
+E_SupplierEvaluation[SupplierEvaluation]
+A_SupplierEvaluation_id((id PK))
+A_SupplierEvaluation_tenantId((tenantId))
+A_SupplierEvaluation_vendorId((vendorId))
+A_SupplierEvaluation_evaluatedBy((evaluatedBy))
+A_SupplierEvaluation_evaluationDate((evaluationDate))
+A_SupplierEvaluation_evaluationPeriod((evaluationPeriod))
+A_SupplierEvaluation_qualityRating((qualityRating))
+A_SupplierEvaluation_deliveryRating((deliveryRating))
+A_SupplierEvaluation_priceRating((priceRating))
+A_SupplierEvaluation_serviceRating((serviceRating))
+A_SupplierEvaluation_communicationRating((communicationRating))
+A_SupplierEvaluation_overallRating((overallRating))
+A_SupplierEvaluation_onTimeDeliveryRate((onTimeDeliveryRate))
+A_SupplierEvaluation_defectRate((defectRate))
+A_SupplierEvaluation_responseTime((responseTime))
+A_SupplierEvaluation_strengths((strengths))
+A_SupplierEvaluation_weaknesses((weaknesses))
+A_SupplierEvaluation_recommendations((recommendations))
+A_SupplierEvaluation_status((status))
+A_SupplierEvaluation_notes((notes))
+A_SupplierEvaluation_createdAt((createdAt))
+A_SupplierEvaluation_updatedAt((updatedAt))
+
+E_SystemOption[SystemOption]
+A_SystemOption_id((id PK))
+A_SystemOption_category((category))
+A_SystemOption_key((key))
+A_SystemOption_value((value))
+A_SystemOption_label((label))
+A_SystemOption_tenantId((tenantId))
+A_SystemOption_isActive((isActive))
+A_SystemOption_createdAt((createdAt))
+
+E_Tag[Tag]
+A_Tag_id((id PK))
+A_Tag_tenantId((tenantId))
+A_Tag_name((name))
+A_Tag_color((color))
+A_Tag_category((category))
+A_Tag_usageCount((usageCount))
+A_Tag_createdAt((createdAt))
+
+E_Task[Task]
+A_Task_id((id PK))
+A_Task_tenantId((tenantId))
+A_Task_employeeId((employeeId))
+A_Task_assignedBy((assignedBy))
+A_Task_title((title))
+A_Task_description((description))
+A_Task_priority((priority))
+A_Task_status((status))
+A_Task_dueDate((dueDate))
+A_Task_createdAt((createdAt))
+A_Task_updatedAt((updatedAt))
+
+E_TaxConfiguration[TaxConfiguration]
+A_TaxConfiguration_id((id PK))
+A_TaxConfiguration_tenantId((tenantId))
+A_TaxConfiguration_name((name))
+A_TaxConfiguration_taxType((taxType))
+A_TaxConfiguration_slabs((slabs))
+A_TaxConfiguration_deductionRules((deductionRules))
+A_TaxConfiguration_isActive((isActive))
+A_TaxConfiguration_effectiveFrom((effectiveFrom))
+A_TaxConfiguration_effectiveTo((effectiveTo))
+A_TaxConfiguration_createdAt((createdAt))
+A_TaxConfiguration_updatedAt((updatedAt))
+
+E_Tenant[Tenant]
+A_Tenant_id((id PK))
+A_Tenant_name((name))
+A_Tenant_createdAt((createdAt))
+
+E_TimeTracking[TimeTracking]
+A_TimeTracking_id((id PK))
+A_TimeTracking_tenantId((tenantId))
+A_TimeTracking_employeeId((employeeId))
+A_TimeTracking_date((date))
+A_TimeTracking_checkInTime((checkInTime))
+A_TimeTracking_checkOutTime((checkOutTime))
+A_TimeTracking_checkInLocation((checkInLocation))
+A_TimeTracking_checkOutLocation((checkOutLocation))
+A_TimeTracking_workHours((workHours))
+A_TimeTracking_breakHours((breakHours))
+A_TimeTracking_status((status))
+A_TimeTracking_isLate((isLate))
+A_TimeTracking_notes((notes))
+A_TimeTracking_createdAt((createdAt))
+A_TimeTracking_updatedAt((updatedAt))
+
+E_User[User]
+A_User_id((id PK))
+A_User_email((email))
+A_User_password((password))
+A_User_role((role))
+A_User_status((status))
+A_User_tenantId((tenantId))
+A_User_departmentId((departmentId))
+A_User_managerId((managerId))
+A_User_createdAt((createdAt))
+
+E_UserInvite[UserInvite]
+A_UserInvite_id((id PK))
+A_UserInvite_email((email))
+A_UserInvite_role((role))
+A_UserInvite_token((token))
+A_UserInvite_used((used))
+A_UserInvite_expiresAt((expiresAt))
+A_UserInvite_tenantId((tenantId))
+A_UserInvite_createdAt((createdAt))
+
+E_UserRole[UserRole]
+A_UserRole_userId((userId PK))
+A_UserRole_roleId((roleId PK))
+
+E_Vendor[Vendor]
+A_Vendor_id((id PK))
+A_Vendor_tenantId((tenantId))
+A_Vendor_vendorCode((vendorCode))
+A_Vendor_name((name))
+A_Vendor_contactPerson((contactPerson))
+A_Vendor_email((email))
+A_Vendor_phone((phone))
+A_Vendor_address((address))
+A_Vendor_city((city))
+A_Vendor_state((state))
+A_Vendor_country((country))
+A_Vendor_postalCode((postalCode))
+A_Vendor_website((website))
+A_Vendor_taxId((taxId))
+A_Vendor_paymentTerms((paymentTerms))
+A_Vendor_creditLimit((creditLimit))
+A_Vendor_currency((currency))
+A_Vendor_status((status))
+A_Vendor_category((category))
+A_Vendor_bankName((bankName))
+A_Vendor_accountNumber((accountNumber))
+A_Vendor_swiftCode((swiftCode))
+A_Vendor_rating((rating))
+A_Vendor_notes((notes))
+A_Vendor_createdAt((createdAt))
+A_Vendor_updatedAt((updatedAt))
+
+E_Warehouse[Warehouse]
+A_Warehouse_id((id PK))
+A_Warehouse_tenantId((tenantId))
+A_Warehouse_branchId((branchId))
+A_Warehouse_code((code))
+A_Warehouse_name((name))
+A_Warehouse_type((type))
+A_Warehouse_address((address))
+A_Warehouse_city((city))
+A_Warehouse_state((state))
+A_Warehouse_country((country))
+A_Warehouse_postalCode((postalCode))
+A_Warehouse_capacity((capacity))
+A_Warehouse_unit((unit))
+A_Warehouse_managerId((managerId))
+A_Warehouse_phone((phone))
+A_Warehouse_isActive((isActive))
+A_Warehouse_createdAt((createdAt))
+A_Warehouse_updatedAt((updatedAt))
+
+E_WarehouseStock[WarehouseStock]
+A_WarehouseStock_id((id PK))
+A_WarehouseStock_tenantId((tenantId))
+A_WarehouseStock_warehouseId((warehouseId))
+A_WarehouseStock_itemId((itemId))
+A_WarehouseStock_quantity((quantity))
+A_WarehouseStock_reservedQty((reservedQty))
+A_WarehouseStock_availableQty((availableQty))
+A_WarehouseStock_binLocation((binLocation))
+A_WarehouseStock_zone((zone))
+A_WarehouseStock_reorderPoint((reorderPoint))
+A_WarehouseStock_reorderQty((reorderQty))
+A_WarehouseStock_minStock((minStock))
+A_WarehouseStock_maxStock((maxStock))
+A_WarehouseStock_lastPurchasePrice((lastPurchasePrice))
+A_WarehouseStock_avgCost((avgCost))
+A_WarehouseStock_createdAt((createdAt))
+A_WarehouseStock_updatedAt((updatedAt))
+
+E_Workflow[Workflow]
+A_Workflow_id((id PK))
+A_Workflow_tenantId((tenantId))
+A_Workflow_module((module))
+A_Workflow_action((action))
+A_Workflow_status((status))
+A_Workflow_createdAt((createdAt))
+
+E_WorkflowRequest[WorkflowRequest]
+A_WorkflowRequest_id((id PK))
+A_WorkflowRequest_tenantId((tenantId))
+A_WorkflowRequest_workflowId((workflowId))
+A_WorkflowRequest_module((module))
+A_WorkflowRequest_action((action))
+A_WorkflowRequest_payload((payload))
+A_WorkflowRequest_status((status))
+A_WorkflowRequest_createdBy((createdBy))
+A_WorkflowRequest_requestedBy((requestedBy))
+A_WorkflowRequest_createdAt((createdAt))
+
+E_WorkflowStep[WorkflowStep]
+A_WorkflowStep_id((id PK))
+A_WorkflowStep_workflowId((workflowId))
+A_WorkflowStep_stepOrder((stepOrder))
+A_WorkflowStep_permission((permission))
+
+E_WorkflowTemplate[WorkflowTemplate]
+A_WorkflowTemplate_id((id PK))
+A_WorkflowTemplate_name((name))
+A_WorkflowTemplate_description((description))
+A_WorkflowTemplate_industry((industry))
+A_WorkflowTemplate_module((module))
+A_WorkflowTemplate_steps((steps))
+A_WorkflowTemplate_isDefault((isDefault))
+A_WorkflowTemplate_createdAt((createdAt))
+
+E_WorkOrder[WorkOrder]
+A_WorkOrder_id((id PK))
+A_WorkOrder_tenantId((tenantId))
+A_WorkOrder_workOrderNumber((workOrderNumber))
+A_WorkOrder_bomId((bomId))
+A_WorkOrder_productId((productId))
+A_WorkOrder_plannedQty((plannedQty))
+A_WorkOrder_producedQty((producedQty))
+A_WorkOrder_scrappedQty((scrappedQty))
+A_WorkOrder_scheduledStart((scheduledStart))
+A_WorkOrder_scheduledEnd((scheduledEnd))
+A_WorkOrder_actualStart((actualStart))
+A_WorkOrder_actualEnd((actualEnd))
+A_WorkOrder_warehouseId((warehouseId))
+A_WorkOrder_workCenter((workCenter))
+A_WorkOrder_status((status))
+A_WorkOrder_priority((priority))
+A_WorkOrder_estimatedCost((estimatedCost))
+A_WorkOrder_actualCost((actualCost))
+A_WorkOrder_salesOrderId((salesOrderId))
+A_WorkOrder_projectId((projectId))
+A_WorkOrder_assignedTo((assignedTo))
+A_WorkOrder_notes((notes))
+A_WorkOrder_createdBy((createdBy))
+A_WorkOrder_completedBy((completedBy))
+A_WorkOrder_completedAt((completedAt))
+A_WorkOrder_createdAt((createdAt))
+A_WorkOrder_updatedAt((updatedAt))
+
+E_WorkOrderMaterial[WorkOrderMaterial]
+A_WorkOrderMaterial_id((id PK))
+A_WorkOrderMaterial_workOrderId((workOrderId))
+A_WorkOrderMaterial_itemId((itemId))
+A_WorkOrderMaterial_plannedQty((plannedQty))
+A_WorkOrderMaterial_issuedQty((issuedQty))
+A_WorkOrderMaterial_consumedQty((consumedQty))
+A_WorkOrderMaterial_returnedQty((returnedQty))
+A_WorkOrderMaterial_warehouseId((warehouseId))
+A_WorkOrderMaterial_unitCost((unitCost))
+A_WorkOrderMaterial_totalCost((totalCost))
+A_WorkOrderMaterial_status((status))
+A_WorkOrderMaterial_issuedBy((issuedBy))
+A_WorkOrderMaterial_issuedAt((issuedAt))
+A_WorkOrderMaterial_notes((notes))
+A_WorkOrderMaterial_createdAt((createdAt))
+A_WorkOrderMaterial_updatedAt((updatedAt))
+
+E_WorkOrderOperation[WorkOrderOperation]
+A_WorkOrderOperation_id((id PK))
+A_WorkOrderOperation_workOrderId((workOrderId))
+A_WorkOrderOperation_sequence((sequence))
+A_WorkOrderOperation_operationName((operationName))
+A_WorkOrderOperation_description((description))
+A_WorkOrderOperation_workCenter((workCenter))
+A_WorkOrderOperation_estimatedHours((estimatedHours))
+A_WorkOrderOperation_actualHours((actualHours))
+A_WorkOrderOperation_assignedTo((assignedTo))
+A_WorkOrderOperation_laborCost((laborCost))
+A_WorkOrderOperation_status((status))
+A_WorkOrderOperation_startedAt((startedAt))
+A_WorkOrderOperation_completedAt((completedAt))
+A_WorkOrderOperation_notes((notes))
+A_WorkOrderOperation_createdAt((createdAt))
+A_WorkOrderOperation_updatedAt((updatedAt))
+
+E_WorkReport[WorkReport]
+A_WorkReport_id((id PK))
+A_WorkReport_tenantId((tenantId))
+A_WorkReport_employeeId((employeeId))
+A_WorkReport_taskId((taskId))
+A_WorkReport_title((title))
+A_WorkReport_description((description))
+A_WorkReport_workDate((workDate))
+A_WorkReport_hoursSpent((hoursSpent))
+A_WorkReport_attachments((attachments))
+A_WorkReport_createdAt((createdAt))
+
+R_001{tenant}
+E_CompanyConfig -- 0..1 --> R_001
+R_001 -- 1 --> E_Tenant
+
+R_002{plan}
+E_PlanModule -- N --> R_002
+R_002 -- 1 --> E_Plan
+
+R_003{tenant}
+E_Subscription -- N --> R_003
+R_003 -- 1 --> E_Tenant
+
+R_004{plan}
+E_Subscription -- N --> R_004
+R_004 -- 1 --> E_Plan
+
+R_005{subscription}
+E_SubscriptionItem -- N --> R_005
+R_005 -- 1 --> E_Subscription
+
+R_006{subscription}
+E_SubscriptionPayment -- N --> R_006
+R_006 -- 1 --> E_Subscription
+
+R_007{tenant}
+E_User -- N --> R_007
+R_007 -- 1 --> E_Tenant
+
+R_008{department}
+E_User -- N --> R_008
+R_008 -- 0..1 --> E_Department
+
+R_009{role}
+E_RolePermission -- N --> R_009
+R_009 -- 1 --> E_Role
+
+R_010{permission}
+E_RolePermission -- N --> R_010
+R_010 -- 1 --> E_Permission
+
+R_011{user}
+E_UserRole -- N --> R_011
+R_011 -- 1 --> E_User
+
+R_012{role}
+E_UserRole -- N --> R_012
+R_012 -- 1 --> E_Role
+
+R_013{workflow}
+E_WorkflowStep -- N --> R_013
+R_013 -- 1 --> E_Workflow
+
+R_014{tenant}
+E_Item -- N --> R_014
+R_014 -- 1 --> E_Tenant
+
+R_015{tenant}
+E_SalesQuotation -- N --> R_015
+R_015 -- 1 --> E_Tenant
+
+R_016{customer}
+E_SalesQuotation -- N --> R_016
+R_016 -- 0..1 --> E_Customer
+
+R_017{deal}
+E_SalesQuotation -- N --> R_017
+R_017 -- 0..1 --> E_Deal
+
+R_018{tenant}
+E_SalesOrder -- N --> R_018
+R_018 -- 1 --> E_Tenant
+
+R_019{customer}
+E_SalesOrder -- N --> R_019
+R_019 -- 0..1 --> E_Customer
+
+R_020{deal}
+E_SalesOrder -- N --> R_020
+R_020 -- 0..1 --> E_Deal
+
+R_021{tenant}
+E_SalesInvoice -- N --> R_021
+R_021 -- 1 --> E_Tenant
+
+R_022{customer}
+E_SalesInvoice -- N --> R_022
+R_022 -- 0..1 --> E_Customer
+
+R_023{deal}
+E_SalesInvoice -- N --> R_023
+R_023 -- 0..1 --> E_Deal
+
+R_024{invoice}
+E_InvoicePayment -- N --> R_024
+R_024 -- 1 --> E_SalesInvoice
+
+R_025{tenant}
+E_SalesOrderTracking -- N --> R_025
+R_025 -- 1 --> E_Tenant
+
+R_026{order}
+E_SalesOrderTracking -- N --> R_026
+R_026 -- 1 --> E_SalesOrder
+
+R_027{tenant}
+E_UserInvite -- N --> R_027
+R_027 -- 1 --> E_Tenant
+
+R_028{workflow}
+E_Approval -- N --> R_028
+R_028 -- 1 --> E_Workflow
+
+R_029{workflowRequest}
+E_Approval -- N --> R_029
+R_029 -- 0..1 --> E_WorkflowRequest
+
+R_030{workflowStep}
+E_Approval -- N --> R_030
+R_030 -- 0..1 --> E_WorkflowStep
+
+R_031{user}
+E_Employee -- 0..1 --> R_031
+R_031 -- 1 --> E_User
+
+R_032{department}
+E_Employee -- N --> R_032
+R_032 -- 1 --> E_Department
+
+R_033{manager}
+E_Employee -- N --> R_033
+R_033 -- 0..1 --> E_Employee
+
+R_034{employee}
+E_LeaveRequest -- N --> R_034
+R_034 -- 1 --> E_Employee
+
+R_035{leaveType}
+E_LeaveRequest -- N --> R_035
+R_035 -- 1 --> E_LeaveType
+
+R_036{employee}
+E_ExpenseClaim -- N --> R_036
+R_036 -- 1 --> E_Employee
+
+R_037{category}
+E_ExpenseClaim -- N --> R_037
+R_037 -- 1 --> E_ExpenseCategory
+
+R_038{employee}
+E_Task -- N --> R_038
+R_038 -- 1 --> E_Employee
+
+R_039{assigner}
+E_Task -- N --> R_039
+R_039 -- 1 --> E_Employee
+
+R_040{employee}
+E_SalaryStructure -- 0..1 --> R_040
+R_040 -- 1 --> E_Employee
+
+R_041{employee}
+E_WorkReport -- N --> R_041
+R_041 -- 1 --> E_Employee
+
+R_042{task}
+E_WorkReport -- N --> R_042
+R_042 -- 0..1 --> E_Task
+
+R_043{employee}
+E_Notification -- N --> R_043
+R_043 -- 1 --> E_Employee
+
+R_044{owner}
+E_Customer -- N --> R_044
+R_044 -- 0..1 --> E_User
+
+R_045{customer}
+E_Contact -- N --> R_045
+R_045 -- 1 --> E_Customer
+
+R_046{owner}
+E_Contact -- N --> R_046
+R_046 -- 0..1 --> E_User
+
+R_047{customer}
+E_Lead -- N --> R_047
+R_047 -- 0..1 --> E_Customer
+
+R_048{contact}
+E_Lead -- N --> R_048
+R_048 -- 0..1 --> E_Contact
+
+R_049{deal}
+E_Lead -- N --> R_049
+R_049 -- 0..1 --> E_Deal
+
+R_050{owner}
+E_Lead -- N --> R_050
+R_050 -- 0..1 --> E_User
+
+R_051{customer}
+E_Deal -- N --> R_051
+R_051 -- 1 --> E_Customer
+
+R_052{owner}
+E_Deal -- N --> R_052
+R_052 -- 0..1 --> E_User
+
+R_053{pipeline}
+E_Deal -- N --> R_053
+R_053 -- 0..1 --> E_Pipeline
+
+R_054{customer}
+E_Communication -- N --> R_054
+R_054 -- 0..1 --> E_Customer
+
+R_055{contact}
+E_Communication -- N --> R_055
+R_055 -- 0..1 --> E_Contact
+
+R_056{lead}
+E_Communication -- N --> R_056
+R_056 -- 0..1 --> E_Lead
+
+R_057{deal}
+E_Communication -- N --> R_057
+R_057 -- 0..1 --> E_Deal
+
+R_058{activity}
+E_Communication -- N --> R_058
+R_058 -- 0..1 --> E_Activity
+
+R_059{creator}
+E_Communication -- N --> R_059
+R_059 -- 0..1 --> E_User
+
+R_060{pipeline}
+E_PipelineStage -- N --> R_060
+R_060 -- 1 --> E_Pipeline
+
+R_061{customer}
+E_Activity -- N --> R_061
+R_061 -- 0..1 --> E_Customer
+
+R_062{contact}
+E_Activity -- N --> R_062
+R_062 -- 0..1 --> E_Contact
+
+R_063{lead}
+E_Activity -- N --> R_063
+R_063 -- 0..1 --> E_Lead
+
+R_064{deal}
+E_Activity -- N --> R_064
+R_064 -- 0..1 --> E_Deal
+
+R_065{assignee}
+E_Activity -- N --> R_065
+R_065 -- 0..1 --> E_User
+
+R_066{creator}
+E_Activity -- N --> R_066
+R_066 -- 1 --> E_User
+
+R_067{customer}
+E_CustomerNote -- N --> R_067
+R_067 -- 1 --> E_Customer
+
+R_068{creator}
+E_CustomerNote -- N --> R_068
+R_068 -- 1 --> E_User
+
+R_069{customer}
+E_Attachment -- N --> R_069
+R_069 -- 0..1 --> E_Customer
+
+R_070{deal}
+E_Attachment -- N --> R_070
+R_070 -- 0..1 --> E_Deal
+
+R_071{communication}
+E_Attachment -- N --> R_071
+R_071 -- 0..1 --> E_Communication
+
+R_072{uploader}
+E_Attachment -- N --> R_072
+R_072 -- 1 --> E_User
+
+R_073{vendor}
+E_PurchaseRequisition -- N --> R_073
+R_073 -- 0..1 --> E_Vendor
+
+R_074{vendor}
+E_PurchaseOrder -- N --> R_074
+R_074 -- 1 --> E_Vendor
+
+R_075{requisition}
+E_PurchaseOrder -- N --> R_075
+R_075 -- 0..1 --> E_PurchaseRequisition
+
+R_076{purchaseOrder}
+E_GoodsReceipt -- N --> R_076
+R_076 -- 1 --> E_PurchaseOrder
+
+R_077{vendor}
+E_SupplierEvaluation -- N --> R_077
+R_077 -- 1 --> E_Vendor
+
+R_078{vendor}
+E_APBill -- N --> R_078
+R_078 -- 1 --> E_Vendor
+
+R_079{purchaseOrder}
+E_APBill -- N --> R_079
+R_079 -- 0..1 --> E_PurchaseOrder
+
+R_080{vendor}
+E_Payment -- N --> R_080
+R_080 -- 1 --> E_Vendor
+
+R_081{department}
+E_Project -- N --> R_081
+R_081 -- 0..1 --> E_Department
+
+R_082{project}
+E_ProjectMember -- N --> R_082
+R_082 -- 1 --> E_Project
+
+R_083{project}
+E_ProjectMilestone -- N --> R_083
+R_083 -- 1 --> E_Project
+
+R_084{predecessor}
+E_ProjectMilestoneDependency -- N --> R_084
+R_084 -- 1 --> E_ProjectMilestone
+
+R_085{successor}
+E_ProjectMilestoneDependency -- N --> R_085
+R_085 -- 1 --> E_ProjectMilestone
+
+R_086{project}
+E_ProjectResource -- N --> R_086
+R_086 -- 1 --> E_Project
+
+R_087{project}
+E_ProjectBudget -- N --> R_087
+R_087 -- 1 --> E_Project
+
+R_088{project}
+E_ProjectTimeLog -- N --> R_088
+R_088 -- 1 --> E_Project
+
+R_089{timesheet}
+E_ProjectTimeLog -- N --> R_089
+R_089 -- 0..1 --> E_ProjectTimesheet
+
+R_090{employee}
+E_Attendance -- N --> R_090
+R_090 -- 1 --> E_Employee
+
+R_091{employee}
+E_Payslip -- N --> R_091
+R_091 -- 1 --> E_Employee
+
+R_092{payrollCycle}
+E_Payslip -- N --> R_092
+R_092 -- 1 --> E_PayrollCycle
+
+R_093{payrollCycle}
+E_SalaryDisbursement -- N --> R_093
+R_093 -- 1 --> E_PayrollCycle
+
+R_094{employee}
+E_SalaryDisbursement -- N --> R_094
+R_094 -- 1 --> E_Employee
+
+R_095{employee}
+E_ShiftAssignment -- N --> R_095
+R_095 -- 1 --> E_Employee
+
+R_096{shift}
+E_ShiftAssignment -- N --> R_096
+R_096 -- 1 --> E_Shift
+
+R_097{employee}
+E_TimeTracking -- N --> R_097
+R_097 -- 1 --> E_Employee
+
+R_098{shift}
+E_OvertimePolicy -- N --> R_098
+R_098 -- 0..1 --> E_Shift
+
+R_099{employee}
+E_OvertimeRecord -- N --> R_099
+R_099 -- 1 --> E_Employee
+
+R_100{overtimePolicy}
+E_OvertimeRecord -- N --> R_100
+R_100 -- 1 --> E_OvertimePolicy
+
+R_101{employee}
+E_AttendanceReport -- N --> R_101
+R_101 -- 1 --> E_Employee
+
+R_102{employee}
+E_LeaveIntegration -- N --> R_102
+R_102 -- 1 --> E_Employee
+
+R_103{category}
+E_Asset -- N --> R_103
+R_103 -- 1 --> E_AssetCategory
+
+R_104{asset}
+E_AssetAllocation -- N --> R_104
+R_104 -- 1 --> E_Asset
+
+R_105{employee}
+E_AssetAllocation -- N --> R_105
+R_105 -- 1 --> E_Employee
+
+R_106{asset}
+E_AssetMaintenance -- N --> R_106
+R_106 -- 1 --> E_Asset
+
+R_107{asset}
+E_AssetDepreciation -- N --> R_107
+R_107 -- 1 --> E_Asset
+
+R_108{parent}
+E_DocumentFolder -- N --> R_108
+R_108 -- 0..1 --> E_DocumentFolder
+
+R_109{folder}
+E_Document -- N --> R_109
+R_109 -- 0..1 --> E_DocumentFolder
+
+R_110{template}
+E_Document -- N --> R_110
+R_110 -- 0..1 --> E_DocumentTemplate
+
+R_111{document}
+E_DocumentVersion -- N --> R_111
+R_111 -- 1 --> E_Document
+
+R_112{document}
+E_DocumentShare -- N --> R_112
+R_112 -- 1 --> E_Document
+
+R_113{document}
+E_DocumentPermission -- N --> R_113
+R_113 -- 1 --> E_Document
+
+R_114{folder}
+E_DocumentFolderPermission -- N --> R_114
+R_114 -- 1 --> E_DocumentFolder
+
+R_115{document}
+E_DocumentActivity -- N --> R_115
+R_115 -- 0..1 --> E_Document
+
+R_116{share}
+E_DocumentActivity -- N --> R_116
+R_116 -- 0..1 --> E_DocumentShare
+
+R_117{document}
+E_DocumentComment -- N --> R_117
+R_117 -- 1 --> E_Document
+
+R_118{parent}
+E_DocumentComment -- N --> R_118
+R_118 -- 0..1 --> E_DocumentComment
+
+R_119{template}
+E_Report -- N --> R_119
+R_119 -- 0..1 --> E_ReportTemplate
+
+R_120{conversation}
+E_ConversationParticipant -- N --> R_120
+R_120 -- 1 --> E_Conversation
+
+R_121{conversation}
+E_Message -- N --> R_121
+R_121 -- 1 --> E_Conversation
+
+R_122{message}
+E_MessageReaction -- N --> R_122
+R_122 -- 1 --> E_Message
+
+R_123{message}
+E_MessageReadReceipt -- N --> R_123
+R_123 -- 1 --> E_Message
+
+R_124{announcement}
+E_AnnouncementRead -- N --> R_124
+R_124 -- 1 --> E_Announcement
+
+R_125{channel}
+E_ChatChannelMember -- N --> R_125
+R_125 -- 1 --> E_ChatChannel
+
+R_126{branch}
+E_Warehouse -- N --> R_126
+R_126 -- 0..1 --> E_Branch
+
+R_127{warehouse}
+E_WarehouseStock -- N --> R_127
+R_127 -- 1 --> E_Warehouse
+
+R_128{warehouse}
+E_StockMovement -- N --> R_128
+R_128 -- 0..1 --> E_Warehouse
+
+R_129{parent}
+E_ChartOfAccounts -- N --> R_129
+R_129 -- 0..1 --> E_ChartOfAccounts
+
+R_130{journalEntry}
+E_JournalEntryLine -- N --> R_130
+R_130 -- 1 --> E_JournalEntry
+
+R_131{account}
+E_JournalEntryLine -- N --> R_131
+R_131 -- 1 --> E_ChartOfAccounts
+
+R_132{account}
+E_LedgerEntry -- N --> R_132
+R_132 -- 1 --> E_ChartOfAccounts
+
+R_133{bom}
+E_BOMItem -- N --> R_133
+R_133 -- 1 --> E_BillOfMaterials
+
+R_134{bom}
+E_WorkOrder -- N --> R_134
+R_134 -- 1 --> E_BillOfMaterials
+
+R_135{workOrder}
+E_WorkOrderOperation -- N --> R_135
+R_135 -- 1 --> E_WorkOrder
+
+R_136{workOrder}
+E_WorkOrderMaterial -- N --> R_136
+R_136 -- 1 --> E_WorkOrder
+

@@ -1,0 +1,39 @@
+@startuml UEORMS_Sequence_08
+!pragma teoz true
+autonumber
+hide footbox
+
+actor "Sales Manager" as SalesM
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Notification Service" as Notify
+control "Integration Service" as Integr
+control "Integration Event Manager" as EventBus
+control "Finance + Accounting Services" as Finance
+control "CRM Service" as CRM
+control "Sales Service" as Sales
+control "Reports + Reporting Services" as Reports
+database "PostgreSQL via Prisma" as DB
+
+== 8) CRM and Sales ==
+SalesM -> Client : CRM lifecycle
+Client -> API : /api/crm/customers contacts leads deals pipelines activities attachments communications
+API -> CRM : customer lifecycle + pipeline + activity orchestration
+CRM -> DB : Customer, Contact, Lead, Deal, Pipeline, PipelineStage, Activity, Attachment, Communication, Tag
+CRM -> Notify : reminders/overdue/upcoming activity notifications
+CRM --> API : CRM result
+API --> Client : CRM updated
+
+SalesM -> Client : Sales lifecycle
+Client -> API : /api/sales/quotations orders invoices trackings payments analytics
+API -> Sales : quotation->order->invoice conversions and tracking
+Sales -> DB : SalesQuotation, SalesOrder, SalesInvoice, InvoicePayment, SalesOrderTracking
+Sales -> Integr : sync sales order completion to AR/GL
+Integr -> EventBus : sales:order:completed
+EventBus -> Finance : revenue posting sync
+Sales -> Reports : sales analytics/forecast/export jobs
+Sales --> API : sales output
+API --> Client : sales completed
+
+
+@enduml

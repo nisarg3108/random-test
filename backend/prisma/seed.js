@@ -1,5 +1,6 @@
 import { seedPermissions } from '../src/core/rbac/permissions.seed.js';
 import prisma from '../src/config/db.js';
+import { seedComprehensiveDemoData } from './demo.seed.js';
 
 const seedPlans = async () => {
   const plans = [
@@ -339,6 +340,7 @@ async function main() {
   
   await seedPermissions();
   await seedPlans();
+  await seedComprehensiveDemoData();
   await seedSampleCRM();
   await seedDefaultPipeline();
   

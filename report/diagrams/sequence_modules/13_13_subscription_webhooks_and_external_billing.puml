@@ -1,0 +1,27 @@
+@startuml UEORMS_Sequence_13
+!pragma teoz true
+autonumber
+hide footbox
+
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Notification Service" as Notify
+control "Email Service + Queue" as Email
+control "Billing Service" as Billing
+entity "Stripe / Razorpay" as Gateway
+database "PostgreSQL via Prisma" as DB
+
+== 13) Subscription Webhooks and External Billing ==
+Gateway -> API : POST /api/billing/webhooks/stripe|razorpay
+API -> Billing : validate signature/event + idempotency check
+Billing -> DB : BillingEvent find/create/update
+alt event not processed
+  Billing -> DB : update subscription/payment state
+  Billing -> Notify : subscription/billing notification
+  Billing -> Email : invoice email / failure notice
+else already processed
+  Billing --> API : idempotent ack
+end
+API --> Gateway : webhook acknowledged
+
+
+@enduml

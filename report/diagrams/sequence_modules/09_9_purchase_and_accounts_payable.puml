@@ -1,0 +1,42 @@
+@startuml UEORMS_Sequence_09
+!pragma teoz true
+autonumber
+hide footbox
+
+actor "Finance Manager" as FinM
+actor "Purchase Manager" as PurM
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Workflow Engine + Approval Service" as WF
+control "Notification Service" as Notify
+control "Integration Service" as Integr
+control "Integration Event Manager" as EventBus
+control "Finance + Accounting Services" as Finance
+control "Inventory + Warehouse Services" as Inventory
+control "Purchase Service" as Purchase
+control "AP Service" as AP
+database "PostgreSQL via Prisma" as DB
+
+== 9) Purchase and Accounts Payable ==
+PurM -> Client : Procurement lifecycle
+Client -> API : /api/purchase/vendors requisitions orders receipts evaluations analytics
+API -> Purchase : requisition->PO->receipt workflows
+Purchase -> DB : Vendor, PurchaseRequisition, PurchaseOrder, GoodsReceipt, SupplierEvaluation
+Purchase -> WF : requisition/PO approvals
+Purchase -> Inventory : stock updates on receipt
+Purchase -> Integr : AP/GL sync on receipt/invoice
+Integr -> EventBus : purchase:order:received
+EventBus -> AP : AP sync trigger
+API --> Client : purchase result
+
+FinM -> Client : AP operations
+Client -> API : /api/ap/bills payments aging vendor statement
+API -> AP : bill lifecycle + three-way match + payments
+AP -> DB : APBill, Payment
+AP -> WF : bill approval chain
+AP -> Finance : payable postings
+AP -> Notify : due/overdue reminders
+API --> Client : AP result
+
+
+@enduml

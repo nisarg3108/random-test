@@ -1,0 +1,256 @@
+<mxfile host="app.diagrams.net" modified="2026-03-03T00:00:00.000Z" agent="Codex" version="24.7.17" etag="seq-split">
+  <diagram id="05_5_hr_attendance_payroll_disbursement" name="05_5_hr_attendance_payroll_disbursement">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3260" pageHeight="1286" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="05 5 hr attendance payroll disbursement" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="20" y="0" width="900" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="Employee" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#fff2cc;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="HR Manager" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#fff2cc;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="330" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="Web/Mobile Client" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#dae8fc;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="Express API Layer\n(app.js route orchestration)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="750" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="Workflow Engine + Approval Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="960" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="Notification Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="Email Service + Queue" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="17" value="Integration Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="18" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1670" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="19" value="Integration Event Manager" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="HR Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2010" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2090" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="23" value="Attendance Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2220" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2300" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="25" value="Payroll + Disbursement Services" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2430" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="26" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2510" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="27" value="Finance + Accounting Services" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2640" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="28" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="29" value="PostgreSQL via Prisma" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#e1d5e7;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2850" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="30" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2930" y="74" width="1" height="1132" as="geometry"/>
+        </mxCell>
+        <mxCell id="31" value="5) HR, Attendance, Payroll, Disbursement" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#999999;fillColor=#f5f5f5;align=center;verticalAlign=middle;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="108" width="3180" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="32" value="Employee/Leave operations" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="158" as="sourcePoint"/>
+            <mxPoint x="620" y="158" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="33" value="/api/employees, /api/leave-types, /api/leave-requests" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="196" as="sourcePoint"/>
+            <mxPoint x="830" y="196" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="34" value="employee + leave service flows" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="234" as="sourcePoint"/>
+            <mxPoint x="2090" y="234" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="35" value="Employee, LeaveType, LeaveRequest, Task, WorkReport" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2090" y="272" as="sourcePoint"/>
+            <mxPoint x="2930" y="272" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="36" value="HR transaction data" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2930" y="310" as="sourcePoint"/>
+            <mxPoint x="2090" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="37" value="leave approval workflow trigger" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2090" y="348" as="sourcePoint"/>
+            <mxPoint x="1040" y="348" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="38" value="approver + requester notifications" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1040" y="386" as="sourcePoint"/>
+            <mxPoint x="1250" y="386" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="39" value="HR result" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="424" as="sourcePoint"/>
+            <mxPoint x="620" y="424" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="40" value="Clock in/out, view attendance" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="462" as="sourcePoint"/>
+            <mxPoint x="620" y="462" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="41" value="/api/attendance/clock-in, /clock-out, /reports" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="500" as="sourcePoint"/>
+            <mxPoint x="830" y="500" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="42" value="time tracking, shifts, overtime, reports" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="538" as="sourcePoint"/>
+            <mxPoint x="2300" y="538" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="43" value="Attendance, TimeTracking, ShiftAssignment, OvertimeRecord, AttendanceReport" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2300" y="576" as="sourcePoint"/>
+            <mxPoint x="2930" y="576" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="44" value="overtime approval requests" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2300" y="614" as="sourcePoint"/>
+            <mxPoint x="1040" y="614" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="45" value="attendance/ot alerts" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2300" y="652" as="sourcePoint"/>
+            <mxPoint x="1250" y="652" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="46" value="attendance status" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="690" as="sourcePoint"/>
+            <mxPoint x="620" y="690" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="47" value="Run payroll" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="728" as="sourcePoint"/>
+            <mxPoint x="620" y="728" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="48" value="/api/payroll/cycles, generate-payslips, disbursements" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="766" as="sourcePoint"/>
+            <mxPoint x="830" y="766" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="49" value="payroll cycle calculation + payslip generation" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="804" as="sourcePoint"/>
+            <mxPoint x="2510" y="804" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="50" value="PayrollCycle, Payslip, SalaryComponent, TaxConfiguration, SalaryDisbursement" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2510" y="842" as="sourcePoint"/>
+            <mxPoint x="2930" y="842" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="51" value="payslip/finance approvals where configured" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2510" y="880" as="sourcePoint"/>
+            <mxPoint x="1040" y="880" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="52" value="sync payroll to GL" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2510" y="918" as="sourcePoint"/>
+            <mxPoint x="1670" y="918" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="53" value="emit payroll:cycle:processed" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1670" y="956" as="sourcePoint"/>
+            <mxPoint x="1880" y="956" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="54" value="payroll accounting sync trigger" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1880" y="994" as="sourcePoint"/>
+            <mxPoint x="2720" y="994" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="55" value="payslip/disbursement notices" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2510" y="1032" as="sourcePoint"/>
+            <mxPoint x="1460" y="1032" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="56" value="payroll outputs" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2510" y="1070" as="sourcePoint"/>
+            <mxPoint x="830" y="1070" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="57" value="payroll completed" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="1108" as="sourcePoint"/>
+            <mxPoint x="620" y="1108" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

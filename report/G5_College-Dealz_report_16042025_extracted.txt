@@ -1,0 +1,1966 @@
+
+
+--- PAGE 1 ---
+ 
+ 
+A  
+Project Report  
+On 
+ 
+COLLEGE DEALZ 
+BTech-IT, Sem VI 
+ 
+ 
+Prepared By: 
+Nand Rabadiya (IT-118) 
+Venu Virparia (IT-156) 
+ 
+ 
+Guided By: 
+Prof. Kunal J. Sahitya 
+Dept. of Information Technology 
+ 
+ 
+ 
+Department of Information Technology 
+Faculty of Technology, 
+Dharmsinh Desai University 
+College Road, Nadiad-387001 
+ 
+April, 2025 
+
+--- PAGE 2 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  i 
+ 
+CANDIDATE’S DECLARATION 
+ 
+ 
+ 
+We declare that 6th semester report entitled College Dealz is our work conducted under 
+the supervision of the guide Professor Kunal J. Sahitya. 
+We further declare that to the best of our knowledge the report for B.Tech, VI semester 
+does not contain part of the work which has been submitted either in this or any other 
+university without proper citation.  
+ 
+ 
+ 
+ 
+ 
+ 
+Candidate’s Signature: 
+Candidate’s Name: Rabadiya Nand D. 
+Student ID: 22ITUOS003 
+  
+ 
+Candidate’s Signature: 
+Candidate’s Name: Virparia Venu K. 
+Student ID: 22ITUOS055 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 3 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  ii 
+ 
+ 
+DHARMSINH DESAI UNIVERSITY 
+NADIAD-387001, GUJARAT 
+ 
+ 
+ 
+CERTIFICATE 
+ 
+This is to certify that the project carried out in the subject of Project-I, entitled “College 
+Dealz” and recorded in this report is a Bonafide report of work of 
+1) Rabadiya Nand D.      Roll No.:  IT118     ID No.:  22ITUOS003 
+2) Virparia Venu K.        Roll No.:  IT156     ID No.:  22ITUOS055 
+of Department of Information Technology, semester VI. They were involved in Project 
+work during academic year 2024-2025. 
+ 
+ 
+ 
+Prof. Kunal J. Sahitya 
+(Project Guide), 
+Department of Information Technology, 
+Faculty of Technology, 
+Dharmsinh Desai University, Nadiad 
+Date: 
+ 
+ 
+ 
+ 
+Prof. (Dr.) V. K. Dabhi 
+Head, Department of Information Technology, 
+Faculty of Technology,  
+Dharmsinh Desai University, Nadiad 
+Date: 
+ 
+ 
+
+--- PAGE 4 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  iii 
+ 
+ACKNOWLEDGEMENT 
+ 
+We are truly grateful to everyone who helped bring this project to life. Without the 
+valuable support and guidance of many individuals, overcoming the challenges of this 
+journey would have been difficult. 
+ 
+While theoretical knowledge lays the foundation, it is through practical application that 
+true understanding and growth are achieved. We sincerely thank our institution for 
+providing us with the platform to transform our learning into real-world solutions. This 
+project stands as a testament to our academic progress and collective effort. 
+ 
+We extend our deepest gratitude to our mentor, Prof. Kunal J. Sahitya, whose 
+unwavering support, insightful feedback, and continuous encouragement played a vital 
+role in the successful completion of this project. His guidance not only refined our 
+technical approach but also kept us aligned with our goals throughout the development 
+process. 
+ 
+Lastly, we wholeheartedly appreciate everyone who contributed, directly or indirectly, 
+to these endeavours. Your encouragement, suggestions, and belief in our vision have 
+meant a great deal to us. 
+ 
+ 
+ 
+Rabadiya Nand D.  (IT-118) 
+ 
+ 
+ 
+Virparia Venu K.    (IT-156)                    
+ 
+ 
+B. Tech Semester VI  
+Department of Information Technology  
+Dharmsinh Desai University 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 5 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  iv 
+ 
+TABLE OF CONTENTS 
+ 
+ABSTRACT .............................................................................................................. vii   
+TABLES .................................................................................................................... viii 
+       1. List of Figures ................................................................................................. viii  
+       2. List of Tables ....................................................................................................viii 
+1. INTRODUCTION ................................................................................................. 01   
+       1.1 Project Details................................................................................................. 01   
+       1.2 Purpose ........................................................................................................... 01   
+       1.3 Scope .............................................................................................................. 01   
+       1.4 Objective ........................................................................................................ 02 
+       1.5 Technology and Literature Review ................................................................. 02   
+2. PROJECT MANAGEMENT...............................................................................  04 
+       2.1 Feasibility Study .............................................................................................04   
+              2.1.1 Technical Feasibility  .............................................................................04 
+              2.1.2 Time Schedule Feasibility  .................................................................... 04 
+              2.1.3 Operational Feasibility  ........................................................................ 04 
+              2.1.4 Implementation Feasibility  ...................................................................05 
+       2.2 Project Planning ............................................................................................. 05 
+              2.2.1 Project Development Approach and Justification.................................. 05   
+              2.2.2 Project Plan  .......................................................................................... 06   
+              2.2.3 Milestones and Deliverables  ................................................................ 06   
+              2.2.4 Roles and Responsibilities  .................................................................. 07   
+              2.2.5 Group Dependencies  ............................................................................ 07   
+       2.3 Project Scheduling  ........................................................................................ 08   
+              - Project Scheduling Chart  ............................................................................ 08 
+3. SYSTEM REQUIREMENTS STUDY .................................................................09 
+       3.1 Study of Current System  ................................................................................ 09   
+       3.2 Problems and Weaknesses of Current System  ............................................... 09   
+       3.3 User Characteristics........................................................................................ 10  
+
+--- PAGE 6 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  v 
+ 
+       3.4 Hardware and Software Requirements ............................................................10 
+ 3.4.1 Hardware Requirements..........................................................................10 
+ 3.4.2 Software Requirements........................................................................... 10   
+       3.5 Constraints  ..................................................................................................... 10   
+              3.5.1 Regulatory Policies  .............................................................................. 10   
+              3.5.2 Hardware Limitations  ...........................................................................10  
+              3.5.3 Interfaces to Other Applications  ...........................................................10 
+              3.5.4 Parallel Operations  ............................................................................... 11   
+              3.5.5 Higher Order Language Requirements  ................................................ 11   
+              3.5.6 Reliability Requirements  ..................................................................... 11   
+              3.5.7 Criticality of the Application  ................................................................ 11   
+              3.5.8 Safety and Security Consideration  ....................................................... 11   
+       3.6 Assumptions and Dependencies  ..................................................................... 11   
+4. SYSTEM ANALYSIS .............................................................................................12  
+       4.1 Requirements of New System (SRS)  ..............................................................12   
+              4.1.1 User Requirements  .............................................................................. 12   
+              4.1.2 System Requirements  ...........................................................................12   
+       4.2 Features of New System  ................................................................................ 13   
+       4.3 Navigation Chart  ............................................................................................ 14   
+       4.4 Class Diagram ................................................................................................ 15   
+       4.5 System Activity  ............................................................................................. 16   
+       4.6 Sequence Diagram .......................................................................................... 17   
+       4.7 ER Diagram .................................................................................................... 19   
+5. SYSTEM DESIGN..................................................................................................20   
+       5.1 System Architecture Study...............................................................................20 
+              5.1.1 Class Diagram .......................................................................................20 
+              5.1.2 Sequence Diagrams ...............................................................................21 
+              5.1.3 Component Diagram  ............................................................................23 
+              5.1.4 Deployment Diagram  ...........................................................................24 
+       5.2 Database Design..............................................................................................24 
+
+--- PAGE 7 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  vi 
+ 
+              5.2.1 Table and Relationship  .........................................................................24 
+              5.2.2 Logical Description of Data  ..................................................................27 
+       5.3 Input/Output and Interface Design  .................................................................28 
+              5.3.1 State Transition/UML Diagram  ............................................................28 
+              5.3.2 Interface Design  ……….......................................................................29 
+6. IMPLEMENTATION PLANNING ..................................................................... 32 
+       6.1 Implementation Environment .........................................................................32 
+       6.2 Program/Modules Specification  .....................................................................32 
+       6.3 Coding Standards  ...........................................................................................34 
+7. TESTING................................................................................................................35 
+       7.1 Testing Plan  ...................................................................................................35 
+       7.2 Testing Strategy  ..............................................................................................35 
+       7.3 Testing Methods  ............................................................................................. 35 
+       7.4 Test Cases  .......................................................................................................36 
+              7.4.1 Purpose  .................................................................................................36 
+              7.4.2 Required Input  ......................................................................................36 
+              7.4.3 Expected Result  ....................................................................................36 
+8. USER MANUAL ....................................................................................................37   
+9. LIMITATION AND FUTURE ENHANCEMENT .............................................47 
+        9.1 Current Limitations  .......................................................................................47 
+        9.2 Future Enhancements......................................................................................48 
+10. CONCLUSION AND DISCUSSION ..................................................................50   
+       10.1 Conclusions ...................................................................................................50 
+       10.2 Discussion  ....................................................................................................50 
+              10.2.1 Self-Analysis of Project Viabilities  .....................................................50 
+              10.2.2 Problems Encountered and Possible Solutions  ...................................51 
+              10.2.3 Summary of Project Work  ..................................................................52 
+ 
+ 
+ 
+ 
+
+--- PAGE 8 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  vii 
+ 
+ABSTRACT 
+ 
+College life is full of changes, and students often find themselves with things they no 
+longer need—books from last semester, gadgets they’ve outgrown, or furniture that 
+won’t fit in their next rental. At the same time, other students are looking for these very 
+items at affordable prices. College Dealz bridges this gap by creating a student-
+exclusive reselling platform where buyers and sellers can connect easily, securely, and 
+quickly. 
+ 
+Unlike general online marketplaces, College Dealz is tailor-made for university 
+students. By verifying users through university email IDs, it ensures a trusted 
+environment and drastically reduces the chances of scams or spam. It further simplifies 
+the reselling experience with features like category-wise search, price-based filtering, 
+real-time chat, instant notifications, and a responsive UI—eliminating the need to rely 
+on disorganized social media groups or messaging platforms. 
+ 
+From a technical perspective, the project leverages a robust tech stack: 
+ Frontend: Built using React.js, providing a smooth and dynamic user 
+experience. 
+ Backend: Developed with Spring Boot, ensuring secure, scalable, and 
+maintainable server-side logic. 
+ Database: MySQL is used for reliable and structured data storage. 
+ Real-Time Chat: Integrated using WebSockets for seamless buyer-seller 
+communication. 
+  
+To support a scalable and production-ready environment, the project utilizes various 
+AWS services: 
+ Amazon RDS for hosting the MySQL database in the cloud with high 
+availability. 
+ Amazon EC2 to deploy and manage the backend services. 
+ Amazon S3 for fast and secure image storage, replacing slower local blob 
+handling. These integrations ensure better performance, reliability, and speed 
+across all parts of the platform. 
+ 
+Developed by a dedicated two-person team following agile methodologies, the work 
+was split across frontend and backend in parallel, allowing efficient development and 
+continuous iteration. Hosting and CI/CD were handled via platforms like Vercel (for 
+frontend) and Railway (during development phase), with production deployments 
+now on AWS for better control and scalability. 
+ 
+At its core, College Dealz is not just a project—it’s a student-centric solution that 
+enhances campus life. It helps students save money, reduce waste, and connect with 
+their local community, all while gaining real-world experience in using modern tools 
+and technologies. Whether someone is searching for a budget-friendly laptop or trying 
+to give a second life to their old textbooks, College Dealz makes the process simple, 
+secure, and truly student-first. 
+ 
+ 
+ 
+
+--- PAGE 9 ---
+   
+         
+DDU (Faculty of Tech., Dept. of IT)  viii 
+ 
+ 
+ 
+ 
+ 
+LIST OF FIGURES 
+ 
+Fig 2.1 Agile Methodology ........................................................................................ 05 
+Fig 2.2 Schedule Chart................................................................................................ 08 
+Fig 4.1 Navigation Chart..............................................................................................14 
+Fig 4.2 Class Diagram................................................................................................. 15 
+Fig 4.3 Use-Case Diagram.......................................................................................... 16 
+Fig 4.4 Product Sale Sequence Diagram..................................................................... 17 
+Fig 4.5 Wantlist Sequence Diagram............................................................................ 18 
+Fig 4.6 ER Diagram.....................................................................................................19 
+Fig 5.1 Class Diagram................................................................................................. 20 
+Fig 5.2 SignUp Sequence Diagram..............................................................................21 
+Fig 5.3 Login with Google Sequence Diagram........................................................... 22 
+Fig 5.4 Login Sequence Diagram.................................................................................23 
+Fig 5.5 Component Diagram....................................................................................... 23 
+Fig 5.6 Deployment Diagram...................................................................................... 24 
+Fig 5.7 Tables in DB....................................................................................................24 
+Fig 5.8 Relationships among Entities...........................................................................26 
+Fig 5.9 Product State Transition Diagram................................................................... 28 
+Fig 5.10 Wantlist State Transition Diagram................................................................ 29 
+Fig 5.11 Wantlist Form................................................................................................ 30 
+Fig 5.12 Post Deal Form..............................................................................................30 
+Fig 5.13 Home Page Interface..................................................................................... 31 
+Fig 5.14 Wantlist Interface.......................................................................................... 31 
+Fig 5.15 Dashboard Interface...................................................................................... 31 
+Fig 8.1-Fig 8.30 User Manual ScreenShots................................................................ 37 
+ 
+ 
+ 
+LIST OF TABLES 
+ 
+Table 2.1 Pproject Roadmap………………………………………………………....06 
+Table 2.2 Table outlining the milestones and corresponding deliverables …...…..…06 
+Table 2.3 Responsibility table……………………………………………………..…07 
+Table 4.1 System Requirements…………………………………………………...…12 
+Table 6.1 Implementation Environment…………………………………………...…32 
+Table 6.2 Admin Module’s Features……………………………………………....…33 
+Table 6.3 Coding Standards…...…………………………………………………..…34 
+Table 7.1Testing Methods…….…………………………………………………...…35 
+Table 7.2 Test Case and Expected Results..…………………………………….....…36 
+ 
+ 
+
+--- PAGE 10 ---
+ INTRODUCTION 
+DDU (Faculty of Tech., Dept. of IT)  1 
+ 
+1. INTRODUCTION 
+ 
+1.1 PROJECT DETAILS 
+College Dealz is a reselling platform specifically designed for university students. It 
+allows students to buy and sell second-hand items within their university community. 
+The platform ensures a smooth and secure experience by offering features like user 
+authentication, product search and filtering, and real-time chat. 
+Students often accumulate items such as books, electronics, furniture, and accessories 
+that they no longer need. Instead of throwing these items away or struggling to find 
+buyers through social media, College Dealz provides a structured marketplace where 
+students can easily post listings and connect with potential buyers. 
+ 
+1.2 PURPOSE 
+The purpose of College Dealz is to create a student-centered marketplace that makes 
+buying and selling second-hand items more convenient, affordable, and accessible. The 
+key benefits include: 
+• Cost Savings: Students can buy items at lower prices compared to retail stores. 
+• Sustainability: Encouraging reuse reduces waste and promotes eco -friendly 
+habits. 
+• Community-Based Transactions: The platform ensures buyers and sellers are 
+university students, making transactions safer and more reliable. 
+• Convenience: Students can easily find, compare, and negotiate deals without 
+leaving campus. 
+ 
+1.3 SCOPE 
+1.3.1 User Scope 
+• Sellers: University students who want to sell their used or unwanted 
+items. 
+• Buyers: Students looking for affordable, second-hand products. 
+• Administrators: A team managing the platform, handling 
+complaints, and verifying listings. 
+ 
+1.3.2 Functional Scope 
+• User Registration & Authentication: Users can sign up using their 
+university email for verification. 
+• Product Listing & Management: Sellers can add details like price, 
+images, and descriptions of items. 
+• Search & Sorting Features: Users can filter listings based on 
+category, price, and location. 
+
+--- PAGE 11 ---
+ INTRODUCTION 
+DDU (Faculty of Tech., Dept. of IT)  2 
+ 
+• Real-Time Chat System: Buyers and sellers can negotiate deals 
+through instant messaging. 
+• Notification System: Users receive alerts for new messages, offers, 
+and product updates. 
+ 
+ 
+1.4 OBJECTIVE 
+• To create a user-friendly reselling platform that helps university students trade 
+second-hand items with ease. 
+• To ensure a safe and secure marketplace by verifying university students and 
+implementing user ratings. 
+• To facilitate seamless communication between buyers and sellers using real -
+time chat. 
+• To improve searchability and discoverability of products through sorting and 
+filtering. 
+• To promote sustainable practices by reducing waste and encouraging students 
+to reuse items. 
+ 
+ 
+1.5 TECHNOLOGY AND LITERATURE REVIEW 
+1.5.1 Technology Review 
+• React.js: A frontend JavaScript library used for building the website’s 
+interactive interface, ensuring fast page rendering. 
+• Spring Boot: A backend framework that provides APIs for handling 
+user authentication, managing products, and enabling chat. 
+• MySQL: A relational database that stores user data, product listings, 
+chat history, and transaction records. 
+• WebSocket: Enables instant messaging between users, improving 
+communication efficiency. 
+• REST APIs:  Facilitate data exchange between the frontend and 
+backend, ensuring smooth operation.  
+ 
+     1.5.2 Literature Review 
+Online reselling platforms such as Craigslist, OLX, and Facebook 
+Marketplace offer general -purpose second -hand sales but lack student-
+specific features  like university verification and a safe community 
+environment. 
+ 
+Several research studies highlight the challenges of online peer -to-peer 
+reselling, including: 
+1. Trust and Safety Concerns: Many buyers and sellers hesitate to trade due 
+to fear of scams or unreliable users. College Dealz addresses this by 
+implementing a university email verification system and user rating 
+system. 
+
+--- PAGE 12 ---
+ INTRODUCTION 
+DDU (Faculty of Tech., Dept. of IT)  3 
+ 
+2. Search Efficiency: Traditional platforms often lack efficient filtering and 
+sorting options. College Dealz improves this with category-based search, 
+price filtering, and relevance sorting. 
+3. Communication Gaps: Many platforms rely on external messaging apps 
+for negotiations. College Dealz integrates real-time chat using WebSocket 
+for seamless interaction. 
+ 
+By focusing on the specific needs of university students, College Dealz offers a more 
+targeted, secure, and efficient solution compared to general reselling platforms. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 13 ---
+ PROJECT MANAGEMENT 
+DDU (Faculty of Tech., Dept. of IT)  4 
+ 
+2. PROJECT MANAGEMENT 
+ 
+2.1 FEASIBILITY STUDY  
+2.1.1 Technical Feasibility  
+After considering our project functionalities and technical needs we decided to 
+go with the following technologies –  
+Frontend – React  
+Backend – Spring Boot  
+Database – MYSQL  
+ 
+These technologies are well -documented and have strong community support, 
+ensuring smooth development and maintenance. 
+ 
+2.1.2 Time Schedule Feasibility 
+After declaration and information of the subject, we started thinking about the 
+project title and technologies. We finalized our topic and discussed it with 
+respected faculty member. Initially we gathered & analysed all the requirements 
+by the beginning of December 2024. We prepared the SRS document right after 
+that. In mid of December 2024, we design the UI and some basic backend work. 
+This was followed by the required diagrams. For coding and unit testing 4 to 6 
+weeks and for system and integration testing another 2 weeks were covered. We 
+are ready for its demonstration in the submission week along with the report. 
+Being a 2 members team, we were able to complete our project in the estimate 
+time. 
+ 
+2.1.3 Operational Feasibility   
+Our team conducted several brainstorming sessions to evaluate the operational 
+aspects of College Dealz. We interacted with university students to understand 
+their buying and selling preferences. The feedback was overwhelmingly 
+positive. Most students currently use general marketplaces or social media 
+groups which lack campus-specific focus. 
+The platform's operation will require minimal staffing as most processes are 
+automated. We'll need only part -time moderation during the initial phase to 
+ensure listing quality. I personally tested similar platforms and found that with 
+proper design, operational overhead can be kept surprisingly low. Based on our 
+analysis, College Dealz can be effectively operated with our current team 
+structure while meeting all user expectations. 
+ 
+ 
+
+--- PAGE 14 ---
+ PROJECT MANAGEMENT 
+DDU (Faculty of Tech., Dept. of IT)  5 
+ 
+            2.1.4 Implementation Feasibility   
+Implementation of College Dealz is highly feasible with our existing resources. 
+(VSCode, IntelliJ IDEA, Postman, etc) During our weekly project meetings, we 
+mapped out the implementation phases against our academic calendar, 
+accounting for exam periods and breaks.  We will deploy our platform on free 
+services first and after completion we will deploy it on cloud platform like AWS. 
+All considered, the implementation plan is realistic and achievable within our 
+timeline constraints. 
+ 
+2.2 PROJECT PLANNING  
+2.2.1 Project Development Approach and Justification   
+For College Dealz, we implemented an Agile development approach using 
+Scrum methodology. This choice was driven by the need for flexibility in a 
+university environment . Our week-long sprint cycles allowed us to gather 
+frequent feedback from our project guide , friends and adapt the platform 
+accordingly. 
+The Scrum framework provided clear structure for our small team through 
+defined roles and regular meetings. During our daily standups, we identified 
+blockers early – particularly helpful when we discovered unexpected issues with 
+the file upload system for product im ages. We quickly pivoted our approach 
+rather than waiting until the end of development. 
+Our product backlog remained prioritized based on core functionality first: user 
+authentication, product listing, and messaging were developed before 
+implementing the notification system. This ensured we had a working MVP by 
+January end, giving us time to refine the user experience before final 
+submission. 
+The Agile approach proved especially valuable when student feedback revealed 
+a strong preference for category -based browsing over our initially planned 
+search-only interface. We incorporated this change without disrupting our 
+timeline, demonstrating the methodology's effectiveness for our project context. 
+ 
+ 
+Fig 2.1   Agile Methodology 
+
+
+--- PAGE 15 ---
+ PROJECT MANAGEMENT 
+DDU (Faculty of Tech., Dept. of IT)  6 
+ 
+            2.2.2 Project Plan   
+ 
+ Table 2.1   Project Roadmap 
+Sr. No. Document Timeline 
+1 Project Definition, Submission Approval December 
+2 System Design Mid of December 
+3 Implementation January, February 
+4 Testing March 
+5 Documentation Mid of March 
+ 
+ 
+            2.2.3 Milestones and Deliverables   
+ 
+ Table 2.2   Table outlining the milestones and corresponding deliverables 
+Milestones Deliverable(s) 
+Project Initiation 
+Selection of project team member 
+Project proposal and approval 
+Distribution of role and responsibilities 
+Requirement Analysis Requirements documents 
+Use case Diagram 
+Design Phase 
+System architecture design 
+User interface design 
+Database schema design 
+Development 
+Functional prototype 
+Frontend implementation (React) 
+Backend implementation (Spring Boot) 
+Database Implementation (MYSQL) 
+Testing 
+Unit testing 
+Integration testing 
+System design testing 
+Deployment 
+System demonstration 
+Final project Report 
+
+--- PAGE 16 ---
+ PROJECT MANAGEMENT 
+DDU (Faculty of Tech., Dept. of IT)  7 
+ 
+            2.2.4 Roles and Responsibilities  
+ 
+ Table 2.3   Responsibility Table 
+ Nand (Backend Developer) Venu (Frontend Developer) 
+Analysis ✓  ✓  
+Design ✓  ✓  
+Coding ✓  ✓  
+Testing ✓  ✓  
+Deployment ✓   
+Documentation  ✓  
+Maintenance ✓  ✓  
+ 
+            2.2.2 Group Dependencies 
+As a two-member team developing College Dealz, our project relies on several 
+key dependencies: 
+1. Task Sequencing: Our critical path runs through database design → backend 
+API → frontend integration. When Rohan encountered issues with the user 
+authentication module, it delayed my work on the shopping cart interface by 
+three days. 
+2. Skill Distribution: We've divided responsibilities based on our strengths - 
+I'm handling the React frontend and UI/UX while my partner focuses on 
+Spring Boot backend and database architecture. This division required 
+careful coordination during API integration. 
+3. Shared Resources: We maintain a common GitHub repository and use the 
+department's test server for deployment. Access conflicts occurred twice 
+during intensive development phases, prompting us to establish a check -in 
+schedule. 
+4. Communication Rhythm: Our twice -weekly sync meetings and daily 
+WhatsApp updates keep development aligned. This proved essential when 
+requirements shifted for the product listing functionality. 
+5. Timeline Management: Our parallel work streams converge at integration 
+points, creating dependencies on meeting individual deadlines. We built 
+buffer time around midterm exams when productivity typically dips. 
+By actively managing these dependencies through our Trello board and regular 
+check-ins, we've minimized bottlenecks and maintained momentum throughout 
+the development cycle. 
+
+--- PAGE 17 ---
+ PROJECT MANAGEMENT 
+DDU (Faculty of Tech., Dept. of IT)  8 
+ 
+2.3 PROJECT SCHEDULING   
+ 
+ 
+Fig 2.2 Schedule Chart 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+0 10 20 30 40 50 60 70
+Documentation
+Deployment
+Testing
+Implementation
+System Design
+ Project Defination, Submission Approval
+Duration (in days)
+
+--- PAGE 18 ---
+ SYSTEM REQUIREMENT STUDY 
+DDU (Faculty of Tech., Dept. of IT)  9 
+ 
+3. SYSTEM REQUIREMENT STUDY 
+ 
+3.1 STUDY OF CURRENT SYSTEM 
+ 
+Currently, university students lack a dedicated platform to conveniently buy and sell 
+second-hand goods such as textbooks, electronics, and daily essentials. Many rely on 
+general online marketplaces like OLX or Facebook Marketplace, which, while 
+functional, are not tailored to student needs. 
+ 
+These platforms present several challenges: 
+• Trust Issues: Buyers and sellers are often strangers, raising concerns about 
+fraud and reliability. 
+• Inconvenient Transactions: Students may need to travel across the city to 
+meet sellers, which is time-consuming and impractical given academic 
+schedules. 
+• Scattered Listings: There is no centralized place for student-specific deals, 
+making it difficult to find relevant listings efficiently. 
+College Dealz  is designed to solve these issues by providing a community-driven 
+marketplace exclusively for university students, ensuring trust, convenience, and 
+security in every transaction. 
+ 
+3.2    PROBLEMS AND WEAKNESSES OF CURRENT SYSTEM 
+The existing approach of using general reselling platforms poses multiple challenges: 
+1. Lack of a Trusted Community 
+o No verification process ensures that buyers and sellers are genuine 
+students. 
+o Risk of scams, overpriced listings, or misleading product descriptions. 
+2. Inconvenience and Time Consumption 
+o Finding the right product requires searching across multiple platforms. 
+o Arranging meet-ups with unknown sellers can be difficult and risky. 
+3. Lack of Student-Specific Features 
+o No dedicated filters for student essentials like textbooks, student items, 
+or course-specific gadgets. 
+4. Security Concerns 
+o No built-in messaging system, leading users to share personal contact 
+details. 
+o No safeguards against fake or misleading listings. 
+ 
+College Dealz aims to eliminate these issues by creating a secure, student-only 
+marketplace with built-in verification, localized deals, and smart filters tailored to 
+student needs. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 19 ---
+ SYSTEM REQUIREMENT STUDY 
+DDU (Faculty of Tech., Dept. of IT)  10 
+ 
+3.3    USER CHARACTERISTICS 
+• Student Buyer: Students looking for second-hand goods such as books, 
+electronics, and hostel essentials. They need an easy way to search, filter, and 
+contact sellers within their university. 
+• Student Seller: Students selling used items to free up space or earn extra 
+money. They need a seamless way to list products and connect with buyers 
+safely. 
+• Admins: Manage users, verify student identities, and ensure smooth operation 
+of the platform. 
+ 
+3.4    HARDWARE AND SOFTWARE REQUIREMENTS 
+ 3.4.1 Hardware Requirements 
+● Minimum:  
+○ Processor: Intel i3 or equivalent 
+○ RAM: 4GB  
+○ Storage: 20GB free space  
+○ Internet Connection: Required for real-time updates  
+● Recommended:  
+○ Processor: Intel i5/i7  
+○ RAM: 8GB+  
+○ SSD: 256GB+  
+○ Internet Connection: High-speed required for seamless user 
+experience 
+ 
+ 3.4.2 Software Requirements 
+  ● Operating System: Windows, macOS, or Linux  
+● Backend: Spring Boot, MySQL  
+● Frontend: ReactJS  
+● Authentication: JWT (Spring Security)  
+● Development Tools: IntelliJ IDEA, Visual Studio Code, MySQL 
+Workbench  
+● API Testing: Postman 
+ 
+3.5    CONSTRAINTS 
+3.3.1   Regulatory Policies 
+The platform follows basic data protection and privacy practices. 
+Advanced compliance (e.g., GDPR) may be needed if scaled 
+internationally. 
+ 
+3.3.2   Hardware Limitations 
+No high-end hardware required. The system runs efficiently on 
+standard student devices like laptops and smartphones. 
+ 
+3.3.3   Interfaces to Other Applications 
+Google OAuth2 is used for authentication. AWS services (EC2, S3, 
+RDS) are integrated for storage and hosting. 
+ 
+ 
+
+--- PAGE 20 ---
+ SYSTEM REQUIREMENT STUDY 
+DDU (Faculty of Tech., Dept. of IT)  11 
+ 
+3.3.4   Parallel Operations 
+The system supports multiple users performing actions simultaneously 
+without conflict due to backend concurrency control. 
+ 
+3.3.5   Higher Order Language Requirements 
+Frontend is built using React (JavaScript), backend with Spring Boot 
+(Java), ensuring modern development standards. 
+ 
+3.3.6   Reliability Requirements 
+Deployed on reliable platforms (AWS, Vercel). Basic failure handling 
+and retry mechanisms are in place. 
+ 
+3.3.7   Criticality of the Application 
+While not life-critical, the app must maintain high availability and trust 
+to retain users. 
+ 
+3.3.8   Safety and Security Consideration 
+Security measures include JWT authentication, Oauth2 login, and user 
+verification to avoid misuse and fraud. 
+ 
+3.6     ASSUMPTIONS AND DEPENDENCIES 
+• Users have stable internet connectivity. 
+• University-specific communities are pre-defined. 
+• AWS, Vercel, and Oauth2 APIs remain active and functional. 
+• Users access the system using standard web browsers (Chrome, Firefox). 
+• Users will provide accurate product and profile information. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 21 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  12 
+ 
+4. SYSTEM ANALYSIS 
+ 
+4.1 REQUIREMENTS OF NEW SYSTEM (SRS) 
+ 
+4.1.1 User Requirements 
+ Buyer/Seller (General User) 
+o Should be able to sign up or log in securely using email or Google 
+account. 
+o Can post new deals, edit, delete, or repost products. 
+o Can mark a product as sold or remove it with a reason. 
+o Can search, filter, and sort products by category or price. 
+o Able to add products to wishlist or wantlist to get future notifications. 
+o Can initiate and continue chat with sellers on a per-product basis. 
+o Receives real-time notifications for relevant updates like matches, updates 
+etc. 
+o Can rate and give feedback via a floating feedback widget. 
+o Can edit their profile. 
+ 
+ Admin User 
+o Can view, add, update, or delete universities (community domains). 
+o Monitors all products, can filter by university, and send warning mails to 
+sellers. 
+o Access to an archive of removed products with reasons and actions. 
+o Can view all users, check verification status, send warnings, and assign 
+admin roles. 
+o Can manage admins and remove privileges if needed. 
+o Access to all user feedbacks and rating analytics (e.g., average rating, total 
+feedback). 
+ 
+4.1.2 System Requirements 
+4.1.2.1 Functional Requirements 
+Table 4.1 System Requirements 
+Module Functionality 
+Admin University CRUD, product & user management, feedback ratings 
+Authentication User signup, login, Google Oauth2 integration 
+Chat Product-wise chat via WebSocket, STOMP, SockJS 
+Dashboard Profile management, switch to admin view, deal management 
+Error Handling Friendly error pages and fallback routes 
+Feedback Widget Floating icon to submit star ratings and comments 
+Navigation Bar Navbar with logo, search, toggle, notifications, profile, etc, 
+Notification Real-time alerts for wantlist match, wantlist item, etc 
+Product Product listing, filters, post/edit/delete/repost product 
+University Selector Community selection for guest users 
+Wantlist Add items not available yet, notify sellers on match 
+Wishlist Bookmark products of interest 
+
+--- PAGE 22 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  13 
+ 
+4.1.2.2 Non-Functional Requirements 
+o Performance 
+The platform should support multiple concurrent users without lag, achieved via 
+pagination and WebSocket. 
+ 
+o Scalability 
+The system is modular and cloud-deployable (AWS EC2, RDS, S3, Vercel), 
+allowing easy scale-up. 
+ 
+o Usability 
+Clean, intuitive UI using TailwindCSS and shadcn/ui components for seamless 
+user interaction. 
+ 
+o Security 
+Secure login using JWT and Oauth2, authorization checks, warning systems for 
+misuse. 
+ 
+o Reliability 
+Deployed on stable cloud services with automated fallback handling for chat 
+and image storage. 
+ 
+o Maintainability 
+Modular code structure, clear API documentation, and use of industry-standard 
+frameworks aid in future maintenance. 
+ 
+o Portability 
+Fully browser-based frontend; accessible from desktops, tablets, and 
+smartphones. 
+ 
+o Availability 
+High availability via cloud hosting and redundancy in services like image 
+storage (S3). 
+ 
+ 
+4.2 FEATURES OF THE NEW SYSTEM 
+ 
+The new system, College Dealz, introduces several impactful features to address 
+existing marketplace issues faced by university students: 
+ 
+ Secure Auth System: Login/signup via JWT and Oauth2. 
+ University-Based Marketplace: Safe and familiar local platform to transact 
+within one’s institution. 
+ Integrated Chat System: Chat with buyers/sellers in real-time for better deal 
+negotiation. 
+ Smart Notifications: Instant alerts for wantlist matches and more. 
+ Feedback & Ratings: Continuous improvement driven by real user feedback 
+through a floating widget. 
+
+--- PAGE 23 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  14 
+ 
+ Post & Manage Deals: Seamless interface to post, edit, mark as sold, or delete 
+products. 
+ Wishlist & Wantlist: Personalization features to track what the user loves or 
+needs. 
+ Admin Panel: Admins can manage communities, users, and moderate content. 
+ Product Filtering & Sorting: Refined search options to discover products 
+effortlessly. 
+ Dark/Light Mode: User-preferred theme with global state managed by context 
+API. 
+ Archive & Report System: Transparent system to track removed items with 
+reasons and actions. 
+ 
+ 
+4.3 NA VIGATION CHART 
+ 
+ 
+Fig 4.1 Navigation Chart 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 24 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  15 
+ 
+4.4 CLASS DIAGRAM 
+ 
+  
+Fig 4.2 Class Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 25 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  16 
+ 
+4.5 SYSTEM ACTIVITY  
+ 
+  
+Fig 4.3 Use Case Diagram 
+
+
+--- PAGE 26 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  17 
+ 
+4.6 SEQUENCE DIAGRAM 
+ Fig 4.4 Product Sale Sequence Diagram 
+
+
+--- PAGE 27 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  18 
+ 
+ Fig 4.5 Wantlist Sequence Diagram 
+
+
+--- PAGE 28 ---
+ SYSTEM ANALYSIS 
+DDU (Faculty of Tech., Dept. of IT)  19 
+ 
+4.7 ER DIAGRAM 
+ 
+ 
+ 
+  
+ 
+Fig 4.6 ER Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 29 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  20 
+ 
+ 
+5. SYSTEM DESIGN 
+ 
+5.1 SYSTEM ARCHITECTURE STUDY 
+5.1.1 Class Diagram 
+  
+Fig 5.1 Class Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 30 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  21 
+ 
+ 
+ 
+5.1.2 Sequence Diagram 
+ Fig 5.2 SignUp Sequence Diagram 
+
+
+--- PAGE 31 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  22 
+ 
+  
+Fig 5.3 Login With Google Sequence Diagram 
+
+
+--- PAGE 32 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  23 
+ 
+ Fig 5.4 Login Sequence Diagram 
+ 
+5.1.3 Component Diagram 
+ Fig 5.5 Component Diagram 
+
+
+--- PAGE 33 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  24 
+ 
+5.1.4 Deployment Diagram 
+ Fig 5.6 Deployment Diagram 
+ 
+5.2 DATABSE DESIGN  
+5.2.1 Tables & Relationships 
+ 
+
+
+--- PAGE 34 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  25 
+ 
+ 
+ 
+  
+Fig 5.7 Tables in DB 
+
+
+--- PAGE 35 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  26 
+ 
+ 
+ 
+ Fig 5.8 RelaƟonships among EnƟƟes 
+ 
+ 
+
+
+--- PAGE 36 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  27 
+ 
+5.2.2 Logical Description of Data 
+5.2.2.1 User Management System:  
+o User authentication with email verification 
+o Support for third-party authentication providers 
+o Role-based access control 
+ 
+5.2.2.2 Product Marketplace:  
+o Product listings with details, pricing, and condition information 
+o Product categorization 
+o Image management for product listings 
+o Product archiving system for completed transactions 
+ 
+5.2.2.3 Want List Management:  
+o Users can create "want lists" specifying products they're looking 
+for 
+o Price range and condition preferences can be specified 
+ 
+5.2.2.4 Wishlist System:  
+o Users can save products they're interested in 
+ 
+5.2.2.5 Messaging System:  
+o Chat functionality between buyers and sellers 
+o Message history tracking 
+o Product context for messages 
+ 
+5.2.2.6 Notification System:  
+o Various notification types for marketplace activities 
+o Read/unread status tracking 
+ 
+5.2.2.7 Admin Management:  
+o Separate admin accounts with different roles 
+o Administrative capabilities 
+ 
+5.2.2.8 Feedback System:  
+o Star ratings and text feedback 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 37 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  28 
+ 
+5.3 INPUT/OUTPUT AND INTERFACE DESIGN  
+5.3.1 State Transition Diagram 
+ 
+ 
+Fig 5.9 Product State Transition Diagram 
+
+
+--- PAGE 38 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  29 
+ 
+ 
+ 
+Fig 5.10 Wantlist State Transition Diagram 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 39 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  30 
+ 
+ 
+5.3.2 Interface Design 
+ 
+Fig 5.11 Wantlist Form 
+ 
+Fig 5.12 Post Deal Form 
+
+
+--- PAGE 40 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  31 
+ 
+ 
+Fig 5.13 Home Page Interface 
+ 
+Fig 5.14 Wantlist Interface 
+ 
+Fig 5.15 Dashboard Interface 
+
+
+--- PAGE 41 ---
+ IMPLEMENTATION PLANNING 
+DDU (Faculty of Tech., Dept. of IT)  32 
+ 
+6. IMPLEMENTATION PLANNING 
+ 
+6.0 IMPLEMENTATION PLANNING 
+ 
+The implementation of College Dealz was carefully planned to ensure a smooth, secure, 
+and scalable experience for all users —primarily students, admins, and sellers. We 
+focused on a modular design, intuitive user interface, and robust backend powered by 
+secure authentication and scalable cloud services. 
+ 
+6.1 IMPLEMENTATION ENVIRONMENT 
+ 
+Table 6.1   Implementation Environment 
+Aspect Description 
+User Type Multi-user system (Students, Admins, Platform Users) 
+Interface 
+Graphical User Interface (GUI) using React.js with 
+TailwindCSS and shadcn/ui for a clean, responsive, and modern 
+look 
+Hosting 
+• Frontend: Deployed on Vercel 
+• Backend: Hosted on AWS EC2 
+• Images: Stored on AWS S3 
+• Database: AWS RDS (MySQL) 
+Authentication Secured using JWT, Spring Security, and OAuth 2.0  
+(Google login) 
+Communication Real-time chat via WebSocket (SockJS + STOMP) 
+Error Handling Dedicated error page and fallback mechanisms 
+ 
+ 
+6.2  PROGRAM / MODULES SPECIFICATION 
+ 
+6.2.1 Auth Module 
+• Sign Up / Log In 
+• Google Sign-In via OAuth 2.0 
+• JWT-based secure authentication 
+ 
+6.2.2 Chat Module 
+• One-on-one product-based chat 
+• Real-time messaging using WebSocket, SockJS, and STOMP 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 42 ---
+ IMPLEMENTATION PLANNING 
+DDU (Faculty of Tech., Dept. of IT)  33 
+ 
+6.2.3 Dashboard Module 
+• User profile view & update (name + profile image) 
+• Toggle to switch between user and admin view 
+• User deals management: post, edit, delete, share, repost, mark as sold 
+ 
+6.2.4 Navigation Bar Module 
+• Includes: logo, product search, notifications, chat, post deal button, want 
+list, wish list, dark/light mode toggle, and profile access 
+ 
+6.2.5 Notification Module 
+• Instant alert for: 
+o Someone added their product to a want list 
+o A new product matches a want list item 
+6.2.6 WantList Module 
+• Allows users to post what they’re looking for 
+• Notifies potential sellers to respond 
+ 
+6.2.7 WishList Module 
+• Save favorite products for later 
+• Keep an eye on desired items 
+ 
+6.2.8 Miscellaneous Module 
+• Feedback Widget: User can give star rating and optional feedback 
+• University Selector: For non-logged-in guests to browse university-specific 
+listings 
+• Error Page: Custom fallback page for broken routes or failed operations 
+ 
+6.2.9 Admin Module 
+Table 6.2   Admin Module’s Feature 
+Tab Features 
+University Tab Add, edit, or delete universities (communities) 
+Product Tab View/filter all product listings; send warning emails 
+Archived Product Tab View removed products with reasons (sold, 
+inappropriate, etc.) 
+User Tab Manage users; view email, verification, community; 
+send warnings; promote to admin 
+Admins Tab View and remove admins 
+Feedback Tab See all feedback and calculate average rating  
+ 
+
+--- PAGE 43 ---
+ IMPLEMENTATION PLANNING 
+DDU (Faculty of Tech., Dept. of IT)  34 
+ 
+6.3 CODING STANDARDS  
+Table 6.3 Coding Standards 
+Category Practice 
+Frontend (React) 
+• Component-based structure 
+• TailwindCSS for styling 
+•  Reusable UI via shadcn/ui components  
+• API calls via axios with error handling 
+Backend (Spring Boot) 
+• Layered architecture 
+• RESTful APIs 
+• JWT for secure endpoints 
+• DTOs and Services pattern for business logic 
+Version Control GitHub used for collaboration, with meaningful 
+commit messages and branch-wise development 
+Naming Conventions Meaningful and properly cased names 
+Best Practices Code reviews, environment separation (dev/prod), 
+clear comments, and logging where required 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 44 ---
+ TESTING PLANNING 
+DDU (Faculty of Tech., Dept. of IT)  35 
+ 
+7. TESTING PLANNING 
+ 
+7.0 TESTING  
+Testing played a crucial role in ensuring that College Dealz runs smoothly and delivers 
+a reliable, secure, and user-friendly experience. With multiple modules and user flows, 
+we focused on real -world scenarios that student users and admins would typically 
+encounter. 
+ 
+7.1 TESTING PLAN 
+Our testing plan aimed to: 
+• Identify and fix functional and UI issues 
+• Ensure security in user authentication and data access 
+• Verify performance of critical features like chat, post -deal flow, and 
+notifications 
+• Maintain cross-device responsiveness and compatibility 
+ 
+Testing was conducted across multiple devices , browsers, and user roles  (buyer, 
+seller, admin) to cover all use cases. 
+. 
+ 
+7.2 TESTING STRATEGY 
+We followed a modular and layered strategy: 
+• Unit Testing: Each component and backend function was tested individually. 
+• Integration Testing:  Modules like product posting and chat were tested 
+together to ensure smooth data flow. 
+• System Testing: End-to-end user flows like login → post product → receive 
+chat → mark as sold were tested. 
+• User Acceptance Testing (UAT):  Simulated real student use cases and 
+feedback was collected to polish UX. 
+ 
+7.2 TESTING METHODS 
+Table 7.1Testing Methods 
+Method Description 
+Manual Testing 
+Most UI and functional flows were tested 
+manually by team members in different user 
+roles 
+Responsive Testing Verified layout and flow on mobile, tablet, and 
+desktop screens 
+API Testing All the APIs’ have been tested using Postman 
+before integrating with frontend 
+Security Testing Tested for JWT token validation, protected 
+admin routes, and safe file uploads to AWS S3 
+
+--- PAGE 45 ---
+ TESTING PLANNING 
+DDU (Faculty of Tech., Dept. of IT)  36 
+ 
+7.4 TEST CASES 
+7.4.1 Purpose 
+To validate that each key feature performs as expected, without breaking the overall 
+user experience. 
+ 
+7.4.2 Required Input 
+• Valid/invalid login credentials 
+• Form submissions (product post, feedback, profile edit) 
+• WebSocket message payloads 
+• CRUD actions on admin panel 
+ 
+7.4.3 Expected Result 
+Table 7.2 Test Case and Expected Results 
+Test Case Input Expected Output Actual Output Pass/Fail 
+Login with 
+Google OAuth sign-in User logged in, 
+home page shown 
+User logged in, 
+home page 
+shown 
+✓  
+Post a Product 
+Title, Description, 
+Price, Images, 
+Category, 
+Condition, Age 
+Product appears on 
+homepage 
+Product appears 
+on homepage ✓  
+Send Chat Message in product 
+chat window 
+Real-time delivery 
+to recipient 
+Recipient gets 
+the message in 
+his inbox 
+✓  
+Add to 
+Wantlist 
+Title, Description, 
+Price (Min & 
+Max), Category, 
+Age 
+Notify all about the 
+product wanted 
+Notification 
+delivered ✓  
+Wantlist 
+Product Posted 
+Title, Description, 
+Price, Images, 
+Category, 
+Condition, Age 
+Notify the buyer 
+(one who added 
+the item in 
+wantlist) 
+Notification 
+delivered ✓  
+Admin - Send 
+Warning Title and Message Warning email 
+sent to user Mail delivered ✓  
+Toggle Dark 
+Mode Click toggle button UI switches to 
+dark/light instantly Theme Switched ✓  
+Wishlist 
+add/remove 
+Click the heart 
+button 
+Added to wishlist 
+table in DB, 
+highlight the heart 
+button and shows 
+in wishlist page 
+Product 
+successfully 
+added and 
+removed from 
+wishlist  
+✓  
+Filter & Sort Select appropriate 
+options 
+Both should work 
+independently and 
+simultaneously 
+Both are working 
+independently 
+and 
+simultaneously 
+✓  
+
+--- PAGE 46 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  37 
+ 
+8. USER MANUAL 
+Fig 8.1 Select Community 
+ 
+Fig 8.2 Home Page 
+ 
+Fig 8.3 Authentication Page 
+
+
+--- PAGE 47 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  38 
+ 
+ 
+Fig 8.4 Google Account Selection 
+ 
+Fig 8.5 OTP Mail 
+ 
+Fig 8.6 Signup with OTP verification 
+ 
+
+
+--- PAGE 48 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  39 
+ 
+ 
+Fig 8.7 Wantlist Tour (JoyRide) 
+ 
+Fig 8.8 Wantlist form 
+ 
+Fig 8.9 Wantlist Notification to Other Buyers 
+
+
+--- PAGE 49 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  40 
+ 
+ 
+Fig 8.10 Wantlist Sell Dialog 
+ 
+Fig 8.11 Wantlist Product Deal Post Form 
+ 
+Fig 8.12 Wantlist Matching Product Notification 
+
+
+--- PAGE 50 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  41 
+ 
+  
+Fig 8.13 Product Detail Page 
+ 
+Fig 8.14 Wishlist Page 
+ 
+Fig 8.15 Filtered And Sorted Products 
+
+
+--- PAGE 51 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  42 
+ 
+ 
+Fig 8.16 Search Result Product 
+ 
+Fig 8.17 Rating/Feedback Widget 
+ 
+Fig 8.18 User Dashboard 
+ 
+
+
+--- PAGE 52 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  43 
+ 
+ 
+Fig 8.19 Admin Dashboard – Community Tab 
+ 
+Fig 8.20 Admin Dashboard – Users Tab
+ 
+Fig 8.21 Admin Dashboard – Feedback Tab 
+
+
+--- PAGE 53 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  44 
+ 
+ 
+Fig 8.22 Admin Dashboard – Admins Tab 
+  
+Fig 8.23 Admin Dashboard – Product Tab 
+ 
+ 
+Fig 8.24 Admin Dashboard –Warn Product 
+
+
+--- PAGE 54 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  45 
+ 
+ 
+Fig 8.25 Admin Dashboard –Archived Products Tab 
+  
+Fig 8.26 Share Product 
+ 
+ 
+Fig 8.27 Public Product Detail Page 
+ 
+ 
+
+
+--- PAGE 55 ---
+ USER MANUAL 
+DDU (Faculty of Tech., Dept. of IT)  46 
+ 
+ 
+Fig 8.28 Mark as Sold 
+ 
+Fig 8.29 Chat Interface 
+ 
+Fig 8.30 Chat Interface 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 56 ---
+ LIMITATION AND FUTURE ENHANCEMENT 
+DDU (Faculty of Tech., Dept. of IT)  47 
+ 
+9. LIMITATION AND FUTURE ENHANCEMENT 
+While College Dealz serves its core purpose well—connecting students within 
+university communities for buying and selling items—there are still a few limitations 
+in its current version that offer great opportunities for future improvements. 
+9.1 CURRENT LIMITATIONS 
+9.2.1 Basic Wantlist Matching 
+ At present, when a buyer adds an item to their wantlist and a seller posts a 
+matching product, the system triggers a notification only if the product is 
+accessed via the wantlist notification. 
+ This restricts automatic notifications from other product sources like profile 
+reposts or direct post-a-deal forms. 
+ 
+9.2.2 No Real-Time Notification Update 
+ Notifications are currently queued and displayed on refresh or fetching after 
+few intervals.  
+ Users might miss immediate updates unless they actively check their 
+dashboard or reload the page. 
+ 
+9.2.3 No Integrated Payment Tracking 
+ Transactions are entirely manual. The platform does not track if a product 
+was actually paid for or just marked as sold, which reduces platform-level 
+transparency and trust metrics. 
+ 
+9.2.4 No Product Authenticity Verification 
+ There's currently no verification system in place to ensure that the product 
+listed matches its description or photos. 
+ 
+9.2.5 Limited Analytics for Admin 
+ Admin dashboard lacks detailed statistics such as most active universities, 
+average product lifespan, most wanted items, etc., which could help in 
+improving platform decisions 
+. 
+9.2.6 No Support for Group Chats 
+ The chat system is limited to 1-on-1 conversations between buyer and seller. 
+Group discussions, student community alerts, or broadcast messages are not 
+yet supported. 
+ 
+9.2.7 Fixed University Association 
+ Currently, users are tightly bound to a single university. All product listings, 
+chats, and notifications are scoped strictly within that university domain. 
+ 
+9.2.8 Lack of Flexibility in User Grouping 
+ Users cannot join or view other communities even if they belong to multiple 
+institutions (e.g., alumni, cross-college groups, or city-based collectives). 
+ 
+
+--- PAGE 57 ---
+ LIMITATION AND FUTURE ENHANCEMENT 
+DDU (Faculty of Tech., Dept. of IT)  48 
+ 
+9.2 FUTURE ENHANCEMENTS 
+ 
+9.2.1 Smart Wantlist Matching Algorithm 
+ Enhance the algorithm so that any matching product posted anywhere (home 
+page, profile repost, etc.) automatically triggers a notification to all relevant 
+buyers who have that item in their wantlist. 
+ This ensures no buyer misses a potential deal and encourages faster sales. 
+ 
+9.2.2 Real-Time Notification 
+ Upgrade the notification module using WebSocket-based broadcasting so 
+that users receive updates the moment a message is sent, a deal is marked 
+sold, or a wantlist item is matched—without refreshing the page. 
+ 
+9.2.3 Secure Payment Integration 
+ Introduce a payment gateway (e.g., Razor pay or Stripe) for optional secure 
+transactions within the platform. This can also help in confirming that a deal 
+is completed and gather data for future analytics. 
+ 
+9.2.4 Verified Listing 
+ Add an optional verification badge for sellers who upload additional proofs 
+(e.g., original bills, ID-verification), helping users trust listings and reducing 
+scams. 
+ 
+9.2.5 Dynamic Community Creation 
+ Allow users or admins to create and join interest-based or location-based 
+communities (e.g., “Tech Enthusiasts, Mumbai Students, North Campus - 
+Delhi”) instead of just predefined universities. 
+ 
+9.2.6 Multi-Community Membership 
+ Enable users to join multiple communities and toggle between them, giving 
+them access to more deals and making the platform more inclusive. 
+ 
+9.2.7 Product Recommendations 
+ Suggest similar or trending products based on user behaviour, previously 
+searched terms, or location-specific interests. 
+ 
+9.2.8 In-App Support and Report System 
+ Provide a mini help centre or chatbot to handle queries, and introduce a 
+"report product/user" feature for safety. 
+ 
+9.2.9 Advanced Analytics for Admins 
+ Offer a visual dashboard with: 
+o Number of deals per university 
+o Most searched categories 
+o Daily/weekly active users 
+o Feedback trends 
+ 
+
+--- PAGE 58 ---
+ LIMITATION AND FUTURE ENHANCEMENT 
+DDU (Faculty of Tech., Dept. of IT)  49 
+ 
+9.2.10 Mobile App Version 
+ Build a dedicated mobile app (React Native or Flutter) to enhance 
+convenience for student users and make real-time features even more 
+powerful with native notifications. 
+ 
+9.2.11 Merge University + Community Concept 
+ Keep university tags as a base community but allow users to branch out to 
+wider groups—essentially blending structured and free-form communities. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 59 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  50 
+ 
+10. CONCLUSIONS AND DISCUSSIONS  
+10.1 CONCLUSIONS 
+College Dealz started as a simple reselling platform for university students but has now 
+evolved into a robust, scalable application with the potential to support multiple 
+communities beyond just university domains. Through consistent problem-solving, 
+real-time collaboration, and continuous iterations, the platform not only offers core 
+functionalities like deal posting, chatting, and notifications—but also focuses on trust, 
+convenience, and personalization for students. 
+The project helped bridge the real-world problem of unreliable, generic reselling 
+platforms and offered a safe, localized alternative specifically built for campus 
+communities. 
+More than just a technical build, this project became a journey of learning and 
+growth, pushing the limits of what could be achieved with teamwork, mentorship, and 
+modern tech stacks. 
+10.2 DISCUSSIONS 
+10.2.1  Self-Analysis of Project Viabilities 
+10.2.1.1 Strengths 
+ Tailored for students with real, practical use cases. 
+ Modular design ensures scalability and maintainability. 
+ Uses modern, efficient tech stack (React, Spring Boot, AWS). 
+ Smooth deployment with Vercel, RDS and EC2. 
+ Secure with JWT and OAuth2. 
+ 
+10.2.1.2 Weaknesses 
+ Limited to university-specific communities. 
+ Admin controls are hardcoded and rigid. 
+ Product visibility is restricted within the same university. 
+ 
+10.2.1.3 Opportunities 
+ Expand to location or interest-based communities 
+ Add monetization features like premium listings. 
+ Integrate in-app payments and delivery support. 
+ Implement AI-based recommendations. 
+ 
+10.2.1.4 Threats 
+ Competes with OLX and other marketplaces. 
+ Risk of fake or inappropriate listings. 
+ Limited resources on free-tier services. 
+ Data protection compliance as platform scales. 
+ 
+ 
+
+--- PAGE 60 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  51 
+ 
+10.2.2  Problems Encountered and Possible Solutions 
+Throughout development, we encountered a range of technical, architectural, and 
+collaboration-related challenges. 
+ 
+10.2.1.1 Frontend (React.js) Issues 
+ Problem: State not persisting across pages (e.g., Dark Mode toggle) 
+    Solution:   Used React Context API to create a global theme state. 
+ 
+ Problem: Frequent re-renders and uncleaned effects. 
+Solution: Optimized components using React Hooks like useMemo, 
+                   useCallback, and useEffect cleanup functions. 
+ 
+ Problem: Chat not live or reactive. 
+   Solution: Integrated WebSocket with STOMP protocol and used SockJS 
+       on the frontend for seamless real-time messaging. 
+ 
+ Problem: Too many products made the homepage laggy. 
+   Solution: Introduced pagination using Spring Data and frontend pagination 
+       buttons. 
+ 
+10.2.1.2 Backend (Spring Boot) Issues 
+ Problem: N+1 Query fetching issue when getting user deals and feedbacks. 
+   Solution: Used @Fetch (FetchType.LAZY) and DTOs with projections to  
+       fetch only required data. 
+ 
+ Problem: Circular reference error during JSON response. 
+   Solution: Used @JsonIgnore, DTOs to avoid infinite recursion. 
+ 
+ Problem: Notification model created redundant objects for each user. 
+   Solution: Changed the mapping to Many-to-Many between User and  
+Notification to maintain a single notification shared with many 
+users. 
+ 
+ Problem: Scaling Chat with Dynamic Users. 
+   Solution: Used @EnableWebSocketMessageBroker with destination  
+       prefix and session tracking 
+ 
+ 
+10.2.1.3 Deployment & DevOps Challenges 
+ Problem: Blob image URLs were slow to load and cache. 
+Solution: Migrated image storage to AWS S3 for fast, reliable access. 
+ 
+ Problem: Need to share a common dev database with the team. 
+Solution: Used TiDB Cloud (free plan) to allow database access across     
+devices and locations. 
+
+--- PAGE 61 ---
+ CONCLUSIONS AND DISCUSSIONS 
+DDU (Faculty of Tech., Dept. of IT)  52 
+ 
+ Problem: Frontend and backend hosted on different free-tier platforms 
+caused CORS and performance issues. 
+     Solution: Shifted to unified production hosting using: 
+o Backend: AWS EC2 
+o Database: AWS RDS (MySQL) 
+o Frontend: Vercel 
+o Images: AWS S3 
+ 
+ 
+10.2.1.4 Other Solved Problems 
+ Problem: Git Conflicts & Code Management: 
+Solution: Gained hands-on experience with Git & GitHub workflows—
+branches, pull requests, merge conflict resolutions. 
+ 
+ 
+10.2.3  Summary of Project Work 
+ Problem-Solving Mindset 
+We learned to approach bugs logically and resolve them through research, 
+collaboration with seniors, professors, and communities like Stack Overflow. 
+ 
+  Hands-On Tech Skills 
+o React: Component design, hooks, state management 
+o Spring Boot: REST APIs, security, entity relationships 
+o AWS: EC2, RDS, S3 – understanding real cloud infrastructure 
+o Deployment tools: Vercel, Railway, TiDB 
+o WebSockets: Real-time messaging using STOMP 
+ From Campus to Community Vision 
+What started as a university-specific reselling platform, can now be evolved 
+into a community-based platform with flexibility to scale into interest-based 
+groups, regional collectives, or even closed community apps for hostels, 
+events, or departments.  
+ 
+ College Dealz is more than a semester project. It’s proof that real problems 
+can be solved with thoughtful design, collaboration, and continuous learning. 
+The experience was a mix of development, debugging, teamwork, and 
+dreaming big—and that’s what made it truly meaningful. 

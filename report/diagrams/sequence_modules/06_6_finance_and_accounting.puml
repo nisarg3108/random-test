@@ -1,0 +1,34 @@
+@startuml UEORMS_Sequence_06
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Employee
+actor "Finance Manager" as FinM
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Workflow Engine + Approval Service" as WF
+control "Notification Service" as Notify
+control "Finance + Accounting Services" as Finance
+control "Reports + Reporting Services" as Reports
+database "PostgreSQL via Prisma" as DB
+
+== 6) Finance and Accounting ==
+Employee -> Client : Submit expense claim
+Client -> API : /api/expense-claims
+API -> Finance : create expense claim
+Finance -> DB : ExpenseCategory, ExpenseClaim
+Finance -> WF : expense approval request
+WF -> Notify : finance approval queue
+API --> Client : claim submitted
+
+FinM -> Client : Accounting operations
+Client -> API : /api/accounting/* + /api/finance-dashboard
+API -> Finance : chart of accounts, journals, posting, reversals, dashboard
+Finance -> DB : ChartOfAccounts, JournalEntry, JournalEntryLine, LedgerEntry, FiscalYear
+Finance -> Reports : financial aggregates for dashboard
+Finance --> API : accounting result
+API --> Client : finance response
+
+
+@enduml

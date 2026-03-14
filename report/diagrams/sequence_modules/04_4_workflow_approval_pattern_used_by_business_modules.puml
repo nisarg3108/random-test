@@ -1,0 +1,40 @@
+@startuml UEORMS_Sequence_04
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Employee
+actor Manager
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Workflow Engine + Approval Service" as WF
+control "Realtime Gateway\n(WebSocket /ws)" as RT
+control "Notification Service" as Notify
+database "PostgreSQL via Prisma" as DB
+
+== 4) Workflow/Approval Pattern Used by Business Modules ==
+Employee -> Client : Submit approval-based transaction
+Client -> API : e.g. leave/expense/stock/requisition/timesheet request
+API -> WF : create workflow request + first approval step
+WF -> DB : WorkflowRequest + Approval (PENDING)
+DB --> WF : approval chain state
+WF -> Notify : notify approver queue
+Notify -> DB : Notification insert
+Notify -> RT : push approval event
+WF --> API : request submitted
+API --> Client : pending approval
+
+Manager -> Client : Approve / Reject
+Client -> API : POST /api/approvals/:id/approve|reject
+API -> WF : resolve approval action
+WF -> DB : Approval status + request status progression
+alt approved and more steps
+  WF -> DB : create next approval step
+else approved final
+  WF -> Notify : notify requester + downstream module completion
+end
+WF --> API : approval result
+API --> Client : action completed
+
+
+@enduml

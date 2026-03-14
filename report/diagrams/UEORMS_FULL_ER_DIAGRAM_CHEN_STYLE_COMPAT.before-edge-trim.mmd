@@ -1,0 +1,4310 @@
+flowchart LR
+%% Compatible Chen-style (older Mermaid-safe)
+E_Activity[Activity]
+A_Activity_id((id PK))
+E_Activity --- A_Activity_id
+A_Activity_tenantId((tenantId))
+E_Activity --- A_Activity_tenantId
+A_Activity_type((type))
+E_Activity --- A_Activity_type
+A_Activity_subject((subject))
+E_Activity --- A_Activity_subject
+A_Activity_description((description))
+E_Activity --- A_Activity_description
+A_Activity_status((status))
+E_Activity --- A_Activity_status
+A_Activity_priority((priority))
+E_Activity --- A_Activity_priority
+A_Activity_dueDate((dueDate))
+E_Activity --- A_Activity_dueDate
+A_Activity_dueTime((dueTime))
+E_Activity --- A_Activity_dueTime
+A_Activity_reminderAt((reminderAt))
+E_Activity --- A_Activity_reminderAt
+A_Activity_completedAt((completedAt))
+E_Activity --- A_Activity_completedAt
+A_Activity_completedBy((completedBy))
+E_Activity --- A_Activity_completedBy
+A_Activity_assignedTo((assignedTo))
+E_Activity --- A_Activity_assignedTo
+A_Activity_createdBy((createdBy))
+E_Activity --- A_Activity_createdBy
+A_Activity_customerId((customerId))
+E_Activity --- A_Activity_customerId
+A_Activity_contactId((contactId))
+E_Activity --- A_Activity_contactId
+A_Activity_leadId((leadId))
+E_Activity --- A_Activity_leadId
+A_Activity_dealId((dealId))
+E_Activity --- A_Activity_dealId
+A_Activity_outcome((outcome))
+E_Activity --- A_Activity_outcome
+A_Activity_notes((notes))
+E_Activity --- A_Activity_notes
+A_Activity_createdAt((createdAt))
+E_Activity --- A_Activity_createdAt
+A_Activity_updatedAt((updatedAt))
+E_Activity --- A_Activity_updatedAt
+
+E_Announcement[Announcement]
+A_Announcement_id((id PK))
+E_Announcement --- A_Announcement_id
+A_Announcement_tenantId((tenantId))
+E_Announcement --- A_Announcement_tenantId
+A_Announcement_title((title))
+E_Announcement --- A_Announcement_title
+A_Announcement_content((content))
+E_Announcement --- A_Announcement_content
+A_Announcement_priority((priority))
+E_Announcement --- A_Announcement_priority
+A_Announcement_targetType((targetType))
+E_Announcement --- A_Announcement_targetType
+A_Announcement_targetIds((targetIds))
+E_Announcement --- A_Announcement_targetIds
+A_Announcement_attachments((attachments))
+E_Announcement --- A_Announcement_attachments
+A_Announcement_publishedBy((publishedBy))
+E_Announcement --- A_Announcement_publishedBy
+A_Announcement_publishedAt((publishedAt))
+E_Announcement --- A_Announcement_publishedAt
+A_Announcement_expiresAt((expiresAt))
+E_Announcement --- A_Announcement_expiresAt
+A_Announcement_isPinned((isPinned))
+E_Announcement --- A_Announcement_isPinned
+A_Announcement_isActive((isActive))
+E_Announcement --- A_Announcement_isActive
+A_Announcement_createdAt((createdAt))
+E_Announcement --- A_Announcement_createdAt
+A_Announcement_updatedAt((updatedAt))
+E_Announcement --- A_Announcement_updatedAt
+
+E_AnnouncementRead[AnnouncementRead]
+A_AnnouncementRead_id((id PK))
+E_AnnouncementRead --- A_AnnouncementRead_id
+A_AnnouncementRead_announcementId((announcementId))
+E_AnnouncementRead --- A_AnnouncementRead_announcementId
+A_AnnouncementRead_userId((userId))
+E_AnnouncementRead --- A_AnnouncementRead_userId
+A_AnnouncementRead_readAt((readAt))
+E_AnnouncementRead --- A_AnnouncementRead_readAt
+
+E_APBill[APBill]
+A_APBill_id((id PK))
+E_APBill --- A_APBill_id
+A_APBill_tenantId((tenantId))
+E_APBill --- A_APBill_tenantId
+A_APBill_billNumber((billNumber))
+E_APBill --- A_APBill_billNumber
+A_APBill_vendorId((vendorId))
+E_APBill --- A_APBill_vendorId
+A_APBill_purchaseOrderId((purchaseOrderId))
+E_APBill --- A_APBill_purchaseOrderId
+A_APBill_billDate((billDate))
+E_APBill --- A_APBill_billDate
+A_APBill_dueDate((dueDate))
+E_APBill --- A_APBill_dueDate
+A_APBill_invoiceNumber((invoiceNumber))
+E_APBill --- A_APBill_invoiceNumber
+A_APBill_invoiceDate((invoiceDate))
+E_APBill --- A_APBill_invoiceDate
+A_APBill_subtotal((subtotal))
+E_APBill --- A_APBill_subtotal
+A_APBill_taxAmount((taxAmount))
+E_APBill --- A_APBill_taxAmount
+A_APBill_discountAmount((discountAmount))
+E_APBill --- A_APBill_discountAmount
+A_APBill_shippingCost((shippingCost))
+E_APBill --- A_APBill_shippingCost
+A_APBill_totalAmount((totalAmount))
+E_APBill --- A_APBill_totalAmount
+A_APBill_paidAmount((paidAmount))
+E_APBill --- A_APBill_paidAmount
+A_APBill_balanceAmount((balanceAmount))
+E_APBill --- A_APBill_balanceAmount
+A_APBill_items((items))
+E_APBill --- A_APBill_items
+A_APBill_status((status))
+E_APBill --- A_APBill_status
+A_APBill_approvalStatus((approvalStatus))
+E_APBill --- A_APBill_approvalStatus
+A_APBill_matchedToPO((matchedToPO))
+E_APBill --- A_APBill_matchedToPO
+A_APBill_matchedToReceipt((matchedToReceipt))
+E_APBill --- A_APBill_matchedToReceipt
+A_APBill_threeWayMatched((threeWayMatched))
+E_APBill --- A_APBill_threeWayMatched
+A_APBill_paymentTerms((paymentTerms))
+E_APBill --- A_APBill_paymentTerms
+A_APBill_glPosted((glPosted))
+E_APBill --- A_APBill_glPosted
+A_APBill_glPostDate((glPostDate))
+E_APBill --- A_APBill_glPostDate
+A_APBill_glJournalId((glJournalId))
+E_APBill --- A_APBill_glJournalId
+A_APBill_approvedBy((approvedBy))
+E_APBill --- A_APBill_approvedBy
+A_APBill_approvedAt((approvedAt))
+E_APBill --- A_APBill_approvedAt
+A_APBill_notes((notes))
+E_APBill --- A_APBill_notes
+A_APBill_internalNotes((internalNotes))
+E_APBill --- A_APBill_internalNotes
+A_APBill_attachments((attachments))
+E_APBill --- A_APBill_attachments
+A_APBill_createdBy((createdBy))
+E_APBill --- A_APBill_createdBy
+A_APBill_createdAt((createdAt))
+E_APBill --- A_APBill_createdAt
+A_APBill_updatedAt((updatedAt))
+E_APBill --- A_APBill_updatedAt
+
+E_Approval[Approval]
+A_Approval_id((id PK))
+E_Approval --- A_Approval_id
+A_Approval_workflowId((workflowId))
+E_Approval --- A_Approval_workflowId
+A_Approval_workflowRequestId((workflowRequestId))
+E_Approval --- A_Approval_workflowRequestId
+A_Approval_workflowStepId((workflowStepId))
+E_Approval --- A_Approval_workflowStepId
+A_Approval_stepOrder((stepOrder))
+E_Approval --- A_Approval_stepOrder
+A_Approval_permission((permission))
+E_Approval --- A_Approval_permission
+A_Approval_data((data))
+E_Approval --- A_Approval_data
+A_Approval_tenantId((tenantId))
+E_Approval --- A_Approval_tenantId
+A_Approval_approvedBy((approvedBy))
+E_Approval --- A_Approval_approvedBy
+A_Approval_approvedAt((approvedAt))
+E_Approval --- A_Approval_approvedAt
+A_Approval_status((status))
+E_Approval --- A_Approval_status
+A_Approval_comment((comment))
+E_Approval --- A_Approval_comment
+A_Approval_rejectionReason((rejectionReason))
+E_Approval --- A_Approval_rejectionReason
+A_Approval_createdAt((createdAt))
+E_Approval --- A_Approval_createdAt
+
+E_ApprovalMatrix[ApprovalMatrix]
+A_ApprovalMatrix_id((id PK))
+E_ApprovalMatrix --- A_ApprovalMatrix_id
+A_ApprovalMatrix_tenantId((tenantId))
+E_ApprovalMatrix --- A_ApprovalMatrix_tenantId
+A_ApprovalMatrix_module((module))
+E_ApprovalMatrix --- A_ApprovalMatrix_module
+A_ApprovalMatrix_conditions((conditions))
+E_ApprovalMatrix --- A_ApprovalMatrix_conditions
+A_ApprovalMatrix_approvers((approvers))
+E_ApprovalMatrix --- A_ApprovalMatrix_approvers
+A_ApprovalMatrix_createdAt((createdAt))
+E_ApprovalMatrix --- A_ApprovalMatrix_createdAt
+
+E_Asset[Asset]
+A_Asset_id((id PK))
+E_Asset --- A_Asset_id
+A_Asset_tenantId((tenantId))
+E_Asset --- A_Asset_tenantId
+A_Asset_categoryId((categoryId))
+E_Asset --- A_Asset_categoryId
+A_Asset_assetCode((assetCode))
+E_Asset --- A_Asset_assetCode
+A_Asset_name((name))
+E_Asset --- A_Asset_name
+A_Asset_description((description))
+E_Asset --- A_Asset_description
+A_Asset_purchaseDate((purchaseDate))
+E_Asset --- A_Asset_purchaseDate
+A_Asset_purchasePrice((purchasePrice))
+E_Asset --- A_Asset_purchasePrice
+A_Asset_vendor((vendor))
+E_Asset --- A_Asset_vendor
+A_Asset_invoiceNumber((invoiceNumber))
+E_Asset --- A_Asset_invoiceNumber
+A_Asset_serialNumber((serialNumber))
+E_Asset --- A_Asset_serialNumber
+A_Asset_model((model))
+E_Asset --- A_Asset_model
+A_Asset_manufacturer((manufacturer))
+E_Asset --- A_Asset_manufacturer
+A_Asset_location((location))
+E_Asset --- A_Asset_location
+A_Asset_status((status))
+E_Asset --- A_Asset_status
+A_Asset_condition((condition))
+E_Asset --- A_Asset_condition
+A_Asset_depreciationMethod((depreciationMethod))
+E_Asset --- A_Asset_depreciationMethod
+A_Asset_depreciationRate((depreciationRate))
+E_Asset --- A_Asset_depreciationRate
+A_Asset_usefulLife((usefulLife))
+E_Asset --- A_Asset_usefulLife
+A_Asset_salvageValue((salvageValue))
+E_Asset --- A_Asset_salvageValue
+A_Asset_totalExpectedUnits((totalExpectedUnits))
+E_Asset --- A_Asset_totalExpectedUnits
+A_Asset_unitsProducedToDate((unitsProducedToDate))
+E_Asset --- A_Asset_unitsProducedToDate
+A_Asset_currentValue((currentValue))
+E_Asset --- A_Asset_currentValue
+A_Asset_accumulatedDepreciation((accumulatedDepreciation))
+E_Asset --- A_Asset_accumulatedDepreciation
+A_Asset_warrantyExpiry((warrantyExpiry))
+E_Asset --- A_Asset_warrantyExpiry
+A_Asset_insuranceExpiry((insuranceExpiry))
+E_Asset --- A_Asset_insuranceExpiry
+A_Asset_insuranceProvider((insuranceProvider))
+E_Asset --- A_Asset_insuranceProvider
+A_Asset_insurancePolicyNo((insurancePolicyNo))
+E_Asset --- A_Asset_insurancePolicyNo
+A_Asset_notes((notes))
+E_Asset --- A_Asset_notes
+A_Asset_tags((tags))
+E_Asset --- A_Asset_tags
+A_Asset_createdAt((createdAt))
+E_Asset --- A_Asset_createdAt
+A_Asset_updatedAt((updatedAt))
+E_Asset --- A_Asset_updatedAt
+
+E_AssetAllocation[AssetAllocation]
+A_AssetAllocation_id((id PK))
+E_AssetAllocation --- A_AssetAllocation_id
+A_AssetAllocation_tenantId((tenantId))
+E_AssetAllocation --- A_AssetAllocation_tenantId
+A_AssetAllocation_assetId((assetId))
+E_AssetAllocation --- A_AssetAllocation_assetId
+A_AssetAllocation_employeeId((employeeId))
+E_AssetAllocation --- A_AssetAllocation_employeeId
+A_AssetAllocation_allocatedDate((allocatedDate))
+E_AssetAllocation --- A_AssetAllocation_allocatedDate
+A_AssetAllocation_returnDate((returnDate))
+E_AssetAllocation --- A_AssetAllocation_returnDate
+A_AssetAllocation_expectedReturnDate((expectedReturnDate))
+E_AssetAllocation --- A_AssetAllocation_expectedReturnDate
+A_AssetAllocation_status((status))
+E_AssetAllocation --- A_AssetAllocation_status
+A_AssetAllocation_purpose((purpose))
+E_AssetAllocation --- A_AssetAllocation_purpose
+A_AssetAllocation_allocatedBy((allocatedBy))
+E_AssetAllocation --- A_AssetAllocation_allocatedBy
+A_AssetAllocation_location((location))
+E_AssetAllocation --- A_AssetAllocation_location
+A_AssetAllocation_returnCondition((returnCondition))
+E_AssetAllocation --- A_AssetAllocation_returnCondition
+A_AssetAllocation_returnNotes((returnNotes))
+E_AssetAllocation --- A_AssetAllocation_returnNotes
+A_AssetAllocation_notes((notes))
+E_AssetAllocation --- A_AssetAllocation_notes
+A_AssetAllocation_createdAt((createdAt))
+E_AssetAllocation --- A_AssetAllocation_createdAt
+A_AssetAllocation_updatedAt((updatedAt))
+E_AssetAllocation --- A_AssetAllocation_updatedAt
+
+E_AssetCategory[AssetCategory]
+A_AssetCategory_id((id PK))
+E_AssetCategory --- A_AssetCategory_id
+A_AssetCategory_tenantId((tenantId))
+E_AssetCategory --- A_AssetCategory_tenantId
+A_AssetCategory_name((name))
+E_AssetCategory --- A_AssetCategory_name
+A_AssetCategory_code((code))
+E_AssetCategory --- A_AssetCategory_code
+A_AssetCategory_description((description))
+E_AssetCategory --- A_AssetCategory_description
+A_AssetCategory_defaultDepreciationMethod((defaultDepreciationMethod))
+E_AssetCategory --- A_AssetCategory_defaultDepreciationMethod
+A_AssetCategory_defaultDepreciationRate((defaultDepreciationRate))
+E_AssetCategory --- A_AssetCategory_defaultDepreciationRate
+A_AssetCategory_defaultUsefulLife((defaultUsefulLife))
+E_AssetCategory --- A_AssetCategory_defaultUsefulLife
+A_AssetCategory_isActive((isActive))
+E_AssetCategory --- A_AssetCategory_isActive
+A_AssetCategory_createdAt((createdAt))
+E_AssetCategory --- A_AssetCategory_createdAt
+A_AssetCategory_updatedAt((updatedAt))
+E_AssetCategory --- A_AssetCategory_updatedAt
+
+E_AssetDepreciation[AssetDepreciation]
+A_AssetDepreciation_id((id PK))
+E_AssetDepreciation --- A_AssetDepreciation_id
+A_AssetDepreciation_tenantId((tenantId))
+E_AssetDepreciation --- A_AssetDepreciation_tenantId
+A_AssetDepreciation_assetId((assetId))
+E_AssetDepreciation --- A_AssetDepreciation_assetId
+A_AssetDepreciation_period((period))
+E_AssetDepreciation --- A_AssetDepreciation_period
+A_AssetDepreciation_year((year))
+E_AssetDepreciation --- A_AssetDepreciation_year
+A_AssetDepreciation_month((month))
+E_AssetDepreciation --- A_AssetDepreciation_month
+A_AssetDepreciation_openingValue((openingValue))
+E_AssetDepreciation --- A_AssetDepreciation_openingValue
+A_AssetDepreciation_depreciationAmount((depreciationAmount))
+E_AssetDepreciation --- A_AssetDepreciation_depreciationAmount
+A_AssetDepreciation_closingValue((closingValue))
+E_AssetDepreciation --- A_AssetDepreciation_closingValue
+A_AssetDepreciation_accumulatedDepreciation((accumulatedDepreciation))
+E_AssetDepreciation --- A_AssetDepreciation_accumulatedDepreciation
+A_AssetDepreciation_method((method))
+E_AssetDepreciation --- A_AssetDepreciation_method
+A_AssetDepreciation_rate((rate))
+E_AssetDepreciation --- A_AssetDepreciation_rate
+A_AssetDepreciation_unitsProduced((unitsProduced))
+E_AssetDepreciation --- A_AssetDepreciation_unitsProduced
+A_AssetDepreciation_notes((notes))
+E_AssetDepreciation --- A_AssetDepreciation_notes
+A_AssetDepreciation_createdAt((createdAt))
+E_AssetDepreciation --- A_AssetDepreciation_createdAt
+
+E_AssetMaintenance[AssetMaintenance]
+A_AssetMaintenance_id((id PK))
+E_AssetMaintenance --- A_AssetMaintenance_id
+A_AssetMaintenance_tenantId((tenantId))
+E_AssetMaintenance --- A_AssetMaintenance_tenantId
+A_AssetMaintenance_assetId((assetId))
+E_AssetMaintenance --- A_AssetMaintenance_assetId
+A_AssetMaintenance_maintenanceType((maintenanceType))
+E_AssetMaintenance --- A_AssetMaintenance_maintenanceType
+A_AssetMaintenance_scheduledDate((scheduledDate))
+E_AssetMaintenance --- A_AssetMaintenance_scheduledDate
+A_AssetMaintenance_completedDate((completedDate))
+E_AssetMaintenance --- A_AssetMaintenance_completedDate
+A_AssetMaintenance_status((status))
+E_AssetMaintenance --- A_AssetMaintenance_status
+A_AssetMaintenance_statusBeforeMaintenance((statusBeforeMaintenance))
+E_AssetMaintenance --- A_AssetMaintenance_statusBeforeMaintenance
+A_AssetMaintenance_description((description))
+E_AssetMaintenance --- A_AssetMaintenance_description
+A_AssetMaintenance_performedBy((performedBy))
+E_AssetMaintenance --- A_AssetMaintenance_performedBy
+A_AssetMaintenance_cost((cost))
+E_AssetMaintenance --- A_AssetMaintenance_cost
+A_AssetMaintenance_conditionBefore((conditionBefore))
+E_AssetMaintenance --- A_AssetMaintenance_conditionBefore
+A_AssetMaintenance_conditionAfter((conditionAfter))
+E_AssetMaintenance --- A_AssetMaintenance_conditionAfter
+A_AssetMaintenance_nextMaintenanceDate((nextMaintenanceDate))
+E_AssetMaintenance --- A_AssetMaintenance_nextMaintenanceDate
+A_AssetMaintenance_notes((notes))
+E_AssetMaintenance --- A_AssetMaintenance_notes
+A_AssetMaintenance_attachments((attachments))
+E_AssetMaintenance --- A_AssetMaintenance_attachments
+A_AssetMaintenance_createdAt((createdAt))
+E_AssetMaintenance --- A_AssetMaintenance_createdAt
+A_AssetMaintenance_updatedAt((updatedAt))
+E_AssetMaintenance --- A_AssetMaintenance_updatedAt
+
+E_Attachment[Attachment]
+A_Attachment_id((id PK))
+E_Attachment --- A_Attachment_id
+A_Attachment_tenantId((tenantId))
+E_Attachment --- A_Attachment_tenantId
+A_Attachment_fileName((fileName))
+E_Attachment --- A_Attachment_fileName
+A_Attachment_fileSize((fileSize))
+E_Attachment --- A_Attachment_fileSize
+A_Attachment_mimeType((mimeType))
+E_Attachment --- A_Attachment_mimeType
+A_Attachment_fileUrl((fileUrl))
+E_Attachment --- A_Attachment_fileUrl
+A_Attachment_customerId((customerId))
+E_Attachment --- A_Attachment_customerId
+A_Attachment_dealId((dealId))
+E_Attachment --- A_Attachment_dealId
+A_Attachment_communicationId((communicationId))
+E_Attachment --- A_Attachment_communicationId
+A_Attachment_uploadedBy((uploadedBy))
+E_Attachment --- A_Attachment_uploadedBy
+A_Attachment_createdAt((createdAt))
+E_Attachment --- A_Attachment_createdAt
+
+E_Attendance[Attendance]
+A_Attendance_id((id PK))
+E_Attendance --- A_Attendance_id
+A_Attendance_tenantId((tenantId))
+E_Attendance --- A_Attendance_tenantId
+A_Attendance_employeeId((employeeId))
+E_Attendance --- A_Attendance_employeeId
+A_Attendance_date((date))
+E_Attendance --- A_Attendance_date
+A_Attendance_checkIn((checkIn))
+E_Attendance --- A_Attendance_checkIn
+A_Attendance_checkOut((checkOut))
+E_Attendance --- A_Attendance_checkOut
+A_Attendance_status((status))
+E_Attendance --- A_Attendance_status
+A_Attendance_workHours((workHours))
+E_Attendance --- A_Attendance_workHours
+A_Attendance_overtimeHours((overtimeHours))
+E_Attendance --- A_Attendance_overtimeHours
+A_Attendance_notes((notes))
+E_Attendance --- A_Attendance_notes
+A_Attendance_createdAt((createdAt))
+E_Attendance --- A_Attendance_createdAt
+A_Attendance_updatedAt((updatedAt))
+E_Attendance --- A_Attendance_updatedAt
+
+E_AttendanceReport[AttendanceReport]
+A_AttendanceReport_id((id PK))
+E_AttendanceReport --- A_AttendanceReport_id
+A_AttendanceReport_tenantId((tenantId))
+E_AttendanceReport --- A_AttendanceReport_tenantId
+A_AttendanceReport_employeeId((employeeId))
+E_AttendanceReport --- A_AttendanceReport_employeeId
+A_AttendanceReport_reportDate((reportDate))
+E_AttendanceReport --- A_AttendanceReport_reportDate
+A_AttendanceReport_month((month))
+E_AttendanceReport --- A_AttendanceReport_month
+A_AttendanceReport_year((year))
+E_AttendanceReport --- A_AttendanceReport_year
+A_AttendanceReport_totalWorkingDays((totalWorkingDays))
+E_AttendanceReport --- A_AttendanceReport_totalWorkingDays
+A_AttendanceReport_presentDays((presentDays))
+E_AttendanceReport --- A_AttendanceReport_presentDays
+A_AttendanceReport_absentDays((absentDays))
+E_AttendanceReport --- A_AttendanceReport_absentDays
+A_AttendanceReport_leaveDays((leaveDays))
+E_AttendanceReport --- A_AttendanceReport_leaveDays
+A_AttendanceReport_halfDays((halfDays))
+E_AttendanceReport --- A_AttendanceReport_halfDays
+A_AttendanceReport_workFromHomeDays((workFromHomeDays))
+E_AttendanceReport --- A_AttendanceReport_workFromHomeDays
+A_AttendanceReport_totalWorkHours((totalWorkHours))
+E_AttendanceReport --- A_AttendanceReport_totalWorkHours
+A_AttendanceReport_totalOvertimeHours((totalOvertimeHours))
+E_AttendanceReport --- A_AttendanceReport_totalOvertimeHours
+A_AttendanceReport_attendancePercentage((attendancePercentage))
+E_AttendanceReport --- A_AttendanceReport_attendancePercentage
+A_AttendanceReport_status((status))
+E_AttendanceReport --- A_AttendanceReport_status
+A_AttendanceReport_notes((notes))
+E_AttendanceReport --- A_AttendanceReport_notes
+A_AttendanceReport_createdAt((createdAt))
+E_AttendanceReport --- A_AttendanceReport_createdAt
+A_AttendanceReport_updatedAt((updatedAt))
+E_AttendanceReport --- A_AttendanceReport_updatedAt
+
+E_AuditLog[AuditLog]
+A_AuditLog_id((id PK))
+E_AuditLog --- A_AuditLog_id
+A_AuditLog_userId((userId))
+E_AuditLog --- A_AuditLog_userId
+A_AuditLog_tenantId((tenantId))
+E_AuditLog --- A_AuditLog_tenantId
+A_AuditLog_action((action))
+E_AuditLog --- A_AuditLog_action
+A_AuditLog_entity((entity))
+E_AuditLog --- A_AuditLog_entity
+A_AuditLog_entityId((entityId))
+E_AuditLog --- A_AuditLog_entityId
+A_AuditLog_meta((meta))
+E_AuditLog --- A_AuditLog_meta
+A_AuditLog_timestamp((timestamp))
+E_AuditLog --- A_AuditLog_timestamp
+
+E_BillingEvent[BillingEvent]
+A_BillingEvent_id((id PK))
+E_BillingEvent --- A_BillingEvent_id
+A_BillingEvent_tenantId((tenantId))
+E_BillingEvent --- A_BillingEvent_tenantId
+A_BillingEvent_subscriptionId((subscriptionId))
+E_BillingEvent --- A_BillingEvent_subscriptionId
+A_BillingEvent_eventType((eventType))
+E_BillingEvent --- A_BillingEvent_eventType
+A_BillingEvent_provider((provider))
+E_BillingEvent --- A_BillingEvent_provider
+A_BillingEvent_providerEventId((providerEventId))
+E_BillingEvent --- A_BillingEvent_providerEventId
+A_BillingEvent_status((status))
+E_BillingEvent --- A_BillingEvent_status
+A_BillingEvent_payload((payload))
+E_BillingEvent --- A_BillingEvent_payload
+A_BillingEvent_processedAt((processedAt))
+E_BillingEvent --- A_BillingEvent_processedAt
+A_BillingEvent_errorMessage((errorMessage))
+E_BillingEvent --- A_BillingEvent_errorMessage
+A_BillingEvent_createdAt((createdAt))
+E_BillingEvent --- A_BillingEvent_createdAt
+
+E_BillOfMaterials[BillOfMaterials]
+A_BillOfMaterials_id((id PK))
+E_BillOfMaterials --- A_BillOfMaterials_id
+A_BillOfMaterials_tenantId((tenantId))
+E_BillOfMaterials --- A_BillOfMaterials_tenantId
+A_BillOfMaterials_bomNumber((bomNumber))
+E_BillOfMaterials --- A_BillOfMaterials_bomNumber
+A_BillOfMaterials_productId((productId))
+E_BillOfMaterials --- A_BillOfMaterials_productId
+A_BillOfMaterials_version((version))
+E_BillOfMaterials --- A_BillOfMaterials_version
+A_BillOfMaterials_name((name))
+E_BillOfMaterials --- A_BillOfMaterials_name
+A_BillOfMaterials_description((description))
+E_BillOfMaterials --- A_BillOfMaterials_description
+A_BillOfMaterials_quantity((quantity))
+E_BillOfMaterials --- A_BillOfMaterials_quantity
+A_BillOfMaterials_unit((unit))
+E_BillOfMaterials --- A_BillOfMaterials_unit
+A_BillOfMaterials_materialCost((materialCost))
+E_BillOfMaterials --- A_BillOfMaterials_materialCost
+A_BillOfMaterials_laborCost((laborCost))
+E_BillOfMaterials --- A_BillOfMaterials_laborCost
+A_BillOfMaterials_overheadCost((overheadCost))
+E_BillOfMaterials --- A_BillOfMaterials_overheadCost
+A_BillOfMaterials_totalCost((totalCost))
+E_BillOfMaterials --- A_BillOfMaterials_totalCost
+A_BillOfMaterials_status((status))
+E_BillOfMaterials --- A_BillOfMaterials_status
+A_BillOfMaterials_isActive((isActive))
+E_BillOfMaterials --- A_BillOfMaterials_isActive
+A_BillOfMaterials_isDefault((isDefault))
+E_BillOfMaterials --- A_BillOfMaterials_isDefault
+A_BillOfMaterials_effectiveFrom((effectiveFrom))
+E_BillOfMaterials --- A_BillOfMaterials_effectiveFrom
+A_BillOfMaterials_effectiveTo((effectiveTo))
+E_BillOfMaterials --- A_BillOfMaterials_effectiveTo
+A_BillOfMaterials_createdBy((createdBy))
+E_BillOfMaterials --- A_BillOfMaterials_createdBy
+A_BillOfMaterials_createdAt((createdAt))
+E_BillOfMaterials --- A_BillOfMaterials_createdAt
+A_BillOfMaterials_updatedAt((updatedAt))
+E_BillOfMaterials --- A_BillOfMaterials_updatedAt
+
+E_BOMItem[BOMItem]
+A_BOMItem_id((id PK))
+E_BOMItem --- A_BOMItem_id
+A_BOMItem_bomId((bomId))
+E_BOMItem --- A_BOMItem_bomId
+A_BOMItem_itemId((itemId))
+E_BOMItem --- A_BOMItem_itemId
+A_BOMItem_sequence((sequence))
+E_BOMItem --- A_BOMItem_sequence
+A_BOMItem_quantity((quantity))
+E_BOMItem --- A_BOMItem_quantity
+A_BOMItem_unit((unit))
+E_BOMItem --- A_BOMItem_unit
+A_BOMItem_warehouseId((warehouseId))
+E_BOMItem --- A_BOMItem_warehouseId
+A_BOMItem_unitCost((unitCost))
+E_BOMItem --- A_BOMItem_unitCost
+A_BOMItem_totalCost((totalCost))
+E_BOMItem --- A_BOMItem_totalCost
+A_BOMItem_alternativeItems((alternativeItems))
+E_BOMItem --- A_BOMItem_alternativeItems
+A_BOMItem_scrapPercentage((scrapPercentage))
+E_BOMItem --- A_BOMItem_scrapPercentage
+A_BOMItem_notes((notes))
+E_BOMItem --- A_BOMItem_notes
+A_BOMItem_createdAt((createdAt))
+E_BOMItem --- A_BOMItem_createdAt
+
+E_Branch[Branch]
+A_Branch_id((id PK))
+E_Branch --- A_Branch_id
+A_Branch_tenantId((tenantId))
+E_Branch --- A_Branch_tenantId
+A_Branch_code((code))
+E_Branch --- A_Branch_code
+A_Branch_name((name))
+E_Branch --- A_Branch_name
+A_Branch_type((type))
+E_Branch --- A_Branch_type
+A_Branch_address((address))
+E_Branch --- A_Branch_address
+A_Branch_city((city))
+E_Branch --- A_Branch_city
+A_Branch_state((state))
+E_Branch --- A_Branch_state
+A_Branch_country((country))
+E_Branch --- A_Branch_country
+A_Branch_postalCode((postalCode))
+E_Branch --- A_Branch_postalCode
+A_Branch_phone((phone))
+E_Branch --- A_Branch_phone
+A_Branch_email((email))
+E_Branch --- A_Branch_email
+A_Branch_managerId((managerId))
+E_Branch --- A_Branch_managerId
+A_Branch_isActive((isActive))
+E_Branch --- A_Branch_isActive
+A_Branch_isMainBranch((isMainBranch))
+E_Branch --- A_Branch_isMainBranch
+A_Branch_operatingHours((operatingHours))
+E_Branch --- A_Branch_operatingHours
+A_Branch_createdAt((createdAt))
+E_Branch --- A_Branch_createdAt
+A_Branch_updatedAt((updatedAt))
+E_Branch --- A_Branch_updatedAt
+
+E_ChartOfAccounts[ChartOfAccounts]
+A_ChartOfAccounts_id((id PK))
+E_ChartOfAccounts --- A_ChartOfAccounts_id
+A_ChartOfAccounts_tenantId((tenantId))
+E_ChartOfAccounts --- A_ChartOfAccounts_tenantId
+A_ChartOfAccounts_accountCode((accountCode))
+E_ChartOfAccounts --- A_ChartOfAccounts_accountCode
+A_ChartOfAccounts_accountName((accountName))
+E_ChartOfAccounts --- A_ChartOfAccounts_accountName
+A_ChartOfAccounts_accountType((accountType))
+E_ChartOfAccounts --- A_ChartOfAccounts_accountType
+A_ChartOfAccounts_category((category))
+E_ChartOfAccounts --- A_ChartOfAccounts_category
+A_ChartOfAccounts_parentId((parentId))
+E_ChartOfAccounts --- A_ChartOfAccounts_parentId
+A_ChartOfAccounts_description((description))
+E_ChartOfAccounts --- A_ChartOfAccounts_description
+A_ChartOfAccounts_isActive((isActive))
+E_ChartOfAccounts --- A_ChartOfAccounts_isActive
+A_ChartOfAccounts_isSystem((isSystem))
+E_ChartOfAccounts --- A_ChartOfAccounts_isSystem
+A_ChartOfAccounts_normalBalance((normalBalance))
+E_ChartOfAccounts --- A_ChartOfAccounts_normalBalance
+A_ChartOfAccounts_createdAt((createdAt))
+E_ChartOfAccounts --- A_ChartOfAccounts_createdAt
+A_ChartOfAccounts_updatedAt((updatedAt))
+E_ChartOfAccounts --- A_ChartOfAccounts_updatedAt
+
+E_ChatChannel[ChatChannel]
+A_ChatChannel_id((id PK))
+E_ChatChannel --- A_ChatChannel_id
+A_ChatChannel_tenantId((tenantId))
+E_ChatChannel --- A_ChatChannel_tenantId
+A_ChatChannel_name((name))
+E_ChatChannel --- A_ChatChannel_name
+A_ChatChannel_description((description))
+E_ChatChannel --- A_ChatChannel_description
+A_ChatChannel_type((type))
+E_ChatChannel --- A_ChatChannel_type
+A_ChatChannel_departmentId((departmentId))
+E_ChatChannel --- A_ChatChannel_departmentId
+A_ChatChannel_projectId((projectId))
+E_ChatChannel --- A_ChatChannel_projectId
+A_ChatChannel_createdBy((createdBy))
+E_ChatChannel --- A_ChatChannel_createdBy
+A_ChatChannel_isArchived((isArchived))
+E_ChatChannel --- A_ChatChannel_isArchived
+A_ChatChannel_createdAt((createdAt))
+E_ChatChannel --- A_ChatChannel_createdAt
+A_ChatChannel_updatedAt((updatedAt))
+E_ChatChannel --- A_ChatChannel_updatedAt
+
+E_ChatChannelMember[ChatChannelMember]
+A_ChatChannelMember_id((id PK))
+E_ChatChannelMember --- A_ChatChannelMember_id
+A_ChatChannelMember_channelId((channelId))
+E_ChatChannelMember --- A_ChatChannelMember_channelId
+A_ChatChannelMember_userId((userId))
+E_ChatChannelMember --- A_ChatChannelMember_userId
+A_ChatChannelMember_role((role))
+E_ChatChannelMember --- A_ChatChannelMember_role
+A_ChatChannelMember_isMuted((isMuted))
+E_ChatChannelMember --- A_ChatChannelMember_isMuted
+A_ChatChannelMember_joinedAt((joinedAt))
+E_ChatChannelMember --- A_ChatChannelMember_joinedAt
+
+E_Communication[Communication]
+A_Communication_id((id PK))
+E_Communication --- A_Communication_id
+A_Communication_tenantId((tenantId))
+E_Communication --- A_Communication_tenantId
+A_Communication_type((type))
+E_Communication --- A_Communication_type
+A_Communication_subject((subject))
+E_Communication --- A_Communication_subject
+A_Communication_notes((notes))
+E_Communication --- A_Communication_notes
+A_Communication_occurredAt((occurredAt))
+E_Communication --- A_Communication_occurredAt
+A_Communication_createdBy((createdBy))
+E_Communication --- A_Communication_createdBy
+A_Communication_customerId((customerId))
+E_Communication --- A_Communication_customerId
+A_Communication_contactId((contactId))
+E_Communication --- A_Communication_contactId
+A_Communication_leadId((leadId))
+E_Communication --- A_Communication_leadId
+A_Communication_direction((direction))
+E_Communication --- A_Communication_direction
+A_Communication_duration((duration))
+E_Communication --- A_Communication_duration
+A_Communication_outcome((outcome))
+E_Communication --- A_Communication_outcome
+A_Communication_emailFrom((emailFrom))
+E_Communication --- A_Communication_emailFrom
+A_Communication_emailTo((emailTo))
+E_Communication --- A_Communication_emailTo
+A_Communication_emailCc((emailCc))
+E_Communication --- A_Communication_emailCc
+A_Communication_meetingLocation((meetingLocation))
+E_Communication --- A_Communication_meetingLocation
+A_Communication_meetingAttendees((meetingAttendees))
+E_Communication --- A_Communication_meetingAttendees
+A_Communication_dealId((dealId))
+E_Communication --- A_Communication_dealId
+A_Communication_activityId((activityId))
+E_Communication --- A_Communication_activityId
+A_Communication_hasAttachments((hasAttachments))
+E_Communication --- A_Communication_hasAttachments
+A_Communication_attachmentCount((attachmentCount))
+E_Communication --- A_Communication_attachmentCount
+A_Communication_tags((tags))
+E_Communication --- A_Communication_tags
+A_Communication_customFields((customFields))
+E_Communication --- A_Communication_customFields
+A_Communication_createdAt((createdAt))
+E_Communication --- A_Communication_createdAt
+
+E_CompanyConfig[CompanyConfig]
+A_CompanyConfig_id((id PK))
+E_CompanyConfig --- A_CompanyConfig_id
+A_CompanyConfig_tenantId((tenantId))
+E_CompanyConfig --- A_CompanyConfig_tenantId
+A_CompanyConfig_companyName((companyName))
+E_CompanyConfig --- A_CompanyConfig_companyName
+A_CompanyConfig_industry((industry))
+E_CompanyConfig --- A_CompanyConfig_industry
+A_CompanyConfig_size((size))
+E_CompanyConfig --- A_CompanyConfig_size
+A_CompanyConfig_country((country))
+E_CompanyConfig --- A_CompanyConfig_country
+A_CompanyConfig_currency((currency))
+E_CompanyConfig --- A_CompanyConfig_currency
+A_CompanyConfig_timezone((timezone))
+E_CompanyConfig --- A_CompanyConfig_timezone
+A_CompanyConfig_fiscalYear((fiscalYear))
+E_CompanyConfig --- A_CompanyConfig_fiscalYear
+A_CompanyConfig_workflowConfig((workflowConfig))
+E_CompanyConfig --- A_CompanyConfig_workflowConfig
+A_CompanyConfig_enabledModules((enabledModules))
+E_CompanyConfig --- A_CompanyConfig_enabledModules
+A_CompanyConfig_approvalLevels((approvalLevels))
+E_CompanyConfig --- A_CompanyConfig_approvalLevels
+A_CompanyConfig_customFields((customFields))
+E_CompanyConfig --- A_CompanyConfig_customFields
+A_CompanyConfig_businessRules((businessRules))
+E_CompanyConfig --- A_CompanyConfig_businessRules
+A_CompanyConfig_createdAt((createdAt))
+E_CompanyConfig --- A_CompanyConfig_createdAt
+A_CompanyConfig_updatedAt((updatedAt))
+E_CompanyConfig --- A_CompanyConfig_updatedAt
+
+E_Contact[Contact]
+A_Contact_id((id PK))
+E_Contact --- A_Contact_id
+A_Contact_tenantId((tenantId))
+E_Contact --- A_Contact_tenantId
+A_Contact_customerId((customerId))
+E_Contact --- A_Contact_customerId
+A_Contact_name((name))
+E_Contact --- A_Contact_name
+A_Contact_email((email))
+E_Contact --- A_Contact_email
+A_Contact_phone((phone))
+E_Contact --- A_Contact_phone
+A_Contact_title((title))
+E_Contact --- A_Contact_title
+A_Contact_status((status))
+E_Contact --- A_Contact_status
+A_Contact_firstName((firstName))
+E_Contact --- A_Contact_firstName
+A_Contact_lastName((lastName))
+E_Contact --- A_Contact_lastName
+A_Contact_jobTitle((jobTitle))
+E_Contact --- A_Contact_jobTitle
+A_Contact_department((department))
+E_Contact --- A_Contact_department
+A_Contact_role((role))
+E_Contact --- A_Contact_role
+A_Contact_mobilePhone((mobilePhone))
+E_Contact --- A_Contact_mobilePhone
+A_Contact_workPhone((workPhone))
+E_Contact --- A_Contact_workPhone
+A_Contact_linkedinUrl((linkedinUrl))
+E_Contact --- A_Contact_linkedinUrl
+A_Contact_twitterHandle((twitterHandle))
+E_Contact --- A_Contact_twitterHandle
+A_Contact_isPrimary((isPrimary))
+E_Contact --- A_Contact_isPrimary
+A_Contact_ownerId((ownerId))
+E_Contact --- A_Contact_ownerId
+A_Contact_preferredChannel((preferredChannel))
+E_Contact --- A_Contact_preferredChannel
+A_Contact_lastContactDate((lastContactDate))
+E_Contact --- A_Contact_lastContactDate
+A_Contact_birthday((birthday))
+E_Contact --- A_Contact_birthday
+A_Contact_anniversary((anniversary))
+E_Contact --- A_Contact_anniversary
+A_Contact_emailOptIn((emailOptIn))
+E_Contact --- A_Contact_emailOptIn
+A_Contact_smsOptIn((smsOptIn))
+E_Contact --- A_Contact_smsOptIn
+A_Contact_doNotCall((doNotCall))
+E_Contact --- A_Contact_doNotCall
+A_Contact_tags((tags))
+E_Contact --- A_Contact_tags
+A_Contact_customFields((customFields))
+E_Contact --- A_Contact_customFields
+A_Contact_createdAt((createdAt))
+E_Contact --- A_Contact_createdAt
+A_Contact_updatedAt((updatedAt))
+E_Contact --- A_Contact_updatedAt
+
+E_Conversation[Conversation]
+A_Conversation_id((id PK))
+E_Conversation --- A_Conversation_id
+A_Conversation_tenantId((tenantId))
+E_Conversation --- A_Conversation_tenantId
+A_Conversation_type((type))
+E_Conversation --- A_Conversation_type
+A_Conversation_name((name))
+E_Conversation --- A_Conversation_name
+A_Conversation_description((description))
+E_Conversation --- A_Conversation_description
+A_Conversation_createdBy((createdBy))
+E_Conversation --- A_Conversation_createdBy
+A_Conversation_isArchived((isArchived))
+E_Conversation --- A_Conversation_isArchived
+A_Conversation_lastMessageAt((lastMessageAt))
+E_Conversation --- A_Conversation_lastMessageAt
+A_Conversation_createdAt((createdAt))
+E_Conversation --- A_Conversation_createdAt
+A_Conversation_updatedAt((updatedAt))
+E_Conversation --- A_Conversation_updatedAt
+
+E_ConversationParticipant[ConversationParticipant]
+A_ConversationParticipant_id((id PK))
+E_ConversationParticipant --- A_ConversationParticipant_id
+A_ConversationParticipant_conversationId((conversationId))
+E_ConversationParticipant --- A_ConversationParticipant_conversationId
+A_ConversationParticipant_userId((userId))
+E_ConversationParticipant --- A_ConversationParticipant_userId
+A_ConversationParticipant_role((role))
+E_ConversationParticipant --- A_ConversationParticipant_role
+A_ConversationParticipant_isMuted((isMuted))
+E_ConversationParticipant --- A_ConversationParticipant_isMuted
+A_ConversationParticipant_lastReadAt((lastReadAt))
+E_ConversationParticipant --- A_ConversationParticipant_lastReadAt
+A_ConversationParticipant_joinedAt((joinedAt))
+E_ConversationParticipant --- A_ConversationParticipant_joinedAt
+
+E_Customer[Customer]
+A_Customer_id((id PK))
+E_Customer --- A_Customer_id
+A_Customer_tenantId((tenantId))
+E_Customer --- A_Customer_tenantId
+A_Customer_name((name))
+E_Customer --- A_Customer_name
+A_Customer_industry((industry))
+E_Customer --- A_Customer_industry
+A_Customer_website((website))
+E_Customer --- A_Customer_website
+A_Customer_status((status))
+E_Customer --- A_Customer_status
+A_Customer_notes((notes))
+E_Customer --- A_Customer_notes
+A_Customer_type((type))
+E_Customer --- A_Customer_type
+A_Customer_companySize((companySize))
+E_Customer --- A_Customer_companySize
+A_Customer_annualRevenue((annualRevenue))
+E_Customer --- A_Customer_annualRevenue
+A_Customer_currencyCode((currencyCode))
+E_Customer --- A_Customer_currencyCode
+A_Customer_primaryEmail((primaryEmail))
+E_Customer --- A_Customer_primaryEmail
+A_Customer_primaryPhone((primaryPhone))
+E_Customer --- A_Customer_primaryPhone
+A_Customer_billingAddress((billingAddress))
+E_Customer --- A_Customer_billingAddress
+A_Customer_shippingAddress((shippingAddress))
+E_Customer --- A_Customer_shippingAddress
+A_Customer_ownerId((ownerId))
+E_Customer --- A_Customer_ownerId
+A_Customer_accountManager((accountManager))
+E_Customer --- A_Customer_accountManager
+A_Customer_category((category))
+E_Customer --- A_Customer_category
+A_Customer_source((source))
+E_Customer --- A_Customer_source
+A_Customer_firstContactDate((firstContactDate))
+E_Customer --- A_Customer_firstContactDate
+A_Customer_lastContactDate((lastContactDate))
+E_Customer --- A_Customer_lastContactDate
+A_Customer_preferredChannel((preferredChannel))
+E_Customer --- A_Customer_preferredChannel
+A_Customer_timezone((timezone))
+E_Customer --- A_Customer_timezone
+A_Customer_tags((tags))
+E_Customer --- A_Customer_tags
+A_Customer_customFields((customFields))
+E_Customer --- A_Customer_customFields
+A_Customer_createdAt((createdAt))
+E_Customer --- A_Customer_createdAt
+A_Customer_updatedAt((updatedAt))
+E_Customer --- A_Customer_updatedAt
+
+E_CustomerNote[CustomerNote]
+A_CustomerNote_id((id PK))
+E_CustomerNote --- A_CustomerNote_id
+A_CustomerNote_tenantId((tenantId))
+E_CustomerNote --- A_CustomerNote_tenantId
+A_CustomerNote_customerId((customerId))
+E_CustomerNote --- A_CustomerNote_customerId
+A_CustomerNote_title((title))
+E_CustomerNote --- A_CustomerNote_title
+A_CustomerNote_content((content))
+E_CustomerNote --- A_CustomerNote_content
+A_CustomerNote_isPinned((isPinned))
+E_CustomerNote --- A_CustomerNote_isPinned
+A_CustomerNote_createdBy((createdBy))
+E_CustomerNote --- A_CustomerNote_createdBy
+A_CustomerNote_createdAt((createdAt))
+E_CustomerNote --- A_CustomerNote_createdAt
+A_CustomerNote_updatedAt((updatedAt))
+E_CustomerNote --- A_CustomerNote_updatedAt
+
+E_CustomField[CustomField]
+A_CustomField_id((id PK))
+E_CustomField --- A_CustomField_id
+A_CustomField_tenantId((tenantId))
+E_CustomField --- A_CustomField_tenantId
+A_CustomField_module((module))
+E_CustomField --- A_CustomField_module
+A_CustomField_fieldName((fieldName))
+E_CustomField --- A_CustomField_fieldName
+A_CustomField_fieldType((fieldType))
+E_CustomField --- A_CustomField_fieldType
+A_CustomField_options((options))
+E_CustomField --- A_CustomField_options
+A_CustomField_required((required))
+E_CustomField --- A_CustomField_required
+A_CustomField_createdAt((createdAt))
+E_CustomField --- A_CustomField_createdAt
+
+E_Deal[Deal]
+A_Deal_id((id PK))
+E_Deal --- A_Deal_id
+A_Deal_tenantId((tenantId))
+E_Deal --- A_Deal_tenantId
+A_Deal_customerId((customerId))
+E_Deal --- A_Deal_customerId
+A_Deal_name((name))
+E_Deal --- A_Deal_name
+A_Deal_stage((stage))
+E_Deal --- A_Deal_stage
+A_Deal_value((value))
+E_Deal --- A_Deal_value
+A_Deal_expectedCloseDate((expectedCloseDate))
+E_Deal --- A_Deal_expectedCloseDate
+A_Deal_status((status))
+E_Deal --- A_Deal_status
+A_Deal_notes((notes))
+E_Deal --- A_Deal_notes
+A_Deal_dealNumber((dealNumber))
+E_Deal --- A_Deal_dealNumber
+A_Deal_pipelineId((pipelineId))
+E_Deal --- A_Deal_pipelineId
+A_Deal_stageOrder((stageOrder))
+E_Deal --- A_Deal_stageOrder
+A_Deal_probability((probability))
+E_Deal --- A_Deal_probability
+A_Deal_amount((amount))
+E_Deal --- A_Deal_amount
+A_Deal_currencyCode((currencyCode))
+E_Deal --- A_Deal_currencyCode
+A_Deal_discount((discount))
+E_Deal --- A_Deal_discount
+A_Deal_tax((tax))
+E_Deal --- A_Deal_tax
+A_Deal_total((total))
+E_Deal --- A_Deal_total
+A_Deal_products((products))
+E_Deal --- A_Deal_products
+A_Deal_ownerId((ownerId))
+E_Deal --- A_Deal_ownerId
+A_Deal_teamMembers((teamMembers))
+E_Deal --- A_Deal_teamMembers
+A_Deal_createdDate((createdDate))
+E_Deal --- A_Deal_createdDate
+A_Deal_closedDate((closedDate))
+E_Deal --- A_Deal_closedDate
+A_Deal_firstContactDate((firstContactDate))
+E_Deal --- A_Deal_firstContactDate
+A_Deal_lastActivityDate((lastActivityDate))
+E_Deal --- A_Deal_lastActivityDate
+A_Deal_competitors((competitors))
+E_Deal --- A_Deal_competitors
+A_Deal_wonReason((wonReason))
+E_Deal --- A_Deal_wonReason
+A_Deal_lostReason((lostReason))
+E_Deal --- A_Deal_lostReason
+A_Deal_lostToCompetitor((lostToCompetitor))
+E_Deal --- A_Deal_lostToCompetitor
+A_Deal_leadId((leadId))
+E_Deal --- A_Deal_leadId
+A_Deal_source((source))
+E_Deal --- A_Deal_source
+A_Deal_tags((tags))
+E_Deal --- A_Deal_tags
+A_Deal_customFields((customFields))
+E_Deal --- A_Deal_customFields
+A_Deal_createdAt((createdAt))
+E_Deal --- A_Deal_createdAt
+A_Deal_updatedAt((updatedAt))
+E_Deal --- A_Deal_updatedAt
+
+E_Department[Department]
+A_Department_id((id PK))
+E_Department --- A_Department_id
+A_Department_tenantId((tenantId))
+E_Department --- A_Department_tenantId
+A_Department_name((name))
+E_Department --- A_Department_name
+A_Department_description((description))
+E_Department --- A_Department_description
+A_Department_location((location))
+E_Department --- A_Department_location
+A_Department_managerId((managerId))
+E_Department --- A_Department_managerId
+A_Department_budget((budget))
+E_Department --- A_Department_budget
+A_Department_status((status))
+E_Department --- A_Department_status
+A_Department_createdAt((createdAt))
+E_Department --- A_Department_createdAt
+A_Department_updatedAt((updatedAt))
+E_Department --- A_Department_updatedAt
+
+E_Document[Document]
+A_Document_id((id PK))
+E_Document --- A_Document_id
+A_Document_tenantId((tenantId))
+E_Document --- A_Document_tenantId
+A_Document_folderId((folderId))
+E_Document --- A_Document_folderId
+A_Document_name((name))
+E_Document --- A_Document_name
+A_Document_description((description))
+E_Document --- A_Document_description
+A_Document_fileName((fileName))
+E_Document --- A_Document_fileName
+A_Document_fileSize((fileSize))
+E_Document --- A_Document_fileSize
+A_Document_mimeType((mimeType))
+E_Document --- A_Document_mimeType
+A_Document_storagePath((storagePath))
+E_Document --- A_Document_storagePath
+A_Document_storageProvider((storageProvider))
+E_Document --- A_Document_storageProvider
+A_Document_checksum((checksum))
+E_Document --- A_Document_checksum
+A_Document_tags((tags))
+E_Document --- A_Document_tags
+A_Document_metadata((metadata))
+E_Document --- A_Document_metadata
+A_Document_version((version))
+E_Document --- A_Document_version
+A_Document_isLatest((isLatest))
+E_Document --- A_Document_isLatest
+A_Document_status((status))
+E_Document --- A_Document_status
+A_Document_isPublic((isPublic))
+E_Document --- A_Document_isPublic
+A_Document_downloadCount((downloadCount))
+E_Document --- A_Document_downloadCount
+A_Document_viewCount((viewCount))
+E_Document --- A_Document_viewCount
+A_Document_isTemplate((isTemplate))
+E_Document --- A_Document_isTemplate
+A_Document_templateId((templateId))
+E_Document --- A_Document_templateId
+A_Document_createdBy((createdBy))
+E_Document --- A_Document_createdBy
+A_Document_updatedBy((updatedBy))
+E_Document --- A_Document_updatedBy
+A_Document_createdAt((createdAt))
+E_Document --- A_Document_createdAt
+A_Document_updatedAt((updatedAt))
+E_Document --- A_Document_updatedAt
+
+E_DocumentActivity[DocumentActivity]
+A_DocumentActivity_id((id PK))
+E_DocumentActivity --- A_DocumentActivity_id
+A_DocumentActivity_documentId((documentId))
+E_DocumentActivity --- A_DocumentActivity_documentId
+A_DocumentActivity_shareId((shareId))
+E_DocumentActivity --- A_DocumentActivity_shareId
+A_DocumentActivity_tenantId((tenantId))
+E_DocumentActivity --- A_DocumentActivity_tenantId
+A_DocumentActivity_userId((userId))
+E_DocumentActivity --- A_DocumentActivity_userId
+A_DocumentActivity_action((action))
+E_DocumentActivity --- A_DocumentActivity_action
+A_DocumentActivity_details((details))
+E_DocumentActivity --- A_DocumentActivity_details
+A_DocumentActivity_ipAddress((ipAddress))
+E_DocumentActivity --- A_DocumentActivity_ipAddress
+A_DocumentActivity_userAgent((userAgent))
+E_DocumentActivity --- A_DocumentActivity_userAgent
+A_DocumentActivity_createdAt((createdAt))
+E_DocumentActivity --- A_DocumentActivity_createdAt
+
+E_DocumentComment[DocumentComment]
+A_DocumentComment_id((id PK))
+E_DocumentComment --- A_DocumentComment_id
+A_DocumentComment_documentId((documentId))
+E_DocumentComment --- A_DocumentComment_documentId
+A_DocumentComment_userId((userId))
+E_DocumentComment --- A_DocumentComment_userId
+A_DocumentComment_content((content))
+E_DocumentComment --- A_DocumentComment_content
+A_DocumentComment_parentId((parentId))
+E_DocumentComment --- A_DocumentComment_parentId
+A_DocumentComment_createdAt((createdAt))
+E_DocumentComment --- A_DocumentComment_createdAt
+A_DocumentComment_updatedAt((updatedAt))
+E_DocumentComment --- A_DocumentComment_updatedAt
+
+E_DocumentFolder[DocumentFolder]
+A_DocumentFolder_id((id PK))
+E_DocumentFolder --- A_DocumentFolder_id
+A_DocumentFolder_tenantId((tenantId))
+E_DocumentFolder --- A_DocumentFolder_tenantId
+A_DocumentFolder_name((name))
+E_DocumentFolder --- A_DocumentFolder_name
+A_DocumentFolder_description((description))
+E_DocumentFolder --- A_DocumentFolder_description
+A_DocumentFolder_parentId((parentId))
+E_DocumentFolder --- A_DocumentFolder_parentId
+A_DocumentFolder_path((path))
+E_DocumentFolder --- A_DocumentFolder_path
+A_DocumentFolder_color((color))
+E_DocumentFolder --- A_DocumentFolder_color
+A_DocumentFolder_icon((icon))
+E_DocumentFolder --- A_DocumentFolder_icon
+A_DocumentFolder_createdBy((createdBy))
+E_DocumentFolder --- A_DocumentFolder_createdBy
+A_DocumentFolder_createdAt((createdAt))
+E_DocumentFolder --- A_DocumentFolder_createdAt
+A_DocumentFolder_updatedAt((updatedAt))
+E_DocumentFolder --- A_DocumentFolder_updatedAt
+
+E_DocumentFolderPermission[DocumentFolderPermission]
+A_DocumentFolderPermission_id((id PK))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_id
+A_DocumentFolderPermission_folderId((folderId))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_folderId
+A_DocumentFolderPermission_userId((userId))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_userId
+A_DocumentFolderPermission_roleId((roleId))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_roleId
+A_DocumentFolderPermission_canView((canView))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_canView
+A_DocumentFolderPermission_canEdit((canEdit))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_canEdit
+A_DocumentFolderPermission_canDelete((canDelete))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_canDelete
+A_DocumentFolderPermission_canCreate((canCreate))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_canCreate
+A_DocumentFolderPermission_canManage((canManage))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_canManage
+A_DocumentFolderPermission_createdAt((createdAt))
+E_DocumentFolderPermission --- A_DocumentFolderPermission_createdAt
+
+E_DocumentPermission[DocumentPermission]
+A_DocumentPermission_id((id PK))
+E_DocumentPermission --- A_DocumentPermission_id
+A_DocumentPermission_documentId((documentId))
+E_DocumentPermission --- A_DocumentPermission_documentId
+A_DocumentPermission_userId((userId))
+E_DocumentPermission --- A_DocumentPermission_userId
+A_DocumentPermission_roleId((roleId))
+E_DocumentPermission --- A_DocumentPermission_roleId
+A_DocumentPermission_canView((canView))
+E_DocumentPermission --- A_DocumentPermission_canView
+A_DocumentPermission_canEdit((canEdit))
+E_DocumentPermission --- A_DocumentPermission_canEdit
+A_DocumentPermission_canDelete((canDelete))
+E_DocumentPermission --- A_DocumentPermission_canDelete
+A_DocumentPermission_canShare((canShare))
+E_DocumentPermission --- A_DocumentPermission_canShare
+A_DocumentPermission_canManage((canManage))
+E_DocumentPermission --- A_DocumentPermission_canManage
+A_DocumentPermission_createdAt((createdAt))
+E_DocumentPermission --- A_DocumentPermission_createdAt
+
+E_DocumentShare[DocumentShare]
+A_DocumentShare_id((id PK))
+E_DocumentShare --- A_DocumentShare_id
+A_DocumentShare_documentId((documentId))
+E_DocumentShare --- A_DocumentShare_documentId
+A_DocumentShare_shareType((shareType))
+E_DocumentShare --- A_DocumentShare_shareType
+A_DocumentShare_shareToken((shareToken))
+E_DocumentShare --- A_DocumentShare_shareToken
+A_DocumentShare_expiresAt((expiresAt))
+E_DocumentShare --- A_DocumentShare_expiresAt
+A_DocumentShare_password((password))
+E_DocumentShare --- A_DocumentShare_password
+A_DocumentShare_maxDownloads((maxDownloads))
+E_DocumentShare --- A_DocumentShare_maxDownloads
+A_DocumentShare_downloadCount((downloadCount))
+E_DocumentShare --- A_DocumentShare_downloadCount
+A_DocumentShare_sharedWith((sharedWith))
+E_DocumentShare --- A_DocumentShare_sharedWith
+A_DocumentShare_canView((canView))
+E_DocumentShare --- A_DocumentShare_canView
+A_DocumentShare_canDownload((canDownload))
+E_DocumentShare --- A_DocumentShare_canDownload
+A_DocumentShare_canEdit((canEdit))
+E_DocumentShare --- A_DocumentShare_canEdit
+A_DocumentShare_canShare((canShare))
+E_DocumentShare --- A_DocumentShare_canShare
+A_DocumentShare_isActive((isActive))
+E_DocumentShare --- A_DocumentShare_isActive
+A_DocumentShare_createdBy((createdBy))
+E_DocumentShare --- A_DocumentShare_createdBy
+A_DocumentShare_createdAt((createdAt))
+E_DocumentShare --- A_DocumentShare_createdAt
+
+E_DocumentTemplate[DocumentTemplate]
+A_DocumentTemplate_id((id PK))
+E_DocumentTemplate --- A_DocumentTemplate_id
+A_DocumentTemplate_tenantId((tenantId))
+E_DocumentTemplate --- A_DocumentTemplate_tenantId
+A_DocumentTemplate_name((name))
+E_DocumentTemplate --- A_DocumentTemplate_name
+A_DocumentTemplate_description((description))
+E_DocumentTemplate --- A_DocumentTemplate_description
+A_DocumentTemplate_category((category))
+E_DocumentTemplate --- A_DocumentTemplate_category
+A_DocumentTemplate_fileName((fileName))
+E_DocumentTemplate --- A_DocumentTemplate_fileName
+A_DocumentTemplate_storagePath((storagePath))
+E_DocumentTemplate --- A_DocumentTemplate_storagePath
+A_DocumentTemplate_fileSize((fileSize))
+E_DocumentTemplate --- A_DocumentTemplate_fileSize
+A_DocumentTemplate_mimeType((mimeType))
+E_DocumentTemplate --- A_DocumentTemplate_mimeType
+A_DocumentTemplate_fields((fields))
+E_DocumentTemplate --- A_DocumentTemplate_fields
+A_DocumentTemplate_usageCount((usageCount))
+E_DocumentTemplate --- A_DocumentTemplate_usageCount
+A_DocumentTemplate_isActive((isActive))
+E_DocumentTemplate --- A_DocumentTemplate_isActive
+A_DocumentTemplate_createdBy((createdBy))
+E_DocumentTemplate --- A_DocumentTemplate_createdBy
+A_DocumentTemplate_createdAt((createdAt))
+E_DocumentTemplate --- A_DocumentTemplate_createdAt
+A_DocumentTemplate_updatedAt((updatedAt))
+E_DocumentTemplate --- A_DocumentTemplate_updatedAt
+
+E_DocumentVersion[DocumentVersion]
+A_DocumentVersion_id((id PK))
+E_DocumentVersion --- A_DocumentVersion_id
+A_DocumentVersion_documentId((documentId))
+E_DocumentVersion --- A_DocumentVersion_documentId
+A_DocumentVersion_versionNumber((versionNumber))
+E_DocumentVersion --- A_DocumentVersion_versionNumber
+A_DocumentVersion_fileName((fileName))
+E_DocumentVersion --- A_DocumentVersion_fileName
+A_DocumentVersion_fileSize((fileSize))
+E_DocumentVersion --- A_DocumentVersion_fileSize
+A_DocumentVersion_storagePath((storagePath))
+E_DocumentVersion --- A_DocumentVersion_storagePath
+A_DocumentVersion_checksum((checksum))
+E_DocumentVersion --- A_DocumentVersion_checksum
+A_DocumentVersion_changeLog((changeLog))
+E_DocumentVersion --- A_DocumentVersion_changeLog
+A_DocumentVersion_createdBy((createdBy))
+E_DocumentVersion --- A_DocumentVersion_createdBy
+A_DocumentVersion_createdAt((createdAt))
+E_DocumentVersion --- A_DocumentVersion_createdAt
+
+E_EmailLog[EmailLog]
+A_EmailLog_id((id PK))
+E_EmailLog --- A_EmailLog_id
+A_EmailLog_tenantId((tenantId))
+E_EmailLog --- A_EmailLog_tenantId
+A_EmailLog_to((to))
+E_EmailLog --- A_EmailLog_to
+A_EmailLog_cc((cc))
+E_EmailLog --- A_EmailLog_cc
+A_EmailLog_bcc((bcc))
+E_EmailLog --- A_EmailLog_bcc
+A_EmailLog_subject((subject))
+E_EmailLog --- A_EmailLog_subject
+A_EmailLog_body((body))
+E_EmailLog --- A_EmailLog_body
+A_EmailLog_templateId((templateId))
+E_EmailLog --- A_EmailLog_templateId
+A_EmailLog_status((status))
+E_EmailLog --- A_EmailLog_status
+A_EmailLog_sentAt((sentAt))
+E_EmailLog --- A_EmailLog_sentAt
+A_EmailLog_failedAt((failedAt))
+E_EmailLog --- A_EmailLog_failedAt
+A_EmailLog_errorMessage((errorMessage))
+E_EmailLog --- A_EmailLog_errorMessage
+A_EmailLog_metadata((metadata))
+E_EmailLog --- A_EmailLog_metadata
+A_EmailLog_createdAt((createdAt))
+E_EmailLog --- A_EmailLog_createdAt
+
+E_EmailQueue[EmailQueue]
+A_EmailQueue_id((id PK))
+E_EmailQueue --- A_EmailQueue_id
+A_EmailQueue_tenantId((tenantId))
+E_EmailQueue --- A_EmailQueue_tenantId
+A_EmailQueue_to((to))
+E_EmailQueue --- A_EmailQueue_to
+A_EmailQueue_cc((cc))
+E_EmailQueue --- A_EmailQueue_cc
+A_EmailQueue_bcc((bcc))
+E_EmailQueue --- A_EmailQueue_bcc
+A_EmailQueue_subject((subject))
+E_EmailQueue --- A_EmailQueue_subject
+A_EmailQueue_body((body))
+E_EmailQueue --- A_EmailQueue_body
+A_EmailQueue_templateId((templateId))
+E_EmailQueue --- A_EmailQueue_templateId
+A_EmailQueue_variables((variables))
+E_EmailQueue --- A_EmailQueue_variables
+A_EmailQueue_status((status))
+E_EmailQueue --- A_EmailQueue_status
+A_EmailQueue_priority((priority))
+E_EmailQueue --- A_EmailQueue_priority
+A_EmailQueue_attempts((attempts))
+E_EmailQueue --- A_EmailQueue_attempts
+A_EmailQueue_maxAttempts((maxAttempts))
+E_EmailQueue --- A_EmailQueue_maxAttempts
+A_EmailQueue_scheduledAt((scheduledAt))
+E_EmailQueue --- A_EmailQueue_scheduledAt
+A_EmailQueue_processingAt((processingAt))
+E_EmailQueue --- A_EmailQueue_processingAt
+A_EmailQueue_sentAt((sentAt))
+E_EmailQueue --- A_EmailQueue_sentAt
+A_EmailQueue_failedAt((failedAt))
+E_EmailQueue --- A_EmailQueue_failedAt
+A_EmailQueue_cancelledAt((cancelledAt))
+E_EmailQueue --- A_EmailQueue_cancelledAt
+A_EmailQueue_lastError((lastError))
+E_EmailQueue --- A_EmailQueue_lastError
+A_EmailQueue_errorLog((errorLog))
+E_EmailQueue --- A_EmailQueue_errorLog
+A_EmailQueue_metadata((metadata))
+E_EmailQueue --- A_EmailQueue_metadata
+A_EmailQueue_createdAt((createdAt))
+E_EmailQueue --- A_EmailQueue_createdAt
+A_EmailQueue_updatedAt((updatedAt))
+E_EmailQueue --- A_EmailQueue_updatedAt
+
+E_EmailTemplate[EmailTemplate]
+A_EmailTemplate_id((id PK))
+E_EmailTemplate --- A_EmailTemplate_id
+A_EmailTemplate_tenantId((tenantId))
+E_EmailTemplate --- A_EmailTemplate_tenantId
+A_EmailTemplate_name((name))
+E_EmailTemplate --- A_EmailTemplate_name
+A_EmailTemplate_code((code))
+E_EmailTemplate --- A_EmailTemplate_code
+A_EmailTemplate_subject((subject))
+E_EmailTemplate --- A_EmailTemplate_subject
+A_EmailTemplate_body((body))
+E_EmailTemplate --- A_EmailTemplate_body
+A_EmailTemplate_variables((variables))
+E_EmailTemplate --- A_EmailTemplate_variables
+A_EmailTemplate_isSystem((isSystem))
+E_EmailTemplate --- A_EmailTemplate_isSystem
+A_EmailTemplate_isActive((isActive))
+E_EmailTemplate --- A_EmailTemplate_isActive
+A_EmailTemplate_createdBy((createdBy))
+E_EmailTemplate --- A_EmailTemplate_createdBy
+A_EmailTemplate_createdAt((createdAt))
+E_EmailTemplate --- A_EmailTemplate_createdAt
+A_EmailTemplate_updatedAt((updatedAt))
+E_EmailTemplate --- A_EmailTemplate_updatedAt
+
+E_Employee[Employee]
+A_Employee_id((id PK))
+E_Employee --- A_Employee_id
+A_Employee_tenantId((tenantId))
+E_Employee --- A_Employee_tenantId
+A_Employee_userId((userId))
+E_Employee --- A_Employee_userId
+A_Employee_departmentId((departmentId))
+E_Employee --- A_Employee_departmentId
+A_Employee_managerId((managerId))
+E_Employee --- A_Employee_managerId
+A_Employee_employeeCode((employeeCode))
+E_Employee --- A_Employee_employeeCode
+A_Employee_name((name))
+E_Employee --- A_Employee_name
+A_Employee_email((email))
+E_Employee --- A_Employee_email
+A_Employee_phone((phone))
+E_Employee --- A_Employee_phone
+A_Employee_designation((designation))
+E_Employee --- A_Employee_designation
+A_Employee_joiningDate((joiningDate))
+E_Employee --- A_Employee_joiningDate
+A_Employee_status((status))
+E_Employee --- A_Employee_status
+A_Employee_createdAt((createdAt))
+E_Employee --- A_Employee_createdAt
+
+E_ExpenseCategory[ExpenseCategory]
+A_ExpenseCategory_id((id PK))
+E_ExpenseCategory --- A_ExpenseCategory_id
+A_ExpenseCategory_tenantId((tenantId))
+E_ExpenseCategory --- A_ExpenseCategory_tenantId
+A_ExpenseCategory_name((name))
+E_ExpenseCategory --- A_ExpenseCategory_name
+A_ExpenseCategory_code((code))
+E_ExpenseCategory --- A_ExpenseCategory_code
+A_ExpenseCategory_active((active))
+E_ExpenseCategory --- A_ExpenseCategory_active
+A_ExpenseCategory_createdAt((createdAt))
+E_ExpenseCategory --- A_ExpenseCategory_createdAt
+
+E_ExpenseClaim[ExpenseClaim]
+A_ExpenseClaim_id((id PK))
+E_ExpenseClaim --- A_ExpenseClaim_id
+A_ExpenseClaim_tenantId((tenantId))
+E_ExpenseClaim --- A_ExpenseClaim_tenantId
+A_ExpenseClaim_employeeId((employeeId))
+E_ExpenseClaim --- A_ExpenseClaim_employeeId
+A_ExpenseClaim_categoryId((categoryId))
+E_ExpenseClaim --- A_ExpenseClaim_categoryId
+A_ExpenseClaim_title((title))
+E_ExpenseClaim --- A_ExpenseClaim_title
+A_ExpenseClaim_amount((amount))
+E_ExpenseClaim --- A_ExpenseClaim_amount
+A_ExpenseClaim_description((description))
+E_ExpenseClaim --- A_ExpenseClaim_description
+A_ExpenseClaim_receiptUrl((receiptUrl))
+E_ExpenseClaim --- A_ExpenseClaim_receiptUrl
+A_ExpenseClaim_expenseDate((expenseDate))
+E_ExpenseClaim --- A_ExpenseClaim_expenseDate
+A_ExpenseClaim_status((status))
+E_ExpenseClaim --- A_ExpenseClaim_status
+A_ExpenseClaim_createdAt((createdAt))
+E_ExpenseClaim --- A_ExpenseClaim_createdAt
+
+E_FiscalYear[FiscalYear]
+A_FiscalYear_id((id PK))
+E_FiscalYear --- A_FiscalYear_id
+A_FiscalYear_tenantId((tenantId))
+E_FiscalYear --- A_FiscalYear_tenantId
+A_FiscalYear_name((name))
+E_FiscalYear --- A_FiscalYear_name
+A_FiscalYear_startDate((startDate))
+E_FiscalYear --- A_FiscalYear_startDate
+A_FiscalYear_endDate((endDate))
+E_FiscalYear --- A_FiscalYear_endDate
+A_FiscalYear_isClosed((isClosed))
+E_FiscalYear --- A_FiscalYear_isClosed
+A_FiscalYear_closedBy((closedBy))
+E_FiscalYear --- A_FiscalYear_closedBy
+A_FiscalYear_closedAt((closedAt))
+E_FiscalYear --- A_FiscalYear_closedAt
+A_FiscalYear_createdAt((createdAt))
+E_FiscalYear --- A_FiscalYear_createdAt
+A_FiscalYear_updatedAt((updatedAt))
+E_FiscalYear --- A_FiscalYear_updatedAt
+
+E_GoodsReceipt[GoodsReceipt]
+A_GoodsReceipt_id((id PK))
+E_GoodsReceipt --- A_GoodsReceipt_id
+A_GoodsReceipt_tenantId((tenantId))
+E_GoodsReceipt --- A_GoodsReceipt_tenantId
+A_GoodsReceipt_receiptNumber((receiptNumber))
+E_GoodsReceipt --- A_GoodsReceipt_receiptNumber
+A_GoodsReceipt_purchaseOrderId((purchaseOrderId))
+E_GoodsReceipt --- A_GoodsReceipt_purchaseOrderId
+A_GoodsReceipt_receivedDate((receivedDate))
+E_GoodsReceipt --- A_GoodsReceipt_receivedDate
+A_GoodsReceipt_receivedBy((receivedBy))
+E_GoodsReceipt --- A_GoodsReceipt_receivedBy
+A_GoodsReceipt_items((items))
+E_GoodsReceipt --- A_GoodsReceipt_items
+A_GoodsReceipt_status((status))
+E_GoodsReceipt --- A_GoodsReceipt_status
+A_GoodsReceipt_qualityStatus((qualityStatus))
+E_GoodsReceipt --- A_GoodsReceipt_qualityStatus
+A_GoodsReceipt_warehouseLocation((warehouseLocation))
+E_GoodsReceipt --- A_GoodsReceipt_warehouseLocation
+A_GoodsReceipt_notes((notes))
+E_GoodsReceipt --- A_GoodsReceipt_notes
+A_GoodsReceipt_attachments((attachments))
+E_GoodsReceipt --- A_GoodsReceipt_attachments
+A_GoodsReceipt_createdAt((createdAt))
+E_GoodsReceipt --- A_GoodsReceipt_createdAt
+A_GoodsReceipt_updatedAt((updatedAt))
+E_GoodsReceipt --- A_GoodsReceipt_updatedAt
+
+E_InvoicePayment[InvoicePayment]
+A_InvoicePayment_id((id PK))
+E_InvoicePayment --- A_InvoicePayment_id
+A_InvoicePayment_tenantId((tenantId))
+E_InvoicePayment --- A_InvoicePayment_tenantId
+A_InvoicePayment_invoiceId((invoiceId))
+E_InvoicePayment --- A_InvoicePayment_invoiceId
+A_InvoicePayment_amount((amount))
+E_InvoicePayment --- A_InvoicePayment_amount
+A_InvoicePayment_paymentDate((paymentDate))
+E_InvoicePayment --- A_InvoicePayment_paymentDate
+A_InvoicePayment_paymentMethod((paymentMethod))
+E_InvoicePayment --- A_InvoicePayment_paymentMethod
+A_InvoicePayment_referenceNumber((referenceNumber))
+E_InvoicePayment --- A_InvoicePayment_referenceNumber
+A_InvoicePayment_notes((notes))
+E_InvoicePayment --- A_InvoicePayment_notes
+A_InvoicePayment_createdAt((createdAt))
+E_InvoicePayment --- A_InvoicePayment_createdAt
+A_InvoicePayment_updatedAt((updatedAt))
+E_InvoicePayment --- A_InvoicePayment_updatedAt
+
+E_Item[Item]
+A_Item_id((id PK))
+E_Item --- A_Item_id
+A_Item_name((name))
+E_Item --- A_Item_name
+A_Item_sku((sku))
+E_Item --- A_Item_sku
+A_Item_price((price))
+E_Item --- A_Item_price
+A_Item_quantity((quantity))
+E_Item --- A_Item_quantity
+A_Item_description((description))
+E_Item --- A_Item_description
+A_Item_category((category))
+E_Item --- A_Item_category
+A_Item_tenantId((tenantId))
+E_Item --- A_Item_tenantId
+A_Item_createdAt((createdAt))
+E_Item --- A_Item_createdAt
+
+E_JournalEntry[JournalEntry]
+A_JournalEntry_id((id PK))
+E_JournalEntry --- A_JournalEntry_id
+A_JournalEntry_tenantId((tenantId))
+E_JournalEntry --- A_JournalEntry_tenantId
+A_JournalEntry_entryNumber((entryNumber))
+E_JournalEntry --- A_JournalEntry_entryNumber
+A_JournalEntry_entryDate((entryDate))
+E_JournalEntry --- A_JournalEntry_entryDate
+A_JournalEntry_postingDate((postingDate))
+E_JournalEntry --- A_JournalEntry_postingDate
+A_JournalEntry_type((type))
+E_JournalEntry --- A_JournalEntry_type
+A_JournalEntry_description((description))
+E_JournalEntry --- A_JournalEntry_description
+A_JournalEntry_referenceType((referenceType))
+E_JournalEntry --- A_JournalEntry_referenceType
+A_JournalEntry_referenceId((referenceId))
+E_JournalEntry --- A_JournalEntry_referenceId
+A_JournalEntry_status((status))
+E_JournalEntry --- A_JournalEntry_status
+A_JournalEntry_totalDebit((totalDebit))
+E_JournalEntry --- A_JournalEntry_totalDebit
+A_JournalEntry_totalCredit((totalCredit))
+E_JournalEntry --- A_JournalEntry_totalCredit
+A_JournalEntry_createdBy((createdBy))
+E_JournalEntry --- A_JournalEntry_createdBy
+A_JournalEntry_approvedBy((approvedBy))
+E_JournalEntry --- A_JournalEntry_approvedBy
+A_JournalEntry_approvedAt((approvedAt))
+E_JournalEntry --- A_JournalEntry_approvedAt
+A_JournalEntry_postedBy((postedBy))
+E_JournalEntry --- A_JournalEntry_postedBy
+A_JournalEntry_postedAt((postedAt))
+E_JournalEntry --- A_JournalEntry_postedAt
+A_JournalEntry_reversedBy((reversedBy))
+E_JournalEntry --- A_JournalEntry_reversedBy
+A_JournalEntry_reversedAt((reversedAt))
+E_JournalEntry --- A_JournalEntry_reversedAt
+A_JournalEntry_reversingEntryId((reversingEntryId))
+E_JournalEntry --- A_JournalEntry_reversingEntryId
+A_JournalEntry_attachments((attachments))
+E_JournalEntry --- A_JournalEntry_attachments
+A_JournalEntry_createdAt((createdAt))
+E_JournalEntry --- A_JournalEntry_createdAt
+A_JournalEntry_updatedAt((updatedAt))
+E_JournalEntry --- A_JournalEntry_updatedAt
+
+E_JournalEntryLine[JournalEntryLine]
+A_JournalEntryLine_id((id PK))
+E_JournalEntryLine --- A_JournalEntryLine_id
+A_JournalEntryLine_journalEntryId((journalEntryId))
+E_JournalEntryLine --- A_JournalEntryLine_journalEntryId
+A_JournalEntryLine_accountId((accountId))
+E_JournalEntryLine --- A_JournalEntryLine_accountId
+A_JournalEntryLine_lineNumber((lineNumber))
+E_JournalEntryLine --- A_JournalEntryLine_lineNumber
+A_JournalEntryLine_description((description))
+E_JournalEntryLine --- A_JournalEntryLine_description
+A_JournalEntryLine_debit((debit))
+E_JournalEntryLine --- A_JournalEntryLine_debit
+A_JournalEntryLine_credit((credit))
+E_JournalEntryLine --- A_JournalEntryLine_credit
+A_JournalEntryLine_departmentId((departmentId))
+E_JournalEntryLine --- A_JournalEntryLine_departmentId
+A_JournalEntryLine_projectId((projectId))
+E_JournalEntryLine --- A_JournalEntryLine_projectId
+A_JournalEntryLine_costCenter((costCenter))
+E_JournalEntryLine --- A_JournalEntryLine_costCenter
+A_JournalEntryLine_createdAt((createdAt))
+E_JournalEntryLine --- A_JournalEntryLine_createdAt
+
+E_Lead[Lead]
+A_Lead_id((id PK))
+E_Lead --- A_Lead_id
+A_Lead_tenantId((tenantId))
+E_Lead --- A_Lead_tenantId
+A_Lead_name((name))
+E_Lead --- A_Lead_name
+A_Lead_email((email))
+E_Lead --- A_Lead_email
+A_Lead_phone((phone))
+E_Lead --- A_Lead_phone
+A_Lead_company((company))
+E_Lead --- A_Lead_company
+A_Lead_source((source))
+E_Lead --- A_Lead_source
+A_Lead_status((status))
+E_Lead --- A_Lead_status
+A_Lead_notes((notes))
+E_Lead --- A_Lead_notes
+A_Lead_customerId((customerId))
+E_Lead --- A_Lead_customerId
+A_Lead_contactId((contactId))
+E_Lead --- A_Lead_contactId
+A_Lead_firstName((firstName))
+E_Lead --- A_Lead_firstName
+A_Lead_lastName((lastName))
+E_Lead --- A_Lead_lastName
+A_Lead_jobTitle((jobTitle))
+E_Lead --- A_Lead_jobTitle
+A_Lead_leadScore((leadScore))
+E_Lead --- A_Lead_leadScore
+A_Lead_rating((rating))
+E_Lead --- A_Lead_rating
+A_Lead_priority((priority))
+E_Lead --- A_Lead_priority
+A_Lead_campaign((campaign))
+E_Lead --- A_Lead_campaign
+A_Lead_medium((medium))
+E_Lead --- A_Lead_medium
+A_Lead_referrer((referrer))
+E_Lead --- A_Lead_referrer
+A_Lead_budget((budget))
+E_Lead --- A_Lead_budget
+A_Lead_timeline((timeline))
+E_Lead --- A_Lead_timeline
+A_Lead_authority((authority))
+E_Lead --- A_Lead_authority
+A_Lead_need((need))
+E_Lead --- A_Lead_need
+A_Lead_ownerId((ownerId))
+E_Lead --- A_Lead_ownerId
+A_Lead_assignedAt((assignedAt))
+E_Lead --- A_Lead_assignedAt
+A_Lead_convertedAt((convertedAt))
+E_Lead --- A_Lead_convertedAt
+A_Lead_conversionSource((conversionSource))
+E_Lead --- A_Lead_conversionSource
+A_Lead_dealId((dealId))
+E_Lead --- A_Lead_dealId
+A_Lead_firstContactDate((firstContactDate))
+E_Lead --- A_Lead_firstContactDate
+A_Lead_lastContactDate((lastContactDate))
+E_Lead --- A_Lead_lastContactDate
+A_Lead_lastActivityDate((lastActivityDate))
+E_Lead --- A_Lead_lastActivityDate
+A_Lead_disqualifiedAt((disqualifiedAt))
+E_Lead --- A_Lead_disqualifiedAt
+A_Lead_disqualifiedBy((disqualifiedBy))
+E_Lead --- A_Lead_disqualifiedBy
+A_Lead_disqualifiedReason((disqualifiedReason))
+E_Lead --- A_Lead_disqualifiedReason
+A_Lead_tags((tags))
+E_Lead --- A_Lead_tags
+A_Lead_customFields((customFields))
+E_Lead --- A_Lead_customFields
+A_Lead_createdAt((createdAt))
+E_Lead --- A_Lead_createdAt
+A_Lead_updatedAt((updatedAt))
+E_Lead --- A_Lead_updatedAt
+
+E_LeaveIntegration[LeaveIntegration]
+A_LeaveIntegration_id((id PK))
+E_LeaveIntegration --- A_LeaveIntegration_id
+A_LeaveIntegration_tenantId((tenantId))
+E_LeaveIntegration --- A_LeaveIntegration_tenantId
+A_LeaveIntegration_leaveRequestId((leaveRequestId))
+E_LeaveIntegration --- A_LeaveIntegration_leaveRequestId
+A_LeaveIntegration_employeeId((employeeId))
+E_LeaveIntegration --- A_LeaveIntegration_employeeId
+A_LeaveIntegration_leaveDate((leaveDate))
+E_LeaveIntegration --- A_LeaveIntegration_leaveDate
+A_LeaveIntegration_status((status))
+E_LeaveIntegration --- A_LeaveIntegration_status
+A_LeaveIntegration_attendanceStatus((attendanceStatus))
+E_LeaveIntegration --- A_LeaveIntegration_attendanceStatus
+A_LeaveIntegration_createdAt((createdAt))
+E_LeaveIntegration --- A_LeaveIntegration_createdAt
+A_LeaveIntegration_updatedAt((updatedAt))
+E_LeaveIntegration --- A_LeaveIntegration_updatedAt
+
+E_LeaveRequest[LeaveRequest]
+A_LeaveRequest_id((id PK))
+E_LeaveRequest --- A_LeaveRequest_id
+A_LeaveRequest_tenantId((tenantId))
+E_LeaveRequest --- A_LeaveRequest_tenantId
+A_LeaveRequest_employeeId((employeeId))
+E_LeaveRequest --- A_LeaveRequest_employeeId
+A_LeaveRequest_leaveTypeId((leaveTypeId))
+E_LeaveRequest --- A_LeaveRequest_leaveTypeId
+A_LeaveRequest_startDate((startDate))
+E_LeaveRequest --- A_LeaveRequest_startDate
+A_LeaveRequest_endDate((endDate))
+E_LeaveRequest --- A_LeaveRequest_endDate
+A_LeaveRequest_reason((reason))
+E_LeaveRequest --- A_LeaveRequest_reason
+A_LeaveRequest_status((status))
+E_LeaveRequest --- A_LeaveRequest_status
+A_LeaveRequest_createdAt((createdAt))
+E_LeaveRequest --- A_LeaveRequest_createdAt
+
+E_LeaveType[LeaveType]
+A_LeaveType_id((id PK))
+E_LeaveType --- A_LeaveType_id
+A_LeaveType_tenantId((tenantId))
+E_LeaveType --- A_LeaveType_tenantId
+A_LeaveType_name((name))
+E_LeaveType --- A_LeaveType_name
+A_LeaveType_code((code))
+E_LeaveType --- A_LeaveType_code
+A_LeaveType_maxDays((maxDays))
+E_LeaveType --- A_LeaveType_maxDays
+A_LeaveType_paid((paid))
+E_LeaveType --- A_LeaveType_paid
+A_LeaveType_requiresApproval((requiresApproval))
+E_LeaveType --- A_LeaveType_requiresApproval
+A_LeaveType_createdAt((createdAt))
+E_LeaveType --- A_LeaveType_createdAt
+
+E_LedgerEntry[LedgerEntry]
+A_LedgerEntry_id((id PK))
+E_LedgerEntry --- A_LedgerEntry_id
+A_LedgerEntry_tenantId((tenantId))
+E_LedgerEntry --- A_LedgerEntry_tenantId
+A_LedgerEntry_accountId((accountId))
+E_LedgerEntry --- A_LedgerEntry_accountId
+A_LedgerEntry_date((date))
+E_LedgerEntry --- A_LedgerEntry_date
+A_LedgerEntry_description((description))
+E_LedgerEntry --- A_LedgerEntry_description
+A_LedgerEntry_debit((debit))
+E_LedgerEntry --- A_LedgerEntry_debit
+A_LedgerEntry_credit((credit))
+E_LedgerEntry --- A_LedgerEntry_credit
+A_LedgerEntry_balance((balance))
+E_LedgerEntry --- A_LedgerEntry_balance
+A_LedgerEntry_referenceType((referenceType))
+E_LedgerEntry --- A_LedgerEntry_referenceType
+A_LedgerEntry_referenceId((referenceId))
+E_LedgerEntry --- A_LedgerEntry_referenceId
+A_LedgerEntry_journalEntryId((journalEntryId))
+E_LedgerEntry --- A_LedgerEntry_journalEntryId
+A_LedgerEntry_createdAt((createdAt))
+E_LedgerEntry --- A_LedgerEntry_createdAt
+
+E_LotBatch[LotBatch]
+A_LotBatch_id((id PK))
+E_LotBatch --- A_LotBatch_id
+A_LotBatch_tenantId((tenantId))
+E_LotBatch --- A_LotBatch_tenantId
+A_LotBatch_itemId((itemId))
+E_LotBatch --- A_LotBatch_itemId
+A_LotBatch_lotNumber((lotNumber))
+E_LotBatch --- A_LotBatch_lotNumber
+A_LotBatch_batchNumber((batchNumber))
+E_LotBatch --- A_LotBatch_batchNumber
+A_LotBatch_serialNumber((serialNumber))
+E_LotBatch --- A_LotBatch_serialNumber
+A_LotBatch_manufacturingDate((manufacturingDate))
+E_LotBatch --- A_LotBatch_manufacturingDate
+A_LotBatch_expiryDate((expiryDate))
+E_LotBatch --- A_LotBatch_expiryDate
+A_LotBatch_quantity((quantity))
+E_LotBatch --- A_LotBatch_quantity
+A_LotBatch_remainingQty((remainingQty))
+E_LotBatch --- A_LotBatch_remainingQty
+A_LotBatch_supplier((supplier))
+E_LotBatch --- A_LotBatch_supplier
+A_LotBatch_purchaseOrderId((purchaseOrderId))
+E_LotBatch --- A_LotBatch_purchaseOrderId
+A_LotBatch_status((status))
+E_LotBatch --- A_LotBatch_status
+A_LotBatch_notes((notes))
+E_LotBatch --- A_LotBatch_notes
+A_LotBatch_createdAt((createdAt))
+E_LotBatch --- A_LotBatch_createdAt
+A_LotBatch_updatedAt((updatedAt))
+E_LotBatch --- A_LotBatch_updatedAt
+
+E_Message[Message]
+A_Message_id((id PK))
+E_Message --- A_Message_id
+A_Message_conversationId((conversationId))
+E_Message --- A_Message_conversationId
+A_Message_senderId((senderId))
+E_Message --- A_Message_senderId
+A_Message_content((content))
+E_Message --- A_Message_content
+A_Message_type((type))
+E_Message --- A_Message_type
+A_Message_attachments((attachments))
+E_Message --- A_Message_attachments
+A_Message_isEdited((isEdited))
+E_Message --- A_Message_isEdited
+A_Message_isDeleted((isDeleted))
+E_Message --- A_Message_isDeleted
+A_Message_mentionedUserIds((mentionedUserIds))
+E_Message --- A_Message_mentionedUserIds
+A_Message_replyToId((replyToId))
+E_Message --- A_Message_replyToId
+A_Message_createdAt((createdAt))
+E_Message --- A_Message_createdAt
+A_Message_updatedAt((updatedAt))
+E_Message --- A_Message_updatedAt
+
+E_MessageReaction[MessageReaction]
+A_MessageReaction_id((id PK))
+E_MessageReaction --- A_MessageReaction_id
+A_MessageReaction_messageId((messageId))
+E_MessageReaction --- A_MessageReaction_messageId
+A_MessageReaction_userId((userId))
+E_MessageReaction --- A_MessageReaction_userId
+A_MessageReaction_emoji((emoji))
+E_MessageReaction --- A_MessageReaction_emoji
+A_MessageReaction_createdAt((createdAt))
+E_MessageReaction --- A_MessageReaction_createdAt
+
+E_MessageReadReceipt[MessageReadReceipt]
+A_MessageReadReceipt_id((id PK))
+E_MessageReadReceipt --- A_MessageReadReceipt_id
+A_MessageReadReceipt_messageId((messageId))
+E_MessageReadReceipt --- A_MessageReadReceipt_messageId
+A_MessageReadReceipt_userId((userId))
+E_MessageReadReceipt --- A_MessageReadReceipt_userId
+A_MessageReadReceipt_readAt((readAt))
+E_MessageReadReceipt --- A_MessageReadReceipt_readAt
+
+E_Notification[Notification]
+A_Notification_id((id PK))
+E_Notification --- A_Notification_id
+A_Notification_tenantId((tenantId))
+E_Notification --- A_Notification_tenantId
+A_Notification_employeeId((employeeId))
+E_Notification --- A_Notification_employeeId
+A_Notification_type((type))
+E_Notification --- A_Notification_type
+A_Notification_title((title))
+E_Notification --- A_Notification_title
+A_Notification_message((message))
+E_Notification --- A_Notification_message
+A_Notification_isRead((isRead))
+E_Notification --- A_Notification_isRead
+A_Notification_createdAt((createdAt))
+E_Notification --- A_Notification_createdAt
+
+E_OvertimePolicy[OvertimePolicy]
+A_OvertimePolicy_id((id PK))
+E_OvertimePolicy --- A_OvertimePolicy_id
+A_OvertimePolicy_tenantId((tenantId))
+E_OvertimePolicy --- A_OvertimePolicy_tenantId
+A_OvertimePolicy_shiftId((shiftId))
+E_OvertimePolicy --- A_OvertimePolicy_shiftId
+A_OvertimePolicy_name((name))
+E_OvertimePolicy --- A_OvertimePolicy_name
+A_OvertimePolicy_code((code))
+E_OvertimePolicy --- A_OvertimePolicy_code
+A_OvertimePolicy_dailyThreshold((dailyThreshold))
+E_OvertimePolicy --- A_OvertimePolicy_dailyThreshold
+A_OvertimePolicy_weeklyThreshold((weeklyThreshold))
+E_OvertimePolicy --- A_OvertimePolicy_weeklyThreshold
+A_OvertimePolicy_monthlyThreshold((monthlyThreshold))
+E_OvertimePolicy --- A_OvertimePolicy_monthlyThreshold
+A_OvertimePolicy_overtimeRate((overtimeRate))
+E_OvertimePolicy --- A_OvertimePolicy_overtimeRate
+A_OvertimePolicy_weekendRate((weekendRate))
+E_OvertimePolicy --- A_OvertimePolicy_weekendRate
+A_OvertimePolicy_holidayRate((holidayRate))
+E_OvertimePolicy --- A_OvertimePolicy_holidayRate
+A_OvertimePolicy_isActive((isActive))
+E_OvertimePolicy --- A_OvertimePolicy_isActive
+A_OvertimePolicy_description((description))
+E_OvertimePolicy --- A_OvertimePolicy_description
+A_OvertimePolicy_createdAt((createdAt))
+E_OvertimePolicy --- A_OvertimePolicy_createdAt
+A_OvertimePolicy_updatedAt((updatedAt))
+E_OvertimePolicy --- A_OvertimePolicy_updatedAt
+
+E_OvertimeRecord[OvertimeRecord]
+A_OvertimeRecord_id((id PK))
+E_OvertimeRecord --- A_OvertimeRecord_id
+A_OvertimeRecord_tenantId((tenantId))
+E_OvertimeRecord --- A_OvertimeRecord_tenantId
+A_OvertimeRecord_employeeId((employeeId))
+E_OvertimeRecord --- A_OvertimeRecord_employeeId
+A_OvertimeRecord_overtimePolicyId((overtimePolicyId))
+E_OvertimeRecord --- A_OvertimeRecord_overtimePolicyId
+A_OvertimeRecord_date((date))
+E_OvertimeRecord --- A_OvertimeRecord_date
+A_OvertimeRecord_overtimeHours((overtimeHours))
+E_OvertimeRecord --- A_OvertimeRecord_overtimeHours
+A_OvertimeRecord_overtimeRate((overtimeRate))
+E_OvertimeRecord --- A_OvertimeRecord_overtimeRate
+A_OvertimeRecord_overtimeAmount((overtimeAmount))
+E_OvertimeRecord --- A_OvertimeRecord_overtimeAmount
+A_OvertimeRecord_reason((reason))
+E_OvertimeRecord --- A_OvertimeRecord_reason
+A_OvertimeRecord_approvalStatus((approvalStatus))
+E_OvertimeRecord --- A_OvertimeRecord_approvalStatus
+A_OvertimeRecord_approvedBy((approvedBy))
+E_OvertimeRecord --- A_OvertimeRecord_approvedBy
+A_OvertimeRecord_approvedAt((approvedAt))
+E_OvertimeRecord --- A_OvertimeRecord_approvedAt
+A_OvertimeRecord_createdAt((createdAt))
+E_OvertimeRecord --- A_OvertimeRecord_createdAt
+A_OvertimeRecord_updatedAt((updatedAt))
+E_OvertimeRecord --- A_OvertimeRecord_updatedAt
+
+E_PasswordReset[PasswordReset]
+A_PasswordReset_id((id PK))
+E_PasswordReset --- A_PasswordReset_id
+A_PasswordReset_email((email))
+E_PasswordReset --- A_PasswordReset_email
+A_PasswordReset_otp((otp))
+E_PasswordReset --- A_PasswordReset_otp
+A_PasswordReset_expiresAt((expiresAt))
+E_PasswordReset --- A_PasswordReset_expiresAt
+A_PasswordReset_used((used))
+E_PasswordReset --- A_PasswordReset_used
+A_PasswordReset_createdAt((createdAt))
+E_PasswordReset --- A_PasswordReset_createdAt
+
+E_Payment[Payment]
+A_Payment_id((id PK))
+E_Payment --- A_Payment_id
+A_Payment_tenantId((tenantId))
+E_Payment --- A_Payment_tenantId
+A_Payment_paymentNumber((paymentNumber))
+E_Payment --- A_Payment_paymentNumber
+A_Payment_vendorId((vendorId))
+E_Payment --- A_Payment_vendorId
+A_Payment_paymentDate((paymentDate))
+E_Payment --- A_Payment_paymentDate
+A_Payment_amount((amount))
+E_Payment --- A_Payment_amount
+A_Payment_paymentMethod((paymentMethod))
+E_Payment --- A_Payment_paymentMethod
+A_Payment_referenceNumber((referenceNumber))
+E_Payment --- A_Payment_referenceNumber
+A_Payment_bankAccount((bankAccount))
+E_Payment --- A_Payment_bankAccount
+A_Payment_status((status))
+E_Payment --- A_Payment_status
+A_Payment_clearedDate((clearedDate))
+E_Payment --- A_Payment_clearedDate
+A_Payment_allocations((allocations))
+E_Payment --- A_Payment_allocations
+A_Payment_glPosted((glPosted))
+E_Payment --- A_Payment_glPosted
+A_Payment_glPostDate((glPostDate))
+E_Payment --- A_Payment_glPostDate
+A_Payment_glJournalId((glJournalId))
+E_Payment --- A_Payment_glJournalId
+A_Payment_notes((notes))
+E_Payment --- A_Payment_notes
+A_Payment_attachments((attachments))
+E_Payment --- A_Payment_attachments
+A_Payment_createdBy((createdBy))
+E_Payment --- A_Payment_createdBy
+A_Payment_createdAt((createdAt))
+E_Payment --- A_Payment_createdAt
+A_Payment_updatedAt((updatedAt))
+E_Payment --- A_Payment_updatedAt
+
+E_PayrollCycle[PayrollCycle]
+A_PayrollCycle_id((id PK))
+E_PayrollCycle --- A_PayrollCycle_id
+A_PayrollCycle_tenantId((tenantId))
+E_PayrollCycle --- A_PayrollCycle_tenantId
+A_PayrollCycle_name((name))
+E_PayrollCycle --- A_PayrollCycle_name
+A_PayrollCycle_startDate((startDate))
+E_PayrollCycle --- A_PayrollCycle_startDate
+A_PayrollCycle_endDate((endDate))
+E_PayrollCycle --- A_PayrollCycle_endDate
+A_PayrollCycle_paymentDate((paymentDate))
+E_PayrollCycle --- A_PayrollCycle_paymentDate
+A_PayrollCycle_status((status))
+E_PayrollCycle --- A_PayrollCycle_status
+A_PayrollCycle_totalGross((totalGross))
+E_PayrollCycle --- A_PayrollCycle_totalGross
+A_PayrollCycle_totalDeductions((totalDeductions))
+E_PayrollCycle --- A_PayrollCycle_totalDeductions
+A_PayrollCycle_totalNet((totalNet))
+E_PayrollCycle --- A_PayrollCycle_totalNet
+A_PayrollCycle_processedBy((processedBy))
+E_PayrollCycle --- A_PayrollCycle_processedBy
+A_PayrollCycle_processedAt((processedAt))
+E_PayrollCycle --- A_PayrollCycle_processedAt
+A_PayrollCycle_notes((notes))
+E_PayrollCycle --- A_PayrollCycle_notes
+A_PayrollCycle_createdAt((createdAt))
+E_PayrollCycle --- A_PayrollCycle_createdAt
+A_PayrollCycle_updatedAt((updatedAt))
+E_PayrollCycle --- A_PayrollCycle_updatedAt
+
+E_Payslip[Payslip]
+A_Payslip_id((id PK))
+E_Payslip --- A_Payslip_id
+A_Payslip_tenantId((tenantId))
+E_Payslip --- A_Payslip_tenantId
+A_Payslip_employeeId((employeeId))
+E_Payslip --- A_Payslip_employeeId
+A_Payslip_payrollCycleId((payrollCycleId))
+E_Payslip --- A_Payslip_payrollCycleId
+A_Payslip_payslipNumber((payslipNumber))
+E_Payslip --- A_Payslip_payslipNumber
+A_Payslip_basicSalary((basicSalary))
+E_Payslip --- A_Payslip_basicSalary
+A_Payslip_allowances((allowances))
+E_Payslip --- A_Payslip_allowances
+A_Payslip_bonuses((bonuses))
+E_Payslip --- A_Payslip_bonuses
+A_Payslip_overtime((overtime))
+E_Payslip --- A_Payslip_overtime
+A_Payslip_grossSalary((grossSalary))
+E_Payslip --- A_Payslip_grossSalary
+A_Payslip_taxDeductions((taxDeductions))
+E_Payslip --- A_Payslip_taxDeductions
+A_Payslip_providentFund((providentFund))
+E_Payslip --- A_Payslip_providentFund
+A_Payslip_insurance((insurance))
+E_Payslip --- A_Payslip_insurance
+A_Payslip_otherDeductions((otherDeductions))
+E_Payslip --- A_Payslip_otherDeductions
+A_Payslip_totalDeductions((totalDeductions))
+E_Payslip --- A_Payslip_totalDeductions
+A_Payslip_netSalary((netSalary))
+E_Payslip --- A_Payslip_netSalary
+A_Payslip_workingDays((workingDays))
+E_Payslip --- A_Payslip_workingDays
+A_Payslip_presentDays((presentDays))
+E_Payslip --- A_Payslip_presentDays
+A_Payslip_absentDays((absentDays))
+E_Payslip --- A_Payslip_absentDays
+A_Payslip_leaveDays((leaveDays))
+E_Payslip --- A_Payslip_leaveDays
+A_Payslip_overtimeHours((overtimeHours))
+E_Payslip --- A_Payslip_overtimeHours
+A_Payslip_status((status))
+E_Payslip --- A_Payslip_status
+A_Payslip_generatedAt((generatedAt))
+E_Payslip --- A_Payslip_generatedAt
+A_Payslip_approvedBy((approvedBy))
+E_Payslip --- A_Payslip_approvedBy
+A_Payslip_approvedAt((approvedAt))
+E_Payslip --- A_Payslip_approvedAt
+A_Payslip_notes((notes))
+E_Payslip --- A_Payslip_notes
+A_Payslip_createdAt((createdAt))
+E_Payslip --- A_Payslip_createdAt
+A_Payslip_updatedAt((updatedAt))
+E_Payslip --- A_Payslip_updatedAt
+
+E_PendingRegistration[PendingRegistration]
+A_PendingRegistration_id((id PK))
+E_PendingRegistration --- A_PendingRegistration_id
+A_PendingRegistration_email((email))
+E_PendingRegistration --- A_PendingRegistration_email
+A_PendingRegistration_passwordHash((passwordHash))
+E_PendingRegistration --- A_PendingRegistration_passwordHash
+A_PendingRegistration_companyName((companyName))
+E_PendingRegistration --- A_PendingRegistration_companyName
+A_PendingRegistration_planId((planId))
+E_PendingRegistration --- A_PendingRegistration_planId
+A_PendingRegistration_customModules((customModules))
+E_PendingRegistration --- A_PendingRegistration_customModules
+A_PendingRegistration_billingCycle((billingCycle))
+E_PendingRegistration --- A_PendingRegistration_billingCycle
+A_PendingRegistration_provider((provider))
+E_PendingRegistration --- A_PendingRegistration_provider
+A_PendingRegistration_amount((amount))
+E_PendingRegistration --- A_PendingRegistration_amount
+A_PendingRegistration_currency((currency))
+E_PendingRegistration --- A_PendingRegistration_currency
+A_PendingRegistration_status((status))
+E_PendingRegistration --- A_PendingRegistration_status
+A_PendingRegistration_tenantId((tenantId))
+E_PendingRegistration --- A_PendingRegistration_tenantId
+A_PendingRegistration_createdAt((createdAt))
+E_PendingRegistration --- A_PendingRegistration_createdAt
+A_PendingRegistration_completedAt((completedAt))
+E_PendingRegistration --- A_PendingRegistration_completedAt
+A_PendingRegistration_expiresAt((expiresAt))
+E_PendingRegistration --- A_PendingRegistration_expiresAt
+
+E_Permission[Permission]
+A_Permission_id((id PK))
+E_Permission --- A_Permission_id
+A_Permission_code((code))
+E_Permission --- A_Permission_code
+A_Permission_label((label))
+E_Permission --- A_Permission_label
+
+E_Pipeline[Pipeline]
+A_Pipeline_id((id PK))
+E_Pipeline --- A_Pipeline_id
+A_Pipeline_tenantId((tenantId))
+E_Pipeline --- A_Pipeline_tenantId
+A_Pipeline_name((name))
+E_Pipeline --- A_Pipeline_name
+A_Pipeline_description((description))
+E_Pipeline --- A_Pipeline_description
+A_Pipeline_isDefault((isDefault))
+E_Pipeline --- A_Pipeline_isDefault
+A_Pipeline_isActive((isActive))
+E_Pipeline --- A_Pipeline_isActive
+A_Pipeline_createdAt((createdAt))
+E_Pipeline --- A_Pipeline_createdAt
+A_Pipeline_updatedAt((updatedAt))
+E_Pipeline --- A_Pipeline_updatedAt
+
+E_PipelineStage[PipelineStage]
+A_PipelineStage_id((id PK))
+E_PipelineStage --- A_PipelineStage_id
+A_PipelineStage_tenantId((tenantId))
+E_PipelineStage --- A_PipelineStage_tenantId
+A_PipelineStage_pipelineId((pipelineId))
+E_PipelineStage --- A_PipelineStage_pipelineId
+A_PipelineStage_name((name))
+E_PipelineStage --- A_PipelineStage_name
+A_PipelineStage_order((order))
+E_PipelineStage --- A_PipelineStage_order
+A_PipelineStage_probability((probability))
+E_PipelineStage --- A_PipelineStage_probability
+A_PipelineStage_color((color))
+E_PipelineStage --- A_PipelineStage_color
+A_PipelineStage_isClosedWon((isClosedWon))
+E_PipelineStage --- A_PipelineStage_isClosedWon
+A_PipelineStage_isClosedLost((isClosedLost))
+E_PipelineStage --- A_PipelineStage_isClosedLost
+A_PipelineStage_daysInStage((daysInStage))
+E_PipelineStage --- A_PipelineStage_daysInStage
+A_PipelineStage_createdAt((createdAt))
+E_PipelineStage --- A_PipelineStage_createdAt
+A_PipelineStage_updatedAt((updatedAt))
+E_PipelineStage --- A_PipelineStage_updatedAt
+
+E_Plan[Plan]
+A_Plan_id((id PK))
+E_Plan --- A_Plan_id
+A_Plan_name((name))
+E_Plan --- A_Plan_name
+A_Plan_description((description))
+E_Plan --- A_Plan_description
+A_Plan_billingCycle((billingCycle))
+E_Plan --- A_Plan_billingCycle
+A_Plan_currency((currency))
+E_Plan --- A_Plan_currency
+A_Plan_basePrice((basePrice))
+E_Plan --- A_Plan_basePrice
+A_Plan_seatPrice((seatPrice))
+E_Plan --- A_Plan_seatPrice
+A_Plan_isActive((isActive))
+E_Plan --- A_Plan_isActive
+A_Plan_createdAt((createdAt))
+E_Plan --- A_Plan_createdAt
+A_Plan_updatedAt((updatedAt))
+E_Plan --- A_Plan_updatedAt
+
+E_PlanModule[PlanModule]
+A_PlanModule_id((id PK))
+E_PlanModule --- A_PlanModule_id
+A_PlanModule_planId((planId))
+E_PlanModule --- A_PlanModule_planId
+A_PlanModule_moduleKey((moduleKey))
+E_PlanModule --- A_PlanModule_moduleKey
+A_PlanModule_price((price))
+E_PlanModule --- A_PlanModule_price
+A_PlanModule_included((included))
+E_PlanModule --- A_PlanModule_included
+A_PlanModule_createdAt((createdAt))
+E_PlanModule --- A_PlanModule_createdAt
+
+E_ProductionBatch[ProductionBatch]
+A_ProductionBatch_id((id PK))
+E_ProductionBatch --- A_ProductionBatch_id
+A_ProductionBatch_tenantId((tenantId))
+E_ProductionBatch --- A_ProductionBatch_tenantId
+A_ProductionBatch_workOrderId((workOrderId))
+E_ProductionBatch --- A_ProductionBatch_workOrderId
+A_ProductionBatch_batchNumber((batchNumber))
+E_ProductionBatch --- A_ProductionBatch_batchNumber
+A_ProductionBatch_productId((productId))
+E_ProductionBatch --- A_ProductionBatch_productId
+A_ProductionBatch_quantity((quantity))
+E_ProductionBatch --- A_ProductionBatch_quantity
+A_ProductionBatch_unit((unit))
+E_ProductionBatch --- A_ProductionBatch_unit
+A_ProductionBatch_manufacturingDate((manufacturingDate))
+E_ProductionBatch --- A_ProductionBatch_manufacturingDate
+A_ProductionBatch_expiryDate((expiryDate))
+E_ProductionBatch --- A_ProductionBatch_expiryDate
+A_ProductionBatch_qualityStatus((qualityStatus))
+E_ProductionBatch --- A_ProductionBatch_qualityStatus
+A_ProductionBatch_qcBy((qcBy))
+E_ProductionBatch --- A_ProductionBatch_qcBy
+A_ProductionBatch_qcAt((qcAt))
+E_ProductionBatch --- A_ProductionBatch_qcAt
+A_ProductionBatch_qcNotes((qcNotes))
+E_ProductionBatch --- A_ProductionBatch_qcNotes
+A_ProductionBatch_warehouseId((warehouseId))
+E_ProductionBatch --- A_ProductionBatch_warehouseId
+A_ProductionBatch_status((status))
+E_ProductionBatch --- A_ProductionBatch_status
+A_ProductionBatch_createdAt((createdAt))
+E_ProductionBatch --- A_ProductionBatch_createdAt
+A_ProductionBatch_updatedAt((updatedAt))
+E_ProductionBatch --- A_ProductionBatch_updatedAt
+
+E_Project[Project]
+A_Project_id((id PK))
+E_Project --- A_Project_id
+A_Project_tenantId((tenantId))
+E_Project --- A_Project_tenantId
+A_Project_projectCode((projectCode))
+E_Project --- A_Project_projectCode
+A_Project_projectName((projectName))
+E_Project --- A_Project_projectName
+A_Project_description((description))
+E_Project --- A_Project_description
+A_Project_clientName((clientName))
+E_Project --- A_Project_clientName
+A_Project_projectManager((projectManager))
+E_Project --- A_Project_projectManager
+A_Project_status((status))
+E_Project --- A_Project_status
+A_Project_priority((priority))
+E_Project --- A_Project_priority
+A_Project_type((type))
+E_Project --- A_Project_type
+A_Project_startDate((startDate))
+E_Project --- A_Project_startDate
+A_Project_endDate((endDate))
+E_Project --- A_Project_endDate
+A_Project_actualStartDate((actualStartDate))
+E_Project --- A_Project_actualStartDate
+A_Project_actualEndDate((actualEndDate))
+E_Project --- A_Project_actualEndDate
+A_Project_estimatedBudget((estimatedBudget))
+E_Project --- A_Project_estimatedBudget
+A_Project_actualCost((actualCost))
+E_Project --- A_Project_actualCost
+A_Project_progressPercent((progressPercent))
+E_Project --- A_Project_progressPercent
+A_Project_totalPlannedHours((totalPlannedHours))
+E_Project --- A_Project_totalPlannedHours
+A_Project_totalActualHours((totalActualHours))
+E_Project --- A_Project_totalActualHours
+A_Project_totalResourceCost((totalResourceCost))
+E_Project --- A_Project_totalResourceCost
+A_Project_budgetVariance((budgetVariance))
+E_Project --- A_Project_budgetVariance
+A_Project_scheduleVariance((scheduleVariance))
+E_Project --- A_Project_scheduleVariance
+A_Project_utilizationPercent((utilizationPercent))
+E_Project --- A_Project_utilizationPercent
+A_Project_healthScore((healthScore))
+E_Project --- A_Project_healthScore
+A_Project_riskLevel((riskLevel))
+E_Project --- A_Project_riskLevel
+A_Project_departmentId((departmentId))
+E_Project --- A_Project_departmentId
+A_Project_teamMembers((teamMembers))
+E_Project --- A_Project_teamMembers
+A_Project_documentFolderId((documentFolderId))
+E_Project --- A_Project_documentFolderId
+A_Project_financeAccountId((financeAccountId))
+E_Project --- A_Project_financeAccountId
+A_Project_customFields((customFields))
+E_Project --- A_Project_customFields
+A_Project_notes((notes))
+E_Project --- A_Project_notes
+A_Project_attachments((attachments))
+E_Project --- A_Project_attachments
+A_Project_createdBy((createdBy))
+E_Project --- A_Project_createdBy
+A_Project_createdAt((createdAt))
+E_Project --- A_Project_createdAt
+A_Project_updatedAt((updatedAt))
+E_Project --- A_Project_updatedAt
+
+E_ProjectBudget[ProjectBudget]
+A_ProjectBudget_id((id PK))
+E_ProjectBudget --- A_ProjectBudget_id
+A_ProjectBudget_tenantId((tenantId))
+E_ProjectBudget --- A_ProjectBudget_tenantId
+A_ProjectBudget_projectId((projectId))
+E_ProjectBudget --- A_ProjectBudget_projectId
+A_ProjectBudget_category((category))
+E_ProjectBudget --- A_ProjectBudget_category
+A_ProjectBudget_description((description))
+E_ProjectBudget --- A_ProjectBudget_description
+A_ProjectBudget_plannedAmount((plannedAmount))
+E_ProjectBudget --- A_ProjectBudget_plannedAmount
+A_ProjectBudget_actualAmount((actualAmount))
+E_ProjectBudget --- A_ProjectBudget_actualAmount
+A_ProjectBudget_variance((variance))
+E_ProjectBudget --- A_ProjectBudget_variance
+A_ProjectBudget_budgetPeriod((budgetPeriod))
+E_ProjectBudget --- A_ProjectBudget_budgetPeriod
+A_ProjectBudget_transactionDate((transactionDate))
+E_ProjectBudget --- A_ProjectBudget_transactionDate
+A_ProjectBudget_notes((notes))
+E_ProjectBudget --- A_ProjectBudget_notes
+A_ProjectBudget_attachments((attachments))
+E_ProjectBudget --- A_ProjectBudget_attachments
+A_ProjectBudget_createdBy((createdBy))
+E_ProjectBudget --- A_ProjectBudget_createdBy
+A_ProjectBudget_createdAt((createdAt))
+E_ProjectBudget --- A_ProjectBudget_createdAt
+A_ProjectBudget_updatedAt((updatedAt))
+E_ProjectBudget --- A_ProjectBudget_updatedAt
+
+E_ProjectMember[ProjectMember]
+A_ProjectMember_id((id PK))
+E_ProjectMember --- A_ProjectMember_id
+A_ProjectMember_tenantId((tenantId))
+E_ProjectMember --- A_ProjectMember_tenantId
+A_ProjectMember_projectId((projectId))
+E_ProjectMember --- A_ProjectMember_projectId
+A_ProjectMember_employeeId((employeeId))
+E_ProjectMember --- A_ProjectMember_employeeId
+A_ProjectMember_userId((userId))
+E_ProjectMember --- A_ProjectMember_userId
+A_ProjectMember_role((role))
+E_ProjectMember --- A_ProjectMember_role
+A_ProjectMember_allocationPercent((allocationPercent))
+E_ProjectMember --- A_ProjectMember_allocationPercent
+A_ProjectMember_startDate((startDate))
+E_ProjectMember --- A_ProjectMember_startDate
+A_ProjectMember_endDate((endDate))
+E_ProjectMember --- A_ProjectMember_endDate
+A_ProjectMember_status((status))
+E_ProjectMember --- A_ProjectMember_status
+A_ProjectMember_hourlyRate((hourlyRate))
+E_ProjectMember --- A_ProjectMember_hourlyRate
+A_ProjectMember_permissions((permissions))
+E_ProjectMember --- A_ProjectMember_permissions
+A_ProjectMember_notes((notes))
+E_ProjectMember --- A_ProjectMember_notes
+A_ProjectMember_createdAt((createdAt))
+E_ProjectMember --- A_ProjectMember_createdAt
+A_ProjectMember_updatedAt((updatedAt))
+E_ProjectMember --- A_ProjectMember_updatedAt
+
+E_ProjectMilestone[ProjectMilestone]
+A_ProjectMilestone_id((id PK))
+E_ProjectMilestone --- A_ProjectMilestone_id
+A_ProjectMilestone_tenantId((tenantId))
+E_ProjectMilestone --- A_ProjectMilestone_tenantId
+A_ProjectMilestone_projectId((projectId))
+E_ProjectMilestone --- A_ProjectMilestone_projectId
+A_ProjectMilestone_milestoneName((milestoneName))
+E_ProjectMilestone --- A_ProjectMilestone_milestoneName
+A_ProjectMilestone_description((description))
+E_ProjectMilestone --- A_ProjectMilestone_description
+A_ProjectMilestone_status((status))
+E_ProjectMilestone --- A_ProjectMilestone_status
+A_ProjectMilestone_startDate((startDate))
+E_ProjectMilestone --- A_ProjectMilestone_startDate
+A_ProjectMilestone_dueDate((dueDate))
+E_ProjectMilestone --- A_ProjectMilestone_dueDate
+A_ProjectMilestone_completedDate((completedDate))
+E_ProjectMilestone --- A_ProjectMilestone_completedDate
+A_ProjectMilestone_progressPercent((progressPercent))
+E_ProjectMilestone --- A_ProjectMilestone_progressPercent
+A_ProjectMilestone_assignedTo((assignedTo))
+E_ProjectMilestone --- A_ProjectMilestone_assignedTo
+A_ProjectMilestone_deliverables((deliverables))
+E_ProjectMilestone --- A_ProjectMilestone_deliverables
+A_ProjectMilestone_isCriticalPath((isCriticalPath))
+E_ProjectMilestone --- A_ProjectMilestone_isCriticalPath
+A_ProjectMilestone_isAutoScheduled((isAutoScheduled))
+E_ProjectMilestone --- A_ProjectMilestone_isAutoScheduled
+A_ProjectMilestone_notes((notes))
+E_ProjectMilestone --- A_ProjectMilestone_notes
+A_ProjectMilestone_attachments((attachments))
+E_ProjectMilestone --- A_ProjectMilestone_attachments
+A_ProjectMilestone_createdBy((createdBy))
+E_ProjectMilestone --- A_ProjectMilestone_createdBy
+A_ProjectMilestone_createdAt((createdAt))
+E_ProjectMilestone --- A_ProjectMilestone_createdAt
+A_ProjectMilestone_updatedAt((updatedAt))
+E_ProjectMilestone --- A_ProjectMilestone_updatedAt
+
+E_ProjectMilestoneDependency[ProjectMilestoneDependency]
+A_ProjectMilestoneDependency_id((id PK))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_id
+A_ProjectMilestoneDependency_tenantId((tenantId))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_tenantId
+A_ProjectMilestoneDependency_predecessorId((predecessorId))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_predecessorId
+A_ProjectMilestoneDependency_successorId((successorId))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_successorId
+A_ProjectMilestoneDependency_dependencyType((dependencyType))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_dependencyType
+A_ProjectMilestoneDependency_lagDays((lagDays))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_lagDays
+A_ProjectMilestoneDependency_createdAt((createdAt))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_createdAt
+A_ProjectMilestoneDependency_updatedAt((updatedAt))
+E_ProjectMilestoneDependency --- A_ProjectMilestoneDependency_updatedAt
+
+E_ProjectResource[ProjectResource]
+A_ProjectResource_id((id PK))
+E_ProjectResource --- A_ProjectResource_id
+A_ProjectResource_tenantId((tenantId))
+E_ProjectResource --- A_ProjectResource_tenantId
+A_ProjectResource_projectId((projectId))
+E_ProjectResource --- A_ProjectResource_projectId
+A_ProjectResource_resourceType((resourceType))
+E_ProjectResource --- A_ProjectResource_resourceType
+A_ProjectResource_resourceName((resourceName))
+E_ProjectResource --- A_ProjectResource_resourceName
+A_ProjectResource_employeeId((employeeId))
+E_ProjectResource --- A_ProjectResource_employeeId
+A_ProjectResource_allocationPercent((allocationPercent))
+E_ProjectResource --- A_ProjectResource_allocationPercent
+A_ProjectResource_startDate((startDate))
+E_ProjectResource --- A_ProjectResource_startDate
+A_ProjectResource_endDate((endDate))
+E_ProjectResource --- A_ProjectResource_endDate
+A_ProjectResource_costPerUnit((costPerUnit))
+E_ProjectResource --- A_ProjectResource_costPerUnit
+A_ProjectResource_units((units))
+E_ProjectResource --- A_ProjectResource_units
+A_ProjectResource_totalCost((totalCost))
+E_ProjectResource --- A_ProjectResource_totalCost
+A_ProjectResource_plannedHours((plannedHours))
+E_ProjectResource --- A_ProjectResource_plannedHours
+A_ProjectResource_actualHours((actualHours))
+E_ProjectResource --- A_ProjectResource_actualHours
+A_ProjectResource_availableHours((availableHours))
+E_ProjectResource --- A_ProjectResource_availableHours
+A_ProjectResource_quantity((quantity))
+E_ProjectResource --- A_ProjectResource_quantity
+A_ProjectResource_quantityUsed((quantityUsed))
+E_ProjectResource --- A_ProjectResource_quantityUsed
+A_ProjectResource_quantityUnit((quantityUnit))
+E_ProjectResource --- A_ProjectResource_quantityUnit
+A_ProjectResource_status((status))
+E_ProjectResource --- A_ProjectResource_status
+A_ProjectResource_notes((notes))
+E_ProjectResource --- A_ProjectResource_notes
+A_ProjectResource_createdAt((createdAt))
+E_ProjectResource --- A_ProjectResource_createdAt
+A_ProjectResource_updatedAt((updatedAt))
+E_ProjectResource --- A_ProjectResource_updatedAt
+
+E_ProjectTimeLog[ProjectTimeLog]
+A_ProjectTimeLog_id((id PK))
+E_ProjectTimeLog --- A_ProjectTimeLog_id
+A_ProjectTimeLog_tenantId((tenantId))
+E_ProjectTimeLog --- A_ProjectTimeLog_tenantId
+A_ProjectTimeLog_projectId((projectId))
+E_ProjectTimeLog --- A_ProjectTimeLog_projectId
+A_ProjectTimeLog_employeeId((employeeId))
+E_ProjectTimeLog --- A_ProjectTimeLog_employeeId
+A_ProjectTimeLog_timesheetId((timesheetId))
+E_ProjectTimeLog --- A_ProjectTimeLog_timesheetId
+A_ProjectTimeLog_logDate((logDate))
+E_ProjectTimeLog --- A_ProjectTimeLog_logDate
+A_ProjectTimeLog_hoursWorked((hoursWorked))
+E_ProjectTimeLog --- A_ProjectTimeLog_hoursWorked
+A_ProjectTimeLog_taskDescription((taskDescription))
+E_ProjectTimeLog --- A_ProjectTimeLog_taskDescription
+A_ProjectTimeLog_milestoneId((milestoneId))
+E_ProjectTimeLog --- A_ProjectTimeLog_milestoneId
+A_ProjectTimeLog_billable((billable))
+E_ProjectTimeLog --- A_ProjectTimeLog_billable
+A_ProjectTimeLog_hourlyRate((hourlyRate))
+E_ProjectTimeLog --- A_ProjectTimeLog_hourlyRate
+A_ProjectTimeLog_totalCost((totalCost))
+E_ProjectTimeLog --- A_ProjectTimeLog_totalCost
+A_ProjectTimeLog_status((status))
+E_ProjectTimeLog --- A_ProjectTimeLog_status
+A_ProjectTimeLog_notes((notes))
+E_ProjectTimeLog --- A_ProjectTimeLog_notes
+A_ProjectTimeLog_createdAt((createdAt))
+E_ProjectTimeLog --- A_ProjectTimeLog_createdAt
+A_ProjectTimeLog_updatedAt((updatedAt))
+E_ProjectTimeLog --- A_ProjectTimeLog_updatedAt
+
+E_ProjectTimesheet[ProjectTimesheet]
+A_ProjectTimesheet_id((id PK))
+E_ProjectTimesheet --- A_ProjectTimesheet_id
+A_ProjectTimesheet_tenantId((tenantId))
+E_ProjectTimesheet --- A_ProjectTimesheet_tenantId
+A_ProjectTimesheet_employeeId((employeeId))
+E_ProjectTimesheet --- A_ProjectTimesheet_employeeId
+A_ProjectTimesheet_weekStartDate((weekStartDate))
+E_ProjectTimesheet --- A_ProjectTimesheet_weekStartDate
+A_ProjectTimesheet_weekEndDate((weekEndDate))
+E_ProjectTimesheet --- A_ProjectTimesheet_weekEndDate
+A_ProjectTimesheet_status((status))
+E_ProjectTimesheet --- A_ProjectTimesheet_status
+A_ProjectTimesheet_totalHours((totalHours))
+E_ProjectTimesheet --- A_ProjectTimesheet_totalHours
+A_ProjectTimesheet_billableHours((billableHours))
+E_ProjectTimesheet --- A_ProjectTimesheet_billableHours
+A_ProjectTimesheet_submittedAt((submittedAt))
+E_ProjectTimesheet --- A_ProjectTimesheet_submittedAt
+A_ProjectTimesheet_submittedBy((submittedBy))
+E_ProjectTimesheet --- A_ProjectTimesheet_submittedBy
+A_ProjectTimesheet_approvedAt((approvedAt))
+E_ProjectTimesheet --- A_ProjectTimesheet_approvedAt
+A_ProjectTimesheet_approvedBy((approvedBy))
+E_ProjectTimesheet --- A_ProjectTimesheet_approvedBy
+A_ProjectTimesheet_rejectedAt((rejectedAt))
+E_ProjectTimesheet --- A_ProjectTimesheet_rejectedAt
+A_ProjectTimesheet_rejectedBy((rejectedBy))
+E_ProjectTimesheet --- A_ProjectTimesheet_rejectedBy
+A_ProjectTimesheet_rejectionReason((rejectionReason))
+E_ProjectTimesheet --- A_ProjectTimesheet_rejectionReason
+A_ProjectTimesheet_notes((notes))
+E_ProjectTimesheet --- A_ProjectTimesheet_notes
+A_ProjectTimesheet_createdAt((createdAt))
+E_ProjectTimesheet --- A_ProjectTimesheet_createdAt
+A_ProjectTimesheet_updatedAt((updatedAt))
+E_ProjectTimesheet --- A_ProjectTimesheet_updatedAt
+
+E_PurchaseOrder[PurchaseOrder]
+A_PurchaseOrder_id((id PK))
+E_PurchaseOrder --- A_PurchaseOrder_id
+A_PurchaseOrder_tenantId((tenantId))
+E_PurchaseOrder --- A_PurchaseOrder_tenantId
+A_PurchaseOrder_poNumber((poNumber))
+E_PurchaseOrder --- A_PurchaseOrder_poNumber
+A_PurchaseOrder_requisitionId((requisitionId))
+E_PurchaseOrder --- A_PurchaseOrder_requisitionId
+A_PurchaseOrder_vendorId((vendorId))
+E_PurchaseOrder --- A_PurchaseOrder_vendorId
+A_PurchaseOrder_title((title))
+E_PurchaseOrder --- A_PurchaseOrder_title
+A_PurchaseOrder_description((description))
+E_PurchaseOrder --- A_PurchaseOrder_description
+A_PurchaseOrder_orderDate((orderDate))
+E_PurchaseOrder --- A_PurchaseOrder_orderDate
+A_PurchaseOrder_expectedDeliveryDate((expectedDeliveryDate))
+E_PurchaseOrder --- A_PurchaseOrder_expectedDeliveryDate
+A_PurchaseOrder_actualDeliveryDate((actualDeliveryDate))
+E_PurchaseOrder --- A_PurchaseOrder_actualDeliveryDate
+A_PurchaseOrder_status((status))
+E_PurchaseOrder --- A_PurchaseOrder_status
+A_PurchaseOrder_items((items))
+E_PurchaseOrder --- A_PurchaseOrder_items
+A_PurchaseOrder_subtotal((subtotal))
+E_PurchaseOrder --- A_PurchaseOrder_subtotal
+A_PurchaseOrder_taxAmount((taxAmount))
+E_PurchaseOrder --- A_PurchaseOrder_taxAmount
+A_PurchaseOrder_discountAmount((discountAmount))
+E_PurchaseOrder --- A_PurchaseOrder_discountAmount
+A_PurchaseOrder_shippingCost((shippingCost))
+E_PurchaseOrder --- A_PurchaseOrder_shippingCost
+A_PurchaseOrder_totalAmount((totalAmount))
+E_PurchaseOrder --- A_PurchaseOrder_totalAmount
+A_PurchaseOrder_paymentTerms((paymentTerms))
+E_PurchaseOrder --- A_PurchaseOrder_paymentTerms
+A_PurchaseOrder_paymentStatus((paymentStatus))
+E_PurchaseOrder --- A_PurchaseOrder_paymentStatus
+A_PurchaseOrder_paidAmount((paidAmount))
+E_PurchaseOrder --- A_PurchaseOrder_paidAmount
+A_PurchaseOrder_shippingAddress((shippingAddress))
+E_PurchaseOrder --- A_PurchaseOrder_shippingAddress
+A_PurchaseOrder_shippingMethod((shippingMethod))
+E_PurchaseOrder --- A_PurchaseOrder_shippingMethod
+A_PurchaseOrder_trackingNumber((trackingNumber))
+E_PurchaseOrder --- A_PurchaseOrder_trackingNumber
+A_PurchaseOrder_approvalStatus((approvalStatus))
+E_PurchaseOrder --- A_PurchaseOrder_approvalStatus
+A_PurchaseOrder_approvedBy((approvedBy))
+E_PurchaseOrder --- A_PurchaseOrder_approvedBy
+A_PurchaseOrder_approvedAt((approvedAt))
+E_PurchaseOrder --- A_PurchaseOrder_approvedAt
+A_PurchaseOrder_workflowId((workflowId))
+E_PurchaseOrder --- A_PurchaseOrder_workflowId
+A_PurchaseOrder_notes((notes))
+E_PurchaseOrder --- A_PurchaseOrder_notes
+A_PurchaseOrder_attachments((attachments))
+E_PurchaseOrder --- A_PurchaseOrder_attachments
+A_PurchaseOrder_internalNotes((internalNotes))
+E_PurchaseOrder --- A_PurchaseOrder_internalNotes
+A_PurchaseOrder_createdBy((createdBy))
+E_PurchaseOrder --- A_PurchaseOrder_createdBy
+A_PurchaseOrder_createdAt((createdAt))
+E_PurchaseOrder --- A_PurchaseOrder_createdAt
+A_PurchaseOrder_updatedAt((updatedAt))
+E_PurchaseOrder --- A_PurchaseOrder_updatedAt
+
+E_PurchaseRequisition[PurchaseRequisition]
+A_PurchaseRequisition_id((id PK))
+E_PurchaseRequisition --- A_PurchaseRequisition_id
+A_PurchaseRequisition_tenantId((tenantId))
+E_PurchaseRequisition --- A_PurchaseRequisition_tenantId
+A_PurchaseRequisition_requisitionNumber((requisitionNumber))
+E_PurchaseRequisition --- A_PurchaseRequisition_requisitionNumber
+A_PurchaseRequisition_requestedBy((requestedBy))
+E_PurchaseRequisition --- A_PurchaseRequisition_requestedBy
+A_PurchaseRequisition_departmentId((departmentId))
+E_PurchaseRequisition --- A_PurchaseRequisition_departmentId
+A_PurchaseRequisition_vendorId((vendorId))
+E_PurchaseRequisition --- A_PurchaseRequisition_vendorId
+A_PurchaseRequisition_title((title))
+E_PurchaseRequisition --- A_PurchaseRequisition_title
+A_PurchaseRequisition_description((description))
+E_PurchaseRequisition --- A_PurchaseRequisition_description
+A_PurchaseRequisition_priority((priority))
+E_PurchaseRequisition --- A_PurchaseRequisition_priority
+A_PurchaseRequisition_requestedDate((requestedDate))
+E_PurchaseRequisition --- A_PurchaseRequisition_requestedDate
+A_PurchaseRequisition_requiredDate((requiredDate))
+E_PurchaseRequisition --- A_PurchaseRequisition_requiredDate
+A_PurchaseRequisition_status((status))
+E_PurchaseRequisition --- A_PurchaseRequisition_status
+A_PurchaseRequisition_approvalStatus((approvalStatus))
+E_PurchaseRequisition --- A_PurchaseRequisition_approvalStatus
+A_PurchaseRequisition_approvedBy((approvedBy))
+E_PurchaseRequisition --- A_PurchaseRequisition_approvedBy
+A_PurchaseRequisition_approvedAt((approvedAt))
+E_PurchaseRequisition --- A_PurchaseRequisition_approvedAt
+A_PurchaseRequisition_rejectionReason((rejectionReason))
+E_PurchaseRequisition --- A_PurchaseRequisition_rejectionReason
+A_PurchaseRequisition_items((items))
+E_PurchaseRequisition --- A_PurchaseRequisition_items
+A_PurchaseRequisition_totalAmount((totalAmount))
+E_PurchaseRequisition --- A_PurchaseRequisition_totalAmount
+A_PurchaseRequisition_budgetCode((budgetCode))
+E_PurchaseRequisition --- A_PurchaseRequisition_budgetCode
+A_PurchaseRequisition_workflowId((workflowId))
+E_PurchaseRequisition --- A_PurchaseRequisition_workflowId
+A_PurchaseRequisition_notes((notes))
+E_PurchaseRequisition --- A_PurchaseRequisition_notes
+A_PurchaseRequisition_attachments((attachments))
+E_PurchaseRequisition --- A_PurchaseRequisition_attachments
+A_PurchaseRequisition_createdAt((createdAt))
+E_PurchaseRequisition --- A_PurchaseRequisition_createdAt
+A_PurchaseRequisition_updatedAt((updatedAt))
+E_PurchaseRequisition --- A_PurchaseRequisition_updatedAt
+
+E_Report[Report]
+A_Report_id((id PK))
+E_Report --- A_Report_id
+A_Report_tenantId((tenantId))
+E_Report --- A_Report_tenantId
+A_Report_templateId((templateId))
+E_Report --- A_Report_templateId
+A_Report_name((name))
+E_Report --- A_Report_name
+A_Report_type((type))
+E_Report --- A_Report_type
+A_Report_parameters((parameters))
+E_Report --- A_Report_parameters
+A_Report_data((data))
+E_Report --- A_Report_data
+A_Report_generatedBy((generatedBy))
+E_Report --- A_Report_generatedBy
+A_Report_generatedAt((generatedAt))
+E_Report --- A_Report_generatedAt
+A_Report_createdAt((createdAt))
+E_Report --- A_Report_createdAt
+
+E_ReportSchedule[ReportSchedule]
+A_ReportSchedule_id((id PK))
+E_ReportSchedule --- A_ReportSchedule_id
+A_ReportSchedule_tenantId((tenantId))
+E_ReportSchedule --- A_ReportSchedule_tenantId
+A_ReportSchedule_templateId((templateId))
+E_ReportSchedule --- A_ReportSchedule_templateId
+A_ReportSchedule_name((name))
+E_ReportSchedule --- A_ReportSchedule_name
+A_ReportSchedule_frequency((frequency))
+E_ReportSchedule --- A_ReportSchedule_frequency
+A_ReportSchedule_recipients((recipients))
+E_ReportSchedule --- A_ReportSchedule_recipients
+A_ReportSchedule_isActive((isActive))
+E_ReportSchedule --- A_ReportSchedule_isActive
+A_ReportSchedule_lastRunAt((lastRunAt))
+E_ReportSchedule --- A_ReportSchedule_lastRunAt
+A_ReportSchedule_nextRunAt((nextRunAt))
+E_ReportSchedule --- A_ReportSchedule_nextRunAt
+A_ReportSchedule_createdBy((createdBy))
+E_ReportSchedule --- A_ReportSchedule_createdBy
+A_ReportSchedule_createdAt((createdAt))
+E_ReportSchedule --- A_ReportSchedule_createdAt
+A_ReportSchedule_updatedAt((updatedAt))
+E_ReportSchedule --- A_ReportSchedule_updatedAt
+
+E_ReportTemplate[ReportTemplate]
+A_ReportTemplate_id((id PK))
+E_ReportTemplate --- A_ReportTemplate_id
+A_ReportTemplate_tenantId((tenantId))
+E_ReportTemplate --- A_ReportTemplate_tenantId
+A_ReportTemplate_name((name))
+E_ReportTemplate --- A_ReportTemplate_name
+A_ReportTemplate_type((type))
+E_ReportTemplate --- A_ReportTemplate_type
+A_ReportTemplate_category((category))
+E_ReportTemplate --- A_ReportTemplate_category
+A_ReportTemplate_description((description))
+E_ReportTemplate --- A_ReportTemplate_description
+A_ReportTemplate_isSystem((isSystem))
+E_ReportTemplate --- A_ReportTemplate_isSystem
+A_ReportTemplate_isActive((isActive))
+E_ReportTemplate --- A_ReportTemplate_isActive
+A_ReportTemplate_config((config))
+E_ReportTemplate --- A_ReportTemplate_config
+A_ReportTemplate_createdBy((createdBy))
+E_ReportTemplate --- A_ReportTemplate_createdBy
+A_ReportTemplate_createdAt((createdAt))
+E_ReportTemplate --- A_ReportTemplate_createdAt
+A_ReportTemplate_updatedAt((updatedAt))
+E_ReportTemplate --- A_ReportTemplate_updatedAt
+
+E_Role[Role]
+A_Role_id((id PK))
+E_Role --- A_Role_id
+A_Role_name((name))
+E_Role --- A_Role_name
+A_Role_tenantId((tenantId))
+E_Role --- A_Role_tenantId
+
+E_RolePermission[RolePermission]
+A_RolePermission_roleId((roleId PK))
+E_RolePermission --- A_RolePermission_roleId
+A_RolePermission_permissionId((permissionId PK))
+E_RolePermission --- A_RolePermission_permissionId
+
+E_SalaryComponent[SalaryComponent]
+A_SalaryComponent_id((id PK))
+E_SalaryComponent --- A_SalaryComponent_id
+A_SalaryComponent_tenantId((tenantId))
+E_SalaryComponent --- A_SalaryComponent_tenantId
+A_SalaryComponent_name((name))
+E_SalaryComponent --- A_SalaryComponent_name
+A_SalaryComponent_code((code))
+E_SalaryComponent --- A_SalaryComponent_code
+A_SalaryComponent_type((type))
+E_SalaryComponent --- A_SalaryComponent_type
+A_SalaryComponent_calculationType((calculationType))
+E_SalaryComponent --- A_SalaryComponent_calculationType
+A_SalaryComponent_value((value))
+E_SalaryComponent --- A_SalaryComponent_value
+A_SalaryComponent_formula((formula))
+E_SalaryComponent --- A_SalaryComponent_formula
+A_SalaryComponent_isTaxable((isTaxable))
+E_SalaryComponent --- A_SalaryComponent_isTaxable
+A_SalaryComponent_isActive((isActive))
+E_SalaryComponent --- A_SalaryComponent_isActive
+A_SalaryComponent_description((description))
+E_SalaryComponent --- A_SalaryComponent_description
+A_SalaryComponent_createdAt((createdAt))
+E_SalaryComponent --- A_SalaryComponent_createdAt
+A_SalaryComponent_updatedAt((updatedAt))
+E_SalaryComponent --- A_SalaryComponent_updatedAt
+
+E_SalaryDisbursement[SalaryDisbursement]
+A_SalaryDisbursement_id((id PK))
+E_SalaryDisbursement --- A_SalaryDisbursement_id
+A_SalaryDisbursement_tenantId((tenantId))
+E_SalaryDisbursement --- A_SalaryDisbursement_tenantId
+A_SalaryDisbursement_payrollCycleId((payrollCycleId))
+E_SalaryDisbursement --- A_SalaryDisbursement_payrollCycleId
+A_SalaryDisbursement_employeeId((employeeId))
+E_SalaryDisbursement --- A_SalaryDisbursement_employeeId
+A_SalaryDisbursement_amount((amount))
+E_SalaryDisbursement --- A_SalaryDisbursement_amount
+A_SalaryDisbursement_paymentMethod((paymentMethod))
+E_SalaryDisbursement --- A_SalaryDisbursement_paymentMethod
+A_SalaryDisbursement_bankAccount((bankAccount))
+E_SalaryDisbursement --- A_SalaryDisbursement_bankAccount
+A_SalaryDisbursement_transactionRef((transactionRef))
+E_SalaryDisbursement --- A_SalaryDisbursement_transactionRef
+A_SalaryDisbursement_status((status))
+E_SalaryDisbursement --- A_SalaryDisbursement_status
+A_SalaryDisbursement_paymentDate((paymentDate))
+E_SalaryDisbursement --- A_SalaryDisbursement_paymentDate
+A_SalaryDisbursement_completedAt((completedAt))
+E_SalaryDisbursement --- A_SalaryDisbursement_completedAt
+A_SalaryDisbursement_failureReason((failureReason))
+E_SalaryDisbursement --- A_SalaryDisbursement_failureReason
+A_SalaryDisbursement_notes((notes))
+E_SalaryDisbursement --- A_SalaryDisbursement_notes
+A_SalaryDisbursement_createdAt((createdAt))
+E_SalaryDisbursement --- A_SalaryDisbursement_createdAt
+A_SalaryDisbursement_updatedAt((updatedAt))
+E_SalaryDisbursement --- A_SalaryDisbursement_updatedAt
+
+E_SalaryStructure[SalaryStructure]
+A_SalaryStructure_id((id PK))
+E_SalaryStructure --- A_SalaryStructure_id
+A_SalaryStructure_tenantId((tenantId))
+E_SalaryStructure --- A_SalaryStructure_tenantId
+A_SalaryStructure_employeeId((employeeId))
+E_SalaryStructure --- A_SalaryStructure_employeeId
+A_SalaryStructure_basicSalary((basicSalary))
+E_SalaryStructure --- A_SalaryStructure_basicSalary
+A_SalaryStructure_allowances((allowances))
+E_SalaryStructure --- A_SalaryStructure_allowances
+A_SalaryStructure_deductions((deductions))
+E_SalaryStructure --- A_SalaryStructure_deductions
+A_SalaryStructure_netSalary((netSalary))
+E_SalaryStructure --- A_SalaryStructure_netSalary
+A_SalaryStructure_effectiveFrom((effectiveFrom))
+E_SalaryStructure --- A_SalaryStructure_effectiveFrom
+A_SalaryStructure_createdAt((createdAt))
+E_SalaryStructure --- A_SalaryStructure_createdAt
+A_SalaryStructure_updatedAt((updatedAt))
+E_SalaryStructure --- A_SalaryStructure_updatedAt
+
+E_SalesInvoice[SalesInvoice]
+A_SalesInvoice_id((id PK))
+E_SalesInvoice --- A_SalesInvoice_id
+A_SalesInvoice_tenantId((tenantId))
+E_SalesInvoice --- A_SalesInvoice_tenantId
+A_SalesInvoice_customerId((customerId))
+E_SalesInvoice --- A_SalesInvoice_customerId
+A_SalesInvoice_dealId((dealId))
+E_SalesInvoice --- A_SalesInvoice_dealId
+A_SalesInvoice_invoiceNumber((invoiceNumber))
+E_SalesInvoice --- A_SalesInvoice_invoiceNumber
+A_SalesInvoice_customerName((customerName))
+E_SalesInvoice --- A_SalesInvoice_customerName
+A_SalesInvoice_customerEmail((customerEmail))
+E_SalesInvoice --- A_SalesInvoice_customerEmail
+A_SalesInvoice_orderId((orderId))
+E_SalesInvoice --- A_SalesInvoice_orderId
+A_SalesInvoice_issueDate((issueDate))
+E_SalesInvoice --- A_SalesInvoice_issueDate
+A_SalesInvoice_dueDate((dueDate))
+E_SalesInvoice --- A_SalesInvoice_dueDate
+A_SalesInvoice_items((items))
+E_SalesInvoice --- A_SalesInvoice_items
+A_SalesInvoice_subtotal((subtotal))
+E_SalesInvoice --- A_SalesInvoice_subtotal
+A_SalesInvoice_tax((tax))
+E_SalesInvoice --- A_SalesInvoice_tax
+A_SalesInvoice_discount((discount))
+E_SalesInvoice --- A_SalesInvoice_discount
+A_SalesInvoice_total((total))
+E_SalesInvoice --- A_SalesInvoice_total
+A_SalesInvoice_amountPaid((amountPaid))
+E_SalesInvoice --- A_SalesInvoice_amountPaid
+A_SalesInvoice_status((status))
+E_SalesInvoice --- A_SalesInvoice_status
+A_SalesInvoice_createdAt((createdAt))
+E_SalesInvoice --- A_SalesInvoice_createdAt
+A_SalesInvoice_updatedAt((updatedAt))
+E_SalesInvoice --- A_SalesInvoice_updatedAt
+
+E_SalesOrder[SalesOrder]
+A_SalesOrder_id((id PK))
+E_SalesOrder --- A_SalesOrder_id
+A_SalesOrder_tenantId((tenantId))
+E_SalesOrder --- A_SalesOrder_tenantId
+A_SalesOrder_customerId((customerId))
+E_SalesOrder --- A_SalesOrder_customerId
+A_SalesOrder_dealId((dealId))
+E_SalesOrder --- A_SalesOrder_dealId
+A_SalesOrder_orderNumber((orderNumber))
+E_SalesOrder --- A_SalesOrder_orderNumber
+A_SalesOrder_customerName((customerName))
+E_SalesOrder --- A_SalesOrder_customerName
+A_SalesOrder_customerEmail((customerEmail))
+E_SalesOrder --- A_SalesOrder_customerEmail
+A_SalesOrder_quotationId((quotationId))
+E_SalesOrder --- A_SalesOrder_quotationId
+A_SalesOrder_orderDate((orderDate))
+E_SalesOrder --- A_SalesOrder_orderDate
+A_SalesOrder_expectedDelivery((expectedDelivery))
+E_SalesOrder --- A_SalesOrder_expectedDelivery
+A_SalesOrder_items((items))
+E_SalesOrder --- A_SalesOrder_items
+A_SalesOrder_subtotal((subtotal))
+E_SalesOrder --- A_SalesOrder_subtotal
+A_SalesOrder_tax((tax))
+E_SalesOrder --- A_SalesOrder_tax
+A_SalesOrder_discount((discount))
+E_SalesOrder --- A_SalesOrder_discount
+A_SalesOrder_total((total))
+E_SalesOrder --- A_SalesOrder_total
+A_SalesOrder_status((status))
+E_SalesOrder --- A_SalesOrder_status
+A_SalesOrder_notes((notes))
+E_SalesOrder --- A_SalesOrder_notes
+A_SalesOrder_createdAt((createdAt))
+E_SalesOrder --- A_SalesOrder_createdAt
+A_SalesOrder_updatedAt((updatedAt))
+E_SalesOrder --- A_SalesOrder_updatedAt
+
+E_SalesOrderTracking[SalesOrderTracking]
+A_SalesOrderTracking_id((id PK))
+E_SalesOrderTracking --- A_SalesOrderTracking_id
+A_SalesOrderTracking_tenantId((tenantId))
+E_SalesOrderTracking --- A_SalesOrderTracking_tenantId
+A_SalesOrderTracking_salesOrderId((salesOrderId))
+E_SalesOrderTracking --- A_SalesOrderTracking_salesOrderId
+A_SalesOrderTracking_status((status))
+E_SalesOrderTracking --- A_SalesOrderTracking_status
+A_SalesOrderTracking_carrier((carrier))
+E_SalesOrderTracking --- A_SalesOrderTracking_carrier
+A_SalesOrderTracking_trackingNumber((trackingNumber))
+E_SalesOrderTracking --- A_SalesOrderTracking_trackingNumber
+A_SalesOrderTracking_location((location))
+E_SalesOrderTracking --- A_SalesOrderTracking_location
+A_SalesOrderTracking_notes((notes))
+E_SalesOrderTracking --- A_SalesOrderTracking_notes
+A_SalesOrderTracking_createdAt((createdAt))
+E_SalesOrderTracking --- A_SalesOrderTracking_createdAt
+A_SalesOrderTracking_updatedAt((updatedAt))
+E_SalesOrderTracking --- A_SalesOrderTracking_updatedAt
+
+E_SalesQuotation[SalesQuotation]
+A_SalesQuotation_id((id PK))
+E_SalesQuotation --- A_SalesQuotation_id
+A_SalesQuotation_tenantId((tenantId))
+E_SalesQuotation --- A_SalesQuotation_tenantId
+A_SalesQuotation_customerId((customerId))
+E_SalesQuotation --- A_SalesQuotation_customerId
+A_SalesQuotation_dealId((dealId))
+E_SalesQuotation --- A_SalesQuotation_dealId
+A_SalesQuotation_customerName((customerName))
+E_SalesQuotation --- A_SalesQuotation_customerName
+A_SalesQuotation_customerEmail((customerEmail))
+E_SalesQuotation --- A_SalesQuotation_customerEmail
+A_SalesQuotation_title((title))
+E_SalesQuotation --- A_SalesQuotation_title
+A_SalesQuotation_description((description))
+E_SalesQuotation --- A_SalesQuotation_description
+A_SalesQuotation_items((items))
+E_SalesQuotation --- A_SalesQuotation_items
+A_SalesQuotation_subtotal((subtotal))
+E_SalesQuotation --- A_SalesQuotation_subtotal
+A_SalesQuotation_tax((tax))
+E_SalesQuotation --- A_SalesQuotation_tax
+A_SalesQuotation_discount((discount))
+E_SalesQuotation --- A_SalesQuotation_discount
+A_SalesQuotation_total((total))
+E_SalesQuotation --- A_SalesQuotation_total
+A_SalesQuotation_status((status))
+E_SalesQuotation --- A_SalesQuotation_status
+A_SalesQuotation_validUntil((validUntil))
+E_SalesQuotation --- A_SalesQuotation_validUntil
+A_SalesQuotation_createdAt((createdAt))
+E_SalesQuotation --- A_SalesQuotation_createdAt
+A_SalesQuotation_updatedAt((updatedAt))
+E_SalesQuotation --- A_SalesQuotation_updatedAt
+
+E_Shift[Shift]
+A_Shift_id((id PK))
+E_Shift --- A_Shift_id
+A_Shift_tenantId((tenantId))
+E_Shift --- A_Shift_tenantId
+A_Shift_name((name))
+E_Shift --- A_Shift_name
+A_Shift_code((code))
+E_Shift --- A_Shift_code
+A_Shift_startTime((startTime))
+E_Shift --- A_Shift_startTime
+A_Shift_endTime((endTime))
+E_Shift --- A_Shift_endTime
+A_Shift_breakDuration((breakDuration))
+E_Shift --- A_Shift_breakDuration
+A_Shift_workingDays((workingDays))
+E_Shift --- A_Shift_workingDays
+A_Shift_isActive((isActive))
+E_Shift --- A_Shift_isActive
+A_Shift_description((description))
+E_Shift --- A_Shift_description
+A_Shift_createdAt((createdAt))
+E_Shift --- A_Shift_createdAt
+A_Shift_updatedAt((updatedAt))
+E_Shift --- A_Shift_updatedAt
+
+E_ShiftAssignment[ShiftAssignment]
+A_ShiftAssignment_id((id PK))
+E_ShiftAssignment --- A_ShiftAssignment_id
+A_ShiftAssignment_tenantId((tenantId))
+E_ShiftAssignment --- A_ShiftAssignment_tenantId
+A_ShiftAssignment_employeeId((employeeId))
+E_ShiftAssignment --- A_ShiftAssignment_employeeId
+A_ShiftAssignment_shiftId((shiftId))
+E_ShiftAssignment --- A_ShiftAssignment_shiftId
+A_ShiftAssignment_assignedFrom((assignedFrom))
+E_ShiftAssignment --- A_ShiftAssignment_assignedFrom
+A_ShiftAssignment_assignedTo((assignedTo))
+E_ShiftAssignment --- A_ShiftAssignment_assignedTo
+A_ShiftAssignment_status((status))
+E_ShiftAssignment --- A_ShiftAssignment_status
+A_ShiftAssignment_createdAt((createdAt))
+E_ShiftAssignment --- A_ShiftAssignment_createdAt
+A_ShiftAssignment_updatedAt((updatedAt))
+E_ShiftAssignment --- A_ShiftAssignment_updatedAt
+
+E_StockMovement[StockMovement]
+A_StockMovement_id((id PK))
+E_StockMovement --- A_StockMovement_id
+A_StockMovement_tenantId((tenantId))
+E_StockMovement --- A_StockMovement_tenantId
+A_StockMovement_movementNumber((movementNumber))
+E_StockMovement --- A_StockMovement_movementNumber
+A_StockMovement_type((type))
+E_StockMovement --- A_StockMovement_type
+A_StockMovement_reason((reason))
+E_StockMovement --- A_StockMovement_reason
+A_StockMovement_itemId((itemId))
+E_StockMovement --- A_StockMovement_itemId
+A_StockMovement_fromWarehouseId((fromWarehouseId))
+E_StockMovement --- A_StockMovement_fromWarehouseId
+A_StockMovement_toWarehouseId((toWarehouseId))
+E_StockMovement --- A_StockMovement_toWarehouseId
+A_StockMovement_warehouseId((warehouseId))
+E_StockMovement --- A_StockMovement_warehouseId
+A_StockMovement_quantity((quantity))
+E_StockMovement --- A_StockMovement_quantity
+A_StockMovement_lotNumber((lotNumber))
+E_StockMovement --- A_StockMovement_lotNumber
+A_StockMovement_batchNumber((batchNumber))
+E_StockMovement --- A_StockMovement_batchNumber
+A_StockMovement_serialNumber((serialNumber))
+E_StockMovement --- A_StockMovement_serialNumber
+A_StockMovement_expiryDate((expiryDate))
+E_StockMovement --- A_StockMovement_expiryDate
+A_StockMovement_referenceType((referenceType))
+E_StockMovement --- A_StockMovement_referenceType
+A_StockMovement_referenceId((referenceId))
+E_StockMovement --- A_StockMovement_referenceId
+A_StockMovement_unitCost((unitCost))
+E_StockMovement --- A_StockMovement_unitCost
+A_StockMovement_totalCost((totalCost))
+E_StockMovement --- A_StockMovement_totalCost
+A_StockMovement_status((status))
+E_StockMovement --- A_StockMovement_status
+A_StockMovement_approvedBy((approvedBy))
+E_StockMovement --- A_StockMovement_approvedBy
+A_StockMovement_approvedAt((approvedAt))
+E_StockMovement --- A_StockMovement_approvedAt
+A_StockMovement_notes((notes))
+E_StockMovement --- A_StockMovement_notes
+A_StockMovement_createdBy((createdBy))
+E_StockMovement --- A_StockMovement_createdBy
+A_StockMovement_createdAt((createdAt))
+E_StockMovement --- A_StockMovement_createdAt
+A_StockMovement_updatedAt((updatedAt))
+E_StockMovement --- A_StockMovement_updatedAt
+
+E_Subscription[Subscription]
+A_Subscription_id((id PK))
+E_Subscription --- A_Subscription_id
+A_Subscription_tenantId((tenantId))
+E_Subscription --- A_Subscription_tenantId
+A_Subscription_planId((planId))
+E_Subscription --- A_Subscription_planId
+A_Subscription_status((status))
+E_Subscription --- A_Subscription_status
+A_Subscription_startAt((startAt))
+E_Subscription --- A_Subscription_startAt
+A_Subscription_currentPeriodStart((currentPeriodStart))
+E_Subscription --- A_Subscription_currentPeriodStart
+A_Subscription_currentPeriodEnd((currentPeriodEnd))
+E_Subscription --- A_Subscription_currentPeriodEnd
+A_Subscription_cancelAt((cancelAt))
+E_Subscription --- A_Subscription_cancelAt
+A_Subscription_canceledAt((canceledAt))
+E_Subscription --- A_Subscription_canceledAt
+A_Subscription_trialEndsAt((trialEndsAt))
+E_Subscription --- A_Subscription_trialEndsAt
+A_Subscription_provider((provider))
+E_Subscription --- A_Subscription_provider
+A_Subscription_providerSubscriptionId((providerSubscriptionId))
+E_Subscription --- A_Subscription_providerSubscriptionId
+A_Subscription_providerCustomerId((providerCustomerId))
+E_Subscription --- A_Subscription_providerCustomerId
+A_Subscription_createdAt((createdAt))
+E_Subscription --- A_Subscription_createdAt
+A_Subscription_updatedAt((updatedAt))
+E_Subscription --- A_Subscription_updatedAt
+
+E_SubscriptionItem[SubscriptionItem]
+A_SubscriptionItem_id((id PK))
+E_SubscriptionItem --- A_SubscriptionItem_id
+A_SubscriptionItem_subscriptionId((subscriptionId))
+E_SubscriptionItem --- A_SubscriptionItem_subscriptionId
+A_SubscriptionItem_moduleKey((moduleKey))
+E_SubscriptionItem --- A_SubscriptionItem_moduleKey
+A_SubscriptionItem_quantity((quantity))
+E_SubscriptionItem --- A_SubscriptionItem_quantity
+A_SubscriptionItem_unitPrice((unitPrice))
+E_SubscriptionItem --- A_SubscriptionItem_unitPrice
+A_SubscriptionItem_createdAt((createdAt))
+E_SubscriptionItem --- A_SubscriptionItem_createdAt
+A_SubscriptionItem_updatedAt((updatedAt))
+E_SubscriptionItem --- A_SubscriptionItem_updatedAt
+
+E_SubscriptionPayment[SubscriptionPayment]
+A_SubscriptionPayment_id((id PK))
+E_SubscriptionPayment --- A_SubscriptionPayment_id
+A_SubscriptionPayment_subscriptionId((subscriptionId))
+E_SubscriptionPayment --- A_SubscriptionPayment_subscriptionId
+A_SubscriptionPayment_tenantId((tenantId))
+E_SubscriptionPayment --- A_SubscriptionPayment_tenantId
+A_SubscriptionPayment_amount((amount))
+E_SubscriptionPayment --- A_SubscriptionPayment_amount
+A_SubscriptionPayment_currency((currency))
+E_SubscriptionPayment --- A_SubscriptionPayment_currency
+A_SubscriptionPayment_status((status))
+E_SubscriptionPayment --- A_SubscriptionPayment_status
+A_SubscriptionPayment_paymentMethodId((paymentMethodId))
+E_SubscriptionPayment --- A_SubscriptionPayment_paymentMethodId
+A_SubscriptionPayment_providerPaymentId((providerPaymentId))
+E_SubscriptionPayment --- A_SubscriptionPayment_providerPaymentId
+A_SubscriptionPayment_invoiceNumber((invoiceNumber))
+E_SubscriptionPayment --- A_SubscriptionPayment_invoiceNumber
+A_SubscriptionPayment_description((description))
+E_SubscriptionPayment --- A_SubscriptionPayment_description
+A_SubscriptionPayment_scheduledFor((scheduledFor))
+E_SubscriptionPayment --- A_SubscriptionPayment_scheduledFor
+A_SubscriptionPayment_attemptedAt((attemptedAt))
+E_SubscriptionPayment --- A_SubscriptionPayment_attemptedAt
+A_SubscriptionPayment_succeededAt((succeededAt))
+E_SubscriptionPayment --- A_SubscriptionPayment_succeededAt
+A_SubscriptionPayment_failedAt((failedAt))
+E_SubscriptionPayment --- A_SubscriptionPayment_failedAt
+A_SubscriptionPayment_refundedAt((refundedAt))
+E_SubscriptionPayment --- A_SubscriptionPayment_refundedAt
+A_SubscriptionPayment_failureCode((failureCode))
+E_SubscriptionPayment --- A_SubscriptionPayment_failureCode
+A_SubscriptionPayment_failureMessage((failureMessage))
+E_SubscriptionPayment --- A_SubscriptionPayment_failureMessage
+A_SubscriptionPayment_metadata((metadata))
+E_SubscriptionPayment --- A_SubscriptionPayment_metadata
+A_SubscriptionPayment_createdAt((createdAt))
+E_SubscriptionPayment --- A_SubscriptionPayment_createdAt
+A_SubscriptionPayment_updatedAt((updatedAt))
+E_SubscriptionPayment --- A_SubscriptionPayment_updatedAt
+
+E_SupplierEvaluation[SupplierEvaluation]
+A_SupplierEvaluation_id((id PK))
+E_SupplierEvaluation --- A_SupplierEvaluation_id
+A_SupplierEvaluation_tenantId((tenantId))
+E_SupplierEvaluation --- A_SupplierEvaluation_tenantId
+A_SupplierEvaluation_vendorId((vendorId))
+E_SupplierEvaluation --- A_SupplierEvaluation_vendorId
+A_SupplierEvaluation_evaluatedBy((evaluatedBy))
+E_SupplierEvaluation --- A_SupplierEvaluation_evaluatedBy
+A_SupplierEvaluation_evaluationDate((evaluationDate))
+E_SupplierEvaluation --- A_SupplierEvaluation_evaluationDate
+A_SupplierEvaluation_evaluationPeriod((evaluationPeriod))
+E_SupplierEvaluation --- A_SupplierEvaluation_evaluationPeriod
+A_SupplierEvaluation_qualityRating((qualityRating))
+E_SupplierEvaluation --- A_SupplierEvaluation_qualityRating
+A_SupplierEvaluation_deliveryRating((deliveryRating))
+E_SupplierEvaluation --- A_SupplierEvaluation_deliveryRating
+A_SupplierEvaluation_priceRating((priceRating))
+E_SupplierEvaluation --- A_SupplierEvaluation_priceRating
+A_SupplierEvaluation_serviceRating((serviceRating))
+E_SupplierEvaluation --- A_SupplierEvaluation_serviceRating
+A_SupplierEvaluation_communicationRating((communicationRating))
+E_SupplierEvaluation --- A_SupplierEvaluation_communicationRating
+A_SupplierEvaluation_overallRating((overallRating))
+E_SupplierEvaluation --- A_SupplierEvaluation_overallRating
+A_SupplierEvaluation_onTimeDeliveryRate((onTimeDeliveryRate))
+E_SupplierEvaluation --- A_SupplierEvaluation_onTimeDeliveryRate
+A_SupplierEvaluation_defectRate((defectRate))
+E_SupplierEvaluation --- A_SupplierEvaluation_defectRate
+A_SupplierEvaluation_responseTime((responseTime))
+E_SupplierEvaluation --- A_SupplierEvaluation_responseTime
+A_SupplierEvaluation_strengths((strengths))
+E_SupplierEvaluation --- A_SupplierEvaluation_strengths
+A_SupplierEvaluation_weaknesses((weaknesses))
+E_SupplierEvaluation --- A_SupplierEvaluation_weaknesses
+A_SupplierEvaluation_recommendations((recommendations))
+E_SupplierEvaluation --- A_SupplierEvaluation_recommendations
+A_SupplierEvaluation_status((status))
+E_SupplierEvaluation --- A_SupplierEvaluation_status
+A_SupplierEvaluation_notes((notes))
+E_SupplierEvaluation --- A_SupplierEvaluation_notes
+A_SupplierEvaluation_createdAt((createdAt))
+E_SupplierEvaluation --- A_SupplierEvaluation_createdAt
+A_SupplierEvaluation_updatedAt((updatedAt))
+E_SupplierEvaluation --- A_SupplierEvaluation_updatedAt
+
+E_SystemOption[SystemOption]
+A_SystemOption_id((id PK))
+E_SystemOption --- A_SystemOption_id
+A_SystemOption_category((category))
+E_SystemOption --- A_SystemOption_category
+A_SystemOption_key((key))
+E_SystemOption --- A_SystemOption_key
+A_SystemOption_value((value))
+E_SystemOption --- A_SystemOption_value
+A_SystemOption_label((label))
+E_SystemOption --- A_SystemOption_label
+A_SystemOption_tenantId((tenantId))
+E_SystemOption --- A_SystemOption_tenantId
+A_SystemOption_isActive((isActive))
+E_SystemOption --- A_SystemOption_isActive
+A_SystemOption_createdAt((createdAt))
+E_SystemOption --- A_SystemOption_createdAt
+
+E_Tag[Tag]
+A_Tag_id((id PK))
+E_Tag --- A_Tag_id
+A_Tag_tenantId((tenantId))
+E_Tag --- A_Tag_tenantId
+A_Tag_name((name))
+E_Tag --- A_Tag_name
+A_Tag_color((color))
+E_Tag --- A_Tag_color
+A_Tag_category((category))
+E_Tag --- A_Tag_category
+A_Tag_usageCount((usageCount))
+E_Tag --- A_Tag_usageCount
+A_Tag_createdAt((createdAt))
+E_Tag --- A_Tag_createdAt
+
+E_Task[Task]
+A_Task_id((id PK))
+E_Task --- A_Task_id
+A_Task_tenantId((tenantId))
+E_Task --- A_Task_tenantId
+A_Task_employeeId((employeeId))
+E_Task --- A_Task_employeeId
+A_Task_assignedBy((assignedBy))
+E_Task --- A_Task_assignedBy
+A_Task_title((title))
+E_Task --- A_Task_title
+A_Task_description((description))
+E_Task --- A_Task_description
+A_Task_priority((priority))
+E_Task --- A_Task_priority
+A_Task_status((status))
+E_Task --- A_Task_status
+A_Task_dueDate((dueDate))
+E_Task --- A_Task_dueDate
+A_Task_createdAt((createdAt))
+E_Task --- A_Task_createdAt
+A_Task_updatedAt((updatedAt))
+E_Task --- A_Task_updatedAt
+
+E_TaxConfiguration[TaxConfiguration]
+A_TaxConfiguration_id((id PK))
+E_TaxConfiguration --- A_TaxConfiguration_id
+A_TaxConfiguration_tenantId((tenantId))
+E_TaxConfiguration --- A_TaxConfiguration_tenantId
+A_TaxConfiguration_name((name))
+E_TaxConfiguration --- A_TaxConfiguration_name
+A_TaxConfiguration_taxType((taxType))
+E_TaxConfiguration --- A_TaxConfiguration_taxType
+A_TaxConfiguration_slabs((slabs))
+E_TaxConfiguration --- A_TaxConfiguration_slabs
+A_TaxConfiguration_deductionRules((deductionRules))
+E_TaxConfiguration --- A_TaxConfiguration_deductionRules
+A_TaxConfiguration_isActive((isActive))
+E_TaxConfiguration --- A_TaxConfiguration_isActive
+A_TaxConfiguration_effectiveFrom((effectiveFrom))
+E_TaxConfiguration --- A_TaxConfiguration_effectiveFrom
+A_TaxConfiguration_effectiveTo((effectiveTo))
+E_TaxConfiguration --- A_TaxConfiguration_effectiveTo
+A_TaxConfiguration_createdAt((createdAt))
+E_TaxConfiguration --- A_TaxConfiguration_createdAt
+A_TaxConfiguration_updatedAt((updatedAt))
+E_TaxConfiguration --- A_TaxConfiguration_updatedAt
+
+E_Tenant[Tenant]
+A_Tenant_id((id PK))
+E_Tenant --- A_Tenant_id
+A_Tenant_name((name))
+E_Tenant --- A_Tenant_name
+A_Tenant_createdAt((createdAt))
+E_Tenant --- A_Tenant_createdAt
+
+E_TimeTracking[TimeTracking]
+A_TimeTracking_id((id PK))
+E_TimeTracking --- A_TimeTracking_id
+A_TimeTracking_tenantId((tenantId))
+E_TimeTracking --- A_TimeTracking_tenantId
+A_TimeTracking_employeeId((employeeId))
+E_TimeTracking --- A_TimeTracking_employeeId
+A_TimeTracking_date((date))
+E_TimeTracking --- A_TimeTracking_date
+A_TimeTracking_checkInTime((checkInTime))
+E_TimeTracking --- A_TimeTracking_checkInTime
+A_TimeTracking_checkOutTime((checkOutTime))
+E_TimeTracking --- A_TimeTracking_checkOutTime
+A_TimeTracking_checkInLocation((checkInLocation))
+E_TimeTracking --- A_TimeTracking_checkInLocation
+A_TimeTracking_checkOutLocation((checkOutLocation))
+E_TimeTracking --- A_TimeTracking_checkOutLocation
+A_TimeTracking_workHours((workHours))
+E_TimeTracking --- A_TimeTracking_workHours
+A_TimeTracking_breakHours((breakHours))
+E_TimeTracking --- A_TimeTracking_breakHours
+A_TimeTracking_status((status))
+E_TimeTracking --- A_TimeTracking_status
+A_TimeTracking_isLate((isLate))
+E_TimeTracking --- A_TimeTracking_isLate
+A_TimeTracking_notes((notes))
+E_TimeTracking --- A_TimeTracking_notes
+A_TimeTracking_createdAt((createdAt))
+E_TimeTracking --- A_TimeTracking_createdAt
+A_TimeTracking_updatedAt((updatedAt))
+E_TimeTracking --- A_TimeTracking_updatedAt
+
+E_User[User]
+A_User_id((id PK))
+E_User --- A_User_id
+A_User_email((email))
+E_User --- A_User_email
+A_User_password((password))
+E_User --- A_User_password
+A_User_role((role))
+E_User --- A_User_role
+A_User_status((status))
+E_User --- A_User_status
+A_User_tenantId((tenantId))
+E_User --- A_User_tenantId
+A_User_departmentId((departmentId))
+E_User --- A_User_departmentId
+A_User_managerId((managerId))
+E_User --- A_User_managerId
+A_User_createdAt((createdAt))
+E_User --- A_User_createdAt
+
+E_UserInvite[UserInvite]
+A_UserInvite_id((id PK))
+E_UserInvite --- A_UserInvite_id
+A_UserInvite_email((email))
+E_UserInvite --- A_UserInvite_email
+A_UserInvite_role((role))
+E_UserInvite --- A_UserInvite_role
+A_UserInvite_token((token))
+E_UserInvite --- A_UserInvite_token
+A_UserInvite_used((used))
+E_UserInvite --- A_UserInvite_used
+A_UserInvite_expiresAt((expiresAt))
+E_UserInvite --- A_UserInvite_expiresAt
+A_UserInvite_tenantId((tenantId))
+E_UserInvite --- A_UserInvite_tenantId
+A_UserInvite_createdAt((createdAt))
+E_UserInvite --- A_UserInvite_createdAt
+
+E_UserRole[UserRole]
+A_UserRole_userId((userId PK))
+E_UserRole --- A_UserRole_userId
+A_UserRole_roleId((roleId PK))
+E_UserRole --- A_UserRole_roleId
+
+E_Vendor[Vendor]
+A_Vendor_id((id PK))
+E_Vendor --- A_Vendor_id
+A_Vendor_tenantId((tenantId))
+E_Vendor --- A_Vendor_tenantId
+A_Vendor_vendorCode((vendorCode))
+E_Vendor --- A_Vendor_vendorCode
+A_Vendor_name((name))
+E_Vendor --- A_Vendor_name
+A_Vendor_contactPerson((contactPerson))
+E_Vendor --- A_Vendor_contactPerson
+A_Vendor_email((email))
+E_Vendor --- A_Vendor_email
+A_Vendor_phone((phone))
+E_Vendor --- A_Vendor_phone
+A_Vendor_address((address))
+E_Vendor --- A_Vendor_address
+A_Vendor_city((city))
+E_Vendor --- A_Vendor_city
+A_Vendor_state((state))
+E_Vendor --- A_Vendor_state
+A_Vendor_country((country))
+E_Vendor --- A_Vendor_country
+A_Vendor_postalCode((postalCode))
+E_Vendor --- A_Vendor_postalCode
+A_Vendor_website((website))
+E_Vendor --- A_Vendor_website
+A_Vendor_taxId((taxId))
+E_Vendor --- A_Vendor_taxId
+A_Vendor_paymentTerms((paymentTerms))
+E_Vendor --- A_Vendor_paymentTerms
+A_Vendor_creditLimit((creditLimit))
+E_Vendor --- A_Vendor_creditLimit
+A_Vendor_currency((currency))
+E_Vendor --- A_Vendor_currency
+A_Vendor_status((status))
+E_Vendor --- A_Vendor_status
+A_Vendor_category((category))
+E_Vendor --- A_Vendor_category
+A_Vendor_bankName((bankName))
+E_Vendor --- A_Vendor_bankName
+A_Vendor_accountNumber((accountNumber))
+E_Vendor --- A_Vendor_accountNumber
+A_Vendor_swiftCode((swiftCode))
+E_Vendor --- A_Vendor_swiftCode
+A_Vendor_rating((rating))
+E_Vendor --- A_Vendor_rating
+A_Vendor_notes((notes))
+E_Vendor --- A_Vendor_notes
+A_Vendor_createdAt((createdAt))
+E_Vendor --- A_Vendor_createdAt
+A_Vendor_updatedAt((updatedAt))
+E_Vendor --- A_Vendor_updatedAt
+
+E_Warehouse[Warehouse]
+A_Warehouse_id((id PK))
+E_Warehouse --- A_Warehouse_id
+A_Warehouse_tenantId((tenantId))
+E_Warehouse --- A_Warehouse_tenantId
+A_Warehouse_branchId((branchId))
+E_Warehouse --- A_Warehouse_branchId
+A_Warehouse_code((code))
+E_Warehouse --- A_Warehouse_code
+A_Warehouse_name((name))
+E_Warehouse --- A_Warehouse_name
+A_Warehouse_type((type))
+E_Warehouse --- A_Warehouse_type
+A_Warehouse_address((address))
+E_Warehouse --- A_Warehouse_address
+A_Warehouse_city((city))
+E_Warehouse --- A_Warehouse_city
+A_Warehouse_state((state))
+E_Warehouse --- A_Warehouse_state
+A_Warehouse_country((country))
+E_Warehouse --- A_Warehouse_country
+A_Warehouse_postalCode((postalCode))
+E_Warehouse --- A_Warehouse_postalCode
+A_Warehouse_capacity((capacity))
+E_Warehouse --- A_Warehouse_capacity
+A_Warehouse_unit((unit))
+E_Warehouse --- A_Warehouse_unit
+A_Warehouse_managerId((managerId))
+E_Warehouse --- A_Warehouse_managerId
+A_Warehouse_phone((phone))
+E_Warehouse --- A_Warehouse_phone
+A_Warehouse_isActive((isActive))
+E_Warehouse --- A_Warehouse_isActive
+A_Warehouse_createdAt((createdAt))
+E_Warehouse --- A_Warehouse_createdAt
+A_Warehouse_updatedAt((updatedAt))
+E_Warehouse --- A_Warehouse_updatedAt
+
+E_WarehouseStock[WarehouseStock]
+A_WarehouseStock_id((id PK))
+E_WarehouseStock --- A_WarehouseStock_id
+A_WarehouseStock_tenantId((tenantId))
+E_WarehouseStock --- A_WarehouseStock_tenantId
+A_WarehouseStock_warehouseId((warehouseId))
+E_WarehouseStock --- A_WarehouseStock_warehouseId
+A_WarehouseStock_itemId((itemId))
+E_WarehouseStock --- A_WarehouseStock_itemId
+A_WarehouseStock_quantity((quantity))
+E_WarehouseStock --- A_WarehouseStock_quantity
+A_WarehouseStock_reservedQty((reservedQty))
+E_WarehouseStock --- A_WarehouseStock_reservedQty
+A_WarehouseStock_availableQty((availableQty))
+E_WarehouseStock --- A_WarehouseStock_availableQty
+A_WarehouseStock_binLocation((binLocation))
+E_WarehouseStock --- A_WarehouseStock_binLocation
+A_WarehouseStock_zone((zone))
+E_WarehouseStock --- A_WarehouseStock_zone
+A_WarehouseStock_reorderPoint((reorderPoint))
+E_WarehouseStock --- A_WarehouseStock_reorderPoint
+A_WarehouseStock_reorderQty((reorderQty))
+E_WarehouseStock --- A_WarehouseStock_reorderQty
+A_WarehouseStock_minStock((minStock))
+E_WarehouseStock --- A_WarehouseStock_minStock
+A_WarehouseStock_maxStock((maxStock))
+E_WarehouseStock --- A_WarehouseStock_maxStock
+A_WarehouseStock_lastPurchasePrice((lastPurchasePrice))
+E_WarehouseStock --- A_WarehouseStock_lastPurchasePrice
+A_WarehouseStock_avgCost((avgCost))
+E_WarehouseStock --- A_WarehouseStock_avgCost
+A_WarehouseStock_createdAt((createdAt))
+E_WarehouseStock --- A_WarehouseStock_createdAt
+A_WarehouseStock_updatedAt((updatedAt))
+E_WarehouseStock --- A_WarehouseStock_updatedAt
+
+E_Workflow[Workflow]
+A_Workflow_id((id PK))
+E_Workflow --- A_Workflow_id
+A_Workflow_tenantId((tenantId))
+E_Workflow --- A_Workflow_tenantId
+A_Workflow_module((module))
+E_Workflow --- A_Workflow_module
+A_Workflow_action((action))
+E_Workflow --- A_Workflow_action
+A_Workflow_status((status))
+E_Workflow --- A_Workflow_status
+A_Workflow_createdAt((createdAt))
+E_Workflow --- A_Workflow_createdAt
+
+E_WorkflowRequest[WorkflowRequest]
+A_WorkflowRequest_id((id PK))
+E_WorkflowRequest --- A_WorkflowRequest_id
+A_WorkflowRequest_tenantId((tenantId))
+E_WorkflowRequest --- A_WorkflowRequest_tenantId
+A_WorkflowRequest_workflowId((workflowId))
+E_WorkflowRequest --- A_WorkflowRequest_workflowId
+A_WorkflowRequest_module((module))
+E_WorkflowRequest --- A_WorkflowRequest_module
+A_WorkflowRequest_action((action))
+E_WorkflowRequest --- A_WorkflowRequest_action
+A_WorkflowRequest_payload((payload))
+E_WorkflowRequest --- A_WorkflowRequest_payload
+A_WorkflowRequest_status((status))
+E_WorkflowRequest --- A_WorkflowRequest_status
+A_WorkflowRequest_createdBy((createdBy))
+E_WorkflowRequest --- A_WorkflowRequest_createdBy
+A_WorkflowRequest_requestedBy((requestedBy))
+E_WorkflowRequest --- A_WorkflowRequest_requestedBy
+A_WorkflowRequest_createdAt((createdAt))
+E_WorkflowRequest --- A_WorkflowRequest_createdAt
+
+E_WorkflowStep[WorkflowStep]
+A_WorkflowStep_id((id PK))
+E_WorkflowStep --- A_WorkflowStep_id
+A_WorkflowStep_workflowId((workflowId))
+E_WorkflowStep --- A_WorkflowStep_workflowId
+A_WorkflowStep_stepOrder((stepOrder))
+E_WorkflowStep --- A_WorkflowStep_stepOrder
+A_WorkflowStep_permission((permission))
+E_WorkflowStep --- A_WorkflowStep_permission
+
+E_WorkflowTemplate[WorkflowTemplate]
+A_WorkflowTemplate_id((id PK))
+E_WorkflowTemplate --- A_WorkflowTemplate_id
+A_WorkflowTemplate_name((name))
+E_WorkflowTemplate --- A_WorkflowTemplate_name
+A_WorkflowTemplate_description((description))
+E_WorkflowTemplate --- A_WorkflowTemplate_description
+A_WorkflowTemplate_industry((industry))
+E_WorkflowTemplate --- A_WorkflowTemplate_industry
+A_WorkflowTemplate_module((module))
+E_WorkflowTemplate --- A_WorkflowTemplate_module
+A_WorkflowTemplate_steps((steps))
+E_WorkflowTemplate --- A_WorkflowTemplate_steps
+A_WorkflowTemplate_isDefault((isDefault))
+E_WorkflowTemplate --- A_WorkflowTemplate_isDefault
+A_WorkflowTemplate_createdAt((createdAt))
+E_WorkflowTemplate --- A_WorkflowTemplate_createdAt
+
+E_WorkOrder[WorkOrder]
+A_WorkOrder_id((id PK))
+E_WorkOrder --- A_WorkOrder_id
+A_WorkOrder_tenantId((tenantId))
+E_WorkOrder --- A_WorkOrder_tenantId
+A_WorkOrder_workOrderNumber((workOrderNumber))
+E_WorkOrder --- A_WorkOrder_workOrderNumber
+A_WorkOrder_bomId((bomId))
+E_WorkOrder --- A_WorkOrder_bomId
+A_WorkOrder_productId((productId))
+E_WorkOrder --- A_WorkOrder_productId
+A_WorkOrder_plannedQty((plannedQty))
+E_WorkOrder --- A_WorkOrder_plannedQty
+A_WorkOrder_producedQty((producedQty))
+E_WorkOrder --- A_WorkOrder_producedQty
+A_WorkOrder_scrappedQty((scrappedQty))
+E_WorkOrder --- A_WorkOrder_scrappedQty
+A_WorkOrder_scheduledStart((scheduledStart))
+E_WorkOrder --- A_WorkOrder_scheduledStart
+A_WorkOrder_scheduledEnd((scheduledEnd))
+E_WorkOrder --- A_WorkOrder_scheduledEnd
+A_WorkOrder_actualStart((actualStart))
+E_WorkOrder --- A_WorkOrder_actualStart
+A_WorkOrder_actualEnd((actualEnd))
+E_WorkOrder --- A_WorkOrder_actualEnd
+A_WorkOrder_warehouseId((warehouseId))
+E_WorkOrder --- A_WorkOrder_warehouseId
+A_WorkOrder_workCenter((workCenter))
+E_WorkOrder --- A_WorkOrder_workCenter
+A_WorkOrder_status((status))
+E_WorkOrder --- A_WorkOrder_status
+A_WorkOrder_priority((priority))
+E_WorkOrder --- A_WorkOrder_priority
+A_WorkOrder_estimatedCost((estimatedCost))
+E_WorkOrder --- A_WorkOrder_estimatedCost
+A_WorkOrder_actualCost((actualCost))
+E_WorkOrder --- A_WorkOrder_actualCost
+A_WorkOrder_salesOrderId((salesOrderId))
+E_WorkOrder --- A_WorkOrder_salesOrderId
+A_WorkOrder_projectId((projectId))
+E_WorkOrder --- A_WorkOrder_projectId
+A_WorkOrder_assignedTo((assignedTo))
+E_WorkOrder --- A_WorkOrder_assignedTo
+A_WorkOrder_notes((notes))
+E_WorkOrder --- A_WorkOrder_notes
+A_WorkOrder_createdBy((createdBy))
+E_WorkOrder --- A_WorkOrder_createdBy
+A_WorkOrder_completedBy((completedBy))
+E_WorkOrder --- A_WorkOrder_completedBy
+A_WorkOrder_completedAt((completedAt))
+E_WorkOrder --- A_WorkOrder_completedAt
+A_WorkOrder_createdAt((createdAt))
+E_WorkOrder --- A_WorkOrder_createdAt
+A_WorkOrder_updatedAt((updatedAt))
+E_WorkOrder --- A_WorkOrder_updatedAt
+
+E_WorkOrderMaterial[WorkOrderMaterial]
+A_WorkOrderMaterial_id((id PK))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_id
+A_WorkOrderMaterial_workOrderId((workOrderId))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_workOrderId
+A_WorkOrderMaterial_itemId((itemId))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_itemId
+A_WorkOrderMaterial_plannedQty((plannedQty))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_plannedQty
+A_WorkOrderMaterial_issuedQty((issuedQty))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_issuedQty
+A_WorkOrderMaterial_consumedQty((consumedQty))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_consumedQty
+A_WorkOrderMaterial_returnedQty((returnedQty))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_returnedQty
+A_WorkOrderMaterial_warehouseId((warehouseId))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_warehouseId
+A_WorkOrderMaterial_unitCost((unitCost))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_unitCost
+A_WorkOrderMaterial_totalCost((totalCost))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_totalCost
+A_WorkOrderMaterial_status((status))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_status
+A_WorkOrderMaterial_issuedBy((issuedBy))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_issuedBy
+A_WorkOrderMaterial_issuedAt((issuedAt))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_issuedAt
+A_WorkOrderMaterial_notes((notes))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_notes
+A_WorkOrderMaterial_createdAt((createdAt))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_createdAt
+A_WorkOrderMaterial_updatedAt((updatedAt))
+E_WorkOrderMaterial --- A_WorkOrderMaterial_updatedAt
+
+E_WorkOrderOperation[WorkOrderOperation]
+A_WorkOrderOperation_id((id PK))
+E_WorkOrderOperation --- A_WorkOrderOperation_id
+A_WorkOrderOperation_workOrderId((workOrderId))
+E_WorkOrderOperation --- A_WorkOrderOperation_workOrderId
+A_WorkOrderOperation_sequence((sequence))
+E_WorkOrderOperation --- A_WorkOrderOperation_sequence
+A_WorkOrderOperation_operationName((operationName))
+E_WorkOrderOperation --- A_WorkOrderOperation_operationName
+A_WorkOrderOperation_description((description))
+E_WorkOrderOperation --- A_WorkOrderOperation_description
+A_WorkOrderOperation_workCenter((workCenter))
+E_WorkOrderOperation --- A_WorkOrderOperation_workCenter
+A_WorkOrderOperation_estimatedHours((estimatedHours))
+E_WorkOrderOperation --- A_WorkOrderOperation_estimatedHours
+A_WorkOrderOperation_actualHours((actualHours))
+E_WorkOrderOperation --- A_WorkOrderOperation_actualHours
+A_WorkOrderOperation_assignedTo((assignedTo))
+E_WorkOrderOperation --- A_WorkOrderOperation_assignedTo
+A_WorkOrderOperation_laborCost((laborCost))
+E_WorkOrderOperation --- A_WorkOrderOperation_laborCost
+A_WorkOrderOperation_status((status))
+E_WorkOrderOperation --- A_WorkOrderOperation_status
+A_WorkOrderOperation_startedAt((startedAt))
+E_WorkOrderOperation --- A_WorkOrderOperation_startedAt
+A_WorkOrderOperation_completedAt((completedAt))
+E_WorkOrderOperation --- A_WorkOrderOperation_completedAt
+A_WorkOrderOperation_notes((notes))
+E_WorkOrderOperation --- A_WorkOrderOperation_notes
+A_WorkOrderOperation_createdAt((createdAt))
+E_WorkOrderOperation --- A_WorkOrderOperation_createdAt
+A_WorkOrderOperation_updatedAt((updatedAt))
+E_WorkOrderOperation --- A_WorkOrderOperation_updatedAt
+
+E_WorkReport[WorkReport]
+A_WorkReport_id((id PK))
+E_WorkReport --- A_WorkReport_id
+A_WorkReport_tenantId((tenantId))
+E_WorkReport --- A_WorkReport_tenantId
+A_WorkReport_employeeId((employeeId))
+E_WorkReport --- A_WorkReport_employeeId
+A_WorkReport_taskId((taskId))
+E_WorkReport --- A_WorkReport_taskId
+A_WorkReport_title((title))
+E_WorkReport --- A_WorkReport_title
+A_WorkReport_description((description))
+E_WorkReport --- A_WorkReport_description
+A_WorkReport_workDate((workDate))
+E_WorkReport --- A_WorkReport_workDate
+A_WorkReport_hoursSpent((hoursSpent))
+E_WorkReport --- A_WorkReport_hoursSpent
+A_WorkReport_attachments((attachments))
+E_WorkReport --- A_WorkReport_attachments
+A_WorkReport_createdAt((createdAt))
+E_WorkReport --- A_WorkReport_createdAt
+
+R_001{tenant}
+E_CompanyConfig -- 0..1 --> R_001
+R_001 -- 1 --> E_Tenant
+
+R_002{plan}
+E_PlanModule -- N --> R_002
+R_002 -- 1 --> E_Plan
+
+R_003{tenant}
+E_Subscription -- N --> R_003
+R_003 -- 1 --> E_Tenant
+
+R_004{plan}
+E_Subscription -- N --> R_004
+R_004 -- 1 --> E_Plan
+
+R_005{subscription}
+E_SubscriptionItem -- N --> R_005
+R_005 -- 1 --> E_Subscription
+
+R_006{subscription}
+E_SubscriptionPayment -- N --> R_006
+R_006 -- 1 --> E_Subscription
+
+R_007{tenant}
+E_User -- N --> R_007
+R_007 -- 1 --> E_Tenant
+
+R_008{department}
+E_User -- N --> R_008
+R_008 -- 0..1 --> E_Department
+
+R_009{role}
+E_RolePermission -- N --> R_009
+R_009 -- 1 --> E_Role
+
+R_010{permission}
+E_RolePermission -- N --> R_010
+R_010 -- 1 --> E_Permission
+
+R_011{user}
+E_UserRole -- N --> R_011
+R_011 -- 1 --> E_User
+
+R_012{role}
+E_UserRole -- N --> R_012
+R_012 -- 1 --> E_Role
+
+R_013{workflow}
+E_WorkflowStep -- N --> R_013
+R_013 -- 1 --> E_Workflow
+
+R_014{tenant}
+E_Item -- N --> R_014
+R_014 -- 1 --> E_Tenant
+
+R_015{tenant}
+E_SalesQuotation -- N --> R_015
+R_015 -- 1 --> E_Tenant
+
+R_016{customer}
+E_SalesQuotation -- N --> R_016
+R_016 -- 0..1 --> E_Customer
+
+R_017{deal}
+E_SalesQuotation -- N --> R_017
+R_017 -- 0..1 --> E_Deal
+
+R_018{tenant}
+E_SalesOrder -- N --> R_018
+R_018 -- 1 --> E_Tenant
+
+R_019{customer}
+E_SalesOrder -- N --> R_019
+R_019 -- 0..1 --> E_Customer
+
+R_020{deal}
+E_SalesOrder -- N --> R_020
+R_020 -- 0..1 --> E_Deal
+
+R_021{tenant}
+E_SalesInvoice -- N --> R_021
+R_021 -- 1 --> E_Tenant
+
+R_022{customer}
+E_SalesInvoice -- N --> R_022
+R_022 -- 0..1 --> E_Customer
+
+R_023{deal}
+E_SalesInvoice -- N --> R_023
+R_023 -- 0..1 --> E_Deal
+
+R_024{invoice}
+E_InvoicePayment -- N --> R_024
+R_024 -- 1 --> E_SalesInvoice
+
+R_025{tenant}
+E_SalesOrderTracking -- N --> R_025
+R_025 -- 1 --> E_Tenant
+
+R_026{order}
+E_SalesOrderTracking -- N --> R_026
+R_026 -- 1 --> E_SalesOrder
+
+R_027{tenant}
+E_UserInvite -- N --> R_027
+R_027 -- 1 --> E_Tenant
+
+R_028{workflow}
+E_Approval -- N --> R_028
+R_028 -- 1 --> E_Workflow
+
+R_029{workflowRequest}
+E_Approval -- N --> R_029
+R_029 -- 0..1 --> E_WorkflowRequest
+
+R_030{workflowStep}
+E_Approval -- N --> R_030
+R_030 -- 0..1 --> E_WorkflowStep
+
+R_031{user}
+E_Employee -- 0..1 --> R_031
+R_031 -- 1 --> E_User
+
+R_032{department}
+E_Employee -- N --> R_032
+R_032 -- 1 --> E_Department
+
+R_033{manager}
+E_Employee -- N --> R_033
+R_033 -- 0..1 --> E_Employee
+
+R_034{employee}
+E_LeaveRequest -- N --> R_034
+R_034 -- 1 --> E_Employee
+
+R_035{leaveType}
+E_LeaveRequest -- N --> R_035
+R_035 -- 1 --> E_LeaveType
+
+R_036{employee}
+E_ExpenseClaim -- N --> R_036
+R_036 -- 1 --> E_Employee
+
+R_037{category}
+E_ExpenseClaim -- N --> R_037
+R_037 -- 1 --> E_ExpenseCategory
+
+R_038{employee}
+E_Task -- N --> R_038
+R_038 -- 1 --> E_Employee
+
+R_039{assigner}
+E_Task -- N --> R_039
+R_039 -- 1 --> E_Employee
+
+R_040{employee}
+E_SalaryStructure -- 0..1 --> R_040
+R_040 -- 1 --> E_Employee
+
+R_041{employee}
+E_WorkReport -- N --> R_041
+R_041 -- 1 --> E_Employee
+
+R_042{task}
+E_WorkReport -- N --> R_042
+R_042 -- 0..1 --> E_Task
+
+R_043{employee}
+E_Notification -- N --> R_043
+R_043 -- 1 --> E_Employee
+
+R_044{owner}
+E_Customer -- N --> R_044
+R_044 -- 0..1 --> E_User
+
+R_045{customer}
+E_Contact -- N --> R_045
+R_045 -- 1 --> E_Customer
+
+R_046{owner}
+E_Contact -- N --> R_046
+R_046 -- 0..1 --> E_User
+
+R_047{customer}
+E_Lead -- N --> R_047
+R_047 -- 0..1 --> E_Customer
+
+R_048{contact}
+E_Lead -- N --> R_048
+R_048 -- 0..1 --> E_Contact
+
+R_049{deal}
+E_Lead -- N --> R_049
+R_049 -- 0..1 --> E_Deal
+
+R_050{owner}
+E_Lead -- N --> R_050
+R_050 -- 0..1 --> E_User
+
+R_051{customer}
+E_Deal -- N --> R_051
+R_051 -- 1 --> E_Customer
+
+R_052{owner}
+E_Deal -- N --> R_052
+R_052 -- 0..1 --> E_User
+
+R_053{pipeline}
+E_Deal -- N --> R_053
+R_053 -- 0..1 --> E_Pipeline
+
+R_054{customer}
+E_Communication -- N --> R_054
+R_054 -- 0..1 --> E_Customer
+
+R_055{contact}
+E_Communication -- N --> R_055
+R_055 -- 0..1 --> E_Contact
+
+R_056{lead}
+E_Communication -- N --> R_056
+R_056 -- 0..1 --> E_Lead
+
+R_057{deal}
+E_Communication -- N --> R_057
+R_057 -- 0..1 --> E_Deal
+
+R_058{activity}
+E_Communication -- N --> R_058
+R_058 -- 0..1 --> E_Activity
+
+R_059{creator}
+E_Communication -- N --> R_059
+R_059 -- 0..1 --> E_User
+
+R_060{pipeline}
+E_PipelineStage -- N --> R_060
+R_060 -- 1 --> E_Pipeline
+
+R_061{customer}
+E_Activity -- N --> R_061
+R_061 -- 0..1 --> E_Customer
+
+R_062{contact}
+E_Activity -- N --> R_062
+R_062 -- 0..1 --> E_Contact
+
+R_063{lead}
+E_Activity -- N --> R_063
+R_063 -- 0..1 --> E_Lead
+
+R_064{deal}
+E_Activity -- N --> R_064
+R_064 -- 0..1 --> E_Deal
+
+R_065{assignee}
+E_Activity -- N --> R_065
+R_065 -- 0..1 --> E_User
+
+R_066{creator}
+E_Activity -- N --> R_066
+R_066 -- 1 --> E_User
+
+R_067{customer}
+E_CustomerNote -- N --> R_067
+R_067 -- 1 --> E_Customer
+
+R_068{creator}
+E_CustomerNote -- N --> R_068
+R_068 -- 1 --> E_User
+
+R_069{customer}
+E_Attachment -- N --> R_069
+R_069 -- 0..1 --> E_Customer
+
+R_070{deal}
+E_Attachment -- N --> R_070
+R_070 -- 0..1 --> E_Deal
+
+R_071{communication}
+E_Attachment -- N --> R_071
+R_071 -- 0..1 --> E_Communication
+
+R_072{uploader}
+E_Attachment -- N --> R_072
+R_072 -- 1 --> E_User
+
+R_073{vendor}
+E_PurchaseRequisition -- N --> R_073
+R_073 -- 0..1 --> E_Vendor
+
+R_074{vendor}
+E_PurchaseOrder -- N --> R_074
+R_074 -- 1 --> E_Vendor
+
+R_075{requisition}
+E_PurchaseOrder -- N --> R_075
+R_075 -- 0..1 --> E_PurchaseRequisition
+
+R_076{purchaseOrder}
+E_GoodsReceipt -- N --> R_076
+R_076 -- 1 --> E_PurchaseOrder
+
+R_077{vendor}
+E_SupplierEvaluation -- N --> R_077
+R_077 -- 1 --> E_Vendor
+
+R_078{vendor}
+E_APBill -- N --> R_078
+R_078 -- 1 --> E_Vendor
+
+R_079{purchaseOrder}
+E_APBill -- N --> R_079
+R_079 -- 0..1 --> E_PurchaseOrder
+
+R_080{vendor}
+E_Payment -- N --> R_080
+R_080 -- 1 --> E_Vendor
+
+R_081{department}
+E_Project -- N --> R_081
+R_081 -- 0..1 --> E_Department
+
+R_082{project}
+E_ProjectMember -- N --> R_082
+R_082 -- 1 --> E_Project
+
+R_083{project}
+E_ProjectMilestone -- N --> R_083
+R_083 -- 1 --> E_Project
+
+R_084{predecessor}
+E_ProjectMilestoneDependency -- N --> R_084
+R_084 -- 1 --> E_ProjectMilestone
+
+R_085{successor}
+E_ProjectMilestoneDependency -- N --> R_085
+R_085 -- 1 --> E_ProjectMilestone
+
+R_086{project}
+E_ProjectResource -- N --> R_086
+R_086 -- 1 --> E_Project
+
+R_087{project}
+E_ProjectBudget -- N --> R_087
+R_087 -- 1 --> E_Project
+
+R_088{project}
+E_ProjectTimeLog -- N --> R_088
+R_088 -- 1 --> E_Project
+
+R_089{timesheet}
+E_ProjectTimeLog -- N --> R_089
+R_089 -- 0..1 --> E_ProjectTimesheet
+
+R_090{employee}
+E_Attendance -- N --> R_090
+R_090 -- 1 --> E_Employee
+
+R_091{employee}
+E_Payslip -- N --> R_091
+R_091 -- 1 --> E_Employee
+
+R_092{payrollCycle}
+E_Payslip -- N --> R_092
+R_092 -- 1 --> E_PayrollCycle
+
+R_093{payrollCycle}
+E_SalaryDisbursement -- N --> R_093
+R_093 -- 1 --> E_PayrollCycle
+
+R_094{employee}
+E_SalaryDisbursement -- N --> R_094
+R_094 -- 1 --> E_Employee
+
+R_095{employee}
+E_ShiftAssignment -- N --> R_095
+R_095 -- 1 --> E_Employee
+
+R_096{shift}
+E_ShiftAssignment -- N --> R_096
+R_096 -- 1 --> E_Shift
+
+R_097{employee}
+E_TimeTracking -- N --> R_097
+R_097 -- 1 --> E_Employee
+
+R_098{shift}
+E_OvertimePolicy -- N --> R_098
+R_098 -- 0..1 --> E_Shift
+
+R_099{employee}
+E_OvertimeRecord -- N --> R_099
+R_099 -- 1 --> E_Employee
+
+R_100{overtimePolicy}
+E_OvertimeRecord -- N --> R_100
+R_100 -- 1 --> E_OvertimePolicy
+
+R_101{employee}
+E_AttendanceReport -- N --> R_101
+R_101 -- 1 --> E_Employee
+
+R_102{employee}
+E_LeaveIntegration -- N --> R_102
+R_102 -- 1 --> E_Employee
+
+R_103{category}
+E_Asset -- N --> R_103
+R_103 -- 1 --> E_AssetCategory
+
+R_104{asset}
+E_AssetAllocation -- N --> R_104
+R_104 -- 1 --> E_Asset
+
+R_105{employee}
+E_AssetAllocation -- N --> R_105
+R_105 -- 1 --> E_Employee
+
+R_106{asset}
+E_AssetMaintenance -- N --> R_106
+R_106 -- 1 --> E_Asset
+
+R_107{asset}
+E_AssetDepreciation -- N --> R_107
+R_107 -- 1 --> E_Asset
+
+R_108{parent}
+E_DocumentFolder -- N --> R_108
+R_108 -- 0..1 --> E_DocumentFolder
+
+R_109{folder}
+E_Document -- N --> R_109
+R_109 -- 0..1 --> E_DocumentFolder
+
+R_110{template}
+E_Document -- N --> R_110
+R_110 -- 0..1 --> E_DocumentTemplate
+
+R_111{document}
+E_DocumentVersion -- N --> R_111
+R_111 -- 1 --> E_Document
+
+R_112{document}
+E_DocumentShare -- N --> R_112
+R_112 -- 1 --> E_Document
+
+R_113{document}
+E_DocumentPermission -- N --> R_113
+R_113 -- 1 --> E_Document
+
+R_114{folder}
+E_DocumentFolderPermission -- N --> R_114
+R_114 -- 1 --> E_DocumentFolder
+
+R_115{document}
+E_DocumentActivity -- N --> R_115
+R_115 -- 0..1 --> E_Document
+
+R_116{share}
+E_DocumentActivity -- N --> R_116
+R_116 -- 0..1 --> E_DocumentShare
+
+R_117{document}
+E_DocumentComment -- N --> R_117
+R_117 -- 1 --> E_Document
+
+R_118{parent}
+E_DocumentComment -- N --> R_118
+R_118 -- 0..1 --> E_DocumentComment
+
+R_119{template}
+E_Report -- N --> R_119
+R_119 -- 0..1 --> E_ReportTemplate
+
+R_120{conversation}
+E_ConversationParticipant -- N --> R_120
+R_120 -- 1 --> E_Conversation
+
+R_121{conversation}
+E_Message -- N --> R_121
+R_121 -- 1 --> E_Conversation
+
+R_122{message}
+E_MessageReaction -- N --> R_122
+R_122 -- 1 --> E_Message
+
+R_123{message}
+E_MessageReadReceipt -- N --> R_123
+R_123 -- 1 --> E_Message
+
+R_124{announcement}
+E_AnnouncementRead -- N --> R_124
+R_124 -- 1 --> E_Announcement
+
+R_125{channel}
+E_ChatChannelMember -- N --> R_125
+R_125 -- 1 --> E_ChatChannel
+
+R_126{branch}
+E_Warehouse -- N --> R_126
+R_126 -- 0..1 --> E_Branch
+
+R_127{warehouse}
+E_WarehouseStock -- N --> R_127
+R_127 -- 1 --> E_Warehouse
+
+R_128{warehouse}
+E_StockMovement -- N --> R_128
+R_128 -- 0..1 --> E_Warehouse
+
+R_129{parent}
+E_ChartOfAccounts -- N --> R_129
+R_129 -- 0..1 --> E_ChartOfAccounts
+
+R_130{journalEntry}
+E_JournalEntryLine -- N --> R_130
+R_130 -- 1 --> E_JournalEntry
+
+R_131{account}
+E_JournalEntryLine -- N --> R_131
+R_131 -- 1 --> E_ChartOfAccounts
+
+R_132{account}
+E_LedgerEntry -- N --> R_132
+R_132 -- 1 --> E_ChartOfAccounts
+
+R_133{bom}
+E_BOMItem -- N --> R_133
+R_133 -- 1 --> E_BillOfMaterials
+
+R_134{bom}
+E_WorkOrder -- N --> R_134
+R_134 -- 1 --> E_BillOfMaterials
+
+R_135{workOrder}
+E_WorkOrderOperation -- N --> R_135
+R_135 -- 1 --> E_WorkOrder
+
+R_136{workOrder}
+E_WorkOrderMaterial -- N --> R_136
+R_136 -- 1 --> E_WorkOrder
+

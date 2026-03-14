@@ -1,0 +1,40 @@
+@startuml UEORMS_Sequence_07
+!pragma teoz true
+autonumber
+hide footbox
+
+actor "Inventory Manager" as InvM
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Workflow Engine + Approval Service" as WF
+control "Realtime Gateway\n(WebSocket /ws)" as RT
+control "Integration Service" as Integr
+control "Integration Event Manager" as EventBus
+control "Finance + Accounting Services" as Finance
+control "Inventory + Warehouse Services" as Inventory
+control "Manufacturing Service" as Mfg
+database "PostgreSQL via Prisma" as DB
+
+== 7) Inventory and Manufacturing ==
+InvM -> Client : Manage items/warehouses/stock movement
+Client -> API : /api/inventory, /api/warehouses, /api/stock-movements
+API -> Inventory : item + warehouse + stock movement services
+Inventory -> DB : Item, Warehouse, WarehouseStock, StockMovement, LotBatch
+Inventory -> WF : approval for configured stock/item actions
+Inventory -> RT : inventory update broadcast
+Inventory -> Integr : sync inventory movement to GL
+Integr -> EventBus : inventory:movement:completed
+EventBus -> Finance : integration posting trigger
+API --> Client : inventory result
+
+InvM -> Client : Manufacturing execution
+Client -> API : /api/manufacturing/bom and /work-orders
+API -> Mfg : BOM, work order, operations, material issue/consume
+Mfg -> DB : BillOfMaterials, BOMItem, WorkOrder, WorkOrderOperation, WorkOrderMaterial, ProductionBatch
+Mfg -> Integr : sync manufacturing cost to GL
+Integr -> EventBus : manufacturing:workorder:completed
+EventBus -> Finance : manufacturing accounting sync
+API --> Client : manufacturing result
+
+
+@enduml

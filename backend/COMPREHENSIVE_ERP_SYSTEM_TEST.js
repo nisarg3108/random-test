@@ -35,8 +35,8 @@ const UNIQUE_SUFFIX = `test${TEST_RUN_ID}`;
 
 const API_BASE_URL = 'http://localhost:5000/api';
 const TEST_TENANT_NAME = `Test ERP Company ${TEST_RUN_ID}`;
-const TEST_TENANT_EMAIL = `admin-${UNIQUE_SUFFIX}@testerp.com`;
-const TEST_PASSWORD = 'Test@12345';
+const TEST_TENANT_EMAIL = 'bhavsarnisarg0@gmail.com';
+const TEST_PASSWORD = 'bhavsarnisarg0@gmail.com';
 
 // Color codes for console output
 const colors = {
@@ -294,6 +294,16 @@ async function testAuthenticationAndRegistration() {
   
   if (adminLogin.success) {
     testData.tokens.ADMIN = adminLogin.data.token;
+    // Extract tenantId and userId from login JWT
+    const loginParts = adminLogin.data.token.split('.');
+    if (loginParts.length === 3) {
+      try {
+        const payload = JSON.parse(Buffer.from(loginParts[1], 'base64').toString());
+        if (!testData.users.ADMIN) testData.users.ADMIN = payload.userId;
+        if (!testData.tenantId) testData.tenantId = payload.tenantId;
+        log(`Tenant ID: ${testData.tenantId}`, 'info');
+      } catch (e) { /* silent */ }
+    }
   }
   
   await sleep(500);
@@ -1819,7 +1829,7 @@ async function testCRMModule() {
     'POST',
     '/crm/pipelines',
     {
-      name: 'Standard Sales Pipeline',
+      name: `Standard Sales Pipeline ${UNIQUE_SUFFIX}`,
       stages: [
         { name: 'Lead', order: 1, probability: 10 },
         { name: 'Qualified', order: 2, probability: 25 },

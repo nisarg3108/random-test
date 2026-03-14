@@ -1,0 +1,52 @@
+@startuml UEORMS_Sequence_05
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Employee
+actor "HR Manager" as HRM
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Workflow Engine + Approval Service" as WF
+control "Notification Service" as Notify
+control "Email Service + Queue" as Email
+control "Integration Service" as Integr
+control "Integration Event Manager" as EventBus
+control "HR Service" as HR
+control "Attendance Service" as Attend
+control "Payroll + Disbursement Services" as Payroll
+control "Finance + Accounting Services" as Finance
+database "PostgreSQL via Prisma" as DB
+
+== 5) HR, Attendance, Payroll, Disbursement ==
+HRM -> Client : Employee/Leave operations
+Client -> API : /api/employees, /api/leave-types, /api/leave-requests
+API -> HR : employee + leave service flows
+HR -> DB : Employee, LeaveType, LeaveRequest, Task, WorkReport
+DB --> HR : HR transaction data
+HR -> WF : leave approval workflow trigger
+WF -> Notify : approver + requester notifications
+API --> Client : HR result
+
+Employee -> Client : Clock in/out, view attendance
+Client -> API : /api/attendance/clock-in, /clock-out, /reports
+API -> Attend : time tracking, shifts, overtime, reports
+Attend -> DB : Attendance, TimeTracking, ShiftAssignment, OvertimeRecord, AttendanceReport
+Attend -> WF : overtime approval requests
+Attend -> Notify : attendance/ot alerts
+API --> Client : attendance status
+
+HRM -> Client : Run payroll
+Client -> API : /api/payroll/cycles, generate-payslips, disbursements
+API -> Payroll : payroll cycle calculation + payslip generation
+Payroll -> DB : PayrollCycle, Payslip, SalaryComponent, TaxConfiguration, SalaryDisbursement
+Payroll -> WF : payslip/finance approvals where configured
+Payroll -> Integr : sync payroll to GL
+Integr -> EventBus : emit payroll:cycle:processed
+EventBus -> Finance : payroll accounting sync trigger
+Payroll -> Email : payslip/disbursement notices
+Payroll --> API : payroll outputs
+API --> Client : payroll completed
+
+
+@enduml

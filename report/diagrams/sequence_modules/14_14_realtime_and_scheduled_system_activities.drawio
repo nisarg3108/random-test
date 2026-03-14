@@ -1,0 +1,130 @@
+<mxfile host="app.diagrams.net" modified="2026-03-03T00:00:00.000Z" agent="Codex" version="24.7.17" etag="seq-split">
+  <diagram id="14_14_realtime_and_scheduled_system_activities" name="14_14_realtime_and_scheduled_system_activities">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2210" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="14 14 realtime and scheduled system activities" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="20" y="0" width="900" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="Web/Mobile Client" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#dae8fc;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Auth + RBAC\n(requireAuth / permission middleware)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="330" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="Realtime Gateway\n(WebSocket /ws)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="Notification Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="750" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="Email Service + Queue" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="960" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="Scheduler (cron jobs)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="Attendance Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="17" value="Assets Services\n(asset/allocation/maintenance/depreciation)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="18" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1670" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="19" value="PostgreSQL via Prisma" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#e1d5e7;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="74" width="1" height="524" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="14) Realtime and Scheduled System Activities" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#999999;fillColor=#f5f5f5;align=center;verticalAlign=middle;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="108" width="2130" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="connect /ws?token=JWT and subscribe endpoints" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="158" as="sourcePoint"/>
+            <mxPoint x="620" y="158" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="23" value="token verify + user resolve" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="196" as="sourcePoint"/>
+            <mxPoint x="410" y="196" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="24" value="user/tenant lookup" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="234" as="sourcePoint"/>
+            <mxPoint x="1880" y="234" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="25" value="connected + live stream" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="272" as="sourcePoint"/>
+            <mxPoint x="200" y="272" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="26" value="midnight overdue allocation scan" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1250" y="310" as="sourcePoint"/>
+            <mxPoint x="1670" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="27" value="find and mark overdue allocations" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1670" y="348" as="sourcePoint"/>
+            <mxPoint x="1880" y="348" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="28" value="create overdue notifications" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1670" y="386" as="sourcePoint"/>
+            <mxPoint x="830" y="386" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="29" value="send overdue emails" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1670" y="424" as="sourcePoint"/>
+            <mxPoint x="1040" y="424" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="30" value="end-of-day absent marking" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1250" y="462" as="sourcePoint"/>
+            <mxPoint x="1460" y="462" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="31" value="create ABSENT records when no attendance + no approved leave" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1460" y="500" as="sourcePoint"/>
+            <mxPoint x="1880" y="500" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

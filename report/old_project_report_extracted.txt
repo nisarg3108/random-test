@@ -1,0 +1,696 @@
+PROJECT REPORT
+ON
+UEORMS - UNIVERSAL ENTERPRISE OPERATIONS AND RESOURCE MANAGEMENT SYSTEM
+B.Tech Final Year Project
+
+Prepared By
+Nisarg Bhavsar and Team
+
+Guided By
+Project Guide and Faculty Mentor
+
+Department of Information Technology
+Faculty of Technology
+Academic Year: 2025-2026
+Submission Date: March 03, 2026
+
+CANDIDATE DECLARATION
+I hereby declare that this report titled 'UEORMS - Universal Enterprise Operations and Resource Management System' is my original work completed under proper guidance and has not been submitted elsewhere for award of any degree.
+Candidate Name: Nisarg Bhavsar
+Enrollment No.: __________________
+Date: __________________
+Signature: __________________
+
+CERTIFICATE
+This is to certify that the project work titled 'UEORMS - Universal Enterprise Operations and Resource Management System' is a bona fide work carried out during academic year 2025-2026 under supervision and satisfies B.Tech project requirements.
+Project Guide: __________________
+Head of Department: __________________
+Date: __________________
+
+ACKNOWLEDGEMENT
+I express sincere gratitude to my project guide, faculty members, and peers for continuous support, technical direction, and review. Their guidance improved architecture, implementation quality, and test coverage.
+I also thank the institution for providing resources and a conducive environment for successful completion.
+
+ABSTRACT
+UEORMS (Universal Enterprise Operations and Resource Management System) is a multi-tenant Software as a Service (SaaS) enterprise resource planning platform that integrates inventory, finance, human resources, customer relationship management, purchase, sales, projects, assets, documents, communication, and reporting in a unified environment.
+The solution uses React for frontend, Node.js and Express for backend services, and PostgreSQL with Prisma for data persistence. The implementation enforces role-based access control (RBAC), JSON Web Token (JWT) authentication, workflow approvals, and audit logging. Repository analysis indicates broad module coverage with secure API endpoints and production-oriented architecture.
+
+TABLE OF CONTENTS
+Right-click and update field
+
+LIST OF FIGURES
+Right-click and update field
+
+LIST OF TABLES
+Right-click and update field
+
+1. INTRODUCTION
+1.1 Project Details
+Attribute
+Value
+Project Name
+UEORMS - Universal Enterprise Operations and Resource Management System
+Project Type
+Multi-tenant SaaS ERP
+Academic Year
+2025-2026
+Technology Stack
+React, Node.js, Express, PostgreSQL, Prisma, Flutter
+Backend Modules
+19
+Database Models
+125
+Frontend Pages
+124
+Estimated API Endpoints
+574
+Table 1.1: UEORMS Project Details
+1.2 Purpose
+UEORMS provides a centralized and secure ERP platform to automate enterprise workflows, enforce approvals, and improve operational visibility.
+1.3 Scope
+The scope covers tenant-aware operations across HR, Finance, Inventory, CRM, Manufacturing, Purchase, Sales, Projects, Assets, Documents, Communication, and Reporting.
+1.4 Objectives
+Automate workflows with measurable controls.
+Provide secure role-based access governance.
+Improve data consistency and traceability.
+Enable scalable modular expansion.
+1.5 Technology and Literature Review
+The architecture follows layered enterprise design with frontend SPA, backend APIs, and relational persistence with schema migrations.
+Layer
+Tools
+Rationale
+Presentation
+React, Vite, Tailwind
+Fast modular UI delivery
+Application
+Node.js, Express, JWT, RBAC
+Secure API orchestration
+Data
+PostgreSQL, Prisma ORM
+Relational integrity and maintainability
+Integration
+WebSockets, Email, Stripe, Razorpay
+Operational communication and billing
+Table 1.2: Technology Stack Rationale
+1.6 Acronyms and Abbreviations
+Acronym
+Full Form
+ERP
+Enterprise Resource Planning
+RBAC
+Role-Based Access Control
+JWT
+JSON Web Token
+BOM
+Bill of Materials
+API
+Application Programming Interface
+SaaS
+Software as a Service
+Table 1.3: Acronyms and Abbreviations
+
+2. PROJECT MANAGEMENT
+2.1 Feasibility Study
+2.1.1 Technical Feasibility
+The selected stack is mature and supports modular enterprise-grade development.
+2.1.2 Time Schedule Feasibility
+The project progressed through incremental milestones with regular integration checks.
+2.1.3 Operational Feasibility
+Role-specific dashboards align with practical user responsibilities.
+2.1.4 Implementation Feasibility
+Setup scripts and migration support make deployment repeatable.
+2.2 Project Planning
+2.2.1 Project Development Approach and Justification
+A modular route-controller-service architecture was used to parallelize development and reduce coupling.
+2.2.2 Project Plan
+Phase I: Auth, Tenant, RBAC foundation
+Phase II: Inventory, Finance, Manufacturing, Reports
+Phase III: HR, CRM, Projects, Purchase, Documents, Communication
+Phase IV: Testing hardening and deployment readiness
+2.2.3 Milestones and Deliverables
+Milestone
+Deliverable
+Status
+Architecture Baseline
+Core auth, schema, secure routing
+Completed
+Functional Expansion
+Domain modules and UI pages
+Completed
+Data + Analytics
+Reporting and exports
+Completed
+QA and Documentation
+Testing guides and technical docs
+Completed
+Table 2.1: Milestones and Deliverables
+2.2.4 Roles and Responsibilities
+Developer team: implementation and integration
+Guide: design review and quality oversight
+Stakeholders: acceptance validation
+2.2.5 Group Dependencies
+Dependencies were managed using shared middleware, standardized APIs, and staged integration.
+2.3 Project Scheduling
+Scheduling followed build-validate-document cycles with regression verification at each phase.
+
+3. SYSTEM REQUIREMENT STUDY
+3.1 Study of Current System
+Legacy operations often rely on disconnected tools and spreadsheets, causing delays and data inconsistencies.
+3.2 Problems and Weaknesses of Current System
+Data duplication across departments
+Manual approvals without traceability
+Delayed reporting and reconciliation
+Inconsistent access control
+3.3 User Characteristics
+Admin: governance and configuration
+Manager: approvals and KPIs
+Employee: transaction workflows
+Finance/HR: compliance-sensitive operations
+3.4 Hardware and Software Requirements
+3.4.1 Hardware Requirements
+8 GB RAM or higher
+Dual-core processor or better
+Sufficient storage for dependencies and DB
+3.4.2 Software Requirements
+Node.js 18+
+PostgreSQL 14+
+NPM
+Modern browser
+Git
+3.5 Constraints
+3.5.1 Regulatory Policies
+Tenant isolation and auditability are mandatory.
+3.5.2 Hardware Limitations
+Low-resource environments impact heavy reports.
+3.5.3 Interfaces to Other Applications
+Secure contracts required for integrations.
+3.5.4 Parallel Operations
+Concurrent writes need transaction safety.
+3.5.5 Higher Order Language Requirements
+Modern JavaScript tooling is required.
+3.5.6 Reliability Requirements
+Rollback-safe operations for critical flows.
+3.5.7 Criticality of the Application
+Downtime affects finance and operations.
+3.5.8 Safety and Security Consideration
+JWT, RBAC, and secure headers are required.
+3.6 Assumptions and Dependencies
+Stable database and network
+Proper tenant-role setup
+Seed data initialization completed
+3.7 Functional Requirements (Retained and Refined from Base Report)
+R-ID
+Area
+Requirement Statement
+R1
+Registration and Authentication
+System shall provide secure registration and JWT-based login.
+R2
+Tenant Management
+System shall isolate and configure each tenant separately.
+R3
+User and Role Management
+System shall assign roles and enforce permission checks.
+R4
+Master Data
+System shall maintain centralized product and reference data.
+R5
+BOM Management
+System shall support BOM creation and version control.
+R6
+Manufacturing
+System shall manage work orders and material usage.
+R7
+Inventory
+System shall track multi-warehouse stock and transfers.
+R8
+Reordering
+System shall trigger low-stock alerts by threshold.
+R9
+Procurement
+System shall process requisition, PO, and receipts.
+R10
+Sales
+System shall process lead-to-order and invoicing flow.
+R11
+Human Resources
+System shall support attendance, leave, and payroll inputs.
+R12
+Finance
+System shall support journal posting and expense processing.
+R13
+Reports
+System shall generate role-based analytics and exports.
+R14
+RBAC
+System shall deny unauthorized actions at route level.
+R15
+Workflow
+System shall support configurable approval chains.
+R16
+Audit Logging
+System shall record critical user actions.
+R17
+Notifications
+System shall deliver workflow and system alerts.
+R18
+Vendor/Quality
+System shall store supplier and quality evaluation metrics.
+Table 3.1: Consolidated Functional Requirements
+3.8 Non-Functional Requirements
+Category
+Requirement
+Target
+Performance
+API response time
+95% requests under 500 ms
+Security
+Authentication
+JWT on protected endpoints
+Security
+Authorization
+RBAC checks for module actions
+Reliability
+Data integrity
+Transactional rollback on failure
+Usability
+Responsive UI
+Desktop and mobile layouts
+Maintainability
+Modular code
+Service-layer separation
+Table 3.2: Non-Functional Requirements
+
+4. SYSTEM ANALYSIS
+4.1 Requirements of New System (SRS)
+4.1.1 User Requirements
+Role-specific dashboards
+Visible workflow status and approvals
+Exportable reports and search features
+4.1.2 System Requirements
+Tenant-aware data isolation
+Consistent REST APIs
+Audit-ready transactional operations
+4.2 Features of New System
+UEORMS includes integrated modules for HR, Finance, Inventory, CRM, Manufacturing, Purchase, Sales, Projects, Assets, Documents, Communication, and Reporting.
+4.3 Navigation Chart
+Figure 4.1 illustrates major user navigation from login to module operations and reporting.
+
+Figure 4.1: System Navigation Chart
+4.4 Use Case Diagram
+Figure 4.2 presents primary actor interactions including Admin, Manager, Employee, Finance, HR, Inventory, and Sales.
+
+Figure 4.2: Use Case Diagram for Major Actors
+4.5 Class Diagram
+Figure 4.3 models key classes and relationships used by backend services.
+
+Figure 4.3: Class Diagram of Core Entities
+4.6 System Activity
+Figure 4.4 captures the activity flow for login, request creation, and approval processing.
+
+Figure 4.4: Activity Diagram (Login/Approval/Order)
+4.7 Sequence Diagram
+Figure 4.5 combines login sequence and purchase-to-approval sequence.
+
+Figure 4.5: Sequence Diagram (Login and Purchase Approval)
+4.8 ER Diagram
+Figure 4.6 outlines key database entities and foreign-key relationships.
+
+Figure 4.6: ER Diagram of Key Entities
+
+5. SYSTEM DESIGN
+5.1 System Architecture Study
+5.1.1 Component Diagram
+Figure 5.1 shows component-level interaction between clients, API layer, services, ORM, and database.
+
+Figure 5.1: Component Diagram
+5.1.2 Deployment Diagram
+Figure 5.2 presents deployment architecture with cloud hosting, app server, worker, storage, and external providers.
+
+Figure 5.2: Deployment Diagram
+5.2 Database Design
+5.2.1 Table and Relationship
+The data model currently contains 125 Prisma models with tenant-aware relationships and transactional constraints.
+Domain
+Representative Entities
+Identity and Access
+Tenant, User, Role, Permission, UserRole
+Workflow
+Workflow, WorkflowStep, WorkflowRequest, Approval, AuditLog
+Inventory
+Item, Warehouse, WarehouseStock, StockMovement, LotBatch
+Finance
+ChartOfAccounts, JournalEntry, LedgerEntry, ExpenseClaim
+HR
+Employee, Attendance, LeaveRequest, PayrollCycle
+Sales/Purchase
+SalesOrder, SalesInvoice, PurchaseOrder, GoodsReceipt
+Communication
+Conversation, Message, Announcement, Notification
+Table 5.1: Domain-Wise Data Model Summary
+5.2.2 Logical Description of Data
+All business transactions maintain tenant, actor, timestamp, and status metadata for traceability and compliance.
+5.3 Input/Output and Interface Design
+5.3.1 State Transition/UML Diagram
+Operational entities follow controlled state transitions (Draft, Pending, Approved, Rejected, Completed) governed by RBAC and workflows.
+5.3.2 Interface Design
+UI design follows dashboard-list-form-detail patterns with validation, filters, and role-aware actions.
+
+6. IMPLEMENTATION PLANNING
+6.1 Implementation Environment
+Frontend: React + Vite
+Backend: Node.js + Express
+Database: PostgreSQL + Prisma
+Tooling: npm scripts, migration and seed utilities
+6.2 Program/Modules Specification
+Module
+Scope
+Capabilities
+HR
+People operations
+Attendance, leave, payroll workflows
+Finance
+Accounting and approvals
+Expenses, journal, ledger, payments
+Inventory
+Warehouse operations
+Stock movements and approvals
+CRM
+Customer lifecycle
+Leads, deals, communications
+Manufacturing
+Production
+BOM and work order lifecycle
+Purchase
+Procurement
+Requisitions, POs, receipts
+Sales
+Revenue
+Orders, invoices, payment tracking
+Projects
+Delivery
+Planning, capacity, timesheets
+Assets
+Asset lifecycle
+Allocation, maintenance, depreciation
+Documents
+Document control
+Folders, upload, permissions
+Communication
+Collaboration
+Channels, messaging, announcements
+Table 6.1: Module Specifications
+Repository metrics: 19 backend modules, 124 frontend pages, and approximately 574 routed endpoints.
+6.3 Coding Standards
+Consistent REST naming and HTTP semantics
+Service-layer business rules
+Validation and secure error handling
+Tenant and RBAC enforcement on secured routes
+
+7. TESTING
+7.1 Testing Plan
+Testing focused on authentication, authorization, transactional workflows, and report correctness.
+7.2 Testing Strategy
+Module-level API validation
+Role-based access testing
+Cross-module integration scenarios
+Regression checks after enhancements
+7.3 Testing Methods
+Functional testing
+Integration testing
+Regression testing
+Boundary validation
+Error-path testing
+7.4 Test Cases
+7.4.1 Purpose
+Validate system correctness, security, and expected operational output.
+7.4.2 Required Input
+Configured tenant, seeded data, valid user accounts, and JWT tokens.
+7.4.3 Expected Result
+Authorized requests succeed, unauthorized actions are blocked, and data consistency is preserved.
+ID
+Module
+Scenario
+Input
+Expected
+TC-01
+Auth
+Valid login
+Email+Password
+JWT and dashboard
+TC-02
+RBAC
+Unauthorized access
+No permission
+403 response
+TC-03
+Inventory
+Stock transfer
+Warehouse+qty
+Pending movement
+TC-04
+Finance
+Journal posting
+Balanced lines
+Ledger entries
+TC-05
+HR
+Payroll run
+Attendance data
+Payslips generated
+TC-06
+Purchase
+Approval
+Pending requisition
+Approved status
+Table 7.1: Representative Test Cases
+
+8. USER MANUAL
+8.1 Getting Started
+Run backend and frontend dev servers
+Login with authorized credentials
+Open module menus from sidebar
+8.2 Features and Navigation
+Users access role-based dashboards and perform module workflows through list-form-approval patterns.
+Module
+User Flow
+Output
+Inventory
+Create movement -> Approve -> Complete
+Stock and audit update
+Finance
+Create claim/journal -> Approve -> Post
+Ledger/report update
+HR
+Attendance -> Leave -> Payroll
+Payslip/disbursement records
+Purchase
+Requisition -> PO -> Receipt
+Vendor and stock update
+Sales
+Lead -> Order -> Invoice
+Revenue tracking
+Table 8.1: User Manual Workflow Summary
+8.3 Troubleshooting and Support
+Check API health endpoint
+Verify JWT expiry and role mapping
+Inspect backend logs
+Re-run migration/setup scripts when needed
+
+9. LIMITATION AND FUTURE ENHANCEMENT
+9.1 Current Limitations
+Some advanced integrations remain extension scope
+Heavy analytics can require background workers
+Initial onboarding still uses setup scripts
+9.2 Future Enhancements
+Event-driven async processing
+Predictive analytics and forecasting
+Extended mobile parity
+Enterprise SSO integration
+Enhanced observability dashboards
+
+10. CONCLUSION AND DISCUSSION
+10.1 Conclusions
+UEORMS demonstrates a comprehensive multi-tenant ERP implementation with modular architecture, secure access controls, and strong functional coverage.
+10.2 Discussion
+10.2.1 Self-Analysis of Project Viabilities
+The architecture is viable for scale due to clear module boundaries, reusable middleware, and schema-driven data consistency.
+10.2.2 Problem Encountered and Possible Solutions
+Cross-module complexity managed via standardized contracts
+Concurrency risks handled with database transactions
+Permission mismatch reduced through centralized RBAC checks
+10.2.3 Summary of Project Work
+The project covers architecture, implementation, integration, testing, and documentation for submission-ready evaluation.
+
+REFERENCES
+1. React Documentation - https://react.dev/
+2. Vite Documentation - https://vitejs.dev/
+3. Node.js Documentation - https://nodejs.org/docs/
+4. Express Documentation - https://expressjs.com/
+5. Prisma Documentation - https://www.prisma.io/docs/
+6. PostgreSQL Documentation - https://www.postgresql.org/docs/
+7. JWT Introduction - https://jwt.io/introduction
+8. Tailwind CSS - https://tailwindcss.com/docs
+9. Stripe API - https://docs.stripe.com/api
+10. Razorpay API - https://razorpay.com/docs/api/
+11. Internal source: report/ERP_SYSTEM_PROJECT_REPORT_2026.md
+12. Internal source: report/old_project_report.docx
+
+APPENDIX
+Appendix A: API Route Summary
+Route File
+Count
+Sample Endpoints
+crm.routes.js
+49
+POST /customers; GET /customers; GET /customers/:id; PUT /customers/:id
+communication.routes.js
+47
+GET /conversations; GET /conversations/:id; POST /conversations; PUT /conversations/:id
+purchase.routes.js
+33
+GET /vendors; GET /vendors/:id; POST /vendors; PUT /vendors/:id
+sales.routes.js
+32
+GET /quotations; POST /quotations; PUT /quotations/:id; DELETE /quotations/:id
+document.routes.js
+27
+GET /statistics; POST /upload; POST /folders; GET /folders
+manufacturing.routes.js
+27
+POST /bom; GET /bom; GET /bom/:id; GET /bom/product/:productId
+accounting.routes.js
+25
+POST /chart-of-accounts; GET /chart-of-accounts; GET /chart-of-accounts/hierarchy; POST /chart-of-accounts/initialize
+project.routes.js
+23
+GET /dashboard; GET /tasks; POST /; GET /
+ap.routes.js
+21
+GET /bills; GET /bills/:id; POST /bills; PUT /bills/:id
+payroll.routes.js
+19
+POST /components; GET /components; PUT /components/:id; POST /tax-config
+billing.routes.js
+17
+GET /public/plans; GET /subscription; GET /plans; POST /subscription/change-plan
+employee.routes.js
+17
+POST /; PUT /:id; DELETE /:id; POST /assign-manager
+attendance.routes.js
+16
+POST /clock-in; POST /clock-out; GET /clock-status/:employeeId; POST /shifts
+timesheet.routes.js
+14
+GET /get-or-create; POST /; GET /; GET /summary
+report.routes.js
+13
+GET /financial/profit-loss; GET /financial/balance-sheet; GET /hr/analytics; GET /inventory
+asset.routes.js
+11
+POST /categories; GET /categories; GET /categories/:id; PUT /categories/:id
+branch.routes.js
+10
+POST /; GET /; GET /main; GET /:id
+data-import-export.routes.js
+10
+POST /import/items; POST /import/warehouses; POST /import/journal-entries; GET /export/items
+integration.routes.js
+10
+POST /sync-inventory/:movementId; POST /sync-sales/:orderId; POST /sync-payroll/:cycleId; POST /sync-manufacturing/:workOrderId
+reporting.routes.js
+10
+GET /dashboard-summary; GET /income-statement; GET /balance-sheet; GET /inventory-summary
+Table A.1: Top API Route Files
+Appendix B: Key Database Tables
+Index
+Model
+1
+CompanyConfig
+2
+Plan
+3
+PlanModule
+4
+Subscription
+5
+SubscriptionItem
+6
+SubscriptionPayment
+7
+BillingEvent
+8
+PendingRegistration
+9
+User
+10
+Role
+11
+Permission
+12
+RolePermission
+13
+UserRole
+14
+Department
+15
+Workflow
+16
+WorkflowStep
+17
+AuditLog
+18
+Tenant
+19
+Item
+20
+SalesQuotation
+21
+SalesOrder
+22
+SalesInvoice
+23
+InvoicePayment
+24
+SalesOrderTracking
+25
+UserInvite
+26
+Approval
+27
+SystemOption
+28
+WorkflowRequest
+29
+Employee
+30
+LeaveType
+31
+LeaveRequest
+32
+ExpenseCategory
+33
+ExpenseClaim
+34
+Task
+35
+SalaryStructure
+36
+WorkReport
+37
+Notification
+38
+Customer
+39
+Contact
+40
+Lead
+Table B.1: Key Prisma Models
+Appendix C: Setup Guide
+1. Install dependencies: npm run setup
+2. Configure backend environment variables
+3. Run migrations: npx prisma migrate deploy
+4. Start servers: npm run dev
+5. Validate login and dashboard access
+Appendix D: Screenshot and Flow Index
+Generated flow/diagram artifacts are provided in report/diagrams as editable .mmd and image .png files. UI module paths are available under frontend/src/pages.

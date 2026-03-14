@@ -11,10 +11,10 @@ export const createProject = async (data, tenantId, userId) => {
   const project = await prisma.project.create({
     data: {
       projectCode,
-      projectName: data.projectName,
+      projectName: data.projectName || data.name,
       description: data.description,
       clientName: data.clientName,
-      projectManager: data.projectManager,
+      projectManager: data.projectManager || userId,
       status: data.status || 'PLANNING',
       priority: data.priority || 'MEDIUM',
       type: data.type,
@@ -102,7 +102,7 @@ export const updateProject = async (id, data, tenantId) => {
 
   const updateData = {};
   
-  if (data.projectName !== undefined) updateData.projectName = data.projectName;
+  if (data.projectName !== undefined || data.name !== undefined) updateData.projectName = data.projectName || data.name;
   if (data.description !== undefined) updateData.description = data.description;
   if (data.clientName !== undefined) updateData.clientName = data.clientName;
   if (data.projectManager !== undefined) updateData.projectManager = data.projectManager;

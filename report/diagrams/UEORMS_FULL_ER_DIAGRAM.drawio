@@ -1,0 +1,835 @@
+<mxfile host="app.diagrams.net" modified="2026-03-03T00:00:00.000Z" agent="Codex" version="24.7.17" etag="ueorms-er">
+  <diagram id="UEORMS-ER" name="UEORMS Full ER Diagram">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="6000" pageHeight="5000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="UEORMS Full ER Diagram (125 Entities)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="5200" height="5258" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="Identity and Access" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1700" height="752" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="Billing and Subscription" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1770" y="60" width="1700" height="752" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Workflow and Governance" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="3500" y="60" width="1700" height="752" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="HR and Payroll" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="842" width="1700" height="1896" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="CRM and Sales" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1770" y="842" width="1700" height="1896" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="Purchase and AP" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="3500" y="842" width="1700" height="1896" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="Projects and Timesheets" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2768" width="1700" height="1172" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="Assets Management" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1770" y="2768" width="1700" height="1172" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="Documents and Reports" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="3500" y="2768" width="1700" height="1172" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="Communication and Messaging" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="3970" width="1700" height="948" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="Inventory and Warehouse" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1770" y="3970" width="1700" height="948" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="Accounting and Manufacturing" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="3500" y="3970" width="1700" height="948" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="Other Domain" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#eef4ff;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="4948" width="1700" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="Activity&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ type : String&#xa;+ subject : String&#xa;+ description : String?&#xa;+ status : String&#xa;+ priority : String&#xa;+ dueDate : DateTime?&#xa;+ dueTime : String?&#xa;+ reminderAt : DateTime?&#xa;+ completedAt : DateTime?&#xa;+ completedBy : String?&#xa;+ assignedTo : String? &lt;&lt;FK&gt;&gt;&#xa;+ createdBy : String &lt;&lt;FK&gt;&gt;&#xa;+ customerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ contactId : String? &lt;&lt;FK&gt;&gt;&#xa;+ leadId : String? &lt;&lt;FK&gt;&gt;&#xa;+ dealId : String? &lt;&lt;FK&gt;&gt;&#xa;+ outcome : String?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1784" y="870" width="260" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="17" value="Announcement&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ title : String&#xa;+ content : String&#xa;+ priority : String&#xa;+ targetType : String&#xa;+ targetIds : Json?&#xa;+ attachments : Json?&#xa;+ publishedBy : String&#xa;+ publishedAt : DateTime&#xa;+ expiresAt : DateTime?&#xa;+ isPinned : Boolean&#xa;+ isActive : Boolean&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="3998" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="18" value="AnnouncementRead&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ announcementId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String&#xa;+ readAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="3998" width="260" height="108" as="geometry"/>
+        </mxCell>
+        <mxCell id="19" value="APBill&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ billNumber : String &lt;&lt;UQ&gt;&gt;&#xa;+ vendorId : String &lt;&lt;FK&gt;&gt;&#xa;+ purchaseOrderId : String? &lt;&lt;FK&gt;&gt;&#xa;+ billDate : DateTime&#xa;+ dueDate : DateTime&#xa;+ invoiceNumber : String?&#xa;+ invoiceDate : DateTime?&#xa;+ subtotal : Float&#xa;+ taxAmount : Float&#xa;+ discountAmount : Float&#xa;+ shippingCost : Float&#xa;+ totalAmount : Float&#xa;+ paidAmount : Float&#xa;+ balanceAmount : Float&#xa;+ items : Json&#xa;+ status : String&#xa;+ approvalStatus : String&#xa;+ matchedToPO : Boolean&#xa;+ matchedToReceipt : Boolean&#xa;+ threeWayMatched : Boolean&#xa;+ paymentTerms : String?&#xa;+ glPosted : Boolean&#xa;+ glPostDate : DateTime?&#xa;+ glJournalId : String?&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ notes : String?&#xa;+ internalNotes : String?&#xa;+ attachments : Json?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="870" width="260" height="528" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="Approval&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ workflowId : String &lt;&lt;FK&gt;&gt;&#xa;+ workflowRequestId : String? &lt;&lt;FK&gt;&gt;&#xa;+ workflowStepId : String? &lt;&lt;FK&gt;&gt;&#xa;+ stepOrder : Int&#xa;+ permission : String&#xa;+ data : Json?&#xa;+ tenantId : String&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ status : String&#xa;+ comment : String?&#xa;+ rejectionReason : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="88" width="260" height="248" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="ApprovalMatrix&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ module : String&#xa;+ conditions : Json&#xa;+ approvers : Json&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3790" y="88" width="260" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="Asset&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ categoryId : String &lt;&lt;FK&gt;&gt;&#xa;+ assetCode : String&#xa;+ name : String&#xa;+ description : String?&#xa;+ purchaseDate : DateTime&#xa;+ purchasePrice : Float&#xa;+ vendor : String?&#xa;+ invoiceNumber : String?&#xa;+ serialNumber : String?&#xa;+ model : String?&#xa;+ manufacturer : String?&#xa;+ location : String?&#xa;+ status : String&#xa;+ condition : String&#xa;+ depreciationMethod : String?&#xa;+ depreciationRate : Float?&#xa;+ usefulLife : Int?&#xa;+ salvageValue : Float?&#xa;+ totalExpectedUnits : Int?&#xa;+ unitsProducedToDate : Int?&#xa;+ currentValue : Float?&#xa;+ accumulatedDepreciation : Float?&#xa;+ warrantyExpiry : DateTime?&#xa;+ insuranceExpiry : DateTime?&#xa;+ insuranceProvider : String?&#xa;+ insurancePolicyNo : String?&#xa;+ notes : String?&#xa;+ tags : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1784" y="2796" width="260" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="23" value="AssetAllocation&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ assetId : String &lt;&lt;FK&gt;&gt;&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ allocatedDate : DateTime&#xa;+ returnDate : DateTime?&#xa;+ expectedReturnDate : DateTime?&#xa;+ status : String&#xa;+ purpose : String?&#xa;+ allocatedBy : String?&#xa;+ location : String?&#xa;+ returnCondition : String?&#xa;+ returnNotes : String?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="2796" width="260" height="276" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="AssetCategory&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ code : String&#xa;+ description : String?&#xa;+ defaultDepreciationMethod : String?&#xa;+ defaultDepreciationRate : Float?&#xa;+ defaultUsefulLife : Int?&#xa;+ isActive : Boolean&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2336" y="2796" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="25" value="AssetDepreciation&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ assetId : String &lt;&lt;FK&gt;&gt;&#xa;+ period : DateTime&#xa;+ year : Int&#xa;+ month : Int&#xa;+ openingValue : Float&#xa;+ depreciationAmount : Float&#xa;+ closingValue : Float&#xa;+ accumulatedDepreciation : Float&#xa;+ method : String&#xa;+ rate : Float&#xa;+ unitsProduced : Int?&#xa;+ notes : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2612" y="2796" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="26" value="AssetMaintenance&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ assetId : String &lt;&lt;FK&gt;&gt;&#xa;+ maintenanceType : String&#xa;+ scheduledDate : DateTime&#xa;+ completedDate : DateTime?&#xa;+ status : String&#xa;+ statusBeforeMaintenance : String?&#xa;+ description : String&#xa;+ performedBy : String?&#xa;+ cost : Float?&#xa;+ conditionBefore : String?&#xa;+ conditionAfter : String?&#xa;+ nextMaintenanceDate : DateTime?&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2888" y="2796" width="260" height="304" as="geometry"/>
+        </mxCell>
+        <mxCell id="27" value="Attachment&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ fileName : String&#xa;+ fileSize : Int&#xa;+ mimeType : String&#xa;+ fileUrl : String&#xa;+ customerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ dealId : String? &lt;&lt;FK&gt;&gt;&#xa;+ communicationId : String? &lt;&lt;FK&gt;&gt;&#xa;+ uploadedBy : String &lt;&lt;FK&gt;&gt;&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="870" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="28" value="Attendance&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ date : DateTime&#xa;+ checkIn : DateTime?&#xa;+ checkOut : DateTime?&#xa;+ status : String&#xa;+ workHours : Float&#xa;+ overtimeHours : Float&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="870" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="29" value="AttendanceReport&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ reportDate : DateTime&#xa;+ month : Int&#xa;+ year : Int&#xa;+ totalWorkingDays : Int&#xa;+ presentDays : Int&#xa;+ absentDays : Int&#xa;+ leaveDays : Int&#xa;+ halfDays : Int&#xa;+ workFromHomeDays : Int&#xa;+ totalWorkHours : Float&#xa;+ totalOvertimeHours : Float&#xa;+ attendancePercentage : Float&#xa;+ status : String&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="870" width="260" height="318" as="geometry"/>
+        </mxCell>
+        <mxCell id="30" value="AuditLog&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ userId : String&#xa;+ tenantId : String&#xa;+ action : String&#xa;+ entity : String&#xa;+ entityId : String&#xa;+ meta : Json?&#xa;+ timestamp : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4066" y="88" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="31" value="BillingEvent&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String?&#xa;+ subscriptionId : String?&#xa;+ eventType : String&#xa;+ provider : String&#xa;+ providerEventId : String &lt;&lt;UQ&gt;&gt;&#xa;+ status : String&#xa;+ payload : Json&#xa;+ processedAt : DateTime?&#xa;+ errorMessage : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1784" y="88" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="32" value="BillOfMaterials&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ bomNumber : String&#xa;+ productId : String&#xa;+ version : String&#xa;+ name : String&#xa;+ description : String?&#xa;+ quantity : Float&#xa;+ unit : String?&#xa;+ materialCost : Float?&#xa;+ laborCost : Float?&#xa;+ overheadCost : Float?&#xa;+ totalCost : Float?&#xa;+ status : String&#xa;+ isActive : Boolean&#xa;+ isDefault : Boolean&#xa;+ effectiveFrom : DateTime?&#xa;+ effectiveTo : DateTime?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="3998" width="260" height="346" as="geometry"/>
+        </mxCell>
+        <mxCell id="33" value="BOMItem&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ bomId : String &lt;&lt;FK&gt;&gt;&#xa;+ itemId : String&#xa;+ sequence : Int&#xa;+ quantity : Float&#xa;+ unit : String?&#xa;+ warehouseId : String?&#xa;+ unitCost : Float?&#xa;+ totalCost : Float?&#xa;+ alternativeItems : Json?&#xa;+ scrapPercentage : Float?&#xa;+ notes : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3790" y="3998" width="260" height="234" as="geometry"/>
+        </mxCell>
+        <mxCell id="34" value="Branch&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ code : String&#xa;+ name : String&#xa;+ type : String&#xa;+ address : String?&#xa;+ city : String?&#xa;+ state : String?&#xa;+ country : String?&#xa;+ postalCode : String?&#xa;+ phone : String?&#xa;+ email : String?&#xa;+ managerId : String?&#xa;+ isActive : Boolean&#xa;+ isMainBranch : Boolean&#xa;+ operatingHours : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="88" width="260" height="304" as="geometry"/>
+        </mxCell>
+        <mxCell id="35" value="ChartOfAccounts&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ accountCode : String&#xa;+ accountName : String&#xa;+ accountType : String&#xa;+ category : String?&#xa;+ parentId : String? &lt;&lt;FK&gt;&gt;&#xa;+ description : String?&#xa;+ isActive : Boolean&#xa;+ isSystem : Boolean&#xa;+ normalBalance : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4066" y="3998" width="260" height="234" as="geometry"/>
+        </mxCell>
+        <mxCell id="36" value="ChatChannel&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ description : String?&#xa;+ type : String&#xa;+ departmentId : String?&#xa;+ projectId : String?&#xa;+ createdBy : String&#xa;+ isArchived : Boolean&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="3998" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="37" value="ChatChannelMember&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ channelId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String&#xa;+ role : String&#xa;+ isMuted : Boolean&#xa;+ joinedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="3998" width="260" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="38" value="Communication&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ type : String&#xa;+ subject : String?&#xa;+ notes : String&#xa;+ occurredAt : DateTime&#xa;+ createdBy : String? &lt;&lt;FK&gt;&gt;&#xa;+ customerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ contactId : String? &lt;&lt;FK&gt;&gt;&#xa;+ leadId : String? &lt;&lt;FK&gt;&gt;&#xa;+ direction : String?&#xa;+ duration : Int?&#xa;+ outcome : String?&#xa;+ emailFrom : String?&#xa;+ emailTo : String?&#xa;+ emailCc : String?&#xa;+ meetingLocation : String?&#xa;+ meetingAttendees : String[]&#xa;+ dealId : String? &lt;&lt;FK&gt;&gt;&#xa;+ activityId : String? &lt;&lt;FK&gt;&gt;&#xa;+ hasAttachments : Boolean&#xa;+ attachmentCount : Int&#xa;+ tags : String[]&#xa;+ customFields : Json?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2336" y="870" width="260" height="402" as="geometry"/>
+        </mxCell>
+        <mxCell id="39" value="CompanyConfig&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String &lt;&lt;FK,UQ&gt;&gt;&#xa;+ companyName : String&#xa;+ industry : String&#xa;+ size : String&#xa;+ country : String?&#xa;+ currency : String?&#xa;+ timezone : String?&#xa;+ fiscalYear : String?&#xa;+ workflowConfig : Json?&#xa;+ enabledModules : Json?&#xa;+ approvalLevels : Json?&#xa;+ customFields : Json?&#xa;+ businessRules : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="88" width="260" height="276" as="geometry"/>
+        </mxCell>
+        <mxCell id="40" value="Contact&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ customerId : String &lt;&lt;FK&gt;&gt;&#xa;+ name : String&#xa;+ email : String?&#xa;+ phone : String?&#xa;+ title : String?&#xa;+ status : String&#xa;+ firstName : String?&#xa;+ lastName : String?&#xa;+ jobTitle : String?&#xa;+ department : String?&#xa;+ role : String?&#xa;+ mobilePhone : String?&#xa;+ workPhone : String?&#xa;+ linkedinUrl : String?&#xa;+ twitterHandle : String?&#xa;+ isPrimary : Boolean&#xa;+ ownerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ preferredChannel : String?&#xa;+ lastContactDate : DateTime?&#xa;+ birthday : DateTime?&#xa;+ anniversary : DateTime?&#xa;+ emailOptIn : Boolean&#xa;+ smsOptIn : Boolean&#xa;+ doNotCall : Boolean&#xa;+ tags : String[]&#xa;+ customFields : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2612" y="870" width="260" height="472" as="geometry"/>
+        </mxCell>
+        <mxCell id="41" value="Conversation&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ type : String&#xa;+ name : String?&#xa;+ description : String?&#xa;+ createdBy : String&#xa;+ isArchived : Boolean&#xa;+ lastMessageAt : DateTime?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="3998" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="42" value="ConversationParticipant&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ conversationId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String&#xa;+ role : String&#xa;+ isMuted : Boolean&#xa;+ lastReadAt : DateTime?&#xa;+ joinedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1434" y="3998" width="260" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="43" value="Customer&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ industry : String?&#xa;+ website : String?&#xa;+ status : String&#xa;+ notes : String?&#xa;+ type : String?&#xa;+ companySize : String?&#xa;+ annualRevenue : Float?&#xa;+ currencyCode : String?&#xa;+ primaryEmail : String?&#xa;+ primaryPhone : String?&#xa;+ billingAddress : Json?&#xa;+ shippingAddress : Json?&#xa;+ ownerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ accountManager : String?&#xa;+ category : String?&#xa;+ source : String?&#xa;+ firstContactDate : DateTime?&#xa;+ lastContactDate : DateTime?&#xa;+ preferredChannel : String?&#xa;+ timezone : String?&#xa;+ tags : String[]&#xa;+ customFields : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2888" y="870" width="260" height="430" as="geometry"/>
+        </mxCell>
+        <mxCell id="44" value="CustomerNote&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ customerId : String &lt;&lt;FK&gt;&gt;&#xa;+ title : String?&#xa;+ content : String&#xa;+ isPinned : Boolean&#xa;+ createdBy : String &lt;&lt;FK&gt;&gt;&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3164" y="870" width="260" height="178" as="geometry"/>
+        </mxCell>
+        <mxCell id="45" value="CustomField&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ module : String&#xa;+ fieldName : String&#xa;+ fieldType : String&#xa;+ options : Json?&#xa;+ required : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4342" y="88" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="46" value="Deal&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ customerId : String &lt;&lt;FK&gt;&gt;&#xa;+ name : String&#xa;+ stage : String&#xa;+ value : Float&#xa;+ expectedCloseDate : DateTime?&#xa;+ status : String&#xa;+ notes : String?&#xa;+ dealNumber : String? &lt;&lt;UQ&gt;&gt;&#xa;+ pipelineId : String? &lt;&lt;FK&gt;&gt;&#xa;+ stageOrder : Int?&#xa;+ probability : Int?&#xa;+ amount : Float&#xa;+ currencyCode : String?&#xa;+ discount : Float?&#xa;+ tax : Float?&#xa;+ total : Float?&#xa;+ products : Json?&#xa;+ ownerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ teamMembers : String[]&#xa;+ createdDate : DateTime&#xa;+ closedDate : DateTime?&#xa;+ firstContactDate : DateTime?&#xa;+ lastActivityDate : DateTime?&#xa;+ competitors : String[]&#xa;+ wonReason : String?&#xa;+ lostReason : String?&#xa;+ lostToCompetitor : String?&#xa;+ leadId : String?&#xa;+ source : String?&#xa;+ tags : String[]&#xa;+ customFields : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1784" y="1426" width="260" height="542" as="geometry"/>
+        </mxCell>
+        <mxCell id="47" value="Department&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ description : String?&#xa;+ location : String?&#xa;+ managerId : String?&#xa;+ budget : Float?&#xa;+ status : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="88" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="48" value="Document&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ folderId : String? &lt;&lt;FK&gt;&gt;&#xa;+ name : String&#xa;+ description : String?&#xa;+ fileName : String&#xa;+ fileSize : Int&#xa;+ mimeType : String&#xa;+ storagePath : String&#xa;+ storageProvider : String&#xa;+ checksum : String?&#xa;+ tags : String[]&#xa;+ metadata : Json?&#xa;+ version : Int&#xa;+ isLatest : Boolean&#xa;+ status : String&#xa;+ isPublic : Boolean&#xa;+ downloadCount : Int&#xa;+ viewCount : Int&#xa;+ isTemplate : Boolean&#xa;+ templateId : String? &lt;&lt;FK&gt;&gt;&#xa;+ createdBy : String&#xa;+ updatedBy : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="2796" width="260" height="402" as="geometry"/>
+        </mxCell>
+        <mxCell id="49" value="DocumentActivity&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ documentId : String? &lt;&lt;FK&gt;&gt;&#xa;+ shareId : String? &lt;&lt;FK&gt;&gt;&#xa;+ tenantId : String&#xa;+ userId : String?&#xa;+ action : String&#xa;+ details : Json?&#xa;+ ipAddress : String?&#xa;+ userAgent : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3790" y="2796" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="50" value="DocumentComment&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ documentId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String&#xa;+ content : String&#xa;+ parentId : String? &lt;&lt;FK&gt;&gt;&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4066" y="2796" width="260" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="51" value="DocumentFolder&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ description : String?&#xa;+ parentId : String? &lt;&lt;FK&gt;&gt;&#xa;+ path : String&#xa;+ color : String?&#xa;+ icon : String?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4342" y="2796" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="52" value="DocumentFolderPermission&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ folderId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String?&#xa;+ roleId : String?&#xa;+ canView : Boolean&#xa;+ canEdit : Boolean&#xa;+ canDelete : Boolean&#xa;+ canCreate : Boolean&#xa;+ canManage : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4618" y="2796" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="53" value="DocumentPermission&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ documentId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String?&#xa;+ roleId : String?&#xa;+ canView : Boolean&#xa;+ canEdit : Boolean&#xa;+ canDelete : Boolean&#xa;+ canShare : Boolean&#xa;+ canManage : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4894" y="2796" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="54" value="DocumentShare&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ documentId : String &lt;&lt;FK&gt;&gt;&#xa;+ shareType : String&#xa;+ shareToken : String? &lt;&lt;UQ&gt;&gt;&#xa;+ expiresAt : DateTime?&#xa;+ password : String?&#xa;+ maxDownloads : Int?&#xa;+ downloadCount : Int&#xa;+ sharedWith : String?&#xa;+ canView : Boolean&#xa;+ canDownload : Boolean&#xa;+ canEdit : Boolean&#xa;+ canShare : Boolean&#xa;+ isActive : Boolean&#xa;+ createdBy : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="3086" width="260" height="276" as="geometry"/>
+        </mxCell>
+        <mxCell id="55" value="DocumentTemplate&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ description : String?&#xa;+ category : String?&#xa;+ fileName : String&#xa;+ storagePath : String&#xa;+ fileSize : Int&#xa;+ mimeType : String&#xa;+ fields : Json?&#xa;+ usageCount : Int&#xa;+ isActive : Boolean&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3790" y="3072" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="56" value="DocumentVersion&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ documentId : String &lt;&lt;FK&gt;&gt;&#xa;+ versionNumber : Int&#xa;+ fileName : String&#xa;+ fileSize : Int&#xa;+ storagePath : String&#xa;+ checksum : String?&#xa;+ changeLog : String?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4066" y="3002" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="57" value="EmailLog&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ to : String&#xa;+ cc : String?&#xa;+ bcc : String?&#xa;+ subject : String&#xa;+ body : String&#xa;+ templateId : String?&#xa;+ status : String&#xa;+ sentAt : DateTime?&#xa;+ failedAt : DateTime?&#xa;+ errorMessage : String?&#xa;+ metadata : Json?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="4260" width="260" height="248" as="geometry"/>
+        </mxCell>
+        <mxCell id="58" value="EmailQueue&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ to : String&#xa;+ cc : String?&#xa;+ bcc : String?&#xa;+ subject : String&#xa;+ body : String&#xa;+ templateId : String?&#xa;+ variables : Json?&#xa;+ status : String&#xa;+ priority : Int&#xa;+ attempts : Int&#xa;+ maxAttempts : Int&#xa;+ scheduledAt : DateTime&#xa;+ processingAt : DateTime?&#xa;+ sentAt : DateTime?&#xa;+ failedAt : DateTime?&#xa;+ cancelledAt : DateTime?&#xa;+ lastError : String?&#xa;+ errorLog : Json?&#xa;+ metadata : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="4386" width="260" height="374" as="geometry"/>
+        </mxCell>
+        <mxCell id="59" value="EmailTemplate&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ code : String&#xa;+ subject : String&#xa;+ body : String&#xa;+ variables : Json?&#xa;+ isSystem : Boolean&#xa;+ isActive : Boolean&#xa;+ createdBy : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="4232" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="60" value="Employee&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ userId : String &lt;&lt;FK,UQ&gt;&gt;&#xa;+ departmentId : String &lt;&lt;FK&gt;&gt;&#xa;+ managerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ employeeCode : String&#xa;+ name : String&#xa;+ email : String&#xa;+ phone : String?&#xa;+ designation : String&#xa;+ joiningDate : DateTime&#xa;+ status : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="870" width="260" height="234" as="geometry"/>
+        </mxCell>
+        <mxCell id="61" value="ExpenseCategory&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ code : String&#xa;+ active : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="4976" width="260" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="62" value="ExpenseClaim&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ categoryId : String &lt;&lt;FK&gt;&gt;&#xa;+ title : String&#xa;+ amount : Float&#xa;+ description : String?&#xa;+ receiptUrl : String?&#xa;+ expenseDate : DateTime&#xa;+ status : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="4976" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="63" value="FiscalYear&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ startDate : DateTime&#xa;+ endDate : DateTime&#xa;+ isClosed : Boolean&#xa;+ closedBy : String?&#xa;+ closedAt : DateTime?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4342" y="3998" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="64" value="GoodsReceipt&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ receiptNumber : String &lt;&lt;UQ&gt;&gt;&#xa;+ purchaseOrderId : String &lt;&lt;FK&gt;&gt;&#xa;+ receivedDate : DateTime&#xa;+ receivedBy : String&#xa;+ items : Json&#xa;+ status : String&#xa;+ qualityStatus : String?&#xa;+ warehouseLocation : String?&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3790" y="870" width="260" height="248" as="geometry"/>
+        </mxCell>
+        <mxCell id="65" value="InvoicePayment&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ invoiceId : String &lt;&lt;FK&gt;&gt;&#xa;+ amount : Float&#xa;+ paymentDate : DateTime&#xa;+ paymentMethod : String?&#xa;+ referenceNumber : String?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="1076" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="66" value="Item&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ name : String&#xa;+ sku : String&#xa;+ price : Float&#xa;+ quantity : Int&#xa;+ description : String?&#xa;+ category : String?&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1784" y="3998" width="260" height="178" as="geometry"/>
+        </mxCell>
+        <mxCell id="67" value="JournalEntry&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ entryNumber : String&#xa;+ entryDate : DateTime&#xa;+ postingDate : DateTime?&#xa;+ type : String&#xa;+ description : String&#xa;+ referenceType : String?&#xa;+ referenceId : String?&#xa;+ status : String&#xa;+ totalDebit : Float&#xa;+ totalCredit : Float&#xa;+ createdBy : String&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ postedBy : String?&#xa;+ postedAt : DateTime?&#xa;+ reversedBy : String?&#xa;+ reversedAt : DateTime?&#xa;+ reversingEntryId : String?&#xa;+ attachments : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4618" y="3998" width="260" height="374" as="geometry"/>
+        </mxCell>
+        <mxCell id="68" value="JournalEntryLine&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ journalEntryId : String &lt;&lt;FK&gt;&gt;&#xa;+ accountId : String &lt;&lt;FK&gt;&gt;&#xa;+ lineNumber : Int&#xa;+ description : String?&#xa;+ debit : Float&#xa;+ credit : Float&#xa;+ departmentId : String?&#xa;+ projectId : String?&#xa;+ costCenter : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4894" y="3998" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="69" value="Lead&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ email : String?&#xa;+ phone : String?&#xa;+ company : String?&#xa;+ source : String?&#xa;+ status : String&#xa;+ notes : String?&#xa;+ customerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ contactId : String? &lt;&lt;FK&gt;&gt;&#xa;+ firstName : String?&#xa;+ lastName : String?&#xa;+ jobTitle : String?&#xa;+ leadScore : Int&#xa;+ rating : String?&#xa;+ priority : String?&#xa;+ campaign : String?&#xa;+ medium : String?&#xa;+ referrer : String?&#xa;+ budget : Float?&#xa;+ timeline : String?&#xa;+ authority : String?&#xa;+ need : String?&#xa;+ ownerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ assignedAt : DateTime?&#xa;+ convertedAt : DateTime?&#xa;+ conversionSource : String?&#xa;+ dealId : String? &lt;&lt;FK&gt;&gt;&#xa;+ firstContactDate : DateTime?&#xa;+ lastContactDate : DateTime?&#xa;+ lastActivityDate : DateTime?&#xa;+ disqualifiedAt : DateTime?&#xa;+ disqualifiedBy : String?&#xa;+ disqualifiedReason : String?&#xa;+ tags : String[]&#xa;+ customFields : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2336" y="1482" width="260" height="598" as="geometry"/>
+        </mxCell>
+        <mxCell id="70" value="LeaveIntegration&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ leaveRequestId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ leaveDate : DateTime&#xa;+ status : String&#xa;+ attendanceStatus : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="870" width="260" height="178" as="geometry"/>
+        </mxCell>
+        <mxCell id="71" value="LeaveRequest&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ leaveTypeId : String &lt;&lt;FK&gt;&gt;&#xa;+ startDate : DateTime&#xa;+ endDate : DateTime&#xa;+ reason : String&#xa;+ status : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="870" width="260" height="178" as="geometry"/>
+        </mxCell>
+        <mxCell id="72" value="LeaveType&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ code : String&#xa;+ maxDays : Int&#xa;+ paid : Boolean&#xa;+ requiresApproval : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1434" y="870" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="73" value="LedgerEntry&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ accountId : String &lt;&lt;FK&gt;&gt;&#xa;+ date : DateTime&#xa;+ description : String&#xa;+ debit : Float&#xa;+ credit : Float&#xa;+ balance : Float&#xa;+ referenceType : String?&#xa;+ referenceId : String?&#xa;+ journalEntryId : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="4232" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="74" value="LotBatch&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ itemId : String&#xa;+ lotNumber : String?&#xa;+ batchNumber : String?&#xa;+ serialNumber : String?&#xa;+ manufacturingDate : DateTime?&#xa;+ expiryDate : DateTime?&#xa;+ quantity : Float&#xa;+ remainingQty : Float&#xa;+ supplier : String?&#xa;+ purchaseOrderId : String?&#xa;+ status : String&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="3998" width="260" height="276" as="geometry"/>
+        </mxCell>
+        <mxCell id="75" value="Message&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ conversationId : String &lt;&lt;FK&gt;&gt;&#xa;+ senderId : String&#xa;+ content : String&#xa;+ type : String&#xa;+ attachments : Json?&#xa;+ isEdited : Boolean&#xa;+ isDeleted : Boolean&#xa;+ mentionedUserIds : Json?&#xa;+ replyToId : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="4232" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="76" value="MessageReaction&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ messageId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String&#xa;+ emoji : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="4134" width="260" height="122" as="geometry"/>
+        </mxCell>
+        <mxCell id="77" value="MessageReadReceipt&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ messageId : String &lt;&lt;FK&gt;&gt;&#xa;+ userId : String&#xa;+ readAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1434" y="4120" width="260" height="108" as="geometry"/>
+        </mxCell>
+        <mxCell id="78" value="Notification&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ type : String&#xa;+ title : String&#xa;+ message : String&#xa;+ isRead : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4618" y="88" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="79" value="OvertimePolicy&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ shiftId : String? &lt;&lt;FK&gt;&gt;&#xa;+ name : String&#xa;+ code : String&#xa;+ dailyThreshold : Float&#xa;+ weeklyThreshold : Float&#xa;+ monthlyThreshold : Float?&#xa;+ overtimeRate : Float&#xa;+ weekendRate : Float&#xa;+ holidayRate : Float&#xa;+ isActive : Boolean&#xa;+ description : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="1146" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="80" value="OvertimeRecord&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ overtimePolicyId : String &lt;&lt;FK&gt;&gt;&#xa;+ date : DateTime&#xa;+ overtimeHours : Float&#xa;+ overtimeRate : Float&#xa;+ overtimeAmount : Float&#xa;+ reason : String?&#xa;+ approvalStatus : String&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="1132" width="260" height="248" as="geometry"/>
+        </mxCell>
+        <mxCell id="81" value="PasswordReset&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ email : String&#xa;+ otp : String&#xa;+ expiresAt : DateTime&#xa;+ used : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="88" width="260" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="82" value="Payment&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ paymentNumber : String &lt;&lt;UQ&gt;&gt;&#xa;+ vendorId : String &lt;&lt;FK&gt;&gt;&#xa;+ paymentDate : DateTime&#xa;+ amount : Float&#xa;+ paymentMethod : String&#xa;+ referenceNumber : String?&#xa;+ bankAccount : String?&#xa;+ status : String&#xa;+ clearedDate : DateTime?&#xa;+ allocations : Json&#xa;+ glPosted : Boolean&#xa;+ glPostDate : DateTime?&#xa;+ glJournalId : String?&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4066" y="870" width="260" height="332" as="geometry"/>
+        </mxCell>
+        <mxCell id="83" value="PayrollCycle&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ startDate : DateTime&#xa;+ endDate : DateTime&#xa;+ paymentDate : DateTime&#xa;+ status : String&#xa;+ totalGross : Float&#xa;+ totalDeductions : Float&#xa;+ totalNet : Float&#xa;+ processedBy : String?&#xa;+ processedAt : DateTime?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="1146" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="84" value="Payslip&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ payrollCycleId : String &lt;&lt;FK&gt;&gt;&#xa;+ payslipNumber : String &lt;&lt;UQ&gt;&gt;&#xa;+ basicSalary : Float&#xa;+ allowances : Json?&#xa;+ bonuses : Float&#xa;+ overtime : Float&#xa;+ grossSalary : Float&#xa;+ taxDeductions : Float&#xa;+ providentFund : Float&#xa;+ insurance : Float&#xa;+ otherDeductions : Json?&#xa;+ totalDeductions : Float&#xa;+ netSalary : Float&#xa;+ workingDays : Int&#xa;+ presentDays : Float&#xa;+ absentDays : Float&#xa;+ leaveDays : Int&#xa;+ overtimeHours : Float&#xa;+ status : String&#xa;+ generatedAt : DateTime&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="1328" width="260" height="444" as="geometry"/>
+        </mxCell>
+        <mxCell id="85" value="PendingRegistration&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ email : String&#xa;+ passwordHash : String&#xa;+ companyName : String&#xa;+ planId : String?&#xa;+ customModules : Json?&#xa;+ billingCycle : String?&#xa;+ provider : String&#xa;+ amount : Float&#xa;+ currency : String&#xa;+ status : String&#xa;+ tenantId : String?&#xa;+ createdAt : DateTime&#xa;+ completedAt : DateTime?&#xa;+ expiresAt : DateTime?" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2336" y="88" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="86" value="Permission&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ code : String &lt;&lt;UQ&gt;&gt;&#xa;+ label : String" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="88" width="260" height="94" as="geometry"/>
+        </mxCell>
+        <mxCell id="87" value="Pipeline&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ description : String?&#xa;+ isDefault : Boolean&#xa;+ isActive : Boolean&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2612" y="1048" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="88" value="PipelineStage&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ pipelineId : String &lt;&lt;FK&gt;&gt;&#xa;+ name : String&#xa;+ order : Int&#xa;+ probability : Int&#xa;+ color : String?&#xa;+ isClosedWon : Boolean&#xa;+ isClosedLost : Boolean&#xa;+ daysInStage : Int?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2888" y="1104" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="89" value="Plan&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ name : String &lt;&lt;UQ&gt;&gt;&#xa;+ description : String?&#xa;+ billingCycle : String&#xa;+ currency : String&#xa;+ basePrice : Float&#xa;+ seatPrice : Float&#xa;+ isActive : Boolean&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2612" y="88" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="90" value="PlanModule&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ planId : String &lt;&lt;FK&gt;&gt;&#xa;+ moduleKey : String&#xa;+ price : Float&#xa;+ included : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2888" y="88" width="260" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="91" value="ProductionBatch&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ workOrderId : String&#xa;+ batchNumber : String&#xa;+ productId : String&#xa;+ quantity : Float&#xa;+ unit : String?&#xa;+ manufacturingDate : DateTime&#xa;+ expiryDate : DateTime?&#xa;+ qualityStatus : String&#xa;+ qcBy : String?&#xa;+ qcAt : DateTime?&#xa;+ qcNotes : String?&#xa;+ warehouseId : String?&#xa;+ status : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3790" y="4302" width="260" height="290" as="geometry"/>
+        </mxCell>
+        <mxCell id="92" value="Project&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ projectCode : String &lt;&lt;UQ&gt;&gt;&#xa;+ projectName : String&#xa;+ description : String?&#xa;+ clientName : String?&#xa;+ projectManager : String&#xa;+ status : String&#xa;+ priority : String&#xa;+ type : String?&#xa;+ startDate : DateTime?&#xa;+ endDate : DateTime?&#xa;+ actualStartDate : DateTime?&#xa;+ actualEndDate : DateTime?&#xa;+ estimatedBudget : Float&#xa;+ actualCost : Float&#xa;+ progressPercent : Float&#xa;+ totalPlannedHours : Float&#xa;+ totalActualHours : Float&#xa;+ totalResourceCost : Float&#xa;+ budgetVariance : Float&#xa;+ scheduleVariance : Int&#xa;+ utilizationPercent : Float&#xa;+ healthScore : String&#xa;+ riskLevel : String&#xa;+ departmentId : String? &lt;&lt;FK&gt;&gt;&#xa;+ teamMembers : Json?&#xa;+ documentFolderId : String?&#xa;+ financeAccountId : String?&#xa;+ customFields : Json?&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="2796" width="260" height="542" as="geometry"/>
+        </mxCell>
+        <mxCell id="93" value="ProjectBudget&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ projectId : String &lt;&lt;FK&gt;&gt;&#xa;+ category : String&#xa;+ description : String?&#xa;+ plannedAmount : Float&#xa;+ actualAmount : Float&#xa;+ variance : Float&#xa;+ budgetPeriod : String?&#xa;+ transactionDate : DateTime&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="2796" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="94" value="ProjectMember&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ projectId : String &lt;&lt;FK&gt;&gt;&#xa;+ employeeId : String&#xa;+ userId : String?&#xa;+ role : String&#xa;+ allocationPercent : Float&#xa;+ startDate : DateTime&#xa;+ endDate : DateTime?&#xa;+ status : String&#xa;+ hourlyRate : Float?&#xa;+ permissions : Json?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="2796" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="95" value="ProjectMilestone&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ projectId : String &lt;&lt;FK&gt;&gt;&#xa;+ milestoneName : String&#xa;+ description : String?&#xa;+ status : String&#xa;+ startDate : DateTime?&#xa;+ dueDate : DateTime?&#xa;+ completedDate : DateTime?&#xa;+ progressPercent : Float&#xa;+ assignedTo : String?&#xa;+ deliverables : Json?&#xa;+ isCriticalPath : Boolean&#xa;+ isAutoScheduled : Boolean&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="2796" width="260" height="318" as="geometry"/>
+        </mxCell>
+        <mxCell id="96" value="ProjectMilestoneDependency&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ predecessorId : String &lt;&lt;FK&gt;&gt;&#xa;+ successorId : String &lt;&lt;FK&gt;&gt;&#xa;+ dependencyType : String&#xa;+ lagDays : Int&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="2796" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="97" value="ProjectResource&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ projectId : String &lt;&lt;FK&gt;&gt;&#xa;+ resourceType : String&#xa;+ resourceName : String&#xa;+ employeeId : String?&#xa;+ allocationPercent : Float&#xa;+ startDate : DateTime?&#xa;+ endDate : DateTime?&#xa;+ costPerUnit : Float&#xa;+ units : Float&#xa;+ totalCost : Float&#xa;+ plannedHours : Float&#xa;+ actualHours : Float&#xa;+ availableHours : Float&#xa;+ quantity : Float&#xa;+ quantityUsed : Float&#xa;+ quantityUnit : String&#xa;+ status : String&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1434" y="2796" width="260" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="98" value="ProjectTimeLog&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ projectId : String &lt;&lt;FK&gt;&gt;&#xa;+ employeeId : String&#xa;+ timesheetId : String? &lt;&lt;FK&gt;&gt;&#xa;+ logDate : DateTime&#xa;+ hoursWorked : Float&#xa;+ taskDescription : String&#xa;+ milestoneId : String?&#xa;+ billable : Boolean&#xa;+ hourlyRate : Float?&#xa;+ totalCost : Float?&#xa;+ status : String&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="3086" width="260" height="276" as="geometry"/>
+        </mxCell>
+        <mxCell id="99" value="ProjectTimesheet&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String&#xa;+ weekStartDate : DateTime&#xa;+ weekEndDate : DateTime&#xa;+ status : String&#xa;+ totalHours : Float&#xa;+ billableHours : Float&#xa;+ submittedAt : DateTime?&#xa;+ submittedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ approvedBy : String?&#xa;+ rejectedAt : DateTime?&#xa;+ rejectedBy : String?&#xa;+ rejectionReason : String?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="3114" width="260" height="304" as="geometry"/>
+        </mxCell>
+        <mxCell id="100" value="PurchaseOrder&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ poNumber : String &lt;&lt;UQ&gt;&gt;&#xa;+ requisitionId : String? &lt;&lt;FK&gt;&gt;&#xa;+ vendorId : String &lt;&lt;FK&gt;&gt;&#xa;+ title : String&#xa;+ description : String?&#xa;+ orderDate : DateTime&#xa;+ expectedDeliveryDate : DateTime&#xa;+ actualDeliveryDate : DateTime?&#xa;+ status : String&#xa;+ items : Json&#xa;+ subtotal : Float&#xa;+ taxAmount : Float&#xa;+ discountAmount : Float&#xa;+ shippingCost : Float&#xa;+ totalAmount : Float&#xa;+ paymentTerms : String?&#xa;+ paymentStatus : String&#xa;+ paidAmount : Float&#xa;+ shippingAddress : String?&#xa;+ shippingMethod : String?&#xa;+ trackingNumber : String?&#xa;+ approvalStatus : String&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ workflowId : String?&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ internalNotes : String?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4342" y="870" width="260" height="514" as="geometry"/>
+        </mxCell>
+        <mxCell id="101" value="PurchaseRequisition&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ requisitionNumber : String &lt;&lt;UQ&gt;&gt;&#xa;+ requestedBy : String&#xa;+ departmentId : String?&#xa;+ vendorId : String? &lt;&lt;FK&gt;&gt;&#xa;+ title : String&#xa;+ description : String?&#xa;+ priority : String&#xa;+ requestedDate : DateTime&#xa;+ requiredDate : DateTime&#xa;+ status : String&#xa;+ approvalStatus : String&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ rejectionReason : String?&#xa;+ items : Json&#xa;+ totalAmount : Float&#xa;+ budgetCode : String?&#xa;+ workflowId : String?&#xa;+ notes : String?&#xa;+ attachments : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4618" y="870" width="260" height="388" as="geometry"/>
+        </mxCell>
+        <mxCell id="102" value="Report&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ templateId : String? &lt;&lt;FK&gt;&gt;&#xa;+ name : String&#xa;+ type : String&#xa;+ parameters : Json?&#xa;+ data : Json?&#xa;+ generatedBy : String?&#xa;+ generatedAt : DateTime&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4342" y="3002" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="103" value="ReportSchedule&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ templateId : String&#xa;+ name : String&#xa;+ frequency : String&#xa;+ recipients : Json&#xa;+ isActive : Boolean&#xa;+ lastRunAt : DateTime?&#xa;+ nextRunAt : DateTime?&#xa;+ createdBy : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4618" y="3030" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="104" value="ReportTemplate&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ type : String&#xa;+ category : String?&#xa;+ description : String?&#xa;+ isSystem : Boolean&#xa;+ isActive : Boolean&#xa;+ config : Json&#xa;+ createdBy : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4894" y="3030" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="105" value="Role&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ name : String&#xa;+ tenantId : String" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="88" width="260" height="94" as="geometry"/>
+        </mxCell>
+        <mxCell id="106" value="RolePermission&#xa;----------------------&#xa;+ roleId : String &lt;&lt;PK,FK&gt;&gt;&#xa;+ permissionId : String &lt;&lt;PK,FK&gt;&gt;" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1434" y="88" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="107" value="SalaryComponent&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ code : String&#xa;+ type : String&#xa;+ calculationType : String&#xa;+ value : Float?&#xa;+ formula : String?&#xa;+ isTaxable : Boolean&#xa;+ isActive : Boolean&#xa;+ description : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="1118" width="260" height="234" as="geometry"/>
+        </mxCell>
+        <mxCell id="108" value="SalaryDisbursement&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ payrollCycleId : String &lt;&lt;FK&gt;&gt;&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ amount : Float&#xa;+ paymentMethod : String&#xa;+ bankAccount : String?&#xa;+ transactionRef : String?&#xa;+ status : String&#xa;+ paymentDate : DateTime?&#xa;+ completedAt : DateTime?&#xa;+ failureReason : String?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1434" y="1146" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="109" value="SalaryStructure&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK,UQ&gt;&gt;&#xa;+ basicSalary : Float&#xa;+ allowances : Json&#xa;+ deductions : Json&#xa;+ netSalary : Float&#xa;+ effectiveFrom : DateTime&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="1282" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="110" value="SalesInvoice&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ customerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ dealId : String? &lt;&lt;FK&gt;&gt;&#xa;+ invoiceNumber : String?&#xa;+ customerName : String&#xa;+ customerEmail : String?&#xa;+ orderId : String?&#xa;+ issueDate : DateTime&#xa;+ dueDate : DateTime?&#xa;+ items : Json?&#xa;+ subtotal : Float&#xa;+ tax : Float&#xa;+ discount : Float&#xa;+ total : Float&#xa;+ amountPaid : Float&#xa;+ status : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3164" y="1202" width="260" height="318" as="geometry"/>
+        </mxCell>
+        <mxCell id="111" value="SalesOrder&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ customerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ dealId : String? &lt;&lt;FK&gt;&gt;&#xa;+ orderNumber : String?&#xa;+ customerName : String&#xa;+ customerEmail : String?&#xa;+ quotationId : String?&#xa;+ orderDate : DateTime&#xa;+ expectedDelivery : DateTime?&#xa;+ items : Json?&#xa;+ subtotal : Float&#xa;+ tax : Float&#xa;+ discount : Float&#xa;+ total : Float&#xa;+ status : String&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1784" y="1534" width="260" height="318" as="geometry"/>
+        </mxCell>
+        <mxCell id="112" value="SalesOrderTracking&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ salesOrderId : String &lt;&lt;FK&gt;&gt;&#xa;+ status : String&#xa;+ carrier : String?&#xa;+ trackingNumber : String?&#xa;+ location : String?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="1282" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="113" value="SalesQuotation&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ customerId : String? &lt;&lt;FK&gt;&gt;&#xa;+ dealId : String? &lt;&lt;FK&gt;&gt;&#xa;+ customerName : String&#xa;+ customerEmail : String?&#xa;+ title : String&#xa;+ description : String?&#xa;+ items : Json?&#xa;+ subtotal : Float&#xa;+ tax : Float&#xa;+ discount : Float&#xa;+ total : Float&#xa;+ status : String&#xa;+ validUntil : DateTime?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2336" y="1478" width="260" height="290" as="geometry"/>
+        </mxCell>
+        <mxCell id="114" value="Shift&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ code : String&#xa;+ startTime : String&#xa;+ endTime : String&#xa;+ breakDuration : Int&#xa;+ workingDays : String&#xa;+ isActive : Boolean&#xa;+ description : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="1338" width="260" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="115" value="ShiftAssignment&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ shiftId : String &lt;&lt;FK&gt;&gt;&#xa;+ assignedFrom : DateTime&#xa;+ assignedTo : DateTime?&#xa;+ status : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="1254" width="260" height="178" as="geometry"/>
+        </mxCell>
+        <mxCell id="116" value="StockMovement&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ movementNumber : String&#xa;+ type : String&#xa;+ reason : String?&#xa;+ itemId : String&#xa;+ fromWarehouseId : String?&#xa;+ toWarehouseId : String?&#xa;+ warehouseId : String? &lt;&lt;FK&gt;&gt;&#xa;+ quantity : Float&#xa;+ lotNumber : String?&#xa;+ batchNumber : String?&#xa;+ serialNumber : String?&#xa;+ expiryDate : DateTime?&#xa;+ referenceType : String?&#xa;+ referenceId : String?&#xa;+ unitCost : Float?&#xa;+ totalCost : Float?&#xa;+ status : String&#xa;+ approvedBy : String?&#xa;+ approvedAt : DateTime?&#xa;+ notes : String?&#xa;+ createdBy : String&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2336" y="3998" width="260" height="402" as="geometry"/>
+        </mxCell>
+        <mxCell id="117" value="Subscription&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ planId : String &lt;&lt;FK&gt;&gt;&#xa;+ status : String&#xa;+ startAt : DateTime&#xa;+ currentPeriodStart : DateTime&#xa;+ currentPeriodEnd : DateTime&#xa;+ cancelAt : DateTime?&#xa;+ canceledAt : DateTime?&#xa;+ trialEndsAt : DateTime?&#xa;+ provider : String?&#xa;+ providerSubscriptionId : String?&#xa;+ providerCustomerId : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3164" y="88" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="118" value="SubscriptionItem&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ subscriptionId : String &lt;&lt;FK&gt;&gt;&#xa;+ moduleKey : String&#xa;+ quantity : Int&#xa;+ unitPrice : Float&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1784" y="252" width="260" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="119" value="SubscriptionPayment&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ subscriptionId : String &lt;&lt;FK&gt;&gt;&#xa;+ tenantId : String&#xa;+ amount : Float&#xa;+ currency : String&#xa;+ status : String&#xa;+ paymentMethodId : String?&#xa;+ providerPaymentId : String?&#xa;+ invoiceNumber : String?&#xa;+ description : String?&#xa;+ scheduledFor : DateTime?&#xa;+ attemptedAt : DateTime?&#xa;+ succeededAt : DateTime?&#xa;+ failedAt : DateTime?&#xa;+ refundedAt : DateTime?&#xa;+ failureCode : String?&#xa;+ failureMessage : String?&#xa;+ metadata : Json?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="434" width="260" height="332" as="geometry"/>
+        </mxCell>
+        <mxCell id="120" value="SupplierEvaluation&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ vendorId : String &lt;&lt;FK&gt;&gt;&#xa;+ evaluatedBy : String&#xa;+ evaluationDate : DateTime&#xa;+ evaluationPeriod : String?&#xa;+ qualityRating : Float&#xa;+ deliveryRating : Float&#xa;+ priceRating : Float&#xa;+ serviceRating : Float&#xa;+ communicationRating : Float&#xa;+ overallRating : Float&#xa;+ onTimeDeliveryRate : Float?&#xa;+ defectRate : Float?&#xa;+ responseTime : String?&#xa;+ strengths : String?&#xa;+ weaknesses : String?&#xa;+ recommendations : String?&#xa;+ status : String&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4894" y="870" width="260" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="121" value="SystemOption&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ category : String&#xa;+ key : String&#xa;+ value : String&#xa;+ label : String?&#xa;+ tenantId : String?&#xa;+ isActive : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="266" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="122" value="Tag&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ color : String?&#xa;+ category : String?&#xa;+ usageCount : Int&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2612" y="1198" width="260" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="123" value="Task&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ assignedBy : String &lt;&lt;FK&gt;&gt;&#xa;+ title : String&#xa;+ description : String&#xa;+ priority : String&#xa;+ status : String&#xa;+ dueDate : DateTime?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="1310" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="124" value="TaxConfiguration&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ name : String&#xa;+ taxType : String&#xa;+ slabs : Json&#xa;+ deductionRules : Json?&#xa;+ isActive : Boolean&#xa;+ effectiveFrom : DateTime&#xa;+ effectiveTo : DateTime?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="1310" width="260" height="206" as="geometry"/>
+        </mxCell>
+        <mxCell id="125" value="Tenant&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ name : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="330" y="196" width="260" height="94" as="geometry"/>
+        </mxCell>
+        <mxCell id="126" value="TimeTracking&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ date : DateTime&#xa;+ checkInTime : DateTime&#xa;+ checkOutTime : DateTime?&#xa;+ checkInLocation : String?&#xa;+ checkOutLocation : String?&#xa;+ workHours : Float&#xa;+ breakHours : Float&#xa;+ status : String&#xa;+ isLate : Boolean&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1434" y="1422" width="260" height="262" as="geometry"/>
+        </mxCell>
+        <mxCell id="127" value="User&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ email : String &lt;&lt;UQ&gt;&gt;&#xa;+ password : String&#xa;+ role : String&#xa;+ status : String&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ departmentId : String? &lt;&lt;FK&gt;&gt;&#xa;+ managerId : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="606" y="280" width="260" height="178" as="geometry"/>
+        </mxCell>
+        <mxCell id="128" value="UserInvite&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ email : String&#xa;+ role : String&#xa;+ token : String &lt;&lt;UQ&gt;&gt;&#xa;+ used : Boolean&#xa;+ expiresAt : DateTime&#xa;+ tenantId : String &lt;&lt;FK&gt;&gt;&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="882" y="266" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="129" value="UserRole&#xa;----------------------&#xa;+ userId : String &lt;&lt;PK,FK&gt;&gt;&#xa;+ roleId : String &lt;&lt;PK,FK&gt;&gt;" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="192" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="130" value="Vendor&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ vendorCode : String &lt;&lt;UQ&gt;&gt;&#xa;+ name : String&#xa;+ contactPerson : String?&#xa;+ email : String?&#xa;+ phone : String?&#xa;+ address : String?&#xa;+ city : String?&#xa;+ state : String?&#xa;+ country : String?&#xa;+ postalCode : String?&#xa;+ website : String?&#xa;+ taxId : String?&#xa;+ paymentTerms : String?&#xa;+ creditLimit : Float?&#xa;+ currency : String&#xa;+ status : String&#xa;+ category : String?&#xa;+ bankName : String?&#xa;+ accountNumber : String?&#xa;+ swiftCode : String?&#xa;+ rating : Float?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="1300" width="260" height="416" as="geometry"/>
+        </mxCell>
+        <mxCell id="131" value="Warehouse&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ branchId : String? &lt;&lt;FK&gt;&gt;&#xa;+ code : String&#xa;+ name : String&#xa;+ type : String&#xa;+ address : String?&#xa;+ city : String?&#xa;+ state : String?&#xa;+ country : String?&#xa;+ postalCode : String?&#xa;+ capacity : Float?&#xa;+ unit : String?&#xa;+ managerId : String?&#xa;+ phone : String?&#xa;+ isActive : Boolean&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2612" y="3998" width="260" height="304" as="geometry"/>
+        </mxCell>
+        <mxCell id="132" value="WarehouseStock&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ warehouseId : String &lt;&lt;FK&gt;&gt;&#xa;+ itemId : String&#xa;+ quantity : Float&#xa;+ reservedQty : Float&#xa;+ availableQty : Float&#xa;+ binLocation : String?&#xa;+ zone : String?&#xa;+ reorderPoint : Float?&#xa;+ reorderQty : Float?&#xa;+ minStock : Float?&#xa;+ maxStock : Float?&#xa;+ lastPurchasePrice : Float?&#xa;+ avgCost : Float?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="2888" y="3998" width="260" height="290" as="geometry"/>
+        </mxCell>
+        <mxCell id="133" value="Workflow&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ module : String&#xa;+ action : String&#xa;+ status : String&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4894" y="88" width="260" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="134" value="WorkflowRequest&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ workflowId : String?&#xa;+ module : String&#xa;+ action : String&#xa;+ payload : Json&#xa;+ status : String&#xa;+ createdBy : String&#xa;+ requestedBy : String?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3514" y="294" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="135" value="WorkflowStep&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ workflowId : String &lt;&lt;FK&gt;&gt;&#xa;+ stepOrder : Int&#xa;+ permission : String" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="3790" y="210" width="260" height="108" as="geometry"/>
+        </mxCell>
+        <mxCell id="136" value="WorkflowTemplate&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ name : String&#xa;+ description : String&#xa;+ industry : String&#xa;+ module : String&#xa;+ steps : Json&#xa;+ isDefault : Boolean&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4066" y="266" width="260" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="137" value="WorkOrder&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ workOrderNumber : String&#xa;+ bomId : String &lt;&lt;FK&gt;&gt;&#xa;+ productId : String&#xa;+ plannedQty : Float&#xa;+ producedQty : Float&#xa;+ scrappedQty : Float&#xa;+ scheduledStart : DateTime?&#xa;+ scheduledEnd : DateTime?&#xa;+ actualStart : DateTime?&#xa;+ actualEnd : DateTime?&#xa;+ warehouseId : String?&#xa;+ workCenter : String?&#xa;+ status : String&#xa;+ priority : String&#xa;+ estimatedCost : Float?&#xa;+ actualCost : Float?&#xa;+ salesOrderId : String?&#xa;+ projectId : String?&#xa;+ assignedTo : String?&#xa;+ notes : String?&#xa;+ createdBy : String&#xa;+ completedBy : String?&#xa;+ completedAt : DateTime?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4066" y="4442" width="260" height="430" as="geometry"/>
+        </mxCell>
+        <mxCell id="138" value="WorkOrderMaterial&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ workOrderId : String &lt;&lt;FK&gt;&gt;&#xa;+ itemId : String&#xa;+ plannedQty : Float&#xa;+ issuedQty : Float&#xa;+ consumedQty : Float&#xa;+ returnedQty : Float&#xa;+ warehouseId : String?&#xa;+ unitCost : Float?&#xa;+ totalCost : Float?&#xa;+ status : String&#xa;+ issuedBy : String?&#xa;+ issuedAt : DateTime?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4342" y="4288" width="260" height="276" as="geometry"/>
+        </mxCell>
+        <mxCell id="139" value="WorkOrderOperation&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ workOrderId : String &lt;&lt;FK&gt;&gt;&#xa;+ sequence : Int&#xa;+ operationName : String&#xa;+ description : String?&#xa;+ workCenter : String?&#xa;+ estimatedHours : Float?&#xa;+ actualHours : Float?&#xa;+ assignedTo : String?&#xa;+ laborCost : Float?&#xa;+ status : String&#xa;+ startedAt : DateTime?&#xa;+ completedAt : DateTime?&#xa;+ notes : String?&#xa;+ createdAt : DateTime&#xa;+ updatedAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="4618" y="4288" width="260" height="276" as="geometry"/>
+        </mxCell>
+        <mxCell id="140" value="WorkReport&#xa;----------------------&#xa;+ id : String &lt;&lt;PK&gt;&gt;&#xa;+ tenantId : String&#xa;+ employeeId : String &lt;&lt;FK&gt;&gt;&#xa;+ taskId : String? &lt;&lt;FK&gt;&gt;&#xa;+ title : String&#xa;+ description : String&#xa;+ workDate : DateTime&#xa;+ hoursSpent : Float?&#xa;+ attachments : Json?&#xa;+ createdAt : DateTime" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=9;strokeColor=#2f4f6f;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="54" y="1488" width="260" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="141" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="39" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="142" value="plan [planId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="90" target="89">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="143" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="117" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="144" value="plan [planId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="117" target="89">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="145" value="subscription [subscriptionId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="118" target="117">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="146" value="subscription [subscriptionId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="119" target="117">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="147" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="127" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="148" value="department [departmentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="127" target="47">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="149" value="role [roleId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="106" target="105">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="150" value="permission [permissionId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="106" target="86">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="151" value="user [userId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="129" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="152" value="role [roleId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="129" target="105">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="153" value="workflow [workflowId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="135" target="133">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="154" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="66" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="155" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="113" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="156" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="113" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="157" value="deal [dealId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="113" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="158" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="111" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="159" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="111" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="160" value="deal [dealId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="111" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="161" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="110" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="162" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="110" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="163" value="deal [dealId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="110" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="164" value="invoice [invoiceId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="65" target="110">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="165" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="112" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="166" value="order [salesOrderId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="112" target="111">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="167" value="tenant [tenantId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="128" target="125">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="168" value="workflow [workflowId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="20" target="133">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="169" value="workflowRequest [workflowRequestId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="20" target="134">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="170" value="workflowStep [workflowStepId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="20" target="135">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="171" value="user [userId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="172" value="department [departmentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="47">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="173" value="manager [managerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="174" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="71" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="175" value="leaveType [leaveTypeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="71" target="72">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="176" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="62" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="177" value="category [categoryId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="62" target="61">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="178" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="123" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="179" value="assigner [assignedBy]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="123" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="180" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="109" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="181" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="140" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="182" value="task [taskId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="140" target="123">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="183" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="78" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="184" value="owner [ownerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="43" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="185" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="40" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="186" value="owner [ownerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="40" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="187" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="69" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="188" value="contact [contactId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="69" target="40">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="189" value="deal [dealId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="69" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="190" value="owner [ownerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="69" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="191" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="46" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="192" value="owner [ownerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="46" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="193" value="pipeline [pipelineId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="46" target="87">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="194" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="38" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="195" value="contact [contactId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="38" target="40">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="196" value="lead [leadId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="38" target="69">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="197" value="deal [dealId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="38" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="198" value="activity [activityId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="38" target="16">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="199" value="creator [createdBy]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="38" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="200" value="pipeline [pipelineId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="88" target="87">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="201" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="16" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="202" value="contact [contactId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="16" target="40">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="203" value="lead [leadId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="16" target="69">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="204" value="deal [dealId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="16" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="205" value="assignee [assignedTo]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="16" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="206" value="creator [createdBy]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="16" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="207" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="208" value="creator [createdBy]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="209" value="customer [customerId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="27" target="43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="210" value="deal [dealId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="27" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="211" value="communication [communicationId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="27" target="38">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="212" value="uploader [uploadedBy]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="27" target="127">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="213" value="vendor [vendorId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="101" target="130">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="214" value="vendor [vendorId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="100" target="130">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="215" value="requisition [requisitionId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="100" target="101">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="216" value="purchaseOrder [purchaseOrderId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="64" target="100">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="217" value="vendor [vendorId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="120" target="130">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="218" value="vendor [vendorId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="19" target="130">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="219" value="purchaseOrder [purchaseOrderId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="19" target="100">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="220" value="vendor [vendorId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="82" target="130">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="221" value="department [departmentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="92" target="47">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="222" value="project [projectId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="94" target="92">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="223" value="project [projectId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="95" target="92">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="224" value="predecessor [predecessorId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="96" target="95">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="225" value="successor [successorId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="96" target="95">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="226" value="project [projectId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="97" target="92">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="227" value="project [projectId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="93" target="92">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="228" value="project [projectId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="98" target="92">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="229" value="timesheet [timesheetId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="98" target="99">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="230" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="28" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="231" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="84" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="232" value="payrollCycle [payrollCycleId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="84" target="83">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="233" value="payrollCycle [payrollCycleId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="108" target="83">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="234" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="108" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="235" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="115" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="236" value="shift [shiftId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="115" target="114">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="237" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="126" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="238" value="shift [shiftId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="79" target="114">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="239" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="80" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="240" value="overtimePolicy [overtimePolicyId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="80" target="79">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="241" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="29" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="242" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="70" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="243" value="category [categoryId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="22" target="24">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="244" value="asset [assetId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="23" target="22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="245" value="employee [employeeId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="23" target="60">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="246" value="asset [assetId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="26" target="22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="247" value="asset [assetId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="25" target="22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="248" value="parent [parentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="51" target="51">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="249" value="folder [folderId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="48" target="51">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="250" value="template [templateId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="48" target="55">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="251" value="document [documentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="48">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="252" value="document [documentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="54" target="48">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="253" value="document [documentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="48">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="254" value="folder [folderId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="52" target="51">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="255" value="document [documentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="49" target="48">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="256" value="share [shareId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="49" target="54">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="257" value="document [documentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="50" target="48">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="258" value="parent [parentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="50" target="50">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="259" value="template [templateId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="104">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="260" value="conversation [conversationId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="42" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="261" value="conversation [conversationId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="75" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="262" value="message [messageId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="76" target="75">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="263" value="message [messageId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="77" target="75">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="264" value="announcement [announcementId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="18" target="17">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="265" value="channel [channelId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="37" target="36">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="266" value="branch [branchId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="131" target="34">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="267" value="warehouse [warehouseId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="132" target="131">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="268" value="warehouse [warehouseId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="116" target="131">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="269" value="parent [parentId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="35" target="35">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="270" value="journalEntry [journalEntryId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="68" target="67">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="271" value="account [accountId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="68" target="35">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="272" value="account [accountId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="73" target="35">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="273" value="bom [bomId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="33" target="32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="274" value="bom [bomId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="137" target="32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="275" value="workOrder [workOrderId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="139" target="137">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="276" value="workOrder [workOrderId]" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;endFill=1;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="138" target="137">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

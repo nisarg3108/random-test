@@ -1,0 +1,2888 @@
+@startuml UEORMS_Full_Class_Diagram
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS Full Class Diagram (Auto-generated from Prisma Schema + Report Coverage)
+
+legend left
+  Visibility: - private attributes, + public operations
+  Multiplicity: "1", "0..1", "0..*", "*"
+  PK = Primary Key
+  UQ = Unique
+  Relationship label: field/property role name
+endlegend
+
+package "Identity and Access" {
+  class Branch {
+  - id : String <<PK>>
+  - tenantId : String
+  - code : String
+  - name : String
+  - type : String
+  - address : String?
+  - city : String?
+  - state : String?
+  - country : String?
+  - postalCode : String?
+  - phone : String?
+  - email : String?
+  - managerId : String?
+  - isActive : Boolean
+  - isMainBranch : Boolean
+  - operatingHours : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - warehouses : Warehouse[]
+  --
+  {static} @@unique([tenantId, code])
+  {static} @@index([tenantId, isActive])
+  }
+  class Department {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - location : String?
+  - managerId : String?
+  - budget : Float?
+  - status : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employees : Employee[]
+  - User : User[]
+  - projects : Project[]
+  }
+  class PasswordReset {
+  - id : String <<PK>>
+  - email : String
+  - otp : String
+  - expiresAt : DateTime
+  - used : Boolean
+  - createdAt : DateTime
+  --
+  {static} @@index([email, otp])
+  }
+  class Permission {
+  - id : String <<PK>>
+  - code : String <<UQ>>
+  - label : String
+  - roles : RolePermission[]
+  }
+  class Role {
+  - id : String <<PK>>
+  - name : String
+  - tenantId : String
+  - permissions : RolePermission[]
+  - users : UserRole[]
+  --
+  {static} @@unique([name, tenantId])
+  }
+  class RolePermission {
+  - roleId : String
+  - permissionId : String
+  - role : Role
+  - permission : Permission
+  --
+  {static} @@id([roleId, permissionId])
+  }
+  class SystemOption {
+  - id : String <<PK>>
+  - category : String
+  - key : String
+  - value : String
+  - label : String?
+  - tenantId : String?
+  - isActive : Boolean
+  - createdAt : DateTime
+  --
+  {static} @@unique([category, key, tenantId], name: 'category_key_tenantId')
+  }
+  class Tenant {
+  - id : String <<PK>>
+  - name : String
+  - createdAt : DateTime
+  - users : User[]
+  - config : CompanyConfig?
+  - subscriptions : Subscription[]
+  - items : Item[]
+  - invites : UserInvite[]
+  - salesQuotations : SalesQuotation[]
+  - salesOrders : SalesOrder[]
+  - salesInvoices : SalesInvoice[]
+  - salesTrackings : SalesOrderTracking[]
+  }
+  class User {
+  - id : String <<PK>>
+  - email : String <<UQ>>
+  - password : String
+  - role : String
+  - status : String
+  - tenantId : String
+  - departmentId : String?
+  - managerId : String?
+  - tenant : Tenant
+  - department : Department?
+  - roles : UserRole[]
+  - employee : Employee?
+  - customersOwned : Customer[]
+  - contactsOwned : Contact[]
+  - leadsOwned : Lead[]
+  - dealsOwned : Deal[]
+  - communicationsCreated : Communication[]
+  - activitiesAssigned : Activity[]
+  - activitiesCreated : Activity[]
+  - customerNotesCreated : CustomerNote[]
+  - attachmentsUploaded : Attachment[]
+  - createdAt : DateTime
+  }
+  class UserInvite {
+  - id : String <<PK>>
+  - email : String
+  - role : String
+  - token : String <<UQ>>
+  - used : Boolean
+  - expiresAt : DateTime
+  - tenantId : String
+  - createdAt : DateTime
+  - tenant : Tenant
+  }
+  class UserRole {
+  - userId : String
+  - roleId : String
+  - user : User
+  - role : Role
+  --
+  {static} @@id([userId, roleId])
+  }
+}
+
+package "Billing and Subscription" {
+  class BillingEvent {
+  - id : String <<PK>>
+  - tenantId : String?
+  - subscriptionId : String?
+  - eventType : String
+  - provider : String
+  - providerEventId : String <<UQ>>
+  - status : String
+  - payload : Json
+  - processedAt : DateTime?
+  - errorMessage : String?
+  - createdAt : DateTime
+  --
+  {static} @@index([tenantId])
+  {static} @@index([subscriptionId])
+  {static} @@index([eventType])
+  {static} @@index([provider])
+  }
+  class CompanyConfig {
+  - id : String <<PK>>
+  - tenantId : String <<UQ>>
+  - companyName : String
+  - industry : String
+  - size : String
+  - country : String?
+  - currency : String?
+  - timezone : String?
+  - fiscalYear : String?
+  - workflowConfig : Json?
+  - enabledModules : Json?
+  - approvalLevels : Json?
+  - customFields : Json?
+  - businessRules : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  }
+  class PendingRegistration {
+  - id : String <<PK>>
+  - email : String
+  - passwordHash : String
+  - companyName : String
+  - planId : String?
+  - customModules : Json?
+  - billingCycle : String?
+  - provider : String
+  - amount : Float
+  - currency : String
+  - status : String
+  - tenantId : String?
+  - createdAt : DateTime
+  - completedAt : DateTime?
+  - expiresAt : DateTime?
+  --
+  {static} @@index([email])
+  {static} @@index([status])
+  {static} @@index([tenantId])
+  }
+  class Plan {
+  - id : String <<PK>>
+  - name : String <<UQ>>
+  - description : String?
+  - billingCycle : String
+  - currency : String
+  - basePrice : Float
+  - seatPrice : Float
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - modules : PlanModule[]
+  - subscriptions : Subscription[]
+  }
+  class PlanModule {
+  - id : String <<PK>>
+  - planId : String
+  - moduleKey : String
+  - price : Float
+  - included : Boolean
+  - createdAt : DateTime
+  - plan : Plan
+  --
+  {static} @@unique([planId, moduleKey])
+  }
+  class Subscription {
+  - id : String <<PK>>
+  - tenantId : String
+  - planId : String
+  - status : String
+  - startAt : DateTime
+  - currentPeriodStart : DateTime
+  - currentPeriodEnd : DateTime
+  - cancelAt : DateTime?
+  - canceledAt : DateTime?
+  - trialEndsAt : DateTime?
+  - provider : String?
+  - providerSubscriptionId : String?
+  - providerCustomerId : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - plan : Plan
+  - items : SubscriptionItem[]
+  - payments : SubscriptionPayment[]
+  --
+  {static} @@index([tenantId])
+  {static} @@index([planId])
+  }
+  class SubscriptionItem {
+  - id : String <<PK>>
+  - subscriptionId : String
+  - moduleKey : String
+  - quantity : Int
+  - unitPrice : Float
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - subscription : Subscription
+  --
+  {static} @@unique([subscriptionId, moduleKey])
+  }
+  class SubscriptionPayment {
+  - id : String <<PK>>
+  - subscriptionId : String
+  - tenantId : String
+  - amount : Float
+  - currency : String
+  - status : String
+  - paymentMethodId : String?
+  - providerPaymentId : String?
+  - invoiceNumber : String?
+  - description : String?
+  - scheduledFor : DateTime?
+  - attemptedAt : DateTime?
+  - succeededAt : DateTime?
+  - failedAt : DateTime?
+  - refundedAt : DateTime?
+  - failureCode : String?
+  - failureMessage : String?
+  - metadata : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - subscription : Subscription
+  --
+  {static} @@index([subscriptionId])
+  {static} @@index([tenantId])
+  {static} @@index([status])
+  }
+}
+
+package "Workflow and Governance" {
+  class Approval {
+  - id : String <<PK>>
+  - workflowId : String
+  - workflowRequestId : String?
+  - workflowStepId : String?
+  - stepOrder : Int
+  - permission : String
+  - data : Json?
+  - tenantId : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - status : String
+  - comment : String?
+  - rejectionReason : String?
+  - createdAt : DateTime
+  - workflow : Workflow
+  - workflowRequest : WorkflowRequest?
+  - workflowStep : WorkflowStep?
+  }
+  class ApprovalMatrix {
+  - id : String <<PK>>
+  - tenantId : String
+  - module : String
+  - conditions : Json
+  - approvers : Json
+  - createdAt : DateTime
+  }
+  class AuditLog {
+  - id : String <<PK>>
+  - userId : String
+  - tenantId : String
+  - action : String
+  - entity : String
+  - entityId : String
+  - meta : Json?
+  - timestamp : DateTime
+  }
+  class CustomField {
+  - id : String <<PK>>
+  - tenantId : String
+  - module : String
+  - fieldName : String
+  - fieldType : String
+  - options : Json?
+  - required : Boolean
+  - createdAt : DateTime
+  }
+  class Notification {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - type : String
+  - title : String
+  - message : String
+  - isRead : Boolean
+  - createdAt : DateTime
+  - employee : Employee
+  }
+  class Workflow {
+  - id : String <<PK>>
+  - tenantId : String
+  - module : String
+  - action : String
+  - status : String
+  - steps : WorkflowStep[]
+  - approvals : Approval[]
+  - createdAt : DateTime
+  }
+  class WorkflowRequest {
+  - id : String <<PK>>
+  - tenantId : String
+  - workflowId : String?
+  - module : String
+  - action : String
+  - payload : Json
+  - status : String
+  - createdBy : String
+  - requestedBy : String?
+  - createdAt : DateTime
+  - approvals : Approval[]
+  }
+  class WorkflowStep {
+  - id : String <<PK>>
+  - workflowId : String
+  - stepOrder : Int
+  - permission : String
+  - workflow : Workflow
+  - approvals : Approval[]
+  }
+  class WorkflowTemplate {
+  - id : String <<PK>>
+  - name : String
+  - description : String
+  - industry : String
+  - module : String
+  - steps : Json
+  - isDefault : Boolean
+  - createdAt : DateTime
+  }
+}
+
+package "HR and Payroll" {
+  class Attendance {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - date : DateTime
+  - checkIn : DateTime?
+  - checkOut : DateTime?
+  - status : String
+  - workHours : Float
+  - overtimeHours : Float
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  --
+  {static} @@unique([tenantId, employeeId, date])
+  }
+  class AttendanceReport {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - reportDate : DateTime
+  - month : Int
+  - year : Int
+  - totalWorkingDays : Int
+  - presentDays : Int
+  - absentDays : Int
+  - leaveDays : Int
+  - halfDays : Int
+  - workFromHomeDays : Int
+  - totalWorkHours : Float
+  - totalOvertimeHours : Float
+  - attendancePercentage : Float
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  --
+  {static} @@unique([tenantId, employeeId, month, year])
+  }
+  class Employee {
+  - id : String <<PK>>
+  - tenantId : String
+  - userId : String <<UQ>>
+  - departmentId : String
+  - managerId : String?
+  - employeeCode : String
+  - name : String
+  - email : String
+  - phone : String?
+  - designation : String
+  - joiningDate : DateTime
+  - status : String
+  - createdAt : DateTime
+  - user : User
+  - department : Department
+  - manager : Employee?
+  - reports : Employee[]
+  - expenseClaims : ExpenseClaim[]
+  - LeaveRequest : LeaveRequest[]
+  - tasks : Task[]
+  - assignedTasks : Task[]
+  - salaryStructure : SalaryStructure?
+  - workReports : WorkReport[]
+  - notifications : Notification[]
+  - payslips : Payslip[]
+  - disbursements : SalaryDisbursement[]
+  - attendance : Attendance[]
+  - shiftAssignments : ShiftAssignment[]
+  - timeTracking : TimeTracking[]
+  - overtimeRecords : OvertimeRecord[]
+  - attendanceReports : AttendanceReport[]
+  - leaveIntegrations : LeaveIntegration[]
+  - assetAllocations : AssetAllocation[]
+  }
+  class LeaveIntegration {
+  - id : String <<PK>>
+  - tenantId : String
+  - leaveRequestId : String
+  - employeeId : String
+  - leaveDate : DateTime
+  - status : String
+  - attendanceStatus : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  --
+  {static} @@unique([tenantId, leaveRequestId, leaveDate])
+  }
+  class LeaveRequest {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - leaveTypeId : String
+  - startDate : DateTime
+  - endDate : DateTime
+  - reason : String
+  - status : String
+  - createdAt : DateTime
+  - employee : Employee
+  - leaveType : LeaveType
+  }
+  class LeaveType {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - maxDays : Int
+  - paid : Boolean
+  - requiresApproval : Boolean
+  - createdAt : DateTime
+  - leaveRequests : LeaveRequest[]
+  }
+  class OvertimePolicy {
+  - id : String <<PK>>
+  - tenantId : String
+  - shiftId : String?
+  - name : String
+  - code : String
+  - dailyThreshold : Float
+  - weeklyThreshold : Float
+  - monthlyThreshold : Float?
+  - overtimeRate : Float
+  - weekendRate : Float
+  - holidayRate : Float
+  - isActive : Boolean
+  - description : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - shift : Shift?
+  - overtimeRecords : OvertimeRecord[]
+  --
+  {static} @@unique([tenantId, code])
+  }
+  class OvertimeRecord {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - overtimePolicyId : String
+  - date : DateTime
+  - overtimeHours : Float
+  - overtimeRate : Float
+  - overtimeAmount : Float
+  - reason : String?
+  - approvalStatus : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  - overtimePolicy : OvertimePolicy
+  }
+  class PayrollCycle {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - startDate : DateTime
+  - endDate : DateTime
+  - paymentDate : DateTime
+  - status : String
+  - totalGross : Float
+  - totalDeductions : Float
+  - totalNet : Float
+  - processedBy : String?
+  - processedAt : DateTime?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - payslips : Payslip[]
+  - disbursements : SalaryDisbursement[]
+  }
+  class Payslip {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - payrollCycleId : String
+  - payslipNumber : String <<UQ>>
+  - basicSalary : Float
+  - allowances : Json?
+  - bonuses : Float
+  - overtime : Float
+  - grossSalary : Float
+  - taxDeductions : Float
+  - providentFund : Float
+  - insurance : Float
+  - otherDeductions : Json?
+  - totalDeductions : Float
+  - netSalary : Float
+  - workingDays : Int
+  - presentDays : Float
+  - absentDays : Float
+  - leaveDays : Int
+  - overtimeHours : Float
+  - status : String
+  - generatedAt : DateTime
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  - payrollCycle : PayrollCycle
+  }
+  class SalaryComponent {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - type : String
+  - calculationType : String
+  - value : Float?
+  - formula : String?
+  - isTaxable : Boolean
+  - isActive : Boolean
+  - description : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, code])
+  }
+  class SalaryDisbursement {
+  - id : String <<PK>>
+  - tenantId : String
+  - payrollCycleId : String
+  - employeeId : String
+  - amount : Float
+  - paymentMethod : String
+  - bankAccount : String?
+  - transactionRef : String?
+  - status : String
+  - paymentDate : DateTime?
+  - completedAt : DateTime?
+  - failureReason : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - payrollCycle : PayrollCycle
+  - employee : Employee
+  }
+  class SalaryStructure {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String <<UQ>>
+  - basicSalary : Float
+  - allowances : Json
+  - deductions : Json
+  - netSalary : Float
+  - effectiveFrom : DateTime
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  }
+  class Shift {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - startTime : String
+  - endTime : String
+  - breakDuration : Int
+  - workingDays : String
+  - isActive : Boolean
+  - description : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - shiftAssignments : ShiftAssignment[]
+  - overtimePolicies : OvertimePolicy[]
+  --
+  {static} @@unique([tenantId, code])
+  }
+  class ShiftAssignment {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - shiftId : String
+  - assignedFrom : DateTime
+  - assignedTo : DateTime?
+  - status : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  - shift : Shift
+  --
+  {static} @@unique([tenantId, employeeId, shiftId, assignedFrom])
+  }
+  class Task {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - assignedBy : String
+  - title : String
+  - description : String
+  - priority : String
+  - status : String
+  - dueDate : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  - assigner : Employee
+  - reports : WorkReport[]
+  }
+  class TaxConfiguration {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - taxType : String
+  - slabs : Json
+  - deductionRules : Json?
+  - isActive : Boolean
+  - effectiveFrom : DateTime
+  - effectiveTo : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, taxType, effectiveFrom])
+  }
+  class TimeTracking {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - date : DateTime
+  - checkInTime : DateTime
+  - checkOutTime : DateTime?
+  - checkInLocation : String?
+  - checkOutLocation : String?
+  - workHours : Float
+  - breakHours : Float
+  - status : String
+  - isLate : Boolean
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employee : Employee
+  --
+  {static} @@unique([tenantId, employeeId, date, checkInTime])
+  }
+  class WorkReport {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - taskId : String?
+  - title : String
+  - description : String
+  - workDate : DateTime
+  - hoursSpent : Float?
+  - attachments : Json?
+  - createdAt : DateTime
+  - employee : Employee
+  - task : Task?
+  }
+}
+
+package "CRM and Sales" {
+  class Activity {
+  - id : String <<PK>>
+  - tenantId : String
+  - type : String
+  - subject : String
+  - description : String?
+  - status : String
+  - priority : String
+  - dueDate : DateTime?
+  - dueTime : String?
+  - reminderAt : DateTime?
+  - completedAt : DateTime?
+  - completedBy : String?
+  - assignedTo : String?
+  - createdBy : String
+  - customerId : String?
+  - contactId : String?
+  - leadId : String?
+  - dealId : String?
+  - outcome : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer?
+  - contact : Contact?
+  - lead : Lead?
+  - deal : Deal?
+  - communications : Communication[]
+  - assignee : User?
+  - creator : User
+  --
+  {static} @@index([tenantId, assignedTo])
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, dueDate])
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, dealId])
+  }
+  class Attachment {
+  - id : String <<PK>>
+  - tenantId : String
+  - fileName : String
+  - fileSize : Int
+  - mimeType : String
+  - fileUrl : String
+  - customerId : String?
+  - dealId : String?
+  - communicationId : String?
+  - uploadedBy : String
+  - createdAt : DateTime
+  - customer : Customer?
+  - deal : Deal?
+  - communication : Communication?
+  - uploader : User
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, dealId])
+  }
+  class Communication {
+  - id : String <<PK>>
+  - tenantId : String
+  - type : String
+  - subject : String?
+  - notes : String
+  - occurredAt : DateTime
+  - createdBy : String?
+  - customerId : String?
+  - contactId : String?
+  - leadId : String?
+  - direction : String?
+  - duration : Int?
+  - outcome : String?
+  - emailFrom : String?
+  - emailTo : String?
+  - emailCc : String?
+  - meetingLocation : String?
+  - meetingAttendees : String[]
+  - dealId : String?
+  - activityId : String?
+  - hasAttachments : Boolean
+  - attachmentCount : Int
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - customer : Customer?
+  - contact : Contact?
+  - lead : Lead?
+  - deal : Deal?
+  - activity : Activity?
+  - attachments : Attachment[]
+  - creator : User?
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, contactId])
+  {static} @@index([tenantId, leadId])
+  {static} @@index([tenantId, dealId])
+  {static} @@index([tenantId, occurredAt])
+  }
+  class Contact {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String
+  - name : String
+  - email : String?
+  - phone : String?
+  - title : String?
+  - status : String
+  - firstName : String?
+  - lastName : String?
+  - jobTitle : String?
+  - department : String?
+  - role : String?
+  - mobilePhone : String?
+  - workPhone : String?
+  - linkedinUrl : String?
+  - twitterHandle : String?
+  - isPrimary : Boolean
+  - ownerId : String?
+  - preferredChannel : String?
+  - lastContactDate : DateTime?
+  - birthday : DateTime?
+  - anniversary : DateTime?
+  - emailOptIn : Boolean
+  - smsOptIn : Boolean
+  - doNotCall : Boolean
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer
+  - communications : Communication[]
+  - leads : Lead[]
+  - activities : Activity[]
+  - owner : User?
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, email])
+  {static} @@index([tenantId, ownerId])
+  }
+  class Customer {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - industry : String?
+  - website : String?
+  - status : String
+  - notes : String?
+  - type : String?
+  - companySize : String?
+  - annualRevenue : Float?
+  - currencyCode : String?
+  - primaryEmail : String?
+  - primaryPhone : String?
+  - billingAddress : Json?
+  - shippingAddress : Json?
+  - ownerId : String?
+  - accountManager : String?
+  - category : String?
+  - source : String?
+  - firstContactDate : DateTime?
+  - lastContactDate : DateTime?
+  - preferredChannel : String?
+  - timezone : String?
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - contacts : Contact[]
+  - deals : Deal[]
+  - communications : Communication[]
+  - leads : Lead[]
+  - activities : Activity[]
+  - customerNotes : CustomerNote[]
+  - attachments : Attachment[]
+  - salesQuotations : SalesQuotation[]
+  - salesOrders : SalesOrder[]
+  - salesInvoices : SalesInvoice[]
+  - owner : User?
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, ownerId])
+  {static} @@index([tenantId, category])
+  }
+  class CustomerNote {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String
+  - title : String?
+  - content : String
+  - isPinned : Boolean
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer
+  - creator : User
+  --
+  {static} @@index([tenantId, customerId])
+  }
+  class Deal {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String
+  - name : String
+  - stage : String
+  - value : Float
+  - expectedCloseDate : DateTime?
+  - status : String
+  - notes : String?
+  - dealNumber : String? <<UQ>>
+  - pipelineId : String?
+  - stageOrder : Int?
+  - probability : Int?
+  - amount : Float
+  - currencyCode : String?
+  - discount : Float?
+  - tax : Float?
+  - total : Float?
+  - products : Json?
+  - ownerId : String?
+  - teamMembers : String[]
+  - createdDate : DateTime
+  - closedDate : DateTime?
+  - firstContactDate : DateTime?
+  - lastActivityDate : DateTime?
+  - competitors : String[]
+  - wonReason : String?
+  - lostReason : String?
+  - lostToCompetitor : String?
+  - leadId : String?
+  - source : String?
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer
+  - salesQuotations : SalesQuotation[]
+  - salesOrders : SalesOrder[]
+  - salesInvoices : SalesInvoice[]
+  - communications : Communication[]
+  - activities : Activity[]
+  - attachments : Attachment[]
+  - leadConverted : Lead[]
+  - owner : User?
+  - pipeline : Pipeline?
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, stage])
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, ownerId])
+  {static} @@index([tenantId, expectedCloseDate])
+  }
+  class InvoicePayment {
+  - id : String <<PK>>
+  - tenantId : String
+  - invoiceId : String
+  - amount : Float
+  - paymentDate : DateTime
+  - paymentMethod : String?
+  - referenceNumber : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - invoice : SalesInvoice
+  }
+  class Lead {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - email : String?
+  - phone : String?
+  - company : String?
+  - source : String?
+  - status : String
+  - notes : String?
+  - customerId : String?
+  - contactId : String?
+  - firstName : String?
+  - lastName : String?
+  - jobTitle : String?
+  - leadScore : Int
+  - rating : String?
+  - priority : String?
+  - campaign : String?
+  - medium : String?
+  - referrer : String?
+  - budget : Float?
+  - timeline : String?
+  - authority : String?
+  - need : String?
+  - ownerId : String?
+  - assignedAt : DateTime?
+  - convertedAt : DateTime?
+  - conversionSource : String?
+  - dealId : String?
+  - firstContactDate : DateTime?
+  - lastContactDate : DateTime?
+  - lastActivityDate : DateTime?
+  - disqualifiedAt : DateTime?
+  - disqualifiedBy : String?
+  - disqualifiedReason : String?
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer?
+  - contact : Contact?
+  - communications : Communication[]
+  - activities : Activity[]
+  - deal : Deal?
+  - owner : User?
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, ownerId])
+  {static} @@index([tenantId, leadScore])
+  {static} @@index([tenantId, source])
+  }
+  class Pipeline {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - isDefault : Boolean
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - stages : PipelineStage[]
+  - deals : Deal[]
+  --
+  {static} @@unique([tenantId, name])
+  {static} @@index([tenantId, isDefault])
+  }
+  class PipelineStage {
+  - id : String <<PK>>
+  - tenantId : String
+  - pipelineId : String
+  - name : String
+  - order : Int
+  - probability : Int
+  - color : String?
+  - isClosedWon : Boolean
+  - isClosedLost : Boolean
+  - daysInStage : Int?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - pipeline : Pipeline
+  --
+  {static} @@unique([pipelineId, name])
+  {static} @@unique([pipelineId, order])
+  {static} @@index([tenantId, pipelineId])
+  }
+  class SalesInvoice {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String?
+  - dealId : String?
+  - invoiceNumber : String?
+  - customerName : String
+  - customerEmail : String?
+  - orderId : String?
+  - issueDate : DateTime
+  - dueDate : DateTime?
+  - items : Json?
+  - subtotal : Float
+  - tax : Float
+  - discount : Float
+  - total : Float
+  - amountPaid : Float
+  - status : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - customer : Customer?
+  - deal : Deal?
+  - payments : InvoicePayment[]
+  }
+  class SalesOrder {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String?
+  - dealId : String?
+  - orderNumber : String?
+  - customerName : String
+  - customerEmail : String?
+  - quotationId : String?
+  - orderDate : DateTime
+  - expectedDelivery : DateTime?
+  - items : Json?
+  - subtotal : Float
+  - tax : Float
+  - discount : Float
+  - total : Float
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - customer : Customer?
+  - deal : Deal?
+  - tracking : SalesOrderTracking[]
+  }
+  class SalesOrderTracking {
+  - id : String <<PK>>
+  - tenantId : String
+  - salesOrderId : String
+  - status : String
+  - carrier : String?
+  - trackingNumber : String?
+  - location : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - order : SalesOrder
+  }
+  class SalesQuotation {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String?
+  - dealId : String?
+  - customerName : String
+  - customerEmail : String?
+  - title : String
+  - description : String?
+  - items : Json?
+  - subtotal : Float
+  - tax : Float
+  - discount : Float
+  - total : Float
+  - status : String
+  - validUntil : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - customer : Customer?
+  - deal : Deal?
+  }
+  class Tag {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - color : String?
+  - category : String?
+  - usageCount : Int
+  - createdAt : DateTime
+  --
+  {static} @@unique([tenantId, name, category])
+  {static} @@index([tenantId, category])
+  }
+}
+
+package "Purchase and AP" {
+  class APBill {
+  - id : String <<PK>>
+  - tenantId : String
+  - billNumber : String <<UQ>>
+  - vendorId : String
+  - purchaseOrderId : String?
+  - billDate : DateTime
+  - dueDate : DateTime
+  - invoiceNumber : String?
+  - invoiceDate : DateTime?
+  - subtotal : Float
+  - taxAmount : Float
+  - discountAmount : Float
+  - shippingCost : Float
+  - totalAmount : Float
+  - paidAmount : Float
+  - balanceAmount : Float
+  - items : Json
+  - status : String
+  - approvalStatus : String
+  - matchedToPO : Boolean
+  - matchedToReceipt : Boolean
+  - threeWayMatched : Boolean
+  - paymentTerms : String?
+  - glPosted : Boolean
+  - glPostDate : DateTime?
+  - glJournalId : String?
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - notes : String?
+  - internalNotes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  - purchaseOrder : PurchaseOrder?
+  }
+  class GoodsReceipt {
+  - id : String <<PK>>
+  - tenantId : String
+  - receiptNumber : String <<UQ>>
+  - purchaseOrderId : String
+  - receivedDate : DateTime
+  - receivedBy : String
+  - items : Json
+  - status : String
+  - qualityStatus : String?
+  - warehouseLocation : String?
+  - notes : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - purchaseOrder : PurchaseOrder
+  }
+  class Payment {
+  - id : String <<PK>>
+  - tenantId : String
+  - paymentNumber : String <<UQ>>
+  - vendorId : String
+  - paymentDate : DateTime
+  - amount : Float
+  - paymentMethod : String
+  - referenceNumber : String?
+  - bankAccount : String?
+  - status : String
+  - clearedDate : DateTime?
+  - allocations : Json
+  - glPosted : Boolean
+  - glPostDate : DateTime?
+  - glJournalId : String?
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  }
+  class PurchaseOrder {
+  - id : String <<PK>>
+  - tenantId : String
+  - poNumber : String <<UQ>>
+  - requisitionId : String?
+  - vendorId : String
+  - title : String
+  - description : String?
+  - orderDate : DateTime
+  - expectedDeliveryDate : DateTime
+  - actualDeliveryDate : DateTime?
+  - status : String
+  - items : Json
+  - subtotal : Float
+  - taxAmount : Float
+  - discountAmount : Float
+  - shippingCost : Float
+  - totalAmount : Float
+  - paymentTerms : String?
+  - paymentStatus : String
+  - paidAmount : Float
+  - shippingAddress : String?
+  - shippingMethod : String?
+  - trackingNumber : String?
+  - approvalStatus : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - workflowId : String?
+  - notes : String?
+  - attachments : Json?
+  - internalNotes : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  - requisition : PurchaseRequisition?
+  - receipts : GoodsReceipt[]
+  - bills : APBill[]
+  }
+  class PurchaseRequisition {
+  - id : String <<PK>>
+  - tenantId : String
+  - requisitionNumber : String <<UQ>>
+  - requestedBy : String
+  - departmentId : String?
+  - vendorId : String?
+  - title : String
+  - description : String?
+  - priority : String
+  - requestedDate : DateTime
+  - requiredDate : DateTime
+  - status : String
+  - approvalStatus : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - rejectionReason : String?
+  - items : Json
+  - totalAmount : Float
+  - budgetCode : String?
+  - workflowId : String?
+  - notes : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor?
+  - purchaseOrders : PurchaseOrder[]
+  }
+  class SupplierEvaluation {
+  - id : String <<PK>>
+  - tenantId : String
+  - vendorId : String
+  - evaluatedBy : String
+  - evaluationDate : DateTime
+  - evaluationPeriod : String?
+  - qualityRating : Float
+  - deliveryRating : Float
+  - priceRating : Float
+  - serviceRating : Float
+  - communicationRating : Float
+  - overallRating : Float
+  - onTimeDeliveryRate : Float?
+  - defectRate : Float?
+  - responseTime : String?
+  - strengths : String?
+  - weaknesses : String?
+  - recommendations : String?
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  }
+  class Vendor {
+  - id : String <<PK>>
+  - tenantId : String
+  - vendorCode : String <<UQ>>
+  - name : String
+  - contactPerson : String?
+  - email : String?
+  - phone : String?
+  - address : String?
+  - city : String?
+  - state : String?
+  - country : String?
+  - postalCode : String?
+  - website : String?
+  - taxId : String?
+  - paymentTerms : String?
+  - creditLimit : Float?
+  - currency : String
+  - status : String
+  - category : String?
+  - bankName : String?
+  - accountNumber : String?
+  - swiftCode : String?
+  - rating : Float?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - purchaseRequisitions : PurchaseRequisition[]
+  - purchaseOrders : PurchaseOrder[]
+  - evaluations : SupplierEvaluation[]
+  - bills : APBill[]
+  - payments : Payment[]
+  }
+}
+
+package "Projects and Timesheets" {
+  class Project {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectCode : String <<UQ>>
+  - projectName : String
+  - description : String?
+  - clientName : String?
+  - projectManager : String
+  - status : String
+  - priority : String
+  - type : String?
+  - startDate : DateTime?
+  - endDate : DateTime?
+  - actualStartDate : DateTime?
+  - actualEndDate : DateTime?
+  - estimatedBudget : Float
+  - actualCost : Float
+  - progressPercent : Float
+  - totalPlannedHours : Float
+  - totalActualHours : Float
+  - totalResourceCost : Float
+  - budgetVariance : Float
+  - scheduleVariance : Int
+  - utilizationPercent : Float
+  - healthScore : String
+  - riskLevel : String
+  - departmentId : String?
+  - teamMembers : Json?
+  - documentFolderId : String?
+  - financeAccountId : String?
+  - customFields : Json?
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - department : Department?
+  - members : ProjectMember[]
+  - milestones : ProjectMilestone[]
+  - resources : ProjectResource[]
+  - budgets : ProjectBudget[]
+  - timeLogs : ProjectTimeLog[]
+  --
+  {static} @@index([status, priority])
+  {static} @@index([projectManager])
+  {static} @@index([departmentId])
+  {static} @@index([healthScore])
+  }
+  class ProjectBudget {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - category : String
+  - description : String?
+  - plannedAmount : Float
+  - actualAmount : Float
+  - variance : Float
+  - budgetPeriod : String?
+  - transactionDate : DateTime
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  }
+  class ProjectMember {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - employeeId : String
+  - userId : String?
+  - role : String
+  - allocationPercent : Float
+  - startDate : DateTime
+  - endDate : DateTime?
+  - status : String
+  - hourlyRate : Float?
+  - permissions : Json?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  --
+  {static} @@index([projectId])
+  {static} @@index([employeeId])
+  {static} @@index([tenantId])
+  {static} @@index([status])
+  }
+  class ProjectMilestone {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - milestoneName : String
+  - description : String?
+  - status : String
+  - startDate : DateTime?
+  - dueDate : DateTime?
+  - completedDate : DateTime?
+  - progressPercent : Float
+  - assignedTo : String?
+  - deliverables : Json?
+  - isCriticalPath : Boolean
+  - isAutoScheduled : Boolean
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  - predecessors : ProjectMilestoneDependency[]
+  - successors : ProjectMilestoneDependency[]
+  }
+  class ProjectMilestoneDependency {
+  - id : String <<PK>>
+  - tenantId : String
+  - predecessorId : String
+  - successorId : String
+  - dependencyType : String
+  - lagDays : Int
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - predecessor : ProjectMilestone
+  - successor : ProjectMilestone
+  --
+  {static} @@unique([predecessorId, successorId])
+  {static} @@index([tenantId])
+  }
+  class ProjectResource {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - resourceType : String
+  - resourceName : String
+  - employeeId : String?
+  - allocationPercent : Float
+  - startDate : DateTime?
+  - endDate : DateTime?
+  - costPerUnit : Float
+  - units : Float
+  - totalCost : Float
+  - plannedHours : Float
+  - actualHours : Float
+  - availableHours : Float
+  - quantity : Float
+  - quantityUsed : Float
+  - quantityUnit : String
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  --
+  {static} @@index([resourceType])
+  {static} @@index([employeeId])
+  }
+  class ProjectTimeLog {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - employeeId : String
+  - timesheetId : String?
+  - logDate : DateTime
+  - hoursWorked : Float
+  - taskDescription : String
+  - milestoneId : String?
+  - billable : Boolean
+  - hourlyRate : Float?
+  - totalCost : Float?
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  - timesheet : ProjectTimesheet?
+  --
+  {static} @@index([employeeId])
+  {static} @@index([projectId])
+  {static} @@index([timesheetId])
+  {static} @@index([status])
+  }
+  class ProjectTimesheet {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - weekStartDate : DateTime
+  - weekEndDate : DateTime
+  - status : String
+  - totalHours : Float
+  - billableHours : Float
+  - submittedAt : DateTime?
+  - submittedBy : String?
+  - approvedAt : DateTime?
+  - approvedBy : String?
+  - rejectedAt : DateTime?
+  - rejectedBy : String?
+  - rejectionReason : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - timeLogs : ProjectTimeLog[]
+  --
+  {static} @@unique([tenantId, employeeId, weekStartDate])
+  {static} @@index([employeeId])
+  {static} @@index([status])
+  {static} @@index([weekStartDate])
+  }
+}
+
+package "Assets Management" {
+  class Asset {
+  - id : String <<PK>>
+  - tenantId : String
+  - categoryId : String
+  - assetCode : String
+  - name : String
+  - description : String?
+  - purchaseDate : DateTime
+  - purchasePrice : Float
+  - vendor : String?
+  - invoiceNumber : String?
+  - serialNumber : String?
+  - model : String?
+  - manufacturer : String?
+  - location : String?
+  - status : String
+  - condition : String
+  - depreciationMethod : String?
+  - depreciationRate : Float?
+  - usefulLife : Int?
+  - salvageValue : Float?
+  - totalExpectedUnits : Int?
+  - unitsProducedToDate : Int?
+  - currentValue : Float?
+  - accumulatedDepreciation : Float?
+  - warrantyExpiry : DateTime?
+  - insuranceExpiry : DateTime?
+  - insuranceProvider : String?
+  - insurancePolicyNo : String?
+  - notes : String?
+  - tags : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - category : AssetCategory
+  - allocations : AssetAllocation[]
+  - maintenanceSchedules : AssetMaintenance[]
+  - depreciationRecords : AssetDepreciation[]
+  --
+  {static} @@unique([tenantId, assetCode])
+  }
+  class AssetAllocation {
+  - id : String <<PK>>
+  - tenantId : String
+  - assetId : String
+  - employeeId : String
+  - allocatedDate : DateTime
+  - returnDate : DateTime?
+  - expectedReturnDate : DateTime?
+  - status : String
+  - purpose : String?
+  - allocatedBy : String?
+  - location : String?
+  - returnCondition : String?
+  - returnNotes : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - asset : Asset
+  - employee : Employee
+  }
+  class AssetCategory {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - description : String?
+  - defaultDepreciationMethod : String?
+  - defaultDepreciationRate : Float?
+  - defaultUsefulLife : Int?
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - assets : Asset[]
+  --
+  {static} @@unique([tenantId, code])
+  }
+  class AssetDepreciation {
+  - id : String <<PK>>
+  - tenantId : String
+  - assetId : String
+  - period : DateTime
+  - year : Int
+  - month : Int
+  - openingValue : Float
+  - depreciationAmount : Float
+  - closingValue : Float
+  - accumulatedDepreciation : Float
+  - method : String
+  - rate : Float
+  - unitsProduced : Int?
+  - notes : String?
+  - createdAt : DateTime
+  - asset : Asset
+  --
+  {static} @@unique([tenantId, assetId, year, month])
+  }
+  class AssetMaintenance {
+  - id : String <<PK>>
+  - tenantId : String
+  - assetId : String
+  - maintenanceType : String
+  - scheduledDate : DateTime
+  - completedDate : DateTime?
+  - status : String
+  - statusBeforeMaintenance : String?
+  - description : String
+  - performedBy : String?
+  - cost : Float?
+  - conditionBefore : String?
+  - conditionAfter : String?
+  - nextMaintenanceDate : DateTime?
+  - notes : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - asset : Asset
+  }
+}
+
+package "Documents and Reports" {
+  class Document {
+  - id : String <<PK>>
+  - tenantId : String
+  - folderId : String?
+  - name : String
+  - description : String?
+  - fileName : String
+  - fileSize : Int
+  - mimeType : String
+  - storagePath : String
+  - storageProvider : String
+  - checksum : String?
+  - tags : String[]
+  - metadata : Json?
+  - version : Int
+  - isLatest : Boolean
+  - status : String
+  - isPublic : Boolean
+  - downloadCount : Int
+  - viewCount : Int
+  - isTemplate : Boolean
+  - templateId : String?
+  - createdBy : String
+  - updatedBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - folder : DocumentFolder?
+  - template : DocumentTemplate?
+  - versions : DocumentVersion[]
+  - shares : DocumentShare[]
+  - permissions : DocumentPermission[]
+  - activities : DocumentActivity[]
+  - comments : DocumentComment[]
+  --
+  {static} @@index([tenantId, folderId])
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, isTemplate])
+  }
+  class DocumentActivity {
+  - id : String <<PK>>
+  - documentId : String?
+  - shareId : String?
+  - tenantId : String
+  - userId : String?
+  - action : String
+  - details : Json?
+  - ipAddress : String?
+  - userAgent : String?
+  - createdAt : DateTime
+  - document : Document?
+  - share : DocumentShare?
+  --
+  {static} @@index([documentId])
+  {static} @@index([shareId])
+  {static} @@index([tenantId, userId])
+  {static} @@index([createdAt])
+  }
+  class DocumentComment {
+  - id : String <<PK>>
+  - documentId : String
+  - userId : String
+  - content : String
+  - parentId : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - document : Document
+  - parent : DocumentComment?
+  - replies : DocumentComment[]
+  --
+  {static} @@index([documentId])
+  {static} @@index([userId])
+  }
+  class DocumentFolder {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - parentId : String?
+  - path : String
+  - color : String?
+  - icon : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - parent : DocumentFolder?
+  - children : DocumentFolder[]
+  - documents : Document[]
+  - permissions : DocumentFolderPermission[]
+  --
+  {static} @@unique([tenantId, parentId, name])
+  {static} @@index([tenantId, parentId])
+  }
+  class DocumentFolderPermission {
+  - id : String <<PK>>
+  - folderId : String
+  - userId : String?
+  - roleId : String?
+  - canView : Boolean
+  - canEdit : Boolean
+  - canDelete : Boolean
+  - canCreate : Boolean
+  - canManage : Boolean
+  - createdAt : DateTime
+  - folder : DocumentFolder
+  --
+  {static} @@unique([folderId, userId])
+  {static} @@unique([folderId, roleId])
+  {static} @@index([folderId])
+  {static} @@index([userId])
+  {static} @@index([roleId])
+  }
+  class DocumentPermission {
+  - id : String <<PK>>
+  - documentId : String
+  - userId : String?
+  - roleId : String?
+  - canView : Boolean
+  - canEdit : Boolean
+  - canDelete : Boolean
+  - canShare : Boolean
+  - canManage : Boolean
+  - createdAt : DateTime
+  - document : Document
+  --
+  {static} @@unique([documentId, userId])
+  {static} @@unique([documentId, roleId])
+  {static} @@index([documentId])
+  {static} @@index([userId])
+  {static} @@index([roleId])
+  }
+  class DocumentShare {
+  - id : String <<PK>>
+  - documentId : String
+  - shareType : String
+  - shareToken : String? <<UQ>>
+  - expiresAt : DateTime?
+  - password : String?
+  - maxDownloads : Int?
+  - downloadCount : Int
+  - sharedWith : String?
+  - canView : Boolean
+  - canDownload : Boolean
+  - canEdit : Boolean
+  - canShare : Boolean
+  - isActive : Boolean
+  - createdBy : String
+  - createdAt : DateTime
+  - document : Document
+  - activities : DocumentActivity[]
+  --
+  {static} @@index([documentId])
+  {static} @@index([shareToken])
+  {static} @@index([sharedWith])
+  }
+  class DocumentTemplate {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - category : String?
+  - fileName : String
+  - storagePath : String
+  - fileSize : Int
+  - mimeType : String
+  - fields : Json?
+  - usageCount : Int
+  - isActive : Boolean
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - documents : Document[]
+  --
+  {static} @@index([tenantId, category])
+  }
+  class DocumentVersion {
+  - id : String <<PK>>
+  - documentId : String
+  - versionNumber : Int
+  - fileName : String
+  - fileSize : Int
+  - storagePath : String
+  - checksum : String?
+  - changeLog : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - document : Document
+  --
+  {static} @@unique([documentId, versionNumber])
+  {static} @@index([documentId])
+  }
+  class Report {
+  - id : String <<PK>>
+  - tenantId : String
+  - templateId : String?
+  - name : String
+  - type : String
+  - parameters : Json?
+  - data : Json?
+  - generatedBy : String?
+  - generatedAt : DateTime
+  - createdAt : DateTime
+  - template : ReportTemplate?
+  --
+  {static} @@index([tenantId, type])
+  {static} @@index([generatedAt])
+  }
+  class ReportSchedule {
+  - id : String <<PK>>
+  - tenantId : String
+  - templateId : String
+  - name : String
+  - frequency : String
+  - recipients : Json
+  - isActive : Boolean
+  - lastRunAt : DateTime?
+  - nextRunAt : DateTime?
+  - createdBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@index([tenantId])
+  {static} @@index([nextRunAt])
+  }
+  class ReportTemplate {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - type : String
+  - category : String?
+  - description : String?
+  - isSystem : Boolean
+  - isActive : Boolean
+  - config : Json
+  - createdBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - reports : Report[]
+  --
+  {static} @@index([tenantId, type])
+  }
+}
+
+package "Communication and Messaging" {
+  class Announcement {
+  - id : String <<PK>>
+  - tenantId : String
+  - title : String
+  - content : String
+  - priority : String
+  - targetType : String
+  - targetIds : Json?
+  - attachments : Json?
+  - publishedBy : String
+  - publishedAt : DateTime
+  - expiresAt : DateTime?
+  - isPinned : Boolean
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - reads : AnnouncementRead[]
+  --
+  {static} @@index([tenantId, isActive, publishedAt])
+  {static} @@index([tenantId, isPinned])
+  }
+  class AnnouncementRead {
+  - id : String <<PK>>
+  - announcementId : String
+  - userId : String
+  - readAt : DateTime
+  - announcement : Announcement
+  --
+  {static} @@unique([announcementId, userId])
+  {static} @@index([userId])
+  }
+  class ChatChannel {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - type : String
+  - departmentId : String?
+  - projectId : String?
+  - createdBy : String
+  - isArchived : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - members : ChatChannelMember[]
+  --
+  {static} @@index([tenantId, type, isArchived])
+  {static} @@index([departmentId])
+  {static} @@index([projectId])
+  }
+  class ChatChannelMember {
+  - id : String <<PK>>
+  - channelId : String
+  - userId : String
+  - role : String
+  - isMuted : Boolean
+  - joinedAt : DateTime
+  - channel : ChatChannel
+  --
+  {static} @@unique([channelId, userId])
+  {static} @@index([userId])
+  }
+  class Conversation {
+  - id : String <<PK>>
+  - tenantId : String
+  - type : String
+  - name : String?
+  - description : String?
+  - createdBy : String
+  - isArchived : Boolean
+  - lastMessageAt : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - messages : Message[]
+  - participants : ConversationParticipant[]
+  --
+  {static} @@index([tenantId, type])
+  {static} @@index([tenantId, lastMessageAt])
+  }
+  class ConversationParticipant {
+  - id : String <<PK>>
+  - conversationId : String
+  - userId : String
+  - role : String
+  - isMuted : Boolean
+  - lastReadAt : DateTime?
+  - joinedAt : DateTime
+  - conversation : Conversation
+  --
+  {static} @@unique([conversationId, userId])
+  {static} @@index([userId])
+  {static} @@index([conversationId])
+  }
+  class EmailLog {
+  - id : String <<PK>>
+  - tenantId : String
+  - to : String
+  - cc : String?
+  - bcc : String?
+  - subject : String
+  - body : String
+  - templateId : String?
+  - status : String
+  - sentAt : DateTime?
+  - failedAt : DateTime?
+  - errorMessage : String?
+  - metadata : Json?
+  - createdAt : DateTime
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([to])
+  {static} @@index([createdAt])
+  }
+  class EmailQueue {
+  - id : String <<PK>>
+  - tenantId : String
+  - to : String
+  - cc : String?
+  - bcc : String?
+  - subject : String
+  - body : String
+  - templateId : String?
+  - variables : Json?
+  - status : String
+  - priority : Int
+  - attempts : Int
+  - maxAttempts : Int
+  - scheduledAt : DateTime
+  - processingAt : DateTime?
+  - sentAt : DateTime?
+  - failedAt : DateTime?
+  - cancelledAt : DateTime?
+  - lastError : String?
+  - errorLog : Json?
+  - metadata : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([status, scheduledAt])
+  {static} @@index([priority, scheduledAt])
+  {static} @@index([createdAt])
+  }
+  class EmailTemplate {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - subject : String
+  - body : String
+  - variables : Json?
+  - isSystem : Boolean
+  - isActive : Boolean
+  - createdBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, code])
+  {static} @@index([tenantId, isActive])
+  }
+  class Message {
+  - id : String <<PK>>
+  - conversationId : String
+  - senderId : String
+  - content : String
+  - type : String
+  - attachments : Json?
+  - isEdited : Boolean
+  - isDeleted : Boolean
+  - mentionedUserIds : Json?
+  - replyToId : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - conversation : Conversation
+  - reactions : MessageReaction[]
+  - readReceipts : MessageReadReceipt[]
+  --
+  {static} @@index([conversationId, createdAt])
+  {static} @@index([senderId])
+  }
+  class MessageReaction {
+  - id : String <<PK>>
+  - messageId : String
+  - userId : String
+  - emoji : String
+  - createdAt : DateTime
+  - message : Message
+  --
+  {static} @@unique([messageId, userId, emoji])
+  {static} @@index([messageId])
+  }
+  class MessageReadReceipt {
+  - id : String <<PK>>
+  - messageId : String
+  - userId : String
+  - readAt : DateTime
+  - message : Message
+  --
+  {static} @@unique([messageId, userId])
+  {static} @@index([messageId])
+  {static} @@index([userId])
+  }
+}
+
+package "Inventory and Warehouse" {
+  class Item {
+  - id : String <<PK>>
+  - name : String
+  - sku : String
+  - price : Float
+  - quantity : Int
+  - description : String?
+  - category : String?
+  - tenantId : String
+  - createdAt : DateTime
+  - tenant : Tenant
+  --
+  {static} @@unique([sku, tenantId])
+  }
+  class LotBatch {
+  - id : String <<PK>>
+  - tenantId : String
+  - itemId : String
+  - lotNumber : String?
+  - batchNumber : String?
+  - serialNumber : String?
+  - manufacturingDate : DateTime?
+  - expiryDate : DateTime?
+  - quantity : Float
+  - remainingQty : Float
+  - supplier : String?
+  - purchaseOrderId : String?
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, lotNumber])
+  {static} @@index([tenantId, itemId])
+  {static} @@index([expiryDate])
+  }
+  class StockMovement {
+  - id : String <<PK>>
+  - tenantId : String
+  - movementNumber : String
+  - type : String
+  - reason : String?
+  - itemId : String
+  - fromWarehouseId : String?
+  - toWarehouseId : String?
+  - warehouseId : String?
+  - quantity : Float
+  - lotNumber : String?
+  - batchNumber : String?
+  - serialNumber : String?
+  - expiryDate : DateTime?
+  - referenceType : String?
+  - referenceId : String?
+  - unitCost : Float?
+  - totalCost : Float?
+  - status : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - notes : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - warehouse : Warehouse?
+  --
+  {static} @@unique([tenantId, movementNumber])
+  {static} @@index([tenantId, type, status])
+  {static} @@index([itemId])
+  {static} @@index([referenceType, referenceId])
+  }
+  class Warehouse {
+  - id : String <<PK>>
+  - tenantId : String
+  - branchId : String?
+  - code : String
+  - name : String
+  - type : String
+  - address : String?
+  - city : String?
+  - state : String?
+  - country : String?
+  - postalCode : String?
+  - capacity : Float?
+  - unit : String?
+  - managerId : String?
+  - phone : String?
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - branch : Branch?
+  - stockItems : WarehouseStock[]
+  - stockMovements : StockMovement[]
+  --
+  {static} @@unique([tenantId, code])
+  {static} @@index([tenantId, isActive])
+  }
+  class WarehouseStock {
+  - id : String <<PK>>
+  - tenantId : String
+  - warehouseId : String
+  - itemId : String
+  - quantity : Float
+  - reservedQty : Float
+  - availableQty : Float
+  - binLocation : String?
+  - zone : String?
+  - reorderPoint : Float?
+  - reorderQty : Float?
+  - minStock : Float?
+  - maxStock : Float?
+  - lastPurchasePrice : Float?
+  - avgCost : Float?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - warehouse : Warehouse
+  --
+  {static} @@unique([warehouseId, itemId])
+  {static} @@index([tenantId, itemId])
+  {static} @@index([warehouseId])
+  }
+}
+
+package "Accounting and Manufacturing" {
+  class BillOfMaterials {
+  - id : String <<PK>>
+  - tenantId : String
+  - bomNumber : String
+  - productId : String
+  - version : String
+  - name : String
+  - description : String?
+  - quantity : Float
+  - unit : String?
+  - materialCost : Float?
+  - laborCost : Float?
+  - overheadCost : Float?
+  - totalCost : Float?
+  - status : String
+  - isActive : Boolean
+  - isDefault : Boolean
+  - effectiveFrom : DateTime?
+  - effectiveTo : DateTime?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - items : BOMItem[]
+  - workOrders : WorkOrder[]
+  --
+  {static} @@unique([tenantId, bomNumber])
+  {static} @@index([tenantId, productId])
+  }
+  class BOMItem {
+  - id : String <<PK>>
+  - bomId : String
+  - itemId : String
+  - sequence : Int
+  - quantity : Float
+  - unit : String?
+  - warehouseId : String?
+  - unitCost : Float?
+  - totalCost : Float?
+  - alternativeItems : Json?
+  - scrapPercentage : Float?
+  - notes : String?
+  - createdAt : DateTime
+  - bom : BillOfMaterials
+  --
+  {static} @@index([bomId])
+  {static} @@index([itemId])
+  }
+  class ChartOfAccounts {
+  - id : String <<PK>>
+  - tenantId : String
+  - accountCode : String
+  - accountName : String
+  - accountType : String
+  - category : String?
+  - parentId : String?
+  - description : String?
+  - isActive : Boolean
+  - isSystem : Boolean
+  - normalBalance : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - parent : ChartOfAccounts?
+  - children : ChartOfAccounts[]
+  - journalEntries : JournalEntryLine[]
+  - ledgerEntries : LedgerEntry[]
+  --
+  {static} @@unique([tenantId, accountCode])
+  {static} @@index([tenantId, accountType])
+  }
+  class FiscalYear {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - startDate : DateTime
+  - endDate : DateTime
+  - isClosed : Boolean
+  - closedBy : String?
+  - closedAt : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, name])
+  {static} @@index([tenantId, startDate, endDate])
+  }
+  class JournalEntry {
+  - id : String <<PK>>
+  - tenantId : String
+  - entryNumber : String
+  - entryDate : DateTime
+  - postingDate : DateTime?
+  - type : String
+  - description : String
+  - referenceType : String?
+  - referenceId : String?
+  - status : String
+  - totalDebit : Float
+  - totalCredit : Float
+  - createdBy : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - postedBy : String?
+  - postedAt : DateTime?
+  - reversedBy : String?
+  - reversedAt : DateTime?
+  - reversingEntryId : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - lines : JournalEntryLine[]
+  --
+  {static} @@unique([tenantId, entryNumber])
+  {static} @@index([tenantId, status])
+  {static} @@index([entryDate])
+  }
+  class JournalEntryLine {
+  - id : String <<PK>>
+  - journalEntryId : String
+  - accountId : String
+  - lineNumber : Int
+  - description : String?
+  - debit : Float
+  - credit : Float
+  - departmentId : String?
+  - projectId : String?
+  - costCenter : String?
+  - createdAt : DateTime
+  - journalEntry : JournalEntry
+  - account : ChartOfAccounts
+  --
+  {static} @@index([journalEntryId])
+  {static} @@index([accountId])
+  }
+  class LedgerEntry {
+  - id : String <<PK>>
+  - tenantId : String
+  - accountId : String
+  - date : DateTime
+  - description : String
+  - debit : Float
+  - credit : Float
+  - balance : Float
+  - referenceType : String?
+  - referenceId : String?
+  - journalEntryId : String?
+  - createdAt : DateTime
+  - account : ChartOfAccounts
+  --
+  {static} @@index([tenantId, accountId, date])
+  {static} @@index([date])
+  }
+  class ProductionBatch {
+  - id : String <<PK>>
+  - tenantId : String
+  - workOrderId : String
+  - batchNumber : String
+  - productId : String
+  - quantity : Float
+  - unit : String?
+  - manufacturingDate : DateTime
+  - expiryDate : DateTime?
+  - qualityStatus : String
+  - qcBy : String?
+  - qcAt : DateTime?
+  - qcNotes : String?
+  - warehouseId : String?
+  - status : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, batchNumber])
+  {static} @@index([tenantId, workOrderId])
+  {static} @@index([productId])
+  }
+  class WorkOrder {
+  - id : String <<PK>>
+  - tenantId : String
+  - workOrderNumber : String
+  - bomId : String
+  - productId : String
+  - plannedQty : Float
+  - producedQty : Float
+  - scrappedQty : Float
+  - scheduledStart : DateTime?
+  - scheduledEnd : DateTime?
+  - actualStart : DateTime?
+  - actualEnd : DateTime?
+  - warehouseId : String?
+  - workCenter : String?
+  - status : String
+  - priority : String
+  - estimatedCost : Float?
+  - actualCost : Float?
+  - salesOrderId : String?
+  - projectId : String?
+  - assignedTo : String?
+  - notes : String?
+  - createdBy : String
+  - completedBy : String?
+  - completedAt : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - bom : BillOfMaterials
+  - operations : WorkOrderOperation[]
+  - materialUsage : WorkOrderMaterial[]
+  --
+  {static} @@unique([tenantId, workOrderNumber])
+  {static} @@index([tenantId, status])
+  {static} @@index([productId])
+  }
+  class WorkOrderMaterial {
+  - id : String <<PK>>
+  - workOrderId : String
+  - itemId : String
+  - plannedQty : Float
+  - issuedQty : Float
+  - consumedQty : Float
+  - returnedQty : Float
+  - warehouseId : String?
+  - unitCost : Float?
+  - totalCost : Float?
+  - status : String
+  - issuedBy : String?
+  - issuedAt : DateTime?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - workOrder : WorkOrder
+  --
+  {static} @@index([workOrderId])
+  {static} @@index([itemId])
+  }
+  class WorkOrderOperation {
+  - id : String <<PK>>
+  - workOrderId : String
+  - sequence : Int
+  - operationName : String
+  - description : String?
+  - workCenter : String?
+  - estimatedHours : Float?
+  - actualHours : Float?
+  - assignedTo : String?
+  - laborCost : Float?
+  - status : String
+  - startedAt : DateTime?
+  - completedAt : DateTime?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - workOrder : WorkOrder
+  --
+  {static} @@index([workOrderId])
+  }
+}
+
+package "Other Domain" {
+  class ExpenseCategory {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - active : Boolean
+  - createdAt : DateTime
+  - expenseClaims : ExpenseClaim[]
+  }
+  class ExpenseClaim {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - categoryId : String
+  - title : String
+  - amount : Float
+  - description : String?
+  - receiptUrl : String?
+  - expenseDate : DateTime
+  - status : String
+  - createdAt : DateTime
+  - employee : Employee
+  - category : ExpenseCategory
+  }
+}
+
+CompanyConfig "1" --> "1" Tenant : tenant
+Plan "1" --> "*" PlanModule : modules
+Plan "1" --> "*" Subscription : subscriptions
+PlanModule "1" --> "1" Plan : plan
+Subscription "1" --> "1" Tenant : tenant
+Subscription "1" --> "1" Plan : plan
+Subscription "1" --> "*" SubscriptionItem : items
+Subscription "1" --> "*" SubscriptionPayment : payments
+SubscriptionItem "1" --> "1" Subscription : subscription
+SubscriptionPayment "1" --> "1" Subscription : subscription
+User "1" --> "1" Tenant : tenant
+User "1" --> "0..1" Department : department
+User "1" --> "*" UserRole : roles
+User "1" --> "0..1" Employee : employee
+User "1" --> "*" Customer : customersOwned {CustomerOwner}
+User "1" --> "*" Contact : contactsOwned {ContactOwner}
+User "1" --> "*" Lead : leadsOwned {LeadOwner}
+User "1" --> "*" Deal : dealsOwned {DealOwner}
+User "1" --> "*" Communication : communicationsCreated {CommCreator}
+User "1" --> "*" Activity : activitiesAssigned {ActivityAssignee}
+User "1" --> "*" Activity : activitiesCreated {ActivityCreator}
+User "1" --> "*" CustomerNote : customerNotesCreated {NoteCreator}
+User "1" --> "*" Attachment : attachmentsUploaded {AttachmentUploader}
+Role "1" --> "*" RolePermission : permissions
+Role "1" --> "*" UserRole : users
+Permission "1" --> "*" RolePermission : roles
+RolePermission "1" --> "1" Role : role
+RolePermission "1" --> "1" Permission : permission
+UserRole "1" --> "1" User : user
+UserRole "1" --> "1" Role : role
+Department "1" --> "*" Employee : employees
+Department "1" --> "*" User : User
+Department "1" --> "*" Project : projects
+Workflow "1" --> "*" WorkflowStep : steps
+Workflow "1" --> "*" Approval : approvals
+WorkflowStep "1" --> "1" Workflow : workflow
+WorkflowStep "1" --> "*" Approval : approvals
+Tenant "1" --> "*" User : users
+Tenant "1" --> "0..1" CompanyConfig : config
+Tenant "1" --> "*" Subscription : subscriptions
+Tenant "1" --> "*" Item : items
+Tenant "1" --> "*" UserInvite : invites
+Tenant "1" --> "*" SalesQuotation : salesQuotations
+Tenant "1" --> "*" SalesOrder : salesOrders
+Tenant "1" --> "*" SalesInvoice : salesInvoices
+Tenant "1" --> "*" SalesOrderTracking : salesTrackings
+Item "1" --> "1" Tenant : tenant
+SalesQuotation "1" --> "1" Tenant : tenant
+SalesQuotation "1" --> "0..1" Customer : customer
+SalesQuotation "1" --> "0..1" Deal : deal
+SalesOrder "1" --> "1" Tenant : tenant
+SalesOrder "1" --> "0..1" Customer : customer
+SalesOrder "1" --> "0..1" Deal : deal
+SalesOrder "1" --> "*" SalesOrderTracking : tracking
+SalesInvoice "1" --> "1" Tenant : tenant
+SalesInvoice "1" --> "0..1" Customer : customer
+SalesInvoice "1" --> "0..1" Deal : deal
+SalesInvoice "1" --> "*" InvoicePayment : payments
+InvoicePayment "1" --> "1" SalesInvoice : invoice
+SalesOrderTracking "1" --> "1" Tenant : tenant
+SalesOrderTracking "1" --> "1" SalesOrder : order
+UserInvite "1" --> "1" Tenant : tenant
+Approval "1" --> "1" Workflow : workflow
+Approval "1" --> "0..1" WorkflowRequest : workflowRequest
+Approval "1" --> "0..1" WorkflowStep : workflowStep
+WorkflowRequest "1" --> "*" Approval : approvals
+Employee "1" --> "1" User : user
+Employee "1" --> "1" Department : department
+Employee "1" --> "0..1" Employee : manager {EmployeeManager}
+Employee "1" --> "*" Employee : reports {EmployeeManager}
+Employee "1" --> "*" ExpenseClaim : expenseClaims
+Employee "1" --> "*" LeaveRequest : LeaveRequest
+Employee "1" --> "*" Task : tasks
+Employee "1" --> "*" Task : assignedTasks {TaskAssigner}
+Employee "1" --> "0..1" SalaryStructure : salaryStructure
+Employee "1" --> "*" WorkReport : workReports
+Employee "1" --> "*" Notification : notifications
+Employee "1" --> "*" Payslip : payslips
+Employee "1" --> "*" SalaryDisbursement : disbursements
+Employee "1" --> "*" Attendance : attendance
+Employee "1" --> "*" ShiftAssignment : shiftAssignments
+Employee "1" --> "*" TimeTracking : timeTracking
+Employee "1" --> "*" OvertimeRecord : overtimeRecords {EmployeeOvertime}
+Employee "1" --> "*" AttendanceReport : attendanceReports {EmployeeAttendanceReport}
+Employee "1" --> "*" LeaveIntegration : leaveIntegrations {EmployeeLeaveIntegration}
+Employee "1" --> "*" AssetAllocation : assetAllocations
+LeaveType "1" --> "*" LeaveRequest : leaveRequests
+LeaveRequest "1" --> "1" Employee : employee
+LeaveRequest "1" --> "1" LeaveType : leaveType
+ExpenseCategory "1" --> "*" ExpenseClaim : expenseClaims
+ExpenseClaim "1" --> "1" Employee : employee
+ExpenseClaim "1" --> "1" ExpenseCategory : category
+Task "1" --> "1" Employee : employee
+Task "1" --> "1" Employee : assigner {TaskAssigner}
+Task "1" --> "*" WorkReport : reports
+SalaryStructure "1" --> "1" Employee : employee
+WorkReport "1" --> "1" Employee : employee
+WorkReport "1" --> "0..1" Task : task
+Notification "1" --> "1" Employee : employee
+Customer "1" --> "*" Contact : contacts
+Customer "1" --> "*" Deal : deals
+Customer "1" --> "*" Communication : communications
+Customer "1" --> "*" Lead : leads
+Customer "1" --> "*" Activity : activities
+Customer "1" --> "*" CustomerNote : customerNotes
+Customer "1" --> "*" Attachment : attachments
+Customer "1" --> "*" SalesQuotation : salesQuotations
+Customer "1" --> "*" SalesOrder : salesOrders
+Customer "1" --> "*" SalesInvoice : salesInvoices
+Customer "1" --> "0..1" User : owner {CustomerOwner}
+Contact "1" --> "1" Customer : customer
+Contact "1" --> "*" Communication : communications
+Contact "1" --> "*" Lead : leads
+Contact "1" --> "*" Activity : activities
+Contact "1" --> "0..1" User : owner {ContactOwner}
+Lead "1" --> "0..1" Customer : customer
+Lead "1" --> "0..1" Contact : contact
+Lead "1" --> "*" Communication : communications
+Lead "1" --> "*" Activity : activities
+Lead "1" --> "0..1" Deal : deal {LeadDeal}
+Lead "1" --> "0..1" User : owner {LeadOwner}
+Deal "1" --> "1" Customer : customer
+Deal "1" --> "*" SalesQuotation : salesQuotations
+Deal "1" --> "*" SalesOrder : salesOrders
+Deal "1" --> "*" SalesInvoice : salesInvoices
+Deal "1" --> "*" Communication : communications
+Deal "1" --> "*" Activity : activities
+Deal "1" --> "*" Attachment : attachments
+Deal "1" --> "*" Lead : leadConverted {LeadDeal}
+Deal "1" --> "0..1" User : owner {DealOwner}
+Deal "1" --> "0..1" Pipeline : pipeline
+Communication "1" --> "0..1" Customer : customer
+Communication "1" --> "0..1" Contact : contact
+Communication "1" --> "0..1" Lead : lead
+Communication "1" --> "0..1" Deal : deal
+Communication "1" --> "0..1" Activity : activity
+Communication "1" --> "*" Attachment : attachments
+Communication "1" --> "0..1" User : creator {CommCreator}
+Pipeline "1" --> "*" PipelineStage : stages
+Pipeline "1" --> "*" Deal : deals
+PipelineStage "1" --> "1" Pipeline : pipeline
+Activity "1" --> "0..1" Customer : customer
+Activity "1" --> "0..1" Contact : contact
+Activity "1" --> "0..1" Lead : lead
+Activity "1" --> "0..1" Deal : deal
+Activity "1" --> "*" Communication : communications
+Activity "1" --> "0..1" User : assignee {ActivityAssignee}
+Activity "1" --> "1" User : creator {ActivityCreator}
+CustomerNote "1" --> "1" Customer : customer
+CustomerNote "1" --> "1" User : creator {NoteCreator}
+Attachment "1" --> "0..1" Customer : customer
+Attachment "1" --> "0..1" Deal : deal
+Attachment "1" --> "0..1" Communication : communication
+Attachment "1" --> "1" User : uploader {AttachmentUploader}
+Vendor "1" --> "*" PurchaseRequisition : purchaseRequisitions
+Vendor "1" --> "*" PurchaseOrder : purchaseOrders
+Vendor "1" --> "*" SupplierEvaluation : evaluations
+Vendor "1" --> "*" APBill : bills {VendorBills}
+Vendor "1" --> "*" Payment : payments {VendorPayments}
+PurchaseRequisition "1" --> "0..1" Vendor : vendor
+PurchaseRequisition "1" --> "*" PurchaseOrder : purchaseOrders
+PurchaseOrder "1" --> "1" Vendor : vendor
+PurchaseOrder "1" --> "0..1" PurchaseRequisition : requisition
+PurchaseOrder "1" --> "*" GoodsReceipt : receipts
+PurchaseOrder "1" --> "*" APBill : bills {POBills}
+GoodsReceipt "1" --> "1" PurchaseOrder : purchaseOrder
+SupplierEvaluation "1" --> "1" Vendor : vendor
+APBill "1" --> "1" Vendor : vendor {VendorBills}
+APBill "1" --> "0..1" PurchaseOrder : purchaseOrder {POBills}
+Payment "1" --> "1" Vendor : vendor {VendorPayments}
+Project "1" --> "0..1" Department : department
+Project "1" --> "*" ProjectMember : members
+Project "1" --> "*" ProjectMilestone : milestones
+Project "1" --> "*" ProjectResource : resources
+Project "1" --> "*" ProjectBudget : budgets
+Project "1" --> "*" ProjectTimeLog : timeLogs
+ProjectMember "1" --> "1" Project : project
+ProjectMilestone "1" --> "1" Project : project
+ProjectMilestone "1" --> "*" ProjectMilestoneDependency : predecessors {SuccessorDependencies}
+ProjectMilestone "1" --> "*" ProjectMilestoneDependency : successors {PredecessorDependencies}
+ProjectMilestoneDependency "1" --> "1" ProjectMilestone : predecessor {PredecessorDependencies}
+ProjectMilestoneDependency "1" --> "1" ProjectMilestone : successor {SuccessorDependencies}
+ProjectResource "1" --> "1" Project : project
+ProjectBudget "1" --> "1" Project : project
+ProjectTimeLog "1" --> "1" Project : project
+ProjectTimeLog "1" --> "0..1" ProjectTimesheet : timesheet
+ProjectTimesheet "1" --> "*" ProjectTimeLog : timeLogs
+Attendance "1" --> "1" Employee : employee
+PayrollCycle "1" --> "*" Payslip : payslips
+PayrollCycle "1" --> "*" SalaryDisbursement : disbursements
+Payslip "1" --> "1" Employee : employee
+Payslip "1" --> "1" PayrollCycle : payrollCycle
+SalaryDisbursement "1" --> "1" PayrollCycle : payrollCycle
+SalaryDisbursement "1" --> "1" Employee : employee
+Shift "1" --> "*" ShiftAssignment : shiftAssignments
+Shift "1" --> "*" OvertimePolicy : overtimePolicies
+ShiftAssignment "1" --> "1" Employee : employee
+ShiftAssignment "1" --> "1" Shift : shift
+TimeTracking "1" --> "1" Employee : employee
+OvertimePolicy "1" --> "0..1" Shift : shift
+OvertimePolicy "1" --> "*" OvertimeRecord : overtimeRecords
+OvertimeRecord "1" --> "1" Employee : employee {EmployeeOvertime}
+OvertimeRecord "1" --> "1" OvertimePolicy : overtimePolicy
+AttendanceReport "1" --> "1" Employee : employee {EmployeeAttendanceReport}
+LeaveIntegration "1" --> "1" Employee : employee {EmployeeLeaveIntegration}
+AssetCategory "1" --> "*" Asset : assets
+Asset "1" --> "1" AssetCategory : category
+Asset "1" --> "*" AssetAllocation : allocations
+Asset "1" --> "*" AssetMaintenance : maintenanceSchedules
+Asset "1" --> "*" AssetDepreciation : depreciationRecords
+AssetAllocation "1" --> "1" Asset : asset
+AssetAllocation "1" --> "1" Employee : employee
+AssetMaintenance "1" --> "1" Asset : asset
+AssetDepreciation "1" --> "1" Asset : asset
+DocumentFolder "1" --> "0..1" DocumentFolder : parent {FolderHierarchy}
+DocumentFolder "1" --> "*" DocumentFolder : children {FolderHierarchy}
+DocumentFolder "1" --> "*" Document : documents
+DocumentFolder "1" --> "*" DocumentFolderPermission : permissions
+Document "1" --> "0..1" DocumentFolder : folder
+Document "1" --> "0..1" DocumentTemplate : template
+Document "1" --> "*" DocumentVersion : versions
+Document "1" --> "*" DocumentShare : shares
+Document "1" --> "*" DocumentPermission : permissions
+Document "1" --> "*" DocumentActivity : activities
+Document "1" --> "*" DocumentComment : comments
+DocumentVersion "1" --> "1" Document : document
+DocumentTemplate "1" --> "*" Document : documents
+DocumentShare "1" --> "1" Document : document
+DocumentShare "1" --> "*" DocumentActivity : activities
+DocumentPermission "1" --> "1" Document : document
+DocumentFolderPermission "1" --> "1" DocumentFolder : folder
+DocumentActivity "1" --> "0..1" Document : document
+DocumentActivity "1" --> "0..1" DocumentShare : share
+DocumentComment "1" --> "1" Document : document
+DocumentComment "1" --> "0..1" DocumentComment : parent {CommentThread}
+DocumentComment "1" --> "*" DocumentComment : replies {CommentThread}
+ReportTemplate "1" --> "*" Report : reports
+Report "1" --> "0..1" ReportTemplate : template
+Conversation "1" --> "*" Message : messages
+Conversation "1" --> "*" ConversationParticipant : participants
+ConversationParticipant "1" --> "1" Conversation : conversation
+Message "1" --> "1" Conversation : conversation
+Message "1" --> "*" MessageReaction : reactions
+Message "1" --> "*" MessageReadReceipt : readReceipts
+MessageReaction "1" --> "1" Message : message
+MessageReadReceipt "1" --> "1" Message : message
+Announcement "1" --> "*" AnnouncementRead : reads
+AnnouncementRead "1" --> "1" Announcement : announcement
+ChatChannel "1" --> "*" ChatChannelMember : members
+ChatChannelMember "1" --> "1" ChatChannel : channel
+Branch "1" --> "*" Warehouse : warehouses
+Warehouse "1" --> "0..1" Branch : branch
+Warehouse "1" --> "*" WarehouseStock : stockItems
+Warehouse "1" --> "*" StockMovement : stockMovements
+WarehouseStock "1" --> "1" Warehouse : warehouse
+StockMovement "1" --> "0..1" Warehouse : warehouse
+ChartOfAccounts "1" --> "0..1" ChartOfAccounts : parent {AccountHierarchy}
+ChartOfAccounts "1" --> "*" ChartOfAccounts : children {AccountHierarchy}
+ChartOfAccounts "1" --> "*" JournalEntryLine : journalEntries
+ChartOfAccounts "1" --> "*" LedgerEntry : ledgerEntries
+JournalEntry "1" --> "*" JournalEntryLine : lines
+JournalEntryLine "1" --> "1" JournalEntry : journalEntry
+JournalEntryLine "1" --> "1" ChartOfAccounts : account
+LedgerEntry "1" --> "1" ChartOfAccounts : account
+BillOfMaterials "1" --> "*" BOMItem : items
+BillOfMaterials "1" --> "*" WorkOrder : workOrders
+BOMItem "1" --> "1" BillOfMaterials : bom
+WorkOrder "1" --> "1" BillOfMaterials : bom
+WorkOrder "1" --> "*" WorkOrderOperation : operations
+WorkOrder "1" --> "*" WorkOrderMaterial : materialUsage
+WorkOrderOperation "1" --> "1" WorkOrder : workOrder
+WorkOrderMaterial "1" --> "1" WorkOrder : workOrder
+@enduml

@@ -1,0 +1,31 @@
+@startuml UEORMS_Sequence_14
+!pragma teoz true
+autonumber
+hide footbox
+
+boundary "Web/Mobile Client" as Client
+control "Auth + RBAC\n(requireAuth / permission middleware)" as AuthRBAC
+control "Realtime Gateway\n(WebSocket /ws)" as RT
+control "Notification Service" as Notify
+control "Email Service + Queue" as Email
+control "Scheduler (cron jobs)" as Scheduler
+control "Attendance Service" as Attend
+control "Assets Services\n(asset/allocation/maintenance/depreciation)" as Assets
+database "PostgreSQL via Prisma" as DB
+
+== 14) Realtime and Scheduled System Activities ==
+Client -> RT : connect /ws?token=JWT and subscribe endpoints
+RT -> AuthRBAC : token verify + user resolve
+AuthRBAC -> DB : user/tenant lookup
+RT --> Client : connected + live stream
+
+Scheduler -> Assets : midnight overdue allocation scan
+Assets -> DB : find and mark overdue allocations
+Assets -> Notify : create overdue notifications
+Assets -> Email : send overdue emails
+
+Scheduler -> Attend : end-of-day absent marking
+Attend -> DB : create ABSENT records when no attendance + no approved leave
+
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml UEORMS_Sequence_01
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Guest
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Auth + RBAC\n(requireAuth / permission middleware)" as AuthRBAC
+control "Email Service + Queue" as Email
+control "Billing Service" as Billing
+database "PostgreSQL via Prisma" as DB
+
+== 1) Onboarding, Authentication, and Subscription ==
+Guest -> Client : Register / Register+Checkout
+Client -> API : POST /api/auth/register or /register/checkout
+API -> Billing : fetch public plans / create pending registration
+Billing -> DB : Plan, PendingRegistration, Subscription init
+DB --> Billing : plan + registration context
+Billing --> API : plan decision + payment context
+API -> AuthRBAC : create tenant/admin user + hash password + issue JWT
+AuthRBAC -> DB : Tenant, User, Role/UserRole inserts
+DB --> AuthRBAC : user + tenant created
+AuthRBAC --> API : token + identity
+API -> Email : send welcome/verification
+API --> Client : onboarding success + JWT
+
+Guest -> Client : Login
+Client -> API : POST /api/auth/login
+API -> AuthRBAC : validate credentials + roles + permissions
+AuthRBAC -> DB : User + RolePermission lookup
+DB --> AuthRBAC : auth context
+AuthRBAC --> API : JWT + claims
+API --> Client : login success
+
+Guest -> Client : Forgot password
+Client -> API : POST /api/auth/forgot-password -> verify-otp -> reset-password
+API -> AuthRBAC : OTP reset flow
+AuthRBAC -> DB : PasswordReset + User update
+API -> Email : send OTP mail
+API --> Client : password reset completed
+
+
+@enduml

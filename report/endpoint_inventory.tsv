@@ -1,0 +1,57 @@
+TOTAL_ENDPOINTS=606
+49	backend/src/modules/crm/crm.routes.js	POST /customers; GET /customers; GET /customers/:id; PUT /customers/:id
+47	backend/src/modules/communication/communication.routes.js	GET /conversations; GET /conversations/:id; POST /conversations; PUT /conversations/:id
+33	backend/src/modules/purchase/purchase.routes.js	GET /vendors; GET /vendors/:id; POST /vendors; PUT /vendors/:id
+32	backend/src/modules/sales/sales.routes.js	GET /quotations; POST /quotations; PUT /quotations/:id; DELETE /quotations/:id
+27	backend/src/modules/documents/document.routes.js	GET /statistics; POST /upload; POST /folders; GET /folders
+27	backend/src/modules/manufacturing/manufacturing.routes.js	POST /bom; GET /bom; GET /bom/:id; GET /bom/product/:productId
+26	backend/src/routes/missing-routes.js	GET /attendance; GET /attendance/summary; GET /tasks/manager; GET /tasks/team
+25	backend/src/modules/finance/accounting.routes.js	POST /chart-of-accounts; GET /chart-of-accounts; GET /chart-of-accounts/hierarchy; POST /chart-of-accounts/initialize
+23	backend/src/modules/projects/project.routes.js	GET /dashboard; GET /tasks; POST /; GET /
+21	backend/src/modules/ap/ap.routes.js	GET /bills; GET /bills/:id; POST /bills; PUT /bills/:id
+19	backend/src/modules/hr/payroll.routes.js	POST /components; GET /components; PUT /components/:id; POST /tax-config
+17	backend/src/modules/hr/employee.routes.js	POST /; PUT /:id; DELETE /:id; POST /assign-manager
+17	backend/src/modules/subscription/billing.routes.js	GET /public/plans; GET /subscription; GET /plans; POST /subscription/change-plan
+16	backend/src/modules/hr/attendance.routes.js	POST /clock-in; POST /clock-out; GET /clock-status/:employeeId; POST /shifts
+14	backend/src/modules/projects/timesheet.routes.js	GET /get-or-create; POST /; GET /; GET /summary
+13	backend/src/modules/reports/report.routes.js	GET /financial/profit-loss; GET /financial/balance-sheet; GET /hr/analytics; GET /inventory
+11	backend/src/modules/assets/asset.routes.js	POST /categories; GET /categories; GET /categories/:id; PUT /categories/:id
+10	backend/src/modules/company/branch.routes.js	POST /; GET /; GET /main; GET /:id
+10	backend/src/modules/integration/integration.routes.js	POST /sync-inventory/:movementId; POST /sync-sales/:orderId; POST /sync-payroll/:cycleId; POST /sync-manufacturing/:workOrderId
+10	backend/src/modules/inventory/warehouse.routes.js	POST /; GET /; GET /:id; PUT /:id
+10	backend/src/modules/reports/reporting.routes.js	GET /dashboard-summary; GET /income-statement; GET /balance-sheet; GET /inventory-summary
+10	backend/src/modules/utils/data-import-export.routes.js	POST /import/items; POST /import/warehouses; POST /import/journal-entries; GET /export/items
+9	backend/src/modules/assets/maintenance.routes.js	POST /; GET /; GET /upcoming; GET /overdue
+9	backend/src/modules/projects/project-member.routes.js	POST /:projectId/members; POST /:projectId/members/bulk; GET /:projectId/members; GET /:projectId/members/capacity
+8	backend/src/core/rbac/rbac.routes.js	GET /roles; GET /permissions; GET /users/:userId/permissions; GET /my-permissions
+8	backend/src/modules/assets/allocation.routes.js	POST /; GET /; GET /my-allocations; GET /overdue
+7	backend/src/core/workflow/approval.routes.js	GET /debug; POST /seed-workflows; POST /create-test-workflow; GET /
+7	backend/src/modules/hr/disbursement.routes.js	POST /; GET /; GET /stats; PATCH /:id/status
+7	backend/src/modules/inventory/stock-movement.routes.js	POST /; GET /; GET /statistics; GET /:id
+7	backend/src/routes/dashboard.routes.js	GET /stats; GET /activities; GET /user; GET /manager
+6	backend/src/modules/company/companyRoutes.js	GET /workflow-templates; POST /setup; PUT /config; GET /config
+6	backend/src/modules/inventory/inventory.routes.js	GET /debug/workflow; POST /; GET /; GET /:id
+5	backend/src/modules/assets/depreciation.routes.js	POST /calculate/:assetId; POST /calculate-all; GET /history/:assetId; GET /summary
+5	backend/src/modules/finance/finance.routes.js	GET /dashboard; GET /expense-categories; POST /expense-categories; GET /expense-claims
+5	backend/src/modules/hr/leaveType.routes.js	POST /; GET /; GET /:id; PUT /:id
+5	backend/src/modules/hr/task.routes.js	POST /; GET /; GET /manager; GET /team
+5	backend/src/users/user.routes.js	POST /; GET /; PUT /:id; DELETE /:id
+4	backend/src/core/auth/auth.routes.js	POST /register; POST /register/checkout; POST /login; GET /me
+4	backend/src/core/department/department.routes.js	POST /; GET /; PUT /:id; DELETE /:id
+4	backend/src/core/system/systemOptions.routes.js	GET /:category; POST /; PUT /:id; DELETE /:id
+3	backend/src/core/audit/audit.routes.js	POST /test; GET /; GET /:id
+3	backend/src/modules/auth/passwordReset.routes.js	POST /forgot-password; POST /verify-otp; POST /reset-password
+3	backend/src/modules/hr/leaveRequest.routes.js	POST /; GET /; PUT /:id
+3	backend/src/modules/notifications/notification.routes.js	GET /; PUT /:id/read; PUT /mark-all-read
+2	backend/src/invites/invite.routes.js	POST /; POST /accept
+2	backend/src/modules/finance/expenseCategory.routes.js	POST /; GET /
+2	backend/src/modules/finance/expenseClaim.routes.js	POST /; GET /
+2	backend/src/routes/realtime.routes.js	POST /test/dashboard-stats; POST /test/activity
+1	backend/src/core/workflow/workflow.routes.js	POST /approve
+1	backend/src/modules/hr/employee.dashboard.routes.js	GET /dashboard
+1	backend/src/routes/admin.routes.js	GET /
+1	backend/src/routes/db-test.routes.js	GET /
+1	backend/src/routes/finance-dashboard.routes.js	GET /
+1	backend/src/routes/health.routes.js	GET /
+1	backend/src/routes/protected.routes.js	GET /
+1	backend/src/routes/seed.routes.js	POST /seed

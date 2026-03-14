@@ -1,0 +1,235 @@
+@startmindmap UEORMS_Full_Navigation_Chart
+title UEORMS Full Navigation Chart (Project + Report Complete Coverage)
+
+skinparam monochrome false
+skinparam defaultFontName Courier
+
+* UEORMS Navigation Chart
+** Evidence Sources
+*** frontend/src/App.jsx (111 routed paths)
+*** frontend/src/components/layout/Sidebar.jsx (role-based menu filtering)
+*** frontend/src/pages/Dashboard.jsx (role to dashboard resolver)
+*** frontend/src/auth/Login.jsx (billing check and post-login redirect)
+*** report/old_project_report_extracted.txt (Figure 4.1 and navigation narrative)
+*** backend/src/app.js + UEORMS_ROUTE_INVENTORY.md (module operation mapping)
+
+** Report Navigation Intent
+*** Figure 4.1: Login to module operations to reporting
+*** User manual: open module menus from sidebar
+*** Role-based dashboard and workflow navigation
+
+** Entry and Access Flow
+*** Public Routes
+**** / (Landing)
+**** /login
+**** /register
+**** /forgot-password
+**** /accept-invite
+**** /theme-demo
+*** Login Outcome
+**** Authenticate credentials
+**** Fetch billing subscription status
+***** ACTIVE -> /dashboard
+***** NON_ACTIVE -> /subscription/billing then /dashboard
+*** ProtectedRoute Guard
+**** Authenticated request -> allow target route
+**** Unauthenticated request -> redirect to /
+
+** Dashboard Hub
+*** Route: /dashboard
+*** Role-to-dashboard resolver
+**** ADMIN -> AdminDashboard
+**** MANAGER -> ManagerDashboard
+**** HR_MANAGER -> HRManagerDashboard
+**** HR_STAFF -> HRStaffDashboard
+**** FINANCE_MANAGER -> FinanceManagerDashboard
+**** ACCOUNTANT -> AccountantDashboard
+**** INVENTORY_MANAGER -> InventoryManagerDashboard
+**** WAREHOUSE_STAFF -> WarehouseStaffDashboard
+**** SALES_MANAGER -> SalesManagerDashboard
+**** SALES_STAFF -> SalesStaffDashboard
+**** PURCHASE_MANAGER -> PurchaseManagerDashboard
+**** PROJECT_MANAGER -> ProjectManagerDashboard
+**** EMPLOYEE -> EmployeeDashboard
+**** USER -> UserDashboard
+
+** Sidebar Navigation Control
+*** Menu visibility depends on
+**** User role
+**** Enabled module list (tenant config.enabledModules)
+**** Duplicate path removal by unique path key
+*** Sidebar coverage highlights
+**** Dashboard, modules, approvals, reports, notifications
+**** Admin-only controls
+***** /role-management
+***** /roles
+***** /company
+***** /system-options
+***** /audit
+
+** Protected Route Tree (All Routed Pages: 111)
+*** Core Access (3)
+**** /dashboard
+**** /invite
+**** /users
+
+*** Inventory and Warehouse (9)
+**** /inventory
+**** /inventory/approvals
+**** /inventory-dashboard
+**** /stock-movements
+**** /warehouse
+**** /warehouse/dispatch
+**** /warehouse/receipts
+**** /warehouses
+**** /warehouses/dashboard
+
+*** Manufacturing (2)
+**** /manufacturing/boms
+**** /manufacturing/work-orders
+
+*** HR and Payroll (12)
+**** /hr
+**** /hr/approvals
+**** /hr/attendance
+**** /hr/employees
+**** /hr/leave-requests
+**** /hr/leave-types
+**** /hr/payroll
+**** /hr/payroll/cycles
+**** /hr/payroll/cycles/:id
+**** /hr/payroll/disbursements
+**** /hr/payroll/payslips/:id
+**** /hr/salary-management
+
+*** Employee Self Service (5)
+**** /employee
+**** /employee/dashboard
+**** /employee/leave-request
+**** /employee/tasks
+**** /employee/work-reports
+
+*** Finance and Accounting (13)
+**** /accounting/chart-of-accounts
+**** /accounting/charts
+**** /accounting/general-ledger
+**** /accounting/journal
+**** /accounting/journal-entry
+**** /accounting/ledger
+**** /accounting/reports
+**** /finance
+**** /finance/approvals
+**** /finance/expense-categories
+**** /finance/expense-claims
+**** /subscription/billing
+**** /subscription/pricing
+
+*** CRM and Sales (14)
+**** /crm
+**** /crm/communications
+**** /crm/contacts
+**** /crm/customers
+**** /crm/customers/:id
+**** /crm/deals/:id
+**** /crm/leads
+**** /crm/leads/:id
+**** /crm/pipeline
+**** /sales/analytics
+**** /sales/invoices
+**** /sales/orders
+**** /sales/quotations
+**** /sales/tracking
+
+*** Purchase and AP (9)
+**** /ap/aging
+**** /ap/bills
+**** /ap/payments
+**** /purchase/analytics
+**** /purchase/evaluations
+**** /purchase/orders
+**** /purchase/receipts
+**** /purchase/requisitions
+**** /purchase/vendors
+
+*** Projects and Timesheets (5)
+**** /projects
+**** /projects/:id
+**** /projects/timesheet/approvals
+**** /projects/timesheet/entry
+**** /projects/timesheet/my
+
+*** Assets and Documents (9)
+**** /assets
+**** /assets/:id/edit
+**** /assets/allocations
+**** /assets/categories
+**** /assets/depreciation
+**** /assets/list
+**** /assets/maintenance
+**** /assets/new
+**** /documents
+
+*** Communication (3)
+**** /communication/announcements
+**** /communication/channels
+**** /communication/messages
+
+*** Workflow and Approvals (5)
+**** /approval-dashboard
+**** /approval-queue
+**** /approvals
+**** /approvals/dashboard
+**** /workflows
+
+*** Reports and Audit (8)
+**** /audit
+**** /reports
+**** /reports/custom
+**** /reports/financial/balance-sheet
+**** /reports/financial/profit-loss
+**** /reports/hr/analytics
+**** /reports/inventory
+**** /reports/saved/:id
+
+*** System and Admin Config (8)
+**** /company
+**** /company/setup
+**** /departments
+**** /notifications
+**** /permissions
+**** /role-management
+**** /roles
+**** /system-options
+
+** Backend Module Operation Mapping (for UI navigation targets)
+*** Core and Identity APIs
+**** /api/auth
+**** /api/users
+**** /api/invites
+**** /api/rbac
+**** /api/departments
+**** /api/company
+**** /api/branches
+**** /api/system-options
+**** /api/dashboard
+*** Domain APIs
+**** /api/inventory /api/items /api/warehouses /api/stock-movements
+**** /api/manufacturing
+**** /api/employees /api/leave-types /api/leave-requests /api/attendance /api/tasks /api/payroll
+**** /api/finance /api/accounting /api/expense-categories /api/expense-claims /api/finance-dashboard
+**** /api/crm /api/sales
+**** /api/purchase /api/ap
+**** /api/projects /api/timesheets
+**** /api/assets /api/asset-allocations /api/asset-maintenance /api/asset-depreciation
+**** /api/documents /api/communication
+**** /api/workflows /api/approvals /api/notifications /api/audit-logs
+**** /api/reports /api/reporting
+**** /api/data /api/integration
+**** /api/billing
+
+** Session Exit
+*** Sign out from sidebar
+**** Remove token
+**** Redirect to /
+
+@endmindmap

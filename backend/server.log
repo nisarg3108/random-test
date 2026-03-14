@@ -1,0 +1,2055 @@
+Integration event listeners initialized
+🌱 Starting permission and role seeding...
+📝 Seeding 118 permissions...
+✅ Permissions seeded successfully
+🏢 Found 10 tenants
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🔄 Seeding roles for tenant: undefined
+  📋 Creating role: Administrator
+    ✓ 118 permissions assigned
+  📋 Creating role: HR Manager
+    ✓ 32 permissions assigned
+  📋 Creating role: HR Staff
+    ✓ 11 permissions assigned
+  📋 Creating role: Finance Manager
+    ✓ 26 permissions assigned
+  📋 Creating role: Accountant
+    ✓ 10 permissions assigned
+  📋 Creating role: Inventory Manager
+    ✓ 18 permissions assigned
+  📋 Creating role: Warehouse Staff
+    ✓ 6 permissions assigned
+  📋 Creating role: Sales Manager
+    ✓ 30 permissions assigned
+  📋 Creating role: Sales Staff
+    ✓ 17 permissions assigned
+  📋 Creating role: Purchase Manager
+    ✓ 13 permissions assigned
+  📋 Creating role: Project Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Manager
+    ✓ 14 permissions assigned
+  📋 Creating role: Employee
+    ✓ 10 permissions assigned
+  📋 Creating role: Basic User
+    ✓ 2 permissions assigned
+
+🎉 All permissions and roles seeded successfully!
+🚀 Server running on port 5000
+🔌 WebSocket server initialized on path /ws
+🔌 WebSocket server available at ws://localhost:5000/ws
+⏰ Initializing scheduled jobs...
+✅ Scheduled jobs initialized
+   - Overdue allocations: Daily at midnight (00:00)
+   - Mark absent employees: Daily at 11:59 PM
+✅ Email queue processor initialized
+[0mGET /api/notifications [36m304[0m 31.874 ms - -[0m
+[0mPOST /api/auth/register [31m500[0m 4.140 ms - 79[0m
+[0mPOST /api/auth/login [32m200[0m 56.526 ms - 567[0m
+[0mPOST /api/users [32m201[0m 52.665 ms - 202[0m
+[0mPOST /api/users [32m201[0m 50.779 ms - 198[0m
+[0mPOST /api/users [32m201[0m 55.363 ms - 212[0m
+[0mPOST /api/users [32m201[0m 50.496 ms - 202[0m
+[0mPOST /api/users [32m201[0m 68.315 ms - 216[0m
+[0mPOST /api/users [32m201[0m 54.539 ms - 212[0m
+[0mPOST /api/users [32m201[0m 50.152 ms - 208[0m
+[0mPOST /api/users [32m201[0m 50.003 ms - 204[0m
+[0mPOST /api/users [32m201[0m 51.988 ms - 214[0m
+[0mPOST /api/users [32m201[0m 60.131 ms - 212[0m
+[0mPOST /api/users [32m201[0m 61.102 ms - 196[0m
+[0mPOST /api/users [32m201[0m 51.758 ms - 198[0m
+[0mPOST /api/users [32m201[0m 49.779 ms - 190[0m
+[0mPOST /api/auth/login [32m200[0m 50.567 ms - 632[0m
+[0mPOST /api/auth/login [32m200[0m 48.947 ms - 621[0m
+[0mPOST /api/auth/login [32m200[0m 55.425 ms - 661[0m
+[0mPOST /api/auth/login [32m200[0m 52.751 ms - 632[0m
+[0mPOST /api/auth/login [32m200[0m 49.633 ms - 672[0m
+[0mPOST /api/auth/login [32m200[0m 47.823 ms - 661[0m
+[0mPOST /api/auth/login [32m200[0m 53.382 ms - 649[0m
+[0mPOST /api/auth/login [32m200[0m 49.804 ms - 638[0m
+[0mPOST /api/auth/login [32m200[0m 49.009 ms - 666[0m
+[0mPOST /api/auth/login [32m200[0m 48.959 ms - 661[0m
+[0mPOST /api/auth/login [32m200[0m 58.793 ms - 615[0m
+[0mPOST /api/auth/login [32m200[0m 48.956 ms - 621[0m
+[0mPOST /api/auth/login [32m200[0m 48.723 ms - 598[0m
+[0mPOST /api/auth/forgot-password [33m400[0m 1243.800 ms - 237[0m
+[0mGET /api/rbac/roles [32m200[0m 7.228 ms - 21171[0m
+[0mGET /api/rbac/permissions [32m200[0m 2.795 ms - 23764[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 3.037 ms - 215[0m
+[0mGET /api/rbac/users [32m200[0m 5.013 ms - 9493[0m
+[0mPOST /api/rbac/assign-role [32m200[0m 20.761 ms - 147[0m
+[0mGET /api/rbac/users/f39ddb7d-4483-45b9-8905-ac898d73dfed/permissions [32m200[0m 3.951 ms - 899[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.055 ms - 215[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.743 ms - 899[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 1.761 ms - 235[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.594 ms - 256[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.061 ms - 241[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.074 ms - 262[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.016 ms - 256[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.103 ms - 250[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.187 ms - 244[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 1.823 ms - 259[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.175 ms - 256[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 2.242 ms - 232[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 1.757 ms - 235[0m
+[0mGET /api/rbac/my-permissions [32m200[0m 1.742 ms - 223[0m
+Creating department with user: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+Department created: {
+  id: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  name: 'Human Resources',
+  description: null,
+  location: null,
+  managerId: null,
+  budget: null,
+  status: 'ACTIVE',
+  createdAt: 2026-03-13T15:42:07.964Z,
+  updatedAt: 2026-03-13T15:42:07.964Z,
+  employees: []
+}
+Calling audit log...
+[AUDIT HELPER] logCreate called: {
+  entity: 'DEPARTMENT',
+  entityData: {
+    id: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f',
+    tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+    name: 'Human Resources',
+    description: null,
+    location: null,
+    managerId: null,
+    budget: null,
+    status: 'ACTIVE',
+    createdAt: 2026-03-13T15:42:07.964Z,
+    updatedAt: 2026-03-13T15:42:07.964Z,
+    employees: []
+  },
+  additionalMeta: {}
+}
+[AUDIT HELPER] Creating audit log: {
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f'
+}
+[AUDIT HELPER] User info: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+[AUDIT HELPER] Base log data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f',
+  ipAddress: '127.0.0.1',
+  userAgent: 'axios/1.13.5',
+  meta: {
+    changes: { created: [Object] },
+    details: { description: 'Created department "Human Resources"' },
+    timestamp: '2026-03-13T15:42:07.967Z',
+    requestId: null
+  }
+}
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Human Resources"'
+    },
+    timestamp: '2026-03-13T15:42:07.969Z',
+    requestId: null,
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    ipAddress: '127.0.0.1',
+    userAgent: 'axios/1.13.5'
+  }
+}
+[AUDIT] CREATE DEPARTMENT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f',
+  auditLogId: '0155aa32-3bcb-4910-b1c3-10139690839a'
+}
+[AUDIT HELPER] Audit log created: {
+  id: '0155aa32-3bcb-4910-b1c3-10139690839a',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Human Resources"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:07.969Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:07.970Z
+}
+Audit log result: {
+  id: '0155aa32-3bcb-4910-b1c3-10139690839a',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'bd9f2316-b371-4a04-9db0-fd7a2219e04f',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Human Resources"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:07.969Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:07.970Z
+}
+[0mPOST /api/departments [32m201[0m 11.222 ms - 297[0m
+Creating department with user: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+Department created: {
+  id: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  name: 'Finance',
+  description: null,
+  location: null,
+  managerId: null,
+  budget: null,
+  status: 'ACTIVE',
+  createdAt: 2026-03-13T15:42:08.287Z,
+  updatedAt: 2026-03-13T15:42:08.287Z,
+  employees: []
+}
+Calling audit log...
+[AUDIT HELPER] logCreate called: {
+  entity: 'DEPARTMENT',
+  entityData: {
+    id: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c',
+    tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+    name: 'Finance',
+    description: null,
+    location: null,
+    managerId: null,
+    budget: null,
+    status: 'ACTIVE',
+    createdAt: 2026-03-13T15:42:08.287Z,
+    updatedAt: 2026-03-13T15:42:08.287Z,
+    employees: []
+  },
+  additionalMeta: {}
+}
+[AUDIT HELPER] Creating audit log: {
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c'
+}
+[AUDIT HELPER] User info: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+[AUDIT HELPER] Base log data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c',
+  ipAddress: '127.0.0.1',
+  userAgent: 'axios/1.13.5',
+  meta: {
+    changes: { created: [Object] },
+    details: { description: 'Created department "Finance"' },
+    timestamp: '2026-03-13T15:42:08.289Z',
+    requestId: null
+  }
+}
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Finance"'
+    },
+    timestamp: '2026-03-13T15:42:08.290Z',
+    requestId: null,
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    ipAddress: '127.0.0.1',
+    userAgent: 'axios/1.13.5'
+  }
+}
+[AUDIT] CREATE DEPARTMENT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c',
+  auditLogId: '6a12b286-c9c7-461f-8f37-c42764654859'
+}
+[AUDIT HELPER] Audit log created: {
+  id: '6a12b286-c9c7-461f-8f37-c42764654859',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Finance"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:08.290Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:08.291Z
+}
+Audit log result: {
+  id: '6a12b286-c9c7-461f-8f37-c42764654859',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbef3ba0-d307-4f54-90ec-6cbaa2218d9c',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Finance"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:08.290Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:08.291Z
+}
+[0mPOST /api/departments [32m201[0m 7.167 ms - 289[0m
+Creating department with user: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+Department created: {
+  id: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  name: 'IT',
+  description: null,
+  location: null,
+  managerId: null,
+  budget: null,
+  status: 'ACTIVE',
+  createdAt: 2026-03-13T15:42:08.599Z,
+  updatedAt: 2026-03-13T15:42:08.599Z,
+  employees: []
+}
+Calling audit log...
+[AUDIT HELPER] logCreate called: {
+  entity: 'DEPARTMENT',
+  entityData: {
+    id: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4',
+    tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+    name: 'IT',
+    description: null,
+    location: null,
+    managerId: null,
+    budget: null,
+    status: 'ACTIVE',
+    createdAt: 2026-03-13T15:42:08.599Z,
+    updatedAt: 2026-03-13T15:42:08.599Z,
+    employees: []
+  },
+  additionalMeta: {}
+}
+[AUDIT HELPER] Creating audit log: {
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4'
+}
+[AUDIT HELPER] User info: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+[AUDIT HELPER] Base log data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4',
+  ipAddress: '127.0.0.1',
+  userAgent: 'axios/1.13.5',
+  meta: {
+    changes: { created: [Object] },
+    details: { description: 'Created department "IT"' },
+    timestamp: '2026-03-13T15:42:08.601Z',
+    requestId: null
+  }
+}
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "IT"'
+    },
+    timestamp: '2026-03-13T15:42:08.603Z',
+    requestId: null,
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    ipAddress: '127.0.0.1',
+    userAgent: 'axios/1.13.5'
+  }
+}
+[AUDIT] CREATE DEPARTMENT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4',
+  auditLogId: '6052f69d-e340-4c3d-a72b-b948baabfe78'
+}
+[AUDIT HELPER] Audit log created: {
+  id: '6052f69d-e340-4c3d-a72b-b948baabfe78',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "IT"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:08.603Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:08.605Z
+}
+Audit log result: {
+  id: '6052f69d-e340-4c3d-a72b-b948baabfe78',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'dbba36dc-59d9-4f7d-91b5-c66126c2faa4',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "IT"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:08.603Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:08.605Z
+}
+[0mPOST /api/departments [32m201[0m 9.632 ms - 284[0m
+Creating department with user: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+Department created: {
+  id: '8bf35bb5-082c-4712-9f31-194199fb1730',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  name: 'Sales',
+  description: null,
+  location: null,
+  managerId: null,
+  budget: null,
+  status: 'ACTIVE',
+  createdAt: 2026-03-13T15:42:08.923Z,
+  updatedAt: 2026-03-13T15:42:08.923Z,
+  employees: []
+}
+Calling audit log...
+[AUDIT HELPER] logCreate called: {
+  entity: 'DEPARTMENT',
+  entityData: {
+    id: '8bf35bb5-082c-4712-9f31-194199fb1730',
+    tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+    name: 'Sales',
+    description: null,
+    location: null,
+    managerId: null,
+    budget: null,
+    status: 'ACTIVE',
+    createdAt: 2026-03-13T15:42:08.923Z,
+    updatedAt: 2026-03-13T15:42:08.923Z,
+    employees: []
+  },
+  additionalMeta: {}
+}
+[AUDIT HELPER] Creating audit log: {
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '8bf35bb5-082c-4712-9f31-194199fb1730'
+}
+[AUDIT HELPER] User info: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+[AUDIT HELPER] Base log data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '8bf35bb5-082c-4712-9f31-194199fb1730',
+  ipAddress: '127.0.0.1',
+  userAgent: 'axios/1.13.5',
+  meta: {
+    changes: { created: [Object] },
+    details: { description: 'Created department "Sales"' },
+    timestamp: '2026-03-13T15:42:08.923Z',
+    requestId: null
+  }
+}
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '8bf35bb5-082c-4712-9f31-194199fb1730'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '8bf35bb5-082c-4712-9f31-194199fb1730',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Sales"'
+    },
+    timestamp: '2026-03-13T15:42:08.924Z',
+    requestId: null,
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    ipAddress: '127.0.0.1',
+    userAgent: 'axios/1.13.5'
+  }
+}
+[AUDIT] CREATE DEPARTMENT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: '8bf35bb5-082c-4712-9f31-194199fb1730',
+  auditLogId: '966f5082-cd10-4a68-9bbe-6d14bbbeb190'
+}
+[AUDIT HELPER] Audit log created: {
+  id: '966f5082-cd10-4a68-9bbe-6d14bbbeb190',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '8bf35bb5-082c-4712-9f31-194199fb1730',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Sales"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:08.924Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:08.926Z
+}
+Audit log result: {
+  id: '966f5082-cd10-4a68-9bbe-6d14bbbeb190',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '8bf35bb5-082c-4712-9f31-194199fb1730',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Sales"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:08.924Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:08.926Z
+}
+[0mPOST /api/departments [32m201[0m 5.731 ms - 287[0m
+Creating department with user: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+Department created: {
+  id: 'ccac43b2-842e-4d07-9946-2365fd893fc7',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  name: 'Operations',
+  description: null,
+  location: null,
+  managerId: null,
+  budget: null,
+  status: 'ACTIVE',
+  createdAt: 2026-03-13T15:42:09.241Z,
+  updatedAt: 2026-03-13T15:42:09.241Z,
+  employees: []
+}
+Calling audit log...
+[AUDIT HELPER] logCreate called: {
+  entity: 'DEPARTMENT',
+  entityData: {
+    id: 'ccac43b2-842e-4d07-9946-2365fd893fc7',
+    tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+    name: 'Operations',
+    description: null,
+    location: null,
+    managerId: null,
+    budget: null,
+    status: 'ACTIVE',
+    createdAt: 2026-03-13T15:42:09.241Z,
+    updatedAt: 2026-03-13T15:42:09.241Z,
+    employees: []
+  },
+  additionalMeta: {}
+}
+[AUDIT HELPER] Creating audit log: {
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'ccac43b2-842e-4d07-9946-2365fd893fc7'
+}
+[AUDIT HELPER] User info: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+[AUDIT HELPER] Base log data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'ccac43b2-842e-4d07-9946-2365fd893fc7',
+  ipAddress: '127.0.0.1',
+  userAgent: 'axios/1.13.5',
+  meta: {
+    changes: { created: [Object] },
+    details: { description: 'Created department "Operations"' },
+    timestamp: '2026-03-13T15:42:09.244Z',
+    requestId: null
+  }
+}
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'ccac43b2-842e-4d07-9946-2365fd893fc7'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'ccac43b2-842e-4d07-9946-2365fd893fc7',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Operations"'
+    },
+    timestamp: '2026-03-13T15:42:09.246Z',
+    requestId: null,
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    ipAddress: '127.0.0.1',
+    userAgent: 'axios/1.13.5'
+  }
+}
+[AUDIT] CREATE DEPARTMENT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'ccac43b2-842e-4d07-9946-2365fd893fc7',
+  auditLogId: '91b7c749-d693-4092-bafc-cec17e6ca7c1'
+}
+[AUDIT HELPER] Audit log created: {
+  id: '91b7c749-d693-4092-bafc-cec17e6ca7c1',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'ccac43b2-842e-4d07-9946-2365fd893fc7',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Operations"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:09.246Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:09.247Z
+}
+Audit log result: {
+  id: '91b7c749-d693-4092-bafc-cec17e6ca7c1',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: 'ccac43b2-842e-4d07-9946-2365fd893fc7',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Operations"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:09.246Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:09.247Z
+}
+[0mPOST /api/departments [32m201[0m 15.131 ms - 292[0m
+Creating department with user: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+Department created: {
+  id: '1b827fc1-d124-42d4-a23e-c46902a916fa',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  name: 'Marketing',
+  description: null,
+  location: null,
+  managerId: null,
+  budget: null,
+  status: 'ACTIVE',
+  createdAt: 2026-03-13T15:42:09.564Z,
+  updatedAt: 2026-03-13T15:42:09.564Z,
+  employees: []
+}
+Calling audit log...
+[AUDIT HELPER] logCreate called: {
+  entity: 'DEPARTMENT',
+  entityData: {
+    id: '1b827fc1-d124-42d4-a23e-c46902a916fa',
+    tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+    name: 'Marketing',
+    description: null,
+    location: null,
+    managerId: null,
+    budget: null,
+    status: 'ACTIVE',
+    createdAt: 2026-03-13T15:42:09.564Z,
+    updatedAt: 2026-03-13T15:42:09.564Z,
+    employees: []
+  },
+  additionalMeta: {}
+}
+[AUDIT HELPER] Creating audit log: {
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '1b827fc1-d124-42d4-a23e-c46902a916fa'
+}
+[AUDIT HELPER] User info: {
+  id: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  email: 'bhavsarnisarg0@gmail.com',
+  role: 'ADMIN'
+}
+[AUDIT HELPER] Base log data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '1b827fc1-d124-42d4-a23e-c46902a916fa',
+  ipAddress: '127.0.0.1',
+  userAgent: 'axios/1.13.5',
+  meta: {
+    changes: { created: [Object] },
+    details: { description: 'Created department "Marketing"' },
+    timestamp: '2026-03-13T15:42:09.565Z',
+    requestId: null
+  }
+}
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '1b827fc1-d124-42d4-a23e-c46902a916fa'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '1b827fc1-d124-42d4-a23e-c46902a916fa',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Marketing"'
+    },
+    timestamp: '2026-03-13T15:42:09.567Z',
+    requestId: null,
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    ipAddress: '127.0.0.1',
+    userAgent: 'axios/1.13.5'
+  }
+}
+[AUDIT] CREATE DEPARTMENT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: '1b827fc1-d124-42d4-a23e-c46902a916fa',
+  auditLogId: '77706104-4040-4e57-8b5a-84c1ab30e9a9'
+}
+[AUDIT HELPER] Audit log created: {
+  id: '77706104-4040-4e57-8b5a-84c1ab30e9a9',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '1b827fc1-d124-42d4-a23e-c46902a916fa',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Marketing"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:09.567Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:09.568Z
+}
+Audit log result: {
+  id: '77706104-4040-4e57-8b5a-84c1ab30e9a9',
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'DEPARTMENT',
+  entityId: '1b827fc1-d124-42d4-a23e-c46902a916fa',
+  meta: {
+    changes: { created: [Object] },
+    details: {
+      action: 'CREATE DEPARTMENT',
+      description: 'Created department "Marketing"'
+    },
+    userInfo: { role: 'ADMIN', email: 'bhavsarnisarg0@gmail.com' },
+    ipAddress: '127.0.0.1',
+    requestId: null,
+    timestamp: '2026-03-13T15:42:09.567Z',
+    userAgent: 'axios/1.13.5'
+  },
+  timestamp: 2026-03-13T15:42:09.568Z
+}
+[0mPOST /api/departments [32m201[0m 7.425 ms - 291[0m
+[0mGET /api/departments [32m200[0m 3.710 ms - 5563[0m
+[0mGET /api/departments [32m200[0m 4.169 ms - 5563[0m
+[0mGET /api/employees [32m200[0m 2.642 ms - 2[0m
+[0mGET /api/employees [32m200[0m 6.830 ms - 2[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: 'cae84766-1a7c-4e49-ae2d-fa5b301a00c9'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: 'cae84766-1a7c-4e49-ae2d-fa5b301a00c9',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:11.040Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE LEAVE_TYPE',
+      description: 'Created leave_type "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE LEAVE_TYPE by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'cae84766-1a7c-4e49-ae2d-fa5b301a00c9',
+  auditLogId: '9710ed17-e356-480e-88c4-ffae9d77ec14'
+}
+[0mPOST /api/leave-types [32m201[0m 5.674 ms - 239[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: 'e33b366a-03b0-4e3a-a8d1-a0c53c30532d'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: 'e33b366a-03b0-4e3a-a8d1-a0c53c30532d',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:11.351Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE LEAVE_TYPE',
+      description: 'Created leave_type "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE LEAVE_TYPE by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'e33b366a-03b0-4e3a-a8d1-a0c53c30532d',
+  auditLogId: '33c5e022-3329-47ad-b31c-52e206088b6b'
+}
+[0mPOST /api/leave-types [32m201[0m 4.555 ms - 235[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: '25a7ed5a-d580-4582-abdc-f166ceda4e10'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: '25a7ed5a-d580-4582-abdc-f166ceda4e10',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:11.660Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE LEAVE_TYPE',
+      description: 'Created leave_type "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE LEAVE_TYPE by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: '25a7ed5a-d580-4582-abdc-f166ceda4e10',
+  auditLogId: 'e333bf73-36a1-4d61-b89d-9bf427b9edae'
+}
+[0mPOST /api/leave-types [32m201[0m 5.483 ms - 238[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: '0d08aa32-97e8-4ec1-96ca-291541f3b2a4'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAVE_TYPE',
+  entityId: '0d08aa32-97e8-4ec1-96ca-291541f3b2a4',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:11.968Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE LEAVE_TYPE',
+      description: 'Created leave_type "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE LEAVE_TYPE by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: '0d08aa32-97e8-4ec1-96ca-291541f3b2a4',
+  auditLogId: 'dc3f44c9-e31d-4ea4-8627-d5ab7b72bd0e'
+}
+[0mPOST /api/leave-types [32m201[0m 5.191 ms - 245[0m
+[0mGET /api/leave-types [32m200[0m 1.795 ms - 2884[0m
+[0mGET /api/leave-requests [32m200[0m 2.347 ms - 2[0m
+[0mGET /api/attendance [32m200[0m 0.682 ms - 11[0m
+[0mGET /api/attendance/summary [32m200[0m 0.709 ms - 33[0m
+[0mPOST /api/payroll/cycles [32m200[0m 7.884 ms - 468[0m
+[0mGET /api/payroll/cycles [32m200[0m 3.964 ms - 1534[0m
+[0mGET /api/payroll/payslips [32m200[0m 2.048 ms - 2[0m
+[0mGET /api/hr/disbursements [32m200[0m 37.227 ms - 108[0m
+[0mGET /api/hr/disbursements/stats [32m200[0m 199.624 ms - 160[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: '24b32861-aef7-4821-a3ff-185ff9c18389'
+}
+[AUDIT SERVICE] Fetching user info for userId: 644c2a0f-88a7-4dcd-8981-235707755b1a
+[AUDIT SERVICE] User info found: {
+  email: 'finance.manager-test1773416510843@testerp.com',
+  role: 'FINANCE_MANAGER'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: '24b32861-aef7-4821-a3ff-185ff9c18389',
+  meta: {
+    userInfo: {
+      email: 'finance.manager-test1773416510843@testerp.com',
+      role: 'FINANCE_MANAGER'
+    },
+    timestamp: '2026-03-13T15:42:15.342Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE EXPENSE_CATEGORY',
+      description: 'Created expense_category "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE EXPENSE_CATEGORY by user 644c2a0f-88a7-4dcd-8981-235707755b1a (finance.manager-test1773416510843@testerp.com) {
+  entityId: '24b32861-aef7-4821-a3ff-185ff9c18389',
+  auditLogId: '3e85d083-cb64-47ed-809c-47fca7161840'
+}
+[0mPOST /api/expense-categories [32m201[0m 10.014 ms - 180[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: 'edb40b81-c79e-4857-b9cc-7d7faeb02d18'
+}
+[AUDIT SERVICE] Fetching user info for userId: 644c2a0f-88a7-4dcd-8981-235707755b1a
+[AUDIT SERVICE] User info found: {
+  email: 'finance.manager-test1773416510843@testerp.com',
+  role: 'FINANCE_MANAGER'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: 'edb40b81-c79e-4857-b9cc-7d7faeb02d18',
+  meta: {
+    userInfo: {
+      email: 'finance.manager-test1773416510843@testerp.com',
+      role: 'FINANCE_MANAGER'
+    },
+    timestamp: '2026-03-13T15:42:15.668Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE EXPENSE_CATEGORY',
+      description: 'Created expense_category "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE EXPENSE_CATEGORY by user 644c2a0f-88a7-4dcd-8981-235707755b1a (finance.manager-test1773416510843@testerp.com) {
+  entityId: 'edb40b81-c79e-4857-b9cc-7d7faeb02d18',
+  auditLogId: '1556ca13-c73a-4a28-b541-83a35a341bb1'
+}
+[0mPOST /api/expense-categories [32m201[0m 9.045 ms - 178[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: '2e776b3c-dfbc-4547-901d-d24c37dc2f05'
+}
+[AUDIT SERVICE] Fetching user info for userId: 644c2a0f-88a7-4dcd-8981-235707755b1a
+[AUDIT SERVICE] User info found: {
+  email: 'finance.manager-test1773416510843@testerp.com',
+  role: 'FINANCE_MANAGER'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: '2e776b3c-dfbc-4547-901d-d24c37dc2f05',
+  meta: {
+    userInfo: {
+      email: 'finance.manager-test1773416510843@testerp.com',
+      role: 'FINANCE_MANAGER'
+    },
+    timestamp: '2026-03-13T15:42:15.978Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE EXPENSE_CATEGORY',
+      description: 'Created expense_category "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE EXPENSE_CATEGORY by user 644c2a0f-88a7-4dcd-8981-235707755b1a (finance.manager-test1773416510843@testerp.com) {
+  entityId: '2e776b3c-dfbc-4547-901d-d24c37dc2f05',
+  auditLogId: '22992afa-3f96-4db5-be08-0124014d5a57'
+}
+[0mPOST /api/expense-categories [32m201[0m 6.707 ms - 198[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: 'c5674820-8b0f-41cb-8b66-0abac8e3bf1f'
+}
+[AUDIT SERVICE] Fetching user info for userId: 644c2a0f-88a7-4dcd-8981-235707755b1a
+[AUDIT SERVICE] User info found: {
+  email: 'finance.manager-test1773416510843@testerp.com',
+  role: 'FINANCE_MANAGER'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '644c2a0f-88a7-4dcd-8981-235707755b1a',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'EXPENSE_CATEGORY',
+  entityId: 'c5674820-8b0f-41cb-8b66-0abac8e3bf1f',
+  meta: {
+    userInfo: {
+      email: 'finance.manager-test1773416510843@testerp.com',
+      role: 'FINANCE_MANAGER'
+    },
+    timestamp: '2026-03-13T15:42:16.299Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE EXPENSE_CATEGORY',
+      description: 'Created expense_category "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE EXPENSE_CATEGORY by user 644c2a0f-88a7-4dcd-8981-235707755b1a (finance.manager-test1773416510843@testerp.com) {
+  entityId: 'c5674820-8b0f-41cb-8b66-0abac8e3bf1f',
+  auditLogId: 'e1c60c80-6daa-4b0e-91de-2f446e9f4424'
+}
+[0mPOST /api/expense-categories [32m201[0m 4.952 ms - 184[0m
+[0mGET /api/expense-categories [32m200[0m 3.373 ms - 2233[0m
+[0mGET /api/expense-claims [32m200[0m 3.217 ms - 2[0m
+[0mGET /api/finance/dashboard [32m200[0m 46.478 ms - 79[0m
+[0mGET /api/finance-dashboard [32m200[0m 6.514 ms - 101[0m
+[0mPOST /api/accounting/accounts [32m201[0m 37.439 ms - 402[0m
+[0mPOST /api/accounting/accounts [32m201[0m 9.546 ms - 417[0m
+[0mPOST /api/accounting/accounts [32m201[0m 7.709 ms - 423[0m
+[0mPOST /api/accounting/accounts [32m201[0m 8.436 ms - 395[0m
+[0mPOST /api/accounting/accounts [32m201[0m 5.405 ms - 397[0m
+[0mPOST /api/accounting/accounts [32m201[0m 5.446 ms - 402[0m
+[0mGET /api/accounting/accounts [32m200[0m 5.151 ms - 8191[0m
+[0mGET /api/accounting/journal-entries [32m200[0m 142.066 ms - 2[0m
+[0mGET /api/accounting/trial-balance [32m200[0m 2.701 ms - 24[0m
+[0mGET /api/accounting/balance-sheet [32m200[0m 3.411 ms - 37[0m
+[0mGET /api/accounting/income-statement [32m200[0m 2.460 ms - 35[0m
+[0mPOST /api/warehouses [32m201[0m 54.755 ms - 466[0m
+[0mPOST /api/warehouses [32m201[0m 5.885 ms - 465[0m
+[0mGET /api/warehouses [32m200[0m 4.588 ms - 2974[0m
+User role: ADMIN
+Required roles: [ 'ADMIN', 'MANAGER' ]
+DEBUG → Creating inventory item: {
+  name: 'Laptop Dell XPS 15',
+  code: 'IT-001_test1773416510843',
+  category: 'Electronics',
+  unit: 'PCS',
+  reorderLevel: 10,
+  unitPrice: 1200
+}
+DEBUG → tenantId: 93dc85d5-c0e6-48b3-8413-ba50421a2e64
+DEBUG → userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+WORKFLOW FOUND: 4dc53d6b-a291-452e-bb29-a2f9e59d8c50
+Creating workflow request for approval
+Created approval: cd37969c-3fbf-4d10-9800-a4448d4fb458 for workflow: 4dc53d6b-a291-452e-bb29-a2f9e59d8c50 request: 3fef4547-e4d9-48cc-9e06-d792d6b647b8
+[0mPOST /api/inventory [32m202[0m 7.219 ms - 82[0m
+User role: ADMIN
+Required roles: [ 'ADMIN', 'MANAGER' ]
+DEBUG → Creating inventory item: {
+  name: 'Office Chair Ergonomic',
+  code: 'FUR-001_test1773416510843',
+  category: 'Furniture',
+  unit: 'PCS',
+  reorderLevel: 5,
+  unitPrice: 350
+}
+DEBUG → tenantId: 93dc85d5-c0e6-48b3-8413-ba50421a2e64
+DEBUG → userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+WORKFLOW FOUND: 4dc53d6b-a291-452e-bb29-a2f9e59d8c50
+Creating workflow request for approval
+Created approval: fc9a0d47-210d-48f6-a0e0-aa29dbef65ab for workflow: 4dc53d6b-a291-452e-bb29-a2f9e59d8c50 request: dac9abf4-6e58-4836-a904-0bd1baea1d30
+[0mPOST /api/inventory [32m202[0m 24.694 ms - 82[0m
+User role: ADMIN
+Required roles: [ 'ADMIN', 'MANAGER' ]
+DEBUG → Creating inventory item: {
+  name: 'Printer Paper A4',
+  code: 'SUP-001_test1773416510843',
+  category: 'Supplies',
+  unit: 'BOX',
+  reorderLevel: 20,
+  unitPrice: 45
+}
+DEBUG → tenantId: 93dc85d5-c0e6-48b3-8413-ba50421a2e64
+DEBUG → userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+WORKFLOW FOUND: 4dc53d6b-a291-452e-bb29-a2f9e59d8c50
+Creating workflow request for approval
+Created approval: e00c4d95-b591-4805-ba7b-99337196ce35 for workflow: 4dc53d6b-a291-452e-bb29-a2f9e59d8c50 request: 61c9ab1c-f6a1-435c-b00b-d7fb88dea8bd
+[0mPOST /api/inventory [32m202[0m 6.666 ms - 82[0m
+[0mGET /api/inventory [32m200[0m 2.226 ms - 2[0m
+[0mGET /api/stock-movements [32m200[0m 29.535 ms - 2[0m
+[0mGET /api/stock-movements/statistics [32m200[0m 2.793 ms - 2[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'ASSET_CATEGORY',
+  entityId: '83cb5ca4-1c9d-4a7c-bdfc-fa41b2289a20'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'ASSET_CATEGORY',
+  entityId: '83cb5ca4-1c9d-4a7c-bdfc-fa41b2289a20',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:24.477Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE ASSET_CATEGORY',
+      description: 'Created asset_category "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE ASSET_CATEGORY by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: '83cb5ca4-1c9d-4a7c-bdfc-fa41b2289a20',
+  auditLogId: 'b8d06766-6b1e-4873-98d2-b41dce418a1c'
+}
+[0mPOST /api/assets/categories [32m201[0m 34.691 ms - 357[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'ASSET_CATEGORY',
+  entityId: 'be63335b-ad40-4e1f-9b0b-39e4af4a759d'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'ASSET_CATEGORY',
+  entityId: 'be63335b-ad40-4e1f-9b0b-39e4af4a759d',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:24.790Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE ASSET_CATEGORY',
+      description: 'Created asset_category "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE ASSET_CATEGORY by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'be63335b-ad40-4e1f-9b0b-39e4af4a759d',
+  auditLogId: '6c39879e-0049-4458-a288-926607e042f4'
+}
+[0mPOST /api/assets/categories [32m201[0m 4.538 ms - 362[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'ASSET_CATEGORY',
+  entityId: 'e90404c2-5e78-4d7b-aae9-b28262517ffe'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'ASSET_CATEGORY',
+  entityId: 'e90404c2-5e78-4d7b-aae9-b28262517ffe',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:25.099Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE ASSET_CATEGORY',
+      description: 'Created asset_category "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE ASSET_CATEGORY by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'e90404c2-5e78-4d7b-aae9-b28262517ffe',
+  auditLogId: '5d599050-6df9-427e-9d5d-cbc9f7eb8df8'
+}
+[0mPOST /api/assets/categories [32m201[0m 3.781 ms - 362[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'CUSTOMER',
+  entityId: 'c239b9cb-7d76-4f5d-b8cd-6f466683f0bf'
+}
+[AUDIT SERVICE] Fetching user info for userId: 36564c66-937e-427e-b65f-28f0b4b26c68
+[AUDIT SERVICE] User info found: {
+  email: 'sales.staff-test1773416510843@testerp.com',
+  role: 'SALES_STAFF'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'CUSTOMER',
+  entityId: 'c239b9cb-7d76-4f5d-b8cd-6f466683f0bf',
+  meta: {
+    userInfo: {
+      email: 'sales.staff-test1773416510843@testerp.com',
+      role: 'SALES_STAFF'
+    },
+    timestamp: '2026-03-13T15:42:25.420Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE CUSTOMER',
+      description: 'Created customer "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE CUSTOMER by user 36564c66-937e-427e-b65f-28f0b4b26c68 (sales.staff-test1773416510843@testerp.com) {
+  entityId: 'c239b9cb-7d76-4f5d-b8cd-6f466683f0bf',
+  auditLogId: '00d4a1ee-50e8-4b06-af97-e8382c634f1a'
+}
+[0mPOST /api/crm/customers [32m201[0m 11.779 ms - 689[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'CUSTOMER',
+  entityId: '2b0a828a-eb82-4510-a365-e9ab0820e2ed'
+}
+[AUDIT SERVICE] Fetching user info for userId: 36564c66-937e-427e-b65f-28f0b4b26c68
+[AUDIT SERVICE] User info found: {
+  email: 'sales.staff-test1773416510843@testerp.com',
+  role: 'SALES_STAFF'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'CUSTOMER',
+  entityId: '2b0a828a-eb82-4510-a365-e9ab0820e2ed',
+  meta: {
+    userInfo: {
+      email: 'sales.staff-test1773416510843@testerp.com',
+      role: 'SALES_STAFF'
+    },
+    timestamp: '2026-03-13T15:42:25.730Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE CUSTOMER',
+      description: 'Created customer "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE CUSTOMER by user 36564c66-937e-427e-b65f-28f0b4b26c68 (sales.staff-test1773416510843@testerp.com) {
+  entityId: '2b0a828a-eb82-4510-a365-e9ab0820e2ed',
+  auditLogId: 'c405f848-e245-4e60-9385-19786640fd6b'
+}
+[0mPOST /api/crm/customers [32m201[0m 5.909 ms - 688[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'CUSTOMER',
+  entityId: 'e918f9ac-9856-4f5f-8232-cbd856a2cddd'
+}
+[AUDIT SERVICE] Fetching user info for userId: 36564c66-937e-427e-b65f-28f0b4b26c68
+[AUDIT SERVICE] User info found: {
+  email: 'sales.staff-test1773416510843@testerp.com',
+  role: 'SALES_STAFF'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'CUSTOMER',
+  entityId: 'e918f9ac-9856-4f5f-8232-cbd856a2cddd',
+  meta: {
+    userInfo: {
+      email: 'sales.staff-test1773416510843@testerp.com',
+      role: 'SALES_STAFF'
+    },
+    timestamp: '2026-03-13T15:42:26.051Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE CUSTOMER',
+      description: 'Created customer "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE CUSTOMER by user 36564c66-937e-427e-b65f-28f0b4b26c68 (sales.staff-test1773416510843@testerp.com) {
+  entityId: 'e918f9ac-9856-4f5f-8232-cbd856a2cddd',
+  auditLogId: '068db7a0-95c0-40fd-883b-7f03f3b85d69'
+}
+[0mPOST /api/crm/customers [32m201[0m 6.737 ms - 683[0m
+[0mGET /api/crm/customers [32m200[0m 9.207 ms - 7972[0m
+[0mGET /api/crm/contacts [32m200[0m 2.294 ms - 2[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: 'c16d20d7-d0cf-47ec-9b28-b5fcc5b1507f',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'PIPELINE',
+  entityId: 'a141254e-b5f4-4f9b-a386-d26e13a4ab68'
+}
+[AUDIT SERVICE] Fetching user info for userId: c16d20d7-d0cf-47ec-9b28-b5fcc5b1507f
+[AUDIT SERVICE] User info found: {
+  email: 'sales.manager-test1773416510843@testerp.com',
+  role: 'SALES_MANAGER'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: 'c16d20d7-d0cf-47ec-9b28-b5fcc5b1507f',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'PIPELINE',
+  entityId: 'a141254e-b5f4-4f9b-a386-d26e13a4ab68',
+  meta: {
+    userInfo: {
+      email: 'sales.manager-test1773416510843@testerp.com',
+      role: 'SALES_MANAGER'
+    },
+    timestamp: '2026-03-13T15:42:27.016Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE PIPELINE',
+      description: 'Created pipeline "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE PIPELINE by user c16d20d7-d0cf-47ec-9b28-b5fcc5b1507f (sales.manager-test1773416510843@testerp.com) {
+  entityId: 'a141254e-b5f4-4f9b-a386-d26e13a4ab68',
+  auditLogId: '9e11636f-e945-41e4-81df-ab32269ec456'
+}
+[0mPOST /api/crm/pipelines [32m201[0m 7.873 ms - 289[0m
+[0mGET /api/crm/pipelines [32m200[0m 3.195 ms - 3018[0m
+[0mGET /api/crm/pipelines/default [32m200[0m 2.622 ms - 2391[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAD',
+  entityId: '0b6a0af1-d0a6-414d-b248-19192c5b5ee0'
+}
+[AUDIT SERVICE] Fetching user info for userId: 36564c66-937e-427e-b65f-28f0b4b26c68
+[AUDIT SERVICE] User info found: {
+  email: 'sales.staff-test1773416510843@testerp.com',
+  role: 'SALES_STAFF'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAD',
+  entityId: '0b6a0af1-d0a6-414d-b248-19192c5b5ee0',
+  meta: {
+    userInfo: {
+      email: 'sales.staff-test1773416510843@testerp.com',
+      role: 'SALES_STAFF'
+    },
+    timestamp: '2026-03-13T15:42:27.961Z',
+    ipAddress: null,
+    userAgent: null,
+    details: { action: 'CREATE LEAD', description: 'Created lead "Unknown"' }
+  }
+}
+[AUDIT] CREATE LEAD by user 36564c66-937e-427e-b65f-28f0b4b26c68 (sales.staff-test1773416510843@testerp.com) {
+  entityId: '0b6a0af1-d0a6-414d-b248-19192c5b5ee0',
+  auditLogId: '5aaa47aa-6114-439e-85ea-8d2e0b9e8be1'
+}
+[0mPOST /api/crm/leads [32m201[0m 9.038 ms - 912[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAD',
+  entityId: '83fde091-60ea-4036-871e-40688b6b36ca'
+}
+[AUDIT SERVICE] Fetching user info for userId: 36564c66-937e-427e-b65f-28f0b4b26c68
+[AUDIT SERVICE] User info found: {
+  email: 'sales.staff-test1773416510843@testerp.com',
+  role: 'SALES_STAFF'
+}
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '36564c66-937e-427e-b65f-28f0b4b26c68',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'LEAD',
+  entityId: '83fde091-60ea-4036-871e-40688b6b36ca',
+  meta: {
+    userInfo: {
+      email: 'sales.staff-test1773416510843@testerp.com',
+      role: 'SALES_STAFF'
+    },
+    timestamp: '2026-03-13T15:42:28.289Z',
+    ipAddress: null,
+    userAgent: null,
+    details: { action: 'CREATE LEAD', description: 'Created lead "Unknown"' }
+  }
+}
+[AUDIT] CREATE LEAD by user 36564c66-937e-427e-b65f-28f0b4b26c68 (sales.staff-test1773416510843@testerp.com) {
+  entityId: '83fde091-60ea-4036-871e-40688b6b36ca',
+  auditLogId: 'ca68eb8f-1d3c-47f7-a01a-f4caa609d27e'
+}
+[0mPOST /api/crm/leads [32m201[0m 13.032 ms - 912[0m
+[0mGET /api/crm/leads [32m200[0m 6.424 ms - 6571[0m
+[0mGET /api/crm/deals [32m200[0m 3.907 ms - 2[0m
+[0mGET /api/crm/communications [32m200[0m 2.929 ms - 2[0m
+[0mGET /api/sales/quotations [32m200[0m 2.105 ms - 2[0m
+[0mGET /api/sales/orders [32m200[0m 2.683 ms - 2[0m
+[0mGET /api/sales/invoices [32m200[0m 2.741 ms - 2[0m
+[0mGET /api/sales/invoices/payments [32m200[0m 0.866 ms - 11[0m
+[0mGET /api/sales/tracking [32m200[0m 0.812 ms - 11[0m
+[0mGET /api/sales/analytics [32m200[0m 44.002 ms - 596[0m
+[0mGET /api/sales/analytics/revenue [32m200[0m 6.698 ms - 134[0m
+[0mGET /api/sales/analytics/payments [32m200[0m 3.628 ms - 122[0m
+[0mPOST /api/purchase/vendors [32m201[0m 3.971 ms - 603[0m
+[0mPOST /api/purchase/vendors [32m201[0m 3.254 ms - 602[0m
+[0mPOST /api/purchase/vendors [32m201[0m 3.688 ms - 600[0m
+[0mGET /api/purchase/vendors [32m200[0m 3.304 ms - 5839[0m
+[0mGET /api/purchase/requisitions [32m200[0m 2.502 ms - 2[0m
+[0mGET /api/purchase/orders [32m200[0m 2.421 ms - 2[0m
+[0mGET /api/purchase/goods-receipts [32m200[0m 0.616 ms - 11[0m
+[0mGET /api/purchase/evaluations [32m200[0m 2.367 ms - 2[0m
+[0mGET /api/ap/bills [32m200[0m 2.629 ms - 71[0m
+[0mGET /api/ap/payments [32m200[0m 2.128 ms - 71[0m
+[0mGET /api/ap/analytics [32m200[0m 17.856 ms - 117[0m
+[0mGET /api/ap/aging [32m200[0m 5.559 ms - 348[0m
+[0mGET /api/ap/aging/export [32m200[0m 38.414 ms - 7584[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'PROJECT',
+  entityId: '90ff2041-2158-4003-be77-a98cfc718830'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'PROJECT',
+  entityId: '90ff2041-2158-4003-be77-a98cfc718830',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:36.174Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE PROJECT',
+      description: 'Created project "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE PROJECT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: '90ff2041-2158-4003-be77-a98cfc718830',
+  auditLogId: '805f2a01-ddfd-4adf-bd2a-49450a91b924'
+}
+[0mPOST /api/projects [32m201[0m 7.697 ms - 970[0m
+[AUDIT SERVICE] Starting audit log creation: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'PROJECT',
+  entityId: 'e3888f11-ac63-46e4-8a36-eb8225216685'
+}
+[AUDIT SERVICE] Fetching user info for userId: 1ccbe90e-b5bd-4028-b46c-8682901f2746
+[AUDIT SERVICE] User info found: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' }
+[AUDIT SERVICE] Creating audit log with data: {
+  userId: '1ccbe90e-b5bd-4028-b46c-8682901f2746',
+  tenantId: '93dc85d5-c0e6-48b3-8413-ba50421a2e64',
+  action: 'CREATE',
+  entity: 'PROJECT',
+  entityId: 'e3888f11-ac63-46e4-8a36-eb8225216685',
+  meta: {
+    userInfo: { email: 'bhavsarnisarg0@gmail.com', role: 'ADMIN' },
+    timestamp: '2026-03-13T15:42:36.484Z',
+    ipAddress: null,
+    userAgent: null,
+    details: {
+      action: 'CREATE PROJECT',
+      description: 'Created project "Unknown"'
+    }
+  }
+}
+[AUDIT] CREATE PROJECT by user 1ccbe90e-b5bd-4028-b46c-8682901f2746 (bhavsarnisarg0@gmail.com) {
+  entityId: 'e3888f11-ac63-46e4-8a36-eb8225216685',
+  auditLogId: '944acc60-13f1-481f-b3dd-b950f2408c5f'
+}
+[0mPOST /api/projects [32m201[0m 5.460 ms - 965[0m
+[0mGET /api/projects [32m200[0m 3.906 ms - 2016[0m
+[0mGET /api/notifications [36m304[0m 2.440 ms - -[0m
+[0mGET /api/timesheets [32m200[0m 2.748 ms - 2[0m
+[0mGET /api/manufacturing/orders [32m200[0m 0.835 ms - 11[0m
+[0mGET /api/manufacturing/dashboard [32m200[0m 0.698 ms - 11[0m
+[0mGET /api/documents/statistics [32m200[0m 3.043 ms - 89[0m
+[0mPOST /api/documents/folders [32m201[0m 4.215 ms - 404[0m
+[0mPOST /api/documents/folders [32m201[0m 2.447 ms - 417[0m
+[0mPOST /api/documents/folders [32m201[0m 2.423 ms - 414[0m
+[0mGET /api/documents [32m200[0m 3.871 ms - 45[0m
+[0mPOST /api/communication/conversations [32m201[0m 8.589 ms - 803[0m
+[0mGET /api/communication/conversations [32m200[0m 3.367 ms - 2[0m
+[0mPOST /api/communication/announcements [32m201[0m 2.851 ms - 482[0m
+[0mGET /api/communication/announcements [32m200[0m 4.384 ms - 1593[0m
+[0mPOST /api/communication/channels [32m201[0m 4.702 ms - 598[0m
+[0mGET /api/communication/channels [32m200[0m 3.105 ms - 1468[0m
+[0mGET /api/communication/online-users [32m200[0m 0.541 ms - 2[0m
+[0mGET /api/notifications [32m200[0m 1.386 ms - 36[0m
+[0mGET /api/notifications [32m200[0m 1.158 ms - 36[0m
+[0mGET /api/notifications/unread-count [32m200[0m 0.500 ms - 20[0m
+[0mPOST /api/workflows [32m201[0m 0.820 ms - 237[0m
+[0mGET /api/workflows [32m200[0m 0.493 ms - 11[0m
+[0mGET /api/approvals [32m200[0m 8.803 ms - 8770[0m
+[0mGET /api/approvals?status=PENDING [32m200[0m 3.053 ms - 8770[0m
+[0mGET /api/reports [32m200[0m 0.845 ms - 11[0m
+[0mPOST /api/reports/generate [32m201[0m 0.606 ms - 49[0m
+[0mPOST /api/reports/generate [32m201[0m 0.444 ms - 46[0m
+[0mPOST /api/reports/generate [32m201[0m 0.644 ms - 51[0m
+[0mPOST /api/reports/generate [32m201[0m 0.414 ms - 48[0m
+[0mPOST /api/reports/generate [32m201[0m 0.476 ms - 52[0m
+[0mPOST /api/reports/generate [32m201[0m 0.504 ms - 46[0m
+[0mPOST /api/reports/generate [32m201[0m 0.595 ms - 52[0m
+[0mPOST /api/reports/generate [32m201[0m 0.394 ms - 49[0m
+[0mGET /api/dashboard [32m200[0m 0.592 ms - 21[0m
+[0mGET /api/finance-dashboard [32m200[0m 3.579 ms - 101[0m
+[0mGET /api/company [32m200[0m 0.652 ms - 77[0m
+[0mPUT /api/company [32m200[0m 0.461 ms - 189[0m
+[0mPOST /api/branches [32m201[0m 44.581 ms - 504[0m
+[0mGET /api/branches [32m200[0m 3.696 ms - 1594[0m
+[0mGET /api/health [32m200[0m 0.193 ms - 85[0m
+User role: ADMIN
+Required roles: [ 'ADMIN' ]
+Fetching audit logs for tenant: 93dc85d5-c0e6-48b3-8413-ba50421a2e64
+Audit logs where clause: {
+  "tenantId": "93dc85d5-c0e6-48b3-8413-ba50421a2e64"
+}
+Found 70 audit logs out of 70 total
+Returning enhanced logs: 70
+[0mGET /api/audit-logs [32m200[0m 12.432 ms - 55407[0m
+User role: ADMIN
+Required roles: [ 'ADMIN' ]
+Fetching audit logs for tenant: 93dc85d5-c0e6-48b3-8413-ba50421a2e64
+Audit logs where clause: {
+  "tenantId": "93dc85d5-c0e6-48b3-8413-ba50421a2e64"
+}
+Found 50 audit logs out of 70 total
+Returning enhanced logs: 50
+[0mGET /api/audit-logs?limit=50 [32m200[0m 6.357 ms - 39016[0m
+[0mGET /api/system-options [32m200[0m 0.649 ms - 11[0m
+[0mPOST /api/system-options [32m201[0m 1.716 ms - 226[0m
+User role: ADMIN
+Required roles: [ 'ADMIN' ]
+[0mPOST /api/invites [32m201[0m 4.581 ms - 163[0m
+[0mGET /api/invites [32m200[0m 0.597 ms - 11[0m
+[0mGET /api/notifications [36m304[0m 1.657 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.950 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.990 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.569 ms - -[0m
+[0mGET /api/notifications [36m304[0m 24.885 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.574 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.762 ms - -[0m
+[0mGET /api/notifications [36m304[0m 2.084 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.924 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.521 ms - -[0m
+[0mGET /api/notifications [36m304[0m 26.676 ms - -[0m
+[0mGET /api/notifications [36m304[0m 2.239 ms - -[0m
+[0mGET /api/notifications [36m304[0m 1.167 ms - -[0m
+[0mGET /api/inventory [36m304[0m 29.107 ms - -[0m
+[0mGET /api/users [32m200[0m 36.685 ms - 7774[0m
+[0mGET /api/departments [32m200[0m 7.776 ms - 5563[0m
+[0mGET /api/dashboard/activities [32m200[0m 4.377 ms - 4201[0m
+[0mGET /api/inventory [36m304[0m 1.445 ms - -[0m
+[0mGET /api/employees [36m304[0m 3.131 ms - -[0m
+[0mGET /api/users [36m304[0m 2.973 ms - -[0m
+[0mGET /api/departments [36m304[0m 3.308 ms - -[0m
+[0mGET /api/dashboard/activities [36m304[0m 2.311 ms - -[0m
+[0mGET /api/employees [36m304[0m 2.150 ms - -[0m
+[0mGET /api/leave-requests [36m304[0m 1.818 ms - -[0m
+[0mGET /api/finance/expense-claims [36m304[0m 3.158 ms - -[0m
+[0mGET /api/approvals/my-requests [32m200[0m 2.460 ms - 4144[0m
+[0mGET /api/approvals [32m200[0m 7.825 ms - 8770[0m
+[0mGET /api/leave-requests [36m304[0m 1.758 ms - -[0m
+[0mGET /api/finance/expense-claims [36m304[0m 2.489 ms - -[0m
+[0mGET /api/approvals/my-requests [36m304[0m 2.264 ms - -[0m
+[0mGET /api/approvals [36m304[0m 4.685 ms - -[0m
+[0mGET /api/asset-allocations/overdue [36m304[0m 33.449 ms - -[0m
+[0mGET /api/asset-allocations/overdue [36m304[0m 1.520 ms - -[0m

@@ -1,0 +1,13 @@
+Error: Error: User already exists
+    at registerUser (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/core/auth/auth.service.js:280:11)
+    at async register (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/core/auth/auth.controller.js:11:20)
+Failed to send password reset OTP: Error: You can only send testing emails to your own email address (testbro378@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains, and change the `from` address to an email using this domain.
+    at EmailService.sendPasswordResetOTP (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/services/email.service.js:140:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async PasswordResetService.requestPasswordReset (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/services/passwordReset.service.js:37:5)
+    at async requestReset (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/modules/auth/passwordReset.controller.js:12:22)
+Password reset request error: Error: You can only send testing emails to your own email address (testbro378@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains, and change the `from` address to an email using this domain.
+    at EmailService.sendPasswordResetOTP (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/services/email.service.js:140:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async PasswordResetService.requestPasswordReset (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/services/passwordReset.service.js:37:5)
+    at async requestReset (file:///C:/Users/Nisarg%20Bhavsar/ueorms-saas/ERP-SYSTEM-PROJECT/backend/src/modules/auth/passwordReset.controller.js:12:22)

@@ -1,0 +1,109 @@
+<mxfile host="app.diagrams.net" modified="2026-03-03T00:00:00.000Z" agent="Codex" version="24.7.17" etag="seq-split">
+  <diagram id="13_13_subscription_webhooks_and_external_billing" name="13_13_subscription_webhooks_and_external_billing">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1580" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="13 13 subscription webhooks and external billing" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="20" y="0" width="900" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="Express API Layer\n(app.js route orchestration)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="74" width="1" height="562" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Notification Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="330" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="74" width="1" height="562" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="Email Service + Queue" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="540" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="74" width="1" height="562" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="Billing Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#d5e8d4;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="750" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="74" width="1" height="562" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="Stripe / Razorpay" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#f8cecc;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="960" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="74" width="1" height="562" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="PostgreSQL via Prisma" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#2f4f6f;fillColor=#e1d5e7;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="30" width="160" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="" style="shape=line;strokeColor=#666666;dashed=1;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="74" width="1" height="562" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="13) Subscription Webhooks and External Billing" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#999999;fillColor=#f5f5f5;align=center;verticalAlign=middle;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="108" width="1500" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="POST /api/billing/webhooks/stripe|razorpay" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1040" y="158" as="sourcePoint"/>
+            <mxPoint x="200" y="158" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="17" value="validate signature/event + idempotency check" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="196" as="sourcePoint"/>
+            <mxPoint x="830" y="196" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="18" value="BillingEvent find/create/update" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="234" as="sourcePoint"/>
+            <mxPoint x="1250" y="234" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="19" value="alt event not processed" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#999999;fillColor=#fff2cc;align=left;verticalAlign=middle;fontSize=10;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="update subscription/payment state" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="310" as="sourcePoint"/>
+            <mxPoint x="1250" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="21" value="subscription/billing notification" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="348" as="sourcePoint"/>
+            <mxPoint x="410" y="348" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="22" value="invoice email / failure notice" style="endArrow=classic;dashed=0;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="386" as="sourcePoint"/>
+            <mxPoint x="620" y="386" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="23" value="else already processed" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#999999;fillColor=#e1d5e7;align=left;verticalAlign=middle;fontSize=10;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="412" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="idempotent ack" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="462" as="sourcePoint"/>
+            <mxPoint x="200" y="462" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="25" value="end" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#999999;fillColor=#d5e8d4;align=left;verticalAlign=middle;fontSize=10;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="488" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="26" value="webhook acknowledged" style="endArrow=open;dashed=1;strokeWidth=1;html=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="538" as="sourcePoint"/>
+            <mxPoint x="1040" y="538" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

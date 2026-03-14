@@ -1,0 +1,41 @@
+@startuml UEORMS_Sequence_12
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Admin
+actor "Finance Manager" as FinM
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Integration Service" as Integr
+control "Integration Event Manager" as EventBus
+control "Reports + Reporting Services" as Reports
+control "Data Import/Export Service" as DataIO
+database "PostgreSQL via Prisma" as DB
+
+== 12) Reporting, Import/Export, and Integration API ==
+FinM -> Client : Reports and analytics
+Client -> API : /api/reports and /api/reporting
+API -> Reports : financial/hr/inventory/custom/scheduled reports
+Reports -> DB : ReportTemplate, Report, ReportSchedule + source domain tables
+Reports -> DataIO : export pipeline (pdf/excel/csv)
+Reports --> API : report payload/files
+API --> Client : report response
+
+Admin -> Client : Bulk import/export
+Client -> API : /api/data/import/* and /api/data/export/*
+API -> DataIO : parse/validate/import or export templates/data
+DataIO -> DB : upsert/query operational tables
+DataIO --> API : import/export results
+API --> Client : data utility response
+
+Admin -> Client : Manual integration controls
+Client -> API : /api/integration/sync-* /status /config /batch-sync
+API -> Integr : cross-module sync actions
+Integr -> DB : integration read/write + status
+Integr -> EventBus : emit integration lifecycle events
+Integr --> API : sync status
+API --> Client : integration response
+
+
+@enduml

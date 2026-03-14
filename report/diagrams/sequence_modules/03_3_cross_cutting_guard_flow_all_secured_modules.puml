@@ -1,0 +1,25 @@
+@startuml UEORMS_Sequence_03
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Employee
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Auth + RBAC\n(requireAuth / permission middleware)" as AuthRBAC
+control "Subscription Entitlement\n(requireModuleEntitlement)" as Entitlement
+database "PostgreSQL via Prisma" as DB
+
+== 3) Cross-Cutting Guard Flow (all secured modules) ==
+Employee -> Client : Access module endpoint
+Client -> API : any /api/{module}
+API -> AuthRBAC : requireAuth + permission check
+AuthRBAC --> API : user context
+API -> Entitlement : verify module included in active subscription
+Entitlement -> DB : Subscription + SubscriptionItem + Plan lookup
+DB --> Entitlement : entitlement decision
+Entitlement --> API : allowed / forbidden
+API --> Client : proceed or 403
+
+
+@enduml

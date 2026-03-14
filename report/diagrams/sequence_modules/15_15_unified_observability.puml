@@ -1,0 +1,18 @@
+@startuml UEORMS_Sequence_15
+!pragma teoz true
+autonumber
+hide footbox
+
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Realtime Gateway\n(WebSocket /ws)" as RT
+control "Notification Service" as Notify
+database "PostgreSQL via Prisma" as DB
+
+== 15) Unified Observability ==
+API -> DB : write AuditLog for critical actions
+Notify -> DB : persist notifications/read states
+RT --> Client : dashboard/activity/module realtime updates
+
+
+@enduml

@@ -1,0 +1,322 @@
+﻿PROJECT REPORT
+ON
+UEORMS - UNIVERSAL ENTERPRISE OPERATIONS AND RESOURCE MANAGEMENT SYSTEM
+B.Tech - IT / Final Year Project
+Prepared By:
+Nisarg Bhavsar
+ERP Team
+Guided By:
+Project Guide / Faculty Mentor
+Department of Information Technology
+Faculty of Technology
+Academic Year: 2025-2026
+Date: March 03, 2026
+CANDIDATE'S DECLARATION
+I declare that this project report entitled 'UEORMS - Universal Enterprise Operations and Resource Management System' is my original work carried out under proper guidance. This report has not been submitted earlier to any other university or institute for award of any degree or diploma.
+Candidate Name: Nisarg Bhavsar
+Department: Information Technology
+Date: __________________
+Signature: __________________
+CERTIFICATE
+This is to certify that the project report entitled 'UEORMS - Universal Enterprise Operations and Resource Management System' is a bona fide work completed during the academic year 2025-2026 under supervision and guidance.
+Project Guide: __________________
+Head of Department: __________________
+Date: __________________
+ACKNOWLEDGEMENT
+I express sincere gratitude to my project guide, faculty members, and peers for their continuous support, guidance, and review throughout this project. Their feedback was important in shaping the architecture, implementation quality, and documentation.
+I also thank my institution for providing resources and the learning environment required to complete this work successfully.
+TABLE OF CONTENTS
+ABSTRACT
+1. INTRODUCTION
+2. PROJECT MANAGEMENT
+3. SYSTEM REQUIREMENT STUDY
+4. SYSTEM ANALYSIS
+5. SYSTEM DESIGN
+6. IMPLEMENTATION PLANNING
+7. TESTING
+8. USER MANUAL
+9. LIMITATION AND FUTURE ENHANCEMENT
+10. CONCLUSION AND DISCUSSION
+ABSTRACT
+UEORMS is a multi-tenant SaaS ERP platform that integrates inventory, finance, HR, CRM, purchase, projects, communication, and reporting operations in one system. It reduces fragmented tools and manual work by centralizing data and enforcing workflow approvals with role-based access control.
+The project is built with React frontend, Node.js + Express backend, PostgreSQL database, and Prisma ORM. The codebase includes 19 backend modules, 124 frontend pages, and 125 relational models with tenant-aware architecture. The implementation demonstrates a practical enterprise-grade solution for scalable business operations.
+1. INTRODUCTION
+1.1 Project Details
+Project Title: UEORMS - Universal Enterprise Operations and Resource Management System
+Project Type: Multi-tenant SaaS ERP Platform
+Academic Year: 2025-2026
+Primary Users: Admins, managers, and operations teams
+Development Approach: Modular and iterative
+1.2 Purpose
+To provide a centralized and secure ERP platform for managing core enterprise workflows with real-time visibility, approvals, and analytics.
+1.3 Scope
+The scope covers web-based multi-tenant ERP operations across modules such as inventory, finance, HR, sales, procurement, projects, document management, and reporting.
+1.4 Objective
+Automate business workflows
+Improve data consistency and audit traceability
+Enable role-based decision support
+Support scalable tenant-aware architecture
+1.5 Technology and Literature Review
+Layer
+Technology/Approach
+Frontend
+React, Vite, Tailwind CSS, Zustand
+Backend
+Node.js, Express, JWT auth, RBAC middleware
+Database
+PostgreSQL with Prisma ORM
+Integrations
+Email, payments, file upload, report generation
+Quality
+Module testing guides and API validations
+2. PROJECT MANAGEMENT
+2.1 Feasibility Study
+2.1.1 Technical Feasibility
+The selected stack is mature, open-source, and suitable for modular enterprise applications with secure API development and relational data integrity.
+2.1.2 Time Schedule Feasibility
+Development progressed through phased implementation with module-level completion checkpoints and test cycles.
+2.1.3 Operational Feasibility
+Role-based dashboards and workflow-driven forms make the system usable for day-to-day operations teams.
+2.1.4 Implementation Feasibility
+Setup scripts, migration files, and environment-specific configurations make deployment practical across environments.
+2.2 Project Planning
+2.2.1 Project Development Approach and Justification
+A modular architecture enabled independent development and testing of functional areas while sharing auth, tenant context, and common middleware.
+2.2.2 Project Plan
+Phase 1: Auth, tenant, and RBAC foundation
+Phase 2: Inventory, finance, manufacturing, reporting
+Phase 3: HR, projects, documents, communication
+Phase 4: Integration hardening and deployment readiness
+2.2.3 Milestones and Deliverables
+Milestone
+Deliverable
+Architecture Baseline
+Core backend structure and secure routing
+Functional Expansion
+19 backend modules and rich frontend pages
+Data Model Completion
+125 Prisma models with tenant relations
+QA and Documentation
+Testing scripts and implementation guides
+2.2.4 Roles and Responsibilities
+Developer: architecture, coding, integration, testing
+Guide/Reviewer: technical review and quality feedback
+Users/Testers: module validation and acceptance
+2.2.5 Group Dependencies
+Cross-module dependencies are handled using common API patterns, transaction boundaries, and centralized role-permission checks.
+2.3 Project Scheduling
+Scheduling followed iterative build-test-document cycles with regular regression checks before each expansion step.
+3. SYSTEM REQUIREMENT STUDY
+3.1 Study of Current System
+Traditional operations often depend on disconnected tools and spreadsheets, resulting in poor synchronization and delayed decision-making.
+3.2 Problems and Weaknesses of Current System
+Data duplication across departments
+Manual reconciliation and delayed reports
+Weak approval governance
+Inconsistent security controls
+3.3 User Characteristics
+Admins: tenant setup and permissions
+Managers: approvals and KPIs
+Staff: daily transaction entry
+Finance/HR teams: compliance-focused operations
+3.4 Hardware and Software Requirements
+3.4.1 Hardware Requirements
+8 GB RAM or higher
+Dual-core processor or above
+Sufficient storage for dependencies and DB
+3.4.2 Software Requirements
+Node.js 18+
+PostgreSQL 14+
+NPM toolchain
+Modern web browser
+Git
+3.5 Constraints
+3.5.1 Regulatory Policies
+Tenant isolation and data privacy must be enforced.
+3.5.2 Hardware Limitations
+Low-resource devices may impact heavy analytics screens.
+3.5.3 Interfaces to Other Applications
+Integrations require stable API contracts.
+3.5.4 Parallel Operations
+Concurrency needs transaction-safe operations.
+3.5.5 Higher Order Language Requirements
+Implementation follows modern JavaScript ecosystem patterns.
+3.5.6 Reliability Requirements
+Critical workflows require rollback-safe DB transactions.
+3.5.7 Criticality of the Application
+Finance and operations depend on system availability.
+3.5.8 Safety and Security Consideration
+JWT auth, RBAC, and audit logging are mandatory.
+3.6 Assumptions and Dependencies
+Stable network and database access
+Correct tenant/role setup
+Seed/setup scripts executed
+4. SYSTEM ANALYSIS
+4.1 Requirements of New System (SRS)
+4.1.1 User Requirements
+Role-based dashboards
+Simple forms and workflow status visibility
+Exportable reports
+4.1.2 System Requirements
+Tenant isolation and RBAC checks
+Consistent REST APIs
+Audit logs and transactional integrity
+4.2 Features of New System
+19 backend modules
+124 frontend pages
+125 database models
+Workflow approvals and notifications
+4.3 Navigation Chart
+Login -> Dashboard -> Module Pages -> Transactions -> Approvals/Posting -> Reports/Analytics.
+4.4 Class Diagram
+Class structure follows route-controller-service layering with shared middleware and module-specific domain logic.
+4.5 System Activity
+User action triggers validation, permission check, service execution, database transaction, audit logging, and UI refresh.
+4.6 Sequence Diagram
+Frontend requests secured API endpoints, backend middleware validates auth/permissions, service layer processes business rules, and persistence is handled through Prisma ORM.
+4.7 ER Diagram
+ER model includes user/tenant/role entities and module entities for inventory, finance, HR, projects, sales, purchase, and reporting with relational consistency.
+5. SYSTEM DESIGN
+5.1 System Architecture Study
+5.1.1 Class Diagram
+Domain entities and services are organized to support maintainability and module separation.
+5.1.2 Sequence Diagrams
+Defined request-response and state transition paths for approval and posting workflows.
+5.1.3 Component Diagram
+Major components are React SPA, Express API, services, Prisma ORM, PostgreSQL, and utility integrations.
+5.1.4 Deployment Diagram
+Supports local and cloud deployment with environment-specific configuration and secured backend endpoints.
+5.2 Database Design
+5.2.1 Table and Relationship
+125 relational models with foreign keys and tenant-aware associations.
+5.2.2 Logical Description of Data
+Master data: users, roles, departments, branches
+Operational data: stock, purchase, sales, projects
+Financial data: accounts, journals, ledger, payments
+Control data: workflows, approvals, audit logs
+5.3 Input/Output and Interface Design
+5.3.1 State Transition/UML Diagram
+State models include DRAFT, PENDING, APPROVED, COMPLETED where applicable.
+5.3.2 Interface Design
+Responsive UI with dashboard, list, detail, and form workflows including search, filters, and validation.
+6. IMPLEMENTATION PLANNING
+6.1 Implementation Environment
+Frontend: React + Vite
+Backend: Node.js + Express
+Database: PostgreSQL + Prisma
+Tooling: npm scripts, migration and seed support
+6.2 Program/Modules Specification
+Module Group
+Coverage
+Auth & RBAC
+Login, roles, permissions
+Inventory
+Warehouses, stock movements, approvals
+Finance & AP
+Accounts, journals, bills, payments
+HR & Payroll
+Employees, attendance, leave, disbursement
+CRM & Sales
+Leads, deals, orders, invoices
+Projects
+Projects, capacity, timesheets
+Purchase
+Vendors, requisitions, purchase orders
+Documents & Communication
+Document flows, channels, announcements
+Reports
+Analytics and exports
+6.3 Coding Standards
+REST conventions and clear route naming
+Service-layer business logic
+Input validation and secure error handling
+Tenant and role checks for secured routes
+7. TESTING
+7.1 Testing Plan
+Testing covered authentication, permissions, module CRUD, workflow transitions, and report outputs.
+7.2 Testing Strategy
+Module-level script testing
+API contract testing
+UI functional testing
+Regression testing
+7.3 Testing Methods
+Positive/negative scenarios
+Boundary value checks
+Role-based access tests
+Integration scenarios
+7.4 Test Cases
+7.4.1 Purpose
+To validate correctness, security, and expected business outcomes.
+7.4.2 Required Input
+Configured tenant, seeded users/roles, and valid authentication token.
+7.4.3 Expected Result
+Authorized transactions succeed, unauthorized actions are blocked, and dashboard/report outputs reflect committed data.
+Test ID
+Scenario
+Input
+Expected Result
+TC-01
+User login
+Valid credentials
+JWT issued, dashboard opened
+TC-02
+Unauthorized route
+User without permission
+403 forbidden
+TC-03
+Stock transfer
+Valid warehouse and qty
+Movement created with status
+TC-04
+Journal posting
+Balanced debit/credit
+Ledger updated
+TC-05
+Payroll cycle
+Attendance records
+Payslip/disbursement entries
+TC-06
+Report export
+Date filters
+CSV/PDF generated
+8. USER MANUAL
+8.1 Login and Access
+Open frontend URL and sign in
+Access role-specific dashboard
+Use sidebar navigation for permitted modules
+8.2 Working with Modules
+Maintain master data
+Create module transactions
+Review pending approvals
+Generate and export reports
+8.3 Administrative Operations
+Assign roles and permissions
+Manage tenant/company settings
+Review audit logs and notifications
+8.4 Troubleshooting
+Check backend health and DB connection
+Validate token and role mapping
+Review server logs for errors
+9. LIMITATION AND FUTURE ENHANCEMENT
+9.1 Current Limitations
+Some advanced integrations need additional connectors
+Heavy reports may need background queues
+Certain workflows still require manual setup
+9.2 Future Enhancements
+Event-driven automation for long-running tasks
+Advanced predictive analytics
+Expanded mobile support
+Enterprise SSO integration
+Centralized observability dashboards
+10. CONCLUSION AND DISCUSSION
+10.1 Conclusions
+UEORMS demonstrates a complete multi-tenant ERP implementation with modular architecture, role-based control, and broad functional coverage suitable for academic and practical deployment contexts.
+10.2 Discussion
+10.2.1 Self-Analysis of Project Viabilities
+The solution is viable for scale due to clean module boundaries, consistent APIs, and transactional data design.
+10.2.2 Problems Encountered and Possible Solutions
+Dependency complexity handled via strict service contracts
+Concurrency issues addressed with DB transactions
+Permission mismatches reduced by centralized RBAC checks
+10.2.3 Summary of Project Work
+The project delivers an integrated ERP with substantial backend, frontend, and database assets, along with documented testing and operational guidance.

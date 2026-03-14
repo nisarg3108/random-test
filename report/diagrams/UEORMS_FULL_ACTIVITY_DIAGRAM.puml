@@ -1,0 +1,346 @@
+@startuml UEORMS_Full_Activity_Diagram
+title UEORMS Full Activity Diagram (Project + Report Complete Coverage)
+
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor #F7FBFF
+  BorderColor #355070
+  DiamondBackgroundColor #FFF4D6
+  DiamondBorderColor #7A5C00
+  StartColor #355070
+  EndColor #355070
+}
+skinparam noteBackgroundColor #FFFDEB
+skinparam noteBorderColor #9A8C2C
+
+start
+
+partition "Public Entry" {
+  :Open UEORMS Web or Mobile Client;
+  :Choose register, login, reset, or plan view;
+}
+
+if (Register new tenant user?) then (Yes)
+  partition "Onboarding and Subscription Initialization" {
+    :UC01 Enter company and admin details;
+    :UC02 Optional register + checkout flow;
+    :Create Tenant, User, Role/UserRole, CompanyConfig;
+    :Initialize Subscription and SubscriptionItems;
+    :Send welcome and onboarding emails;
+  }
+elseif (Login existing user?) then (Yes)
+  partition "Authentication" {
+    :UC03 Validate credentials;
+    :Issue JWT with tenant and role claims;
+    :Load role permissions and dashboard context (UC14);
+  }
+elseif (Forgot password?) then (Yes)
+  partition "Password Reset" {
+    :UC05 Request OTP;
+    :Verify OTP and set new password;
+    :Send reset confirmation email;
+  }
+else (Public plans)
+  partition "Billing Public Access" {
+    :UC15 View public plans and pricing metadata;
+  }
+endif
+
+while (Session active and API requests continue?) is (Yes)
+  partition "API Gateway Guards" {
+    :Receive API request;
+    :Run requireAuth middleware;
+  }
+
+  if (JWT valid?) then (Yes)
+    :Resolve user, tenant, and role context;
+    :Run RBAC permission check (R3, R14);
+
+    if (RBAC authorized?) then (Yes)
+      :Check if endpoint is entitlement-bound;
+      if (Entitlement required and denied?) then (Yes)
+        :Return 403 module not in active plan (R2);
+        :Write denied-access audit log (R16);
+      else (No)
+        switch (Requested capability domain)
+          case (Core Admin and Tenant\nUC06-UC14)
+            partition "Core Admin and Tenant" {
+              :UC06 Invite user and send invitation email;
+              :UC07 Accept invite and activate account;
+              :UC08 Manage users (create/list/update/delete);
+              :UC09 Manage roles, permissions, and assignments;
+              :UC10 Manage departments;
+              :UC11 Configure company setup and approval matrix;
+              :UC12 Manage branches and branch transfer operations;
+              :UC13 Manage system options and reference settings;
+              :UC14 View role-based dashboard summaries;
+            }
+            note right
+            Routes:
+            /api/users, /api/invites, /api/rbac,
+            /api/departments, /api/company, /api/branches,
+            /api/system-options, /api/dashboard
+            end note
+
+          case (Workflow, Audit, Notifications\nUC20-UC29)
+            partition "Workflow and Governance" {
+              :UC20 Configure workflow definitions;
+              :UC21 Submit workflow-backed requests;
+              :UC22 List pending approvals and my requests;
+              :UC23 Approve workflow step;
+              :UC24 Reject workflow step with reason;
+              :UC25 Track workflow request state;
+              :UC26 Query audit logs by module and actor;
+              :UC27 Dispatch notifications and alerts;
+              :UC28 Mark notification(s) as read;
+              :UC29 Stream realtime events to clients;
+            }
+            note right
+            Routes:
+            /api/workflows, /api/approvals,
+            /api/audit-logs, /api/notifications, /api/realtime
+            end note
+
+          case (HR, Attendance, Payroll\nUC30-UC47)
+            partition "HR and Payroll" {
+              :UC30 Manage employees and profiles;
+              :UC31 Assign managers;
+              :UC32 Manage leave types;
+              :UC33 Submit leave request;
+              :UC34 Approve or reject leave;
+              :UC35 Clock in and clock out;
+              :UC36 Configure shifts and assignments;
+              :UC37 Manage overtime policies;
+              :UC38 Approve overtime records;
+              :UC39 Generate attendance reports;
+              :UC40 Manage tasks and work reports;
+              :UC41 Manage salary components;
+              :UC42 Manage tax configuration;
+              :UC43 Create payroll cycles and run calculations;
+              :UC44 Generate and approve payslips;
+              :UC45 Manage disbursement runs;
+              :UC46 Reconcile payroll disbursements;
+              :UC47 Generate payment files;
+            }
+            note right
+            Routes:
+            /api/employees, /api/leave-types, /api/leave-requests,
+            /api/tasks, /api/attendance, /api/payroll,
+            /api/hr/disbursements
+            end note
+
+          case (Finance and Accounting\nUC48-UC55)
+            partition "Finance and Accounting" {
+              :UC48 Manage expense categories;
+              :UC49 Submit expense claims;
+              :UC50 Approve or reject expense claims;
+              :UC51 Manage chart of accounts hierarchy;
+              :UC52 Create and update journal entries;
+              :UC53 Post or reverse journal entries;
+              :UC54 Query general ledger balances;
+              :UC55 View finance dashboard KPIs;
+            }
+            note right
+            Routes:
+            /api/expense-categories, /api/expense-claims,
+            /api/finance, /api/accounting, /api/finance-dashboard
+            end note
+
+          case (Inventory and Manufacturing\nUC56-UC65)
+            partition "Inventory and Manufacturing" {
+              :UC56 Manage item master data;
+              :UC57 Manage warehouses and stock;
+              :UC58 Execute inter-warehouse transfers;
+              :UC59 Record stock movements;
+              :UC60 Approve or cancel stock movements;
+              :UC61 Manage BOM lifecycle;
+              :UC62 Manage work orders;
+              :UC63 Manage work-order operations;
+              :UC64 Issue and consume materials;
+              :UC65 Review inventory and production stats;
+            }
+            note right
+            Routes:
+            /api/inventory, /api/items, /api/warehouses,
+            /api/stock-movements, /api/manufacturing
+            end note
+
+          case (CRM and Sales\nUC66-UC78)
+            partition "CRM and Sales" {
+              :UC66 Manage customers and contacts;
+              :UC67 Manage leads and convert leads;
+              :UC68 Manage deals, pipelines, and stages;
+              :UC69 Manage CRM activities and reminders;
+              :UC70 Manage CRM attachments and communications;
+              :UC71 Manage quotations;
+              :UC72 Convert quotation to sales order;
+              :UC73 Manage sales orders;
+              :UC74 Convert order to invoice;
+              :UC75 Manage invoices and payments;
+              :UC76 Track order dispatch and delivery;
+              :UC77 Export and schedule sales analytics;
+              :UC78 Review forecast views;
+            }
+            note right
+            Routes:
+            /api/crm, /api/sales
+            end note
+
+          case (Purchase and Accounts Payable\nUC79-UC92)
+            partition "Purchase and AP" {
+              :UC79 Manage vendors;
+              :UC80 Manage purchase requisitions;
+              :UC81 Approve or reject requisitions;
+              :UC82 Convert requisition to purchase order;
+              :UC83 Manage purchase orders;
+              :UC84 Approve purchase orders;
+              :UC85 Manage goods receipts;
+              :UC86 Manage supplier evaluations;
+              :UC87 View purchase analytics;
+              :UC88 Manage AP bills;
+              :UC89 Run three-way matching;
+              :UC90 Approve or reject AP bills;
+              :UC91 Manage AP payments;
+              :UC92 Generate aging and vendor statements;
+            }
+            note right
+            Routes:
+            /api/purchase, /api/ap
+            end note
+
+          case (Projects and Timesheets\nUC93-UC99)
+            partition "Projects and Timesheets" {
+              :UC93 Manage projects;
+              :UC94 Manage milestones, resources, and budgets;
+              :UC95 Manage project members and capacity;
+              :UC96 Log and update timesheets;
+              :UC97 Submit timesheets;
+              :UC98 Approve or reject timesheets;
+              :UC99 View project dashboard and tasks;
+            }
+            note right
+            Routes:
+            /api/projects, /api/timesheets
+            end note
+
+          case (Assets, Documents, Communication\nUC100-UC113)
+            partition "Assets, Documents, Communication" {
+              :UC100 Manage asset categories and assets;
+              :UC101 Allocate and return assets;
+              :UC102 Detect overdue allocations;
+              :UC103 Manage maintenance plans and execution;
+              :UC104 Calculate depreciation history and summary;
+              :UC105 Manage document and folder lifecycle;
+              :UC106 Manage versions and templates;
+              :UC107 Manage shares and permissions;
+              :UC108 Review document activities and stats;
+              :UC109 Manage conversations and channels;
+              :UC110 Send messages and reactions;
+              :UC111 Publish announcements;
+              :UC112 Manage email templates and queue;
+              :UC113 Upload, access, and search files;
+            }
+            note right
+            Routes:
+            /api/assets, /api/asset-allocations, /api/asset-maintenance,
+            /api/asset-depreciation, /api/documents, /api/communication
+            end note
+
+          case (Reports, Data Utilities, Integration\nUC114-UC121)
+            partition "Reporting and Integration" {
+              :UC114 Generate financial, HR, and inventory reports;
+              :UC115 Execute custom report logic;
+              :UC116 Save and export report outputs;
+              :UC117 Schedule reports;
+              :UC118 Import operational data templates;
+              :UC119 Export operational and ledger data;
+              :UC120 Trigger cross-module sync operations;
+              :UC121 Monitor integration status and config;
+            }
+            note right
+            Routes:
+            /api/reports, /api/reporting, /api/data, /api/integration
+            end note
+
+          case (Subscription and Billing\nUC16-UC19)
+            partition "Subscription and Billing" {
+              :UC16 Change or cancel subscription;
+              :UC17 View billing metrics and event history;
+              :UC18 Preview, download, or resend invoices;
+              :UC19 Process Stripe/Razorpay webhook callbacks;
+            }
+            note right
+            Routes:
+            /api/billing
+            end note
+
+          case (Compatibility and Fallback Routes)
+            partition "Fallback and Compatibility API Layer" {
+              :Serve compatibility endpoints from missing-routes.js;
+              :Support fallback reads for dashboard, accounting,
+              reports, workflows, manufacturing, CRM, sales,
+              purchase, documents, notifications, and invites;
+            }
+            note right
+            Routes:
+            /api/* from routes/missing-routes.js
+            end note
+        endswitch
+
+        partition "Cross-Cutting Post Processing" {
+          fork
+            :Persist audit logs for critical actions (R16);
+          fork again
+            :Send notifications and emails (R17);
+          fork again
+            :Broadcast realtime dashboard and module updates;
+          fork again
+            :Emit integration events for dependent modules;
+          end fork
+          :Return success or validation error response;
+        }
+      endif
+    else (No)
+      :Return 403 unauthorized action;
+      :Audit RBAC denial attempt;
+    endif
+  else (No)
+    :Return 401 invalid or expired token;
+  endif
+endwhile (No)
+
+partition "Background Operations (System-Driven)" {
+  fork
+    :Receive billing webhooks from payment gateways;
+    :Verify signature and idempotency key;
+    if (Event already processed?) then (Yes)
+      :Acknowledge without data mutation;
+    else (No)
+      :Update subscription and payment records;
+      :Send invoice/failure notifications;
+    endif
+  fork again
+    :Run scheduler jobs;
+    :Asset overdue allocation scan and reminders;
+    :Attendance absent marking for no clock and no leave;
+    :Execute scheduled report generation and export;
+    :Retry failed email queue jobs;
+  fork again
+    :Maintain websocket sessions;
+    :Authenticate ws token and tenant scope;
+    :Push chat, approval, stock, and dashboard updates;
+  end fork
+}
+
+stop
+
+legend right
+UEORMS Activity Coverage
+- Sources: backend/src/app.js + route files + report docx extract
+- Route inventory baseline: 574 endpoints (UEORMS_ROUTE_INVENTORY.md)
+- Additional mounted files covered: companyRoutes.js and missing-routes.js
+- Use cases represented: UC01 to UC121
+- Report requirement alignment: R1 to R18
+endlegend
+
+@enduml

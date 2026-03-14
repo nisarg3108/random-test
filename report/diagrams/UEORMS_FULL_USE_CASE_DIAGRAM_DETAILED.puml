@@ -1,0 +1,425 @@
+@startuml UEORMS_Full_Use_Case_Diagram
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor #F9FBFF
+  BorderColor #2F4F6F
+}
+skinparam actor {
+  BorderColor #2F4F6F
+}
+
+actor Guest
+actor "Authenticated User" as User
+actor "Tenant Admin" as Admin
+actor Manager
+actor "HR Manager" as HRM
+actor "HR Staff" as HRS
+actor Employee
+actor "Finance Manager" as FinM
+actor Accountant
+actor "Inventory Manager" as InvM
+actor "Warehouse Staff" as WhS
+actor "Sales Manager" as SalesM
+actor "Sales Staff" as SalesS
+actor "Purchase Manager" as PurM
+actor "Project Manager" as ProjM
+actor Auditor
+actor "Payment Gateway\n(Stripe/Razorpay)" as Gateway
+actor "Email Service" as EmailSvc
+actor "Banking System" as BankSys
+actor "Integration Worker" as IntWorker
+actor "Realtime Gateway" as Realtime
+
+User <|-- Admin
+User <|-- Manager
+User <|-- HRM
+User <|-- HRS
+User <|-- Employee
+User <|-- FinM
+User <|-- Accountant
+User <|-- InvM
+User <|-- WhS
+User <|-- SalesM
+User <|-- SalesS
+User <|-- PurM
+User <|-- ProjM
+
+rectangle "UEORMS SaaS ERP" {
+
+  package "Access, Tenant, and Core Setup" {
+    usecase "UC01 Register Account" as UC01
+    usecase "UC02 Register + Checkout" as UC02
+    usecase "UC03 Login" as UC03
+    usecase "UC04 View Own Profile" as UC04
+    usecase "UC05 Reset Password (OTP)" as UC05
+    usecase "UC06 Invite User" as UC06
+    usecase "UC07 Accept Invite" as UC07
+    usecase "UC08 Manage Users" as UC08
+    usecase "UC09 Manage Roles and Permissions" as UC09
+    usecase "UC10 Manage Departments" as UC10
+    usecase "UC11 Configure Company Setup" as UC11
+    usecase "UC12 Manage Branches" as UC12
+    usecase "UC13 Configure System Options" as UC13
+    usecase "UC14 View Role-Based Dashboard" as UC14
+  }
+
+  package "Subscription and Billing" {
+    usecase "UC15 View Public Plans" as UC15
+    usecase "UC16 Manage Subscription\n(view/change/cancel)" as UC16
+    usecase "UC17 View Billing History\nand Metrics" as UC17
+    usecase "UC18 Download/Resend Invoices" as UC18
+    usecase "UC19 Handle Billing Webhooks" as UC19
+  }
+
+  package "Workflow, Audit, and Notifications" {
+    usecase "UC20 Configure Workflows" as UC20
+    usecase "UC21 Submit Workflow Request" as UC21
+    usecase "UC22 Review Pending Approvals" as UC22
+    usecase "UC23 Approve Request" as UC23
+    usecase "UC24 Reject Request" as UC24
+    usecase "UC25 View My Requests" as UC25
+    usecase "UC26 View Audit Logs" as UC26
+    usecase "UC27 Receive Notifications" as UC27
+    usecase "UC28 Mark Notifications as Read" as UC28
+    usecase "UC29 Stream Realtime Activities" as UC29
+  }
+
+  package "HR and Payroll" {
+    usecase "UC30 Manage Employees" as UC30
+    usecase "UC31 Assign Managers" as UC31
+    usecase "UC32 Manage Leave Types" as UC32
+    usecase "UC33 Submit Leave Request" as UC33
+    usecase "UC34 Approve Leave Request" as UC34
+    usecase "UC35 Clock In/Out" as UC35
+    usecase "UC36 Manage Shifts" as UC36
+    usecase "UC37 Manage Overtime Policies" as UC37
+    usecase "UC38 Approve Overtime" as UC38
+    usecase "UC39 Generate Attendance Reports" as UC39
+    usecase "UC40 Manage Tasks and Work Reports" as UC40
+    usecase "UC41 Manage Salary Components" as UC41
+    usecase "UC42 Manage Tax Configuration" as UC42
+    usecase "UC43 Run Payroll Cycle" as UC43
+    usecase "UC44 Generate and Approve Payslips" as UC44
+    usecase "UC45 Manage Disbursements" as UC45
+    usecase "UC46 Reconcile Payroll Payments" as UC46
+    usecase "UC47 Generate Payment Files" as UC47
+  }
+
+  package "Finance and Accounting" {
+    usecase "UC48 Manage Expense Categories" as UC48
+    usecase "UC49 Submit Expense Claims" as UC49
+    usecase "UC50 Approve Expense Claims" as UC50
+    usecase "UC51 Manage Chart of Accounts" as UC51
+    usecase "UC52 Manage Journal Entries" as UC52
+    usecase "UC53 Post/Reverse Journal Entries" as UC53
+    usecase "UC54 View General Ledger" as UC54
+    usecase "UC55 View Finance Dashboard" as UC55
+  }
+
+  package "Inventory and Manufacturing" {
+    usecase "UC56 Manage Items" as UC56
+    usecase "UC57 Manage Warehouses" as UC57
+    usecase "UC58 Transfer Warehouse/Branch Stock" as UC58
+    usecase "UC59 Manage Stock Movements" as UC59
+    usecase "UC60 Approve/Cancel Stock Movement" as UC60
+    usecase "UC61 Manage BOM Lifecycle" as UC61
+    usecase "UC62 Manage Work Orders" as UC62
+    usecase "UC63 Manage Operations" as UC63
+    usecase "UC64 Issue/Consume Materials" as UC64
+    usecase "UC65 View Inventory/Production Stats" as UC65
+  }
+
+  package "CRM and Sales" {
+    usecase "UC66 Manage Customers and Contacts" as UC66
+    usecase "UC67 Manage Leads and Convert Lead" as UC67
+    usecase "UC68 Manage Deals and Pipelines" as UC68
+    usecase "UC69 Track CRM Activities" as UC69
+    usecase "UC70 Manage CRM Attachments\nand Communications" as UC70
+    usecase "UC71 Manage Quotations" as UC71
+    usecase "UC72 Convert Quotation to Order" as UC72
+    usecase "UC73 Manage Sales Orders" as UC73
+    usecase "UC74 Convert Order to Invoice" as UC74
+    usecase "UC75 Manage Sales Invoices\nand Invoice Payments" as UC75
+    usecase "UC76 Track Sales Orders" as UC76
+    usecase "UC77 View/Export/Schedule\nSales Analytics" as UC77
+    usecase "UC78 View Sales Forecast" as UC78
+  }
+
+  package "Purchase and Accounts Payable" {
+    usecase "UC79 Manage Vendors" as UC79
+    usecase "UC80 Manage Purchase Requisitions" as UC80
+    usecase "UC81 Approve/Reject Requisitions" as UC81
+    usecase "UC82 Convert Requisition to PO" as UC82
+    usecase "UC83 Manage Purchase Orders" as UC83
+    usecase "UC84 Approve Purchase Orders" as UC84
+    usecase "UC85 Manage Goods Receipts" as UC85
+    usecase "UC86 Manage Supplier Evaluations" as UC86
+    usecase "UC87 View Purchase Analytics" as UC87
+    usecase "UC88 Manage AP Bills" as UC88
+    usecase "UC89 Perform Three-Way Match" as UC89
+    usecase "UC90 Approve/Reject AP Bills" as UC90
+    usecase "UC91 Manage AP Payments" as UC91
+    usecase "UC92 Generate Aging and Vendor Statements" as UC92
+  }
+
+  package "Projects and Timesheets" {
+    usecase "UC93 Manage Projects" as UC93
+    usecase "UC94 Manage Milestones/Resources/Budgets" as UC94
+    usecase "UC95 Manage Project Members\nand Team Capacity" as UC95
+    usecase "UC96 Log and Update Timesheets" as UC96
+    usecase "UC97 Submit Timesheets" as UC97
+    usecase "UC98 Approve/Reject Timesheets" as UC98
+    usecase "UC99 View Project Dashboard" as UC99
+  }
+
+  package "Assets, Documents, and Communication" {
+    usecase "UC100 Manage Asset Categories\nand Assets" as UC100
+    usecase "UC101 Allocate/Return Assets" as UC101
+    usecase "UC102 Monitor Overdue Allocations" as UC102
+    usecase "UC103 Manage Asset Maintenance" as UC103
+    usecase "UC104 Calculate Asset Depreciation" as UC104
+    usecase "UC105 Manage Documents and Folders" as UC105
+    usecase "UC106 Manage Document Versions\nand Templates" as UC106
+    usecase "UC107 Manage Shares and Permissions" as UC107
+    usecase "UC108 View Document Activities/Stats" as UC108
+    usecase "UC109 Manage Conversations\nand Channels" as UC109
+    usecase "UC110 Send Messages/Reactions" as UC110
+    usecase "UC111 Send Announcements" as UC111
+    usecase "UC112 Manage Email Templates\nand Email Queue" as UC112
+    usecase "UC113 Upload/Search\nCommunication Files" as UC113
+  }
+
+  package "Reports, Data Utilities, and Integration" {
+    usecase "UC114 Generate Financial/HR/Inventory Reports" as UC114
+    usecase "UC115 Build Custom Reports" as UC115
+    usecase "UC116 Save and Export Reports" as UC116
+    usecase "UC117 Schedule Reports" as UC117
+    usecase "UC118 Import Operational Data" as UC118
+    usecase "UC119 Export Operational Data" as UC119
+    usecase "UC120 Run Cross-Module Sync" as UC120
+    usecase "UC121 Monitor Integration Status/Config" as UC121
+  }
+}
+
+Guest --> UC01
+Guest --> UC02
+Guest --> UC03
+Guest --> UC05
+Guest --> UC07
+Guest --> UC15
+
+User --> UC03
+User --> UC04
+User --> UC14
+User --> UC27
+User --> UC28
+User --> UC29
+
+Admin --> UC06
+Admin --> UC08
+Admin --> UC09
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC20
+Admin --> UC22
+Admin --> UC23
+Admin --> UC24
+Admin --> UC25
+Admin --> UC26
+Admin --> UC120
+Admin --> UC121
+
+Auditor --> UC26
+
+Manager --> UC22
+Manager --> UC23
+Manager --> UC24
+Manager --> UC34
+Manager --> UC38
+Manager --> UC50
+Manager --> UC98
+
+HRM --> UC30
+HRM --> UC31
+HRM --> UC32
+HRM --> UC34
+HRM --> UC36
+HRM --> UC37
+HRM --> UC38
+HRM --> UC39
+HRM --> UC40
+HRM --> UC41
+HRM --> UC42
+HRM --> UC43
+HRM --> UC44
+HRM --> UC45
+HRM --> UC46
+HRM --> UC47
+HRM --> UC114
+
+HRS --> UC30
+HRS --> UC32
+HRS --> UC35
+HRS --> UC36
+HRS --> UC39
+HRS --> UC40
+
+Employee --> UC33
+Employee --> UC35
+Employee --> UC40
+Employee --> UC96
+Employee --> UC97
+Employee --> UC109
+Employee --> UC110
+
+FinM --> UC48
+FinM --> UC50
+FinM --> UC51
+FinM --> UC52
+FinM --> UC53
+FinM --> UC54
+FinM --> UC55
+FinM --> UC88
+FinM --> UC90
+FinM --> UC91
+FinM --> UC92
+FinM --> UC114
+FinM --> UC116
+
+Accountant --> UC51
+Accountant --> UC52
+Accountant --> UC53
+Accountant --> UC54
+Accountant --> UC114
+Accountant --> UC116
+
+InvM --> UC56
+InvM --> UC57
+InvM --> UC58
+InvM --> UC59
+InvM --> UC60
+InvM --> UC61
+InvM --> UC62
+InvM --> UC63
+InvM --> UC64
+InvM --> UC65
+InvM --> UC85
+InvM --> UC87
+
+WhS --> UC57
+WhS --> UC58
+WhS --> UC59
+WhS --> UC85
+
+SalesM --> UC66
+SalesM --> UC67
+SalesM --> UC68
+SalesM --> UC69
+SalesM --> UC70
+SalesM --> UC71
+SalesM --> UC72
+SalesM --> UC73
+SalesM --> UC74
+SalesM --> UC75
+SalesM --> UC76
+SalesM --> UC77
+SalesM --> UC78
+
+SalesS --> UC66
+SalesS --> UC67
+SalesS --> UC68
+SalesS --> UC69
+SalesS --> UC70
+SalesS --> UC71
+SalesS --> UC73
+SalesS --> UC75
+SalesS --> UC76
+
+PurM --> UC79
+PurM --> UC80
+PurM --> UC81
+PurM --> UC82
+PurM --> UC83
+PurM --> UC84
+PurM --> UC85
+PurM --> UC86
+PurM --> UC87
+PurM --> UC88
+PurM --> UC89
+PurM --> UC90
+PurM --> UC91
+PurM --> UC92
+
+ProjM --> UC93
+ProjM --> UC94
+ProjM --> UC95
+ProjM --> UC96
+ProjM --> UC98
+ProjM --> UC99
+
+User --> UC100
+User --> UC101
+User --> UC102
+User --> UC103
+User --> UC104
+User --> UC105
+User --> UC106
+User --> UC107
+User --> UC108
+User --> UC109
+User --> UC110
+User --> UC111
+User --> UC112
+User --> UC113
+User --> UC114
+User --> UC115
+User --> UC116
+User --> UC117
+User --> UC118
+User --> UC119
+
+Gateway --> UC19
+EmailSvc --> UC18
+EmailSvc --> UC112
+BankSys --> UC46
+BankSys --> UC47
+IntWorker --> UC120
+Realtime --> UC29
+Realtime --> UC109
+
+UC02 .> UC15 : <<include>>
+UC08 .> UC06 : <<include>>
+UC16 .> UC15 : <<include>>
+UC49 .> UC21 : <<include>>
+UC33 .> UC21 : <<include>>
+UC59 .> UC21 : <<include>>
+UC80 .> UC21 : <<include>>
+UC88 .> UC21 : <<include>>
+UC97 .> UC21 : <<include>>
+UC23 .> UC22 : <<include>>
+UC24 .> UC22 : <<include>>
+UC43 .> UC44 : <<include>>
+UC43 .> UC45 : <<include>>
+UC45 .> UC46 : <<extend>>
+UC45 .> UC47 : <<extend>>
+UC88 .> UC89 : <<include>>
+UC80 .> UC81 : <<extend>>
+UC80 .> UC82 : <<extend>>
+UC83 .> UC84 : <<extend>>
+UC71 .> UC72 : <<extend>>
+UC73 .> UC74 : <<extend>>
+UC105 .> UC106 : <<extend>>
+UC105 .> UC107 : <<extend>>
+UC109 .> UC110 : <<include>>
+UC109 .> UC111 : <<extend>>
+UC114 .> UC116 : <<extend>>
+UC114 .> UC117 : <<extend>>
+UC118 .> UC120 : <<extend>>
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml UEORMS_Sequence_10
+!pragma teoz true
+autonumber
+hide footbox
+
+actor Employee
+actor "Project Manager" as ProjM
+boundary "Web/Mobile Client" as Client
+control "Express API Layer\n(app.js route orchestration)" as API
+control "Workflow Engine + Approval Service" as WF
+control "Notification Service" as Notify
+control "Projects + Team Services" as Projects
+control "Timesheet Service" as Timesheet
+database "PostgreSQL via Prisma" as DB
+
+== 10) Projects and Timesheets ==
+ProjM -> Client : Project operations
+Client -> API : /api/projects + members + dashboard
+API -> Projects : project/milestone/resource/budget/team capacity
+Projects -> DB : Project, ProjectMember, ProjectMilestone, ProjectMilestoneDependency, ProjectResource, ProjectBudget, ProjectTimeLog
+Projects --> API : project outputs
+API --> Client : project updated
+
+Employee -> Client : Timesheet entry and submission
+Client -> API : /api/timesheets
+API -> Timesheet : create/update/submit/approve/reject flows
+Timesheet -> DB : ProjectTimesheet
+Timesheet -> WF : timesheet approval steps
+Timesheet -> Notify : approver + employee notifications
+API --> Client : timesheet status
+
+
+@enduml
