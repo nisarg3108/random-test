@@ -18,9 +18,12 @@ const FinanceApprovals = () => {
       
       // Fetch all pending approvals
       const response = await apiClient.get('/approvals');
-      
+      const approvalsData = Array.isArray(response.data)
+        ? response.data
+        : (Array.isArray(response.data?.data) ? response.data.data : []);
+
       // Filter for finance-related approvals
-      const financeApprovals = response.data.filter(
+      const financeApprovals = approvalsData.filter(
         approval => approval.workflow?.module === 'FINANCE' && 
                    approval.workflow?.action === 'EXPENSE_CLAIM'
       );

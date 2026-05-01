@@ -127,7 +127,13 @@ export const listEmployees = async (tenantId) => {
 
 export const getEmployeeByUserId = async (userId, tenantId) => {
   return prisma.employee.findFirst({
-    where: { userId, tenantId },
+    where: {
+      tenantId,
+      OR: [
+        { userId },
+        { id: userId }
+      ]
+    },
     include: {
       department: true,
       manager: true,
@@ -140,6 +146,45 @@ export const getEmployeeByUserId = async (userId, tenantId) => {
       }
     },
   });
+};
+
+export const deleteEmployee = async (employeeId, tenantId) => {
+  const employee = await prisma.employee.findFirst({
+    where: { id: employeeId, tenantId },
+    select: {
+      id: true,
+      userId: true,
+    }
+  });
+
+  if (!employee) {
+    throw new Error('Employee not found');
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.notification.deleteMany({ where: { employeeId: employee.id } });
+    await tx.workReport.deleteMany({ where: { employeeId: employee.id } });
+    await tx.task.deleteMany({ where: { employeeId: employee.id } });
+    await tx.task.deleteMany({ where: { assignedBy: employee.id } });
+    await tx.expenseClaim.deleteMany({ where: { employeeId: employee.id } });
+    await tx.leaveRequest.deleteMany({ where: { employeeId: employee.id } });
+    await tx.salaryStructure.deleteMany({ where: { employeeId: employee.id } });
+    await tx.timeTracking.deleteMany({ where: { employeeId: employee.id } });
+
+    await tx.employee.updateMany({
+      where: { managerId: employee.id },
+      data: { managerId: null }
+    });
+
+    await tx.employee.delete({ where: { id: employee.id } });
+
+    if (employee.userId) {
+      await tx.userRole.deleteMany({ where: { userId: employee.userId } });
+      await tx.user.delete({ where: { id: employee.userId } });
+    }
+  });
+
+  return employee;
 };
 
 export const assignManager = async (employeeId, managerId, tenantId) => {
