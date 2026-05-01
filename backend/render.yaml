@@ -34,6 +34,8 @@ services:
         value: 10000
       - key: SEED_ADMIN_EMAIL
         value: bhavsarnisarg0@gmail.com
+      - key: SEED_TARGET_TENANT_ID
+        sync: false  # ← Set this in Render dashboard to seed specific tenant
 
 databases:
   - name: ueorms-db

@@ -32,9 +32,17 @@ const runSeedWithRetry = async () => {
   }
 
   console.log('RUN_SEED_ON_DEPLOY=true. Running seed...');
+  
+  // Build seed command args
+  const seedArgs = ['prisma/seed.js'];
+  if (process.env.SEED_TARGET_TENANT_ID) {
+    console.log(`Using SEED_TARGET_TENANT_ID: ${process.env.SEED_TARGET_TENANT_ID}`);
+    seedArgs.push(process.env.SEED_TARGET_TENANT_ID);
+  }
+  
   for (let attempt = 1; attempt <= maxSeedRetries; attempt += 1) {
     console.log(`Seed attempt ${attempt}/${maxSeedRetries}`);
-    const code = runCommand('node', ['prisma/seed.js']);
+    const code = runCommand('node', seedArgs);
 
     if (code === 0) {
       console.log('Seed completed successfully.');
