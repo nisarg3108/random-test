@@ -39,6 +39,9 @@ const Sidebar = () => {
     // Dashboard - Everyone
     items.push({ path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard });
 
+    // Employee Hub - quick access for all authenticated users
+    items.push({ path: '/employee-hub', label: 'Employee Hub', icon: User });
+
     // HR Manager specific items
     if (['ADMIN', 'HR_MANAGER'].includes(role)) {
       items.push(

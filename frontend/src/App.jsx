@@ -55,6 +55,7 @@ import EmployeeLeaveRequest from './pages/employee/EmployeeLeaveRequest';
 import WorkReports from './pages/employee/WorkReports';
 import TaskManagement from './pages/employee/TaskManagement';
 import SalaryManagement from './pages/employee/SalaryManagement';
+import EmployeeHub from './pages/employee/EmployeeHub';
 
 // Finance
 import FinanceDashboard from './pages/finance/FinanceDashboard';
@@ -258,6 +259,7 @@ function App() {
         {/* Employee Self-Service Routes */}
         <Route path="/employee" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
         <Route path="/employee/dashboard" element={<ProtectedRoute><EmployeeDashboardNew /></ProtectedRoute>} />
+        <Route path="/employee-hub" element={<ProtectedRoute><EmployeeHub /></ProtectedRoute>} />
         <Route path="/employee/leave-request" element={<ProtectedRoute><EmployeeLeaveRequest /></ProtectedRoute>} />
         <Route path="/employee/work-reports" element={<ProtectedRoute><WorkReports /></ProtectedRoute>} />
         <Route path="/employee/tasks" element={<ProtectedRoute><TaskManagement /></ProtectedRoute>} />
