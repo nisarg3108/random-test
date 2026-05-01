@@ -148,11 +148,13 @@ export const createPendingRegistration = async ({
     throw new Error('Missing required fields');
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
+
   if (!provider || !['STRIPE', 'RAZORPAY'].includes(String(provider).toUpperCase())) {
     throw new Error('Unsupported billing provider');
   }
 
-  const existingUser = await prisma.user.findUnique({ where: { email } });
+  const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
   if (existingUser) {
     throw new Error('User already exists');
   }
@@ -177,7 +179,7 @@ export const createPendingRegistration = async ({
 
   return prisma.pendingRegistration.create({
     data: {
-      email,
+      email: normalizedEmail,
       passwordHash: hashedPassword,
       companyName,
       planId: plan.id,
@@ -302,25 +304,20 @@ export const registerUser = async ({
     },
   });
 
-  // 4️⃣ Create Subscription (best-effort - don't block registration if plan not found)
-  try {
-    const { plan, items } = await resolvePlanAndItems({
-      planId,
-      customModules,
-      billingCycle
-    });
+  const { plan, items } = await resolvePlanAndItems({
+    planId,
+    customModules,
+    billingCycle
+  });
 
-    await createSubscriptionForTenant({
-      tenantId: tenant.id,
-      plan,
-      items,
-      provider: provider || 'MANUAL'
-    });
+  await createSubscriptionForTenant({
+    tenantId: tenant.id,
+    plan,
+    items,
+    provider: provider || 'MANUAL'
+  });
 
-    await syncCompanyModulesFromSubscription(tenant.id);
-  } catch (planError) {
-    console.warn('Subscription setup skipped during registration:', planError.message);
-  }
+  await syncCompanyModulesFromSubscription(tenant.id);
 
   // 5️⃣ Generate JWT
   const token = signToken({
