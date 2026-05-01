@@ -11,7 +11,7 @@ import {
   seedAdditionalVendors
 } from './enhanced-seed.js';
 
-const DEMO_PASSWORD = 'Demo@12345';
+const DEMO_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'bhavsarnisarg0@gmail.com';
 const DEMO_ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'bhavsarnisarg0@gmail.com';
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -1191,6 +1191,154 @@ const seedHRAndPayroll = async (tenantId, employees, departments, users) => {
     }
   );
 
+  const additionalLeaveRequests = [
+    {
+      employee: employees.sales,
+      leaveTypeId: leaveTypes.sick.id,
+      startDate: addDays(2),
+      endDate: addDays(2),
+      reason: 'Medical checkup leave for seeded demo data',
+      status: 'APPROVED'
+    },
+    {
+      employee: employees.finance,
+      leaveTypeId: leaveTypes.annual.id,
+      startDate: addDays(8),
+      endDate: addDays(9),
+      reason: 'Personal work leave for seeded demo data',
+      status: 'PENDING'
+    }
+  ];
+
+  for (const leaveSpec of additionalLeaveRequests) {
+    await upsertFirst(
+      prisma.leaveRequest,
+      {
+        tenantId,
+        employeeId: leaveSpec.employee.id,
+        reason: leaveSpec.reason
+      },
+      {
+        tenantId,
+        employeeId: leaveSpec.employee.id,
+        leaveTypeId: leaveSpec.leaveTypeId,
+        startDate: leaveSpec.startDate,
+        endDate: leaveSpec.endDate,
+        reason: leaveSpec.reason,
+        status: leaveSpec.status
+      },
+      {
+        leaveTypeId: leaveSpec.leaveTypeId,
+        startDate: leaveSpec.startDate,
+        endDate: leaveSpec.endDate,
+        status: leaveSpec.status
+      }
+    );
+  }
+
+  const attendanceSnapshots = [
+    {
+      employee: employees.manager,
+      dateOffset: -1,
+      checkIn: [8, 55],
+      checkOut: [18, 5],
+      workHours: 8.17,
+      overtimeHours: 0.5,
+      isLate: false,
+      notes: 'Reviewed project milestones and approvals.'
+    },
+    {
+      employee: employees.finance,
+      dateOffset: -1,
+      checkIn: [9, 12],
+      checkOut: [18, 2],
+      workHours: 7.83,
+      overtimeHours: 0.2,
+      isLate: true,
+      notes: 'Processed invoices and reconciliations.'
+    },
+    {
+      employee: employees.sales,
+      dateOffset: -2,
+      checkIn: [9, 2],
+      checkOut: [18, 18],
+      workHours: 8.27,
+      overtimeHours: 0.6,
+      isLate: false,
+      notes: 'Completed customer follow-ups and quote revision.'
+    }
+  ];
+
+  for (const snapshot of attendanceSnapshots) {
+    const baseDate = atTime(addDays(snapshot.dateOffset), 0, 0);
+    const checkInTime = atTime(addDays(snapshot.dateOffset), snapshot.checkIn[0], snapshot.checkIn[1]);
+    const checkOutTime = atTime(addDays(snapshot.dateOffset), snapshot.checkOut[0], snapshot.checkOut[1]);
+
+    await prisma.attendance.upsert({
+      where: {
+        tenantId_employeeId_date: {
+          tenantId,
+          employeeId: snapshot.employee.id,
+          date: baseDate
+        }
+      },
+      update: {
+        checkIn: checkInTime,
+        checkOut: checkOutTime,
+        status: 'PRESENT',
+        workHours: snapshot.workHours,
+        overtimeHours: snapshot.overtimeHours,
+        notes: snapshot.notes
+      },
+      create: {
+        tenantId,
+        employeeId: snapshot.employee.id,
+        date: baseDate,
+        checkIn: checkInTime,
+        checkOut: checkOutTime,
+        status: 'PRESENT',
+        workHours: snapshot.workHours,
+        overtimeHours: snapshot.overtimeHours,
+        notes: snapshot.notes
+      }
+    });
+
+    await prisma.timeTracking.upsert({
+      where: {
+        tenantId_employeeId_date_checkInTime: {
+          tenantId,
+          employeeId: snapshot.employee.id,
+          date: baseDate,
+          checkInTime
+        }
+      },
+      update: {
+        checkOutTime,
+        checkInLocation: 'Ahmedabad HQ',
+        checkOutLocation: 'Ahmedabad HQ',
+        workHours: snapshot.workHours,
+        breakHours: 1,
+        status: 'CHECKED_OUT',
+        isLate: snapshot.isLate,
+        notes: `Seeded time tracking: ${snapshot.notes}`
+      },
+      create: {
+        tenantId,
+        employeeId: snapshot.employee.id,
+        date: baseDate,
+        checkInTime,
+        checkOutTime,
+        checkInLocation: 'Ahmedabad HQ',
+        checkOutLocation: 'Ahmedabad HQ',
+        workHours: snapshot.workHours,
+        breakHours: 1,
+        status: 'CHECKED_OUT',
+        isLate: snapshot.isLate,
+        notes: `Seeded time tracking: ${snapshot.notes}`
+      }
+    });
+  }
+
   const salaryStructures = [
     { employee: employees.manager, basicSalary: 95000, netSalary: 118500 },
     { employee: employees.finance, basicSalary: 72000, netSalary: 87800 },
@@ -2235,6 +2383,79 @@ const seedProjectsAndAssets = async (tenantId, employees, departments, users) =>
     }
   );
 
+  const projectTasks = [
+    {
+      title: `Project ${project.projectCode}: Build KPI dashboards`,
+      description: `Implement milestone analytics views for ${project.projectName}.`,
+      employeeId: employees.employee.id,
+      assignedBy: employees.manager.id,
+      priority: 'HIGH',
+      status: 'IN_PROGRESS',
+      dueDate: addDays(5),
+      reportTitle: `Task update: KPI dashboards for ${project.projectCode}`,
+      reportDescription: 'Completed chart components, pending final QA and accessibility review.',
+      hoursSpent: 7.5
+    },
+    {
+      title: `Project ${project.projectCode}: Validate budget utilization`,
+      description: `Review budget variance and utilization tracking for ${project.projectName}.`,
+      employeeId: employees.finance.id,
+      assignedBy: employees.manager.id,
+      priority: 'MEDIUM',
+      status: 'PENDING',
+      dueDate: addDays(7),
+      reportTitle: `Task update: Budget utilization check for ${project.projectCode}`,
+      reportDescription: 'Draft variance checkpoints prepared for weekly steering review.',
+      hoursSpent: 3.25
+    }
+  ];
+
+  for (const taskSpec of projectTasks) {
+    const seededTask = await upsertFirst(
+      prisma.task,
+      { tenantId, title: taskSpec.title },
+      {
+        tenantId,
+        employeeId: taskSpec.employeeId,
+        assignedBy: taskSpec.assignedBy,
+        title: taskSpec.title,
+        description: taskSpec.description,
+        priority: taskSpec.priority,
+        status: taskSpec.status,
+        dueDate: taskSpec.dueDate
+      },
+      {
+        employeeId: taskSpec.employeeId,
+        assignedBy: taskSpec.assignedBy,
+        description: taskSpec.description,
+        priority: taskSpec.priority,
+        status: taskSpec.status,
+        dueDate: taskSpec.dueDate
+      }
+    );
+
+    await upsertFirst(
+      prisma.workReport,
+      { tenantId, title: taskSpec.reportTitle },
+      {
+        tenantId,
+        employeeId: taskSpec.employeeId,
+        taskId: seededTask.id,
+        title: taskSpec.reportTitle,
+        description: taskSpec.reportDescription,
+        workDate: addDays(-1),
+        hoursSpent: taskSpec.hoursSpent,
+        attachments: [`/uploads/reports/${project.projectCode.toLowerCase()}-${taskSpec.employeeId.slice(0, 6)}.pdf`]
+      },
+      {
+        taskId: seededTask.id,
+        description: taskSpec.reportDescription,
+        workDate: addDays(-1),
+        hoursSpent: taskSpec.hoursSpent
+      }
+    );
+  }
+
   const assetCategory = await upsertFirst(
     prisma.assetCategory,
     { tenantId, code: 'LAPTOP' },
@@ -2554,6 +2775,222 @@ const seedDocumentsReportsCommunication = async (tenantId, users, customer, deal
       isActive: true,
       lastRunAt: addDays(-7),
       nextRunAt: addDays(0),
+      createdBy: users.admin.id
+    }
+  );
+
+  const salesReportTemplate = await upsertFirst(
+    prisma.reportTemplate,
+    { tenantId, name: 'Sales Analytics Overview' },
+    {
+      tenantId,
+      name: 'Sales Analytics Overview',
+      type: 'CUSTOM',
+      category: 'SALES_ANALYTICS',
+      description: 'Tracks pipeline health, conversion, and revenue realization.',
+      isSystem: false,
+      isActive: true,
+      config: {
+        columns: ['pipeline', 'openDeals', 'wonDeals', 'conversionRate', 'invoicedRevenue'],
+        filters: { period: 'LAST_30_DAYS' }
+      },
+      createdBy: users.sales.id
+    }
+  );
+
+  const financeReportTemplate = await upsertFirst(
+    prisma.reportTemplate,
+    { tenantId, name: 'Finance Approvals Dashboard' },
+    {
+      tenantId,
+      name: 'Finance Approvals Dashboard',
+      type: 'FINANCIAL',
+      category: 'APPROVAL_ANALYTICS',
+      description: 'Pending/approved finance approvals with aging and throughput.',
+      isSystem: false,
+      isActive: true,
+      config: {
+        columns: ['module', 'status', 'ageingDays', 'requestedAmount', 'approvedAmount'],
+        filters: { module: 'FINANCE' }
+      },
+      createdBy: users.finance.id
+    }
+  );
+
+  const hrReportTemplate = await upsertFirst(
+    prisma.reportTemplate,
+    { tenantId, name: 'Attendance and Leave Analytics' },
+    {
+      tenantId,
+      name: 'Attendance and Leave Analytics',
+      type: 'HR',
+      category: 'EMPLOYEE_ANALYTICS',
+      description: 'Attendance, overtime, and leave trends for HR monitoring.',
+      isSystem: false,
+      isActive: true,
+      config: {
+        columns: ['employee', 'presentDays', 'leaveDays', 'overtimeHours', 'attendancePercentage'],
+        filters: { month: 'CURRENT_MONTH' }
+      },
+      createdBy: users.manager.id
+    }
+  );
+
+  const assetReportTemplate = await upsertFirst(
+    prisma.reportTemplate,
+    { tenantId, name: 'Asset Management Dashboard' },
+    {
+      tenantId,
+      name: 'Asset Management Dashboard',
+      type: 'CUSTOM',
+      category: 'ASSET_ANALYTICS',
+      description: 'Asset utilization, allocation, depreciation, and maintenance KPIs.',
+      isSystem: false,
+      isActive: true,
+      config: {
+        columns: ['assetCode', 'status', 'allocatedTo', 'currentValue', 'nextMaintenanceDate'],
+        filters: { includeDepreciation: true }
+      },
+      createdBy: users.admin.id
+    }
+  );
+
+  const recentReports = [
+    {
+      name: 'Sales Analytics - Last 30 Days',
+      type: 'CUSTOM',
+      templateId: salesReportTemplate.id,
+      generatedBy: users.sales.id,
+      generatedAt: addDays(-1),
+      parameters: {
+        period: 'LAST_30_DAYS',
+        pipeline: 'Sales Pipeline'
+      },
+      data: {
+        summary: {
+          openDeals: 5,
+          wonDeals: 2,
+          conversionRate: 40,
+          invoicedRevenue: 289000,
+          averageDealSize: 57800
+        }
+      }
+    },
+    {
+      name: 'Attendance and Leave Trend - Current Month',
+      type: 'HR',
+      templateId: hrReportTemplate.id,
+      generatedBy: users.manager.id,
+      generatedAt: addDays(-2),
+      parameters: {
+        month: 'CURRENT',
+        includeOvertime: true
+      },
+      data: {
+        summary: {
+          activeEmployees: 20,
+          avgAttendancePercent: 92.4,
+          approvedLeaves: 4,
+          pendingLeaves: 2,
+          overtimeHours: 9.7
+        }
+      }
+    },
+    {
+      name: 'Finance Approvals Aging - Weekly',
+      type: 'FINANCIAL',
+      templateId: financeReportTemplate.id,
+      generatedBy: users.finance.id,
+      generatedAt: addDays(-3),
+      parameters: {
+        window: '7_DAYS',
+        module: 'FINANCE'
+      },
+      data: {
+        summary: {
+          totalRequests: 8,
+          approved: 5,
+          pending: 3,
+          avgApprovalHours: 11.8,
+          totalApprovedAmount: 707200
+        }
+      }
+    },
+    {
+      name: 'Asset Utilization and Depreciation - Monthly',
+      type: 'CUSTOM',
+      templateId: assetReportTemplate.id,
+      generatedBy: users.admin.id,
+      generatedAt: addDays(-4),
+      parameters: {
+        month: 'CURRENT',
+        groupBy: 'CATEGORY'
+      },
+      data: {
+        summary: {
+          totalAssets: 1,
+          allocatedAssets: 1,
+          maintenanceDueIn30Days: 1,
+          monthlyDepreciation: 3000,
+          currentAssetValue: 85000
+        }
+      }
+    }
+  ];
+
+  for (const reportSpec of recentReports) {
+    await upsertFirst(
+      prisma.report,
+      { tenantId, name: reportSpec.name },
+      {
+        tenantId,
+        templateId: reportSpec.templateId,
+        name: reportSpec.name,
+        type: reportSpec.type,
+        parameters: reportSpec.parameters,
+        data: reportSpec.data,
+        generatedBy: reportSpec.generatedBy,
+        generatedAt: reportSpec.generatedAt
+      },
+      {
+        templateId: reportSpec.templateId,
+        type: reportSpec.type,
+        parameters: reportSpec.parameters,
+        data: reportSpec.data,
+        generatedBy: reportSpec.generatedBy,
+        generatedAt: reportSpec.generatedAt
+      }
+    );
+  }
+
+  await upsertFirst(
+    prisma.reportSchedule,
+    { tenantId, name: 'Daily Sales Analytics' },
+    {
+      tenantId,
+      templateId: salesReportTemplate.id,
+      name: 'Daily Sales Analytics',
+      frequency: 'DAILY',
+      recipients: ['sales@ueorms.local', 'admin@ueorms.local'],
+      isActive: true,
+      lastRunAt: addDays(-1),
+      nextRunAt: addDays(0),
+      createdBy: users.sales.id
+    }
+  );
+
+  await upsertFirst(
+    prisma.reportSchedule,
+    { tenantId, name: 'Monthly Asset Dashboard' },
+    {
+      tenantId,
+      templateId: assetReportTemplate.id,
+      name: 'Monthly Asset Dashboard',
+      frequency: 'MONTHLY',
+      recipients: ['it@ueorms.local', 'finance@ueorms.local'],
+      isActive: true,
+      lastRunAt: addDays(-10),
+      nextRunAt: addDays(20),
       createdBy: users.admin.id
     }
   );
@@ -6243,7 +6680,7 @@ export const seedComprehensiveDemoData = async () => {
   console.log('✨ ========================================\n');
   console.log('📋 Demo Data Summary:');
   console.log(`   • Tenant: UEORMS Demo Tenant`);
-  console.log(`   • Admin Login: ${DEMO_ADMIN_EMAIL} / Demo@12345`);
+  console.log(`   • Admin Login: ${DEMO_ADMIN_EMAIL} / ${DEMO_PASSWORD}`);
   console.log(`   • Total Employees: ${5 + additionalEmployees.length}`);
   console.log(`   • Goods Receipts: ${additionalGRs.length + 1}`);
   console.log(`   • Stock Movements: ${movements.length + 2}`);
