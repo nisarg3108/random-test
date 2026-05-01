@@ -1,2 +1,4 @@
 
 /src/generated/prisma
+/deploy/db/*.dump
+/deploy/db/*.sql

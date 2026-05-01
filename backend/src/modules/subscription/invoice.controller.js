@@ -1,4 +1,5 @@
 import prisma from '../../config/db.js';
+import emailService from '../../services/email.service.js';
 import * as invoiceService from './invoice.service.js';
 
 /**
@@ -109,9 +110,9 @@ export const resendInvoiceEmail = async (req, res) => {
     console.log('[Invoice Controller] User email:', userEmail);
     console.log('[Invoice Controller] Tenant ID:', tenantId);
 
-    // Check Resend configuration
-    if (!process.env.RESEND_API_KEY) {
-      console.error('[Invoice Controller] Resend not configured');
+    // Check email configuration
+    if (!emailService.checkConfiguration()) {
+      console.error('[Invoice Controller] Email service not configured');
       return res.status(503).json({ 
         success: false, 
         error: 'Email service not configured. Please contact administrator.' 

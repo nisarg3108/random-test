@@ -75,28 +75,14 @@ Write-Host ""
 Write-Host "═══════════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
 
-# Ask user to confirm backend is running
-Write-Host "⚠️  IMPORTANT: Make sure your backend server is running!" -ForegroundColor Yellow
-Write-Host "   Expected URL: http://localhost:5000" -ForegroundColor Yellow
 Write-Host ""
-$confirmation = Read-Host "Is your backend server running? (Y/N)"
-
-if ($confirmation -ne 'Y' -and $confirmation -ne 'y') {
-    Write-Host ""
-    Write-Host "❌ Test cancelled. Please start your backend server first:" -ForegroundColor Red
-    Write-Host "   npm run dev" -ForegroundColor Cyan
-    Write-Host ""
-    exit 0
-}
-
-Write-Host ""
-Write-Host "🚀 Starting comprehensive test suite..." -ForegroundColor Green
+Write-Host "🚀 Verifying backend health, database migrations, and comprehensive module coverage..." -ForegroundColor Green
 Write-Host ""
 Write-Host "═══════════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
 
-# Run the test
-node COMPREHENSIVE_ERP_SYSTEM_TEST.js
+# Run the verification script, which also launches the comprehensive test suite
+node verify-server-and-migrations.js --run-tests
 
 # Check exit code
 if ($LASTEXITCODE -eq 0) {

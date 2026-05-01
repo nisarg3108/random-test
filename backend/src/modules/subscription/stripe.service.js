@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import prisma from '../../config/db.js';
+import emailService from '../../services/email.service.js';
 import { syncCompanyModulesFromSubscription } from './subscription.utils.js';
 import { finalizePendingRegistration } from '../../core/auth/auth.service.js';
 import * as invoiceService from './invoice.service.js';
@@ -430,7 +431,7 @@ const handleCheckoutSessionCompleted = async (session, billingEventId) => {
     console.log('[Stripe] Modules synced');
 
     // Send invoice email
-    if (process.env.RESEND_API_KEY) {
+    if (emailService.checkConfiguration()) {
       try {
         const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
           where: { id: payment.id },
@@ -540,7 +541,7 @@ const handlePlanChangePayment = async (session, billingEventId) => {
       console.log('[Stripe] Plan change payment recorded:', payment.id);
 
       // Generate invoice and send email
-      if (process.env.RESEND_API_KEY) {
+      if (emailService.checkConfiguration()) {
         try {
           const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
             where: { id: payment.id },
@@ -649,9 +650,9 @@ const handleChargeSucceeded = async (charge, billingEventId) => {
 
     // Generate invoice and send email
     console.log('\n[Stripe] Checking email configuration...');
-    console.log('[Stripe] RESEND_API_KEY:', process.env.RESEND_API_KEY ? '✅ Configured' : '❌ Not configured');
+    console.log('[Stripe] Email service:', emailService.checkConfiguration() ? `✅ Configured (${emailService.getProvider()})` : '❌ Not configured');
     
-    if (process.env.RESEND_API_KEY) {
+    if (emailService.checkConfiguration()) {
       try {
         const paymentWithDetails = await prisma.subscriptionPayment.findFirst({
           where: { id: payment.id },
@@ -852,9 +853,9 @@ const handleInvoicePaymentSucceeded = async (invoice, billingEventId) => {
 
   // Generate invoice PDF and send email if email is configured
   console.log('\n[Stripe] Checking email configuration...');
-  console.log('[Stripe] RESEND_API_KEY:', process.env.RESEND_API_KEY ? '✅ Configured' : '❌ Not configured');
+  console.log('[Stripe] Email service:', emailService.checkConfiguration() ? `✅ Configured (${emailService.getProvider()})` : '❌ Not configured');
   
-  if (process.env.RESEND_API_KEY) {
+  if (emailService.checkConfiguration()) {
     try {
       // Get admin user email
       const adminEmail = subscription.tenant?.users?.[0]?.email;

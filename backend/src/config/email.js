@@ -3,19 +3,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// We're no longer using Resend, but we keep the structure for compatibility.
-
-if (process.env.SMTP_USER) {
-  console.log(' Email service ready');
+if (emailService.checkConfiguration()) {
+  console.log(` Email service ready via ${emailService.getProvider()}`);
 } else {
-  console.log(' Email service not configured: SMTP_USER is missing');
+  console.log(' Email service not configured: set RESEND_API_KEY or SMTP_USER/SMTP_PASS');
 }
 
 /**
  * Send overdue bill notification
  */
 export const sendOverdueBillNotification = async (bill, vendor, recipients) => {
-  if (!process.env.SMTP_USER) {
+  if (!emailService.checkConfiguration()) {
     console.log('  Email not configured - skipping notification');
     return { success: false, message: 'Email not configured' };
   }
@@ -58,7 +56,7 @@ export const sendOverdueBillNotification = async (bill, vendor, recipients) => {
  * Send bill approval notification
  */
 export const sendBillApprovalNotification = async (bill, vendor, approver, recipients) => {
-  if (!process.env.SMTP_USER) {
+  if (!emailService.checkConfiguration()) {
     return { success: false, message: 'Email not configured' };
   }
 
@@ -94,7 +92,7 @@ export const sendBillApprovalNotification = async (bill, vendor, approver, recip
  * Send payment confirmation notification
  */
 export const sendPaymentConfirmation = async (payment, vendor, bills, recipients) => {
-  if (!process.env.SMTP_USER) {
+  if (!emailService.checkConfiguration()) {
     return { success: false, message: 'Email not configured' };
   }
 

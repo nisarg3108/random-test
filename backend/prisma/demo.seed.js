@@ -2,6 +2,14 @@ import bcrypt from 'bcrypt';
 import prisma from '../src/config/db.js';
 import { seedRoles } from '../src/core/rbac/roles.seed.js';
 import { assignPermissions } from '../src/core/rbac/rolePermission.seed.js';
+import {
+  seedAdditionalEmployees,
+  seedAdditionalGoodsReceipts,
+  seedWarehouseDispatchAndMovements,
+  seedFinanceApprovals,
+  seedEnhancedDocuments,
+  seedAdditionalVendors
+} from './enhanced-seed.js';
 
 const DEMO_PASSWORD = 'Demo@12345';
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -274,7 +282,7 @@ const seedOrganization = async (tenantId, passwordHash) => {
 
   const users = {
     admin: await prisma.user.upsert({
-      where: { email: 'admin.demo@ueorms.local' },
+      where: { email: 'bhavsarnisarg0@gmail.com' },
       update: {
         password: passwordHash,
         role: 'ADMIN',
@@ -284,7 +292,7 @@ const seedOrganization = async (tenantId, passwordHash) => {
         managerId: null
       },
       create: {
-        email: 'admin.demo@ueorms.local',
+        email: 'bhavsarnisarg0@gmail.com',
         password: passwordHash,
         role: 'ADMIN',
         status: 'ACTIVE',
@@ -6157,13 +6165,28 @@ const seedBaselineForExistingTenants = async (passwordHash) => {
 export const seedComprehensiveDemoData = async () => {
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
 
+  console.log('🌱 Seeding tenant and subscription...');
   const { tenant } = await seedTenantAndSubscription();
+  
+  console.log('🌱 Seeding organization, departments, and users...');
   const { departments, users, employees } = await seedOrganization(tenant.id, passwordHash);
+  
+  console.log('🌱 Seeding branch, inventory, and manufacturing...');
   const { warehouse, items } = await seedBranchInventoryAndManufacturing(tenant.id, departments, users);
+  
+  console.log('🌱 Seeding HR and payroll...');
   const hr = await seedHRAndPayroll(tenant.id, employees, departments, users);
+  
+  console.log('🌱 Seeding CRM and sales...');
   const crmSales = await seedCRMAndSales(tenant.id, users, employees, items);
+  
+  console.log('🌱 Seeding purchase, AP, and finance...');
   const finance = await seedPurchaseAPAndFinance(tenant.id, users, departments, warehouse, items, employees);
+  
+  console.log('🌱 Seeding projects and assets...');
   const projectsAssets = await seedProjectsAndAssets(tenant.id, employees, departments, users);
+  
+  console.log('🌱 Seeding documents, reports, and communication...');
   await seedDocumentsReportsCommunication(
     tenant.id,
     users,
@@ -6171,6 +6194,8 @@ export const seedComprehensiveDemoData = async () => {
     crmSales.deal,
     projectsAssets.project
   );
+  
+  console.log('🌱 Seeding workflows, notifications, and customizations...');
   await seedWorkflowsNotificationsAndCustomizations(
     tenant.id,
     users,
@@ -6180,9 +6205,49 @@ export const seedComprehensiveDemoData = async () => {
     projectsAssets.project
   );
 
+  // ============================================
+  // ENHANCED SEED DATA (15 CATEGORIES)
+  // ============================================
+  
+  console.log('🚀 ENHANCING WITH COMPREHENSIVE TEST DATA...\n');
+  
+  console.log('📊 [1/6] Adding more employees to each department (3-5 per dept)...');
+  const additionalEmployees = await seedAdditionalEmployees(tenant.id, departments, employees);
+  console.log(`    ✓ Added ${additionalEmployees.length} employees across all departments`);
+  
+  console.log('📦 [2/6] Adding goods receipt records with line items...');
+  const additionalGRs = await seedAdditionalGoodsReceipts(tenant.id, users, warehouse, items, finance.purchaseOrder);
+  console.log(`    ✓ Added ${additionalGRs.length} goods receipt records`);
+  
+  console.log('🚚 [3/6] Adding warehouse dispatch and stock movements...');
+  const movements = await seedWarehouseDispatchAndMovements(tenant.id, users, warehouse, items);
+  console.log(`    ✓ Added ${movements.length} warehouse dispatch/movement records`);
+  
+  console.log('✅ [4/6] Adding finance approvals for POs, bills, and expenses...');
+  const approvals = await seedFinanceApprovals(tenant.id, users, employees);
+  console.log(`    ✓ Added ${approvals.length} approval workflow records`);
+  
+  console.log('📄 [5/6] Adding comprehensive documents with folders and files...');
+  const documents = await seedEnhancedDocuments(tenant.id, users, employees);
+  console.log(`    ✓ Added ${documents.length} documents with organized folder structure`);
+  
+  console.log('🏢 [6/6] Adding additional vendors with evaluation data...');
+  const additionalVendors = await seedAdditionalVendors(tenant.id, users);
+  console.log(`    ✓ Added ${additionalVendors.length} vendors with comprehensive data`);
+
   await seedBaselineForExistingTenants(passwordHash);
 
-  console.log('Comprehensive demo seed completed.');
-  console.log('Demo tenant: UEORMS Demo Tenant');
-  console.log('Demo admin login: admin.demo@ueorms.local / Demo@12345');
+  console.log('\n✨ ========================================');
+  console.log('✨ Comprehensive demo seed completed successfully!');
+  console.log('✨ ========================================\n');
+  console.log('📋 Demo Data Summary:');
+  console.log(`   • Tenant: UEORMS Demo Tenant`);
+  console.log(`   • Admin Login: bhavsarnisarg0@gmail.com / Demo@12345`);
+  console.log(`   • Total Employees: ${5 + additionalEmployees.length}`);
+  console.log(`   • Goods Receipts: ${additionalGRs.length + 1}`);
+  console.log(`   • Stock Movements: ${movements.length + 2}`);
+  console.log(`   • Finance Approvals: ${approvals.length}`);
+  console.log(`   • Documents: ${documents.length}`);
+  console.log(`   • Vendors: ${additionalVendors.length + 1}`);
+  console.log('✨ ========================================\n');
 };

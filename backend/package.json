@@ -8,6 +8,8 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "seed": "node prisma/seed.js",
+    "verify:server": "node verify-server-and-migrations.js",
+    "test:server": "node verify-server-and-migrations.js --run-tests",
     "test:comprehensive": "node COMPREHENSIVE_ERP_SYSTEM_TEST.js",
     "test": "npm run test:comprehensive"
   },
