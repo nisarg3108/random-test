@@ -1,17 +1,23 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import cron from 'node-cron';
 import exportService from './export.service.js';
 
 class EmailService {
   constructor() {
     this.scheduledJobs = new Map();
-    this.isConfigured = !!process.env.RESEND_API_KEY;
+    this.isConfigured = !!(process.env.SMTP_USER && process.env.SMTP_PASS);
     
     if (this.isConfigured) {
-      this.resend = new Resend(process.env.RESEND_API_KEY);
+      this.transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      });
     } else {
-      console.warn('⚠️  Email service not configured. Set RESEND_API_KEY in .env to enable email features.');
-      this.resend = null;
+      console.warn('⚠️  Email service not configured. Set SMTP_USER and SMTP_PASS in .env to enable email features.');
+      this.transporter = null;
     }
   }
 
@@ -21,7 +27,7 @@ class EmailService {
 
   ensureConfigured() {
     if (!this.isConfigured) {
-      throw new Error('Email service not configured. Please set RESEND_API_KEY in your .env file.');
+      throw new Error('Email service not configured. Please set SMTP_USER and SMTP_PASS in your .env file.');
     }
   }
 
@@ -31,23 +37,21 @@ class EmailService {
   async sendEmail({ to, cc, bcc, subject, html, text, tenantId }) {
     this.ensureConfigured();
 
-    // Use RESEND_TO_OVERRIDE when domain is not yet verified (Resend free plan restriction)
-    const finalTo = process.env.RESEND_TO_OVERRIDE || to;
+    const finalTo = to;
 
     try {
-      const { data, error } = await this.resend.emails.send({
-        from: process.env.RESEND_FROM || 'onboarding@resend.dev',
-        to: Array.isArray(finalTo) ? finalTo : [finalTo],
-        ...(cc ? { cc: Array.isArray(cc) ? cc : [cc] } : {}),
-        ...(bcc ? { bcc: Array.isArray(bcc) ? bcc : [bcc] } : {}),
+      const info = await this.transporter.sendMail({
+        from: process.env.SMTP_USER,
+        to: Array.isArray(finalTo) ? finalTo.join(', ') : finalTo,
+        ...(cc ? { cc: Array.isArray(cc) ? cc.join(', ') : cc } : {}),
+        ...(bcc ? { bcc: Array.isArray(bcc) ? bcc.join(', ') : bcc } : {}),
         subject,
         html: html || text,
         text
       });
 
-      if (error) throw new Error(error.message);
-      console.log(`Email sent to ${to}: ${data.id}`);
-      return { success: true, messageId: data.id };
+      console.log(`Email sent to ${to}: ${info.messageId}`);
+      return { success: true, messageId: info.messageId };
     } catch (error) {
       console.error('Email send error:', error);
       throw error;
@@ -73,7 +77,7 @@ class EmailService {
     const { email, name, employeeCode } = employeeData;
     
     const mailOptions = {
-      from: process.env.RESEND_FROM || 'onboarding@resend.dev',
+      from: process.env.SMTP_USER,
       to: [email],
       subject: 'Welcome to the Team - Your Account Details',
       html: `
@@ -100,8 +104,7 @@ class EmailService {
     };
 
     try {
-      const { data, error } = await this.resend.emails.send(mailOptions);
-      if (error) throw new Error(error.message);
+      const info = await this.transporter.sendMail(mailOptions);
       console.log(`Welcome email sent to ${email}`);
     } catch (error) {
       console.error('Failed to send welcome email:', error);
@@ -112,7 +115,7 @@ class EmailService {
     this.ensureConfigured();
     
     const mailOptions = {
-      from: process.env.RESEND_FROM || 'onboarding@resend.dev',
+      from: process.env.SMTP_USER,
       to: [email],
       subject: 'Password Reset OTP',
       html: `
@@ -136,8 +139,7 @@ class EmailService {
     };
 
     try {
-      const { data, error } = await this.resend.emails.send(mailOptions);
-      if (error) throw new Error(error.message);
+      const info = await this.transporter.sendMail(mailOptions);
       console.log(`Password reset OTP sent to ${email}`);
     } catch (error) {
       console.error('Failed to send password reset OTP:', error);
@@ -183,19 +185,18 @@ class EmailService {
       const html = this.buildReportEmailHTML(analyticsData);
 
       const emailPayload = {
-        from: process.env.RESEND_FROM || 'onboarding@resend.dev',
-        to: Array.isArray(to) ? to : [to],
+        from: process.env.SMTP_USER,
+        to: Array.isArray(to) ? to.join(', ') : to,
         subject,
         html,
         ...(includeAttachment ? {
-          attachments: [{ filename, content: Buffer.isBuffer(attachment) ? attachment.toString('base64') : attachment }]
+          attachments: [{ filename, content: attachment }]
         } : {})
       };
 
-      const { data, error } = await this.resend.emails.send(emailPayload);
-      if (error) throw new Error(error.message);
-      console.log('Analytics report email sent:', data.id);
-      return { success: true, messageId: data.id };
+      const info = await this.transporter.sendMail(emailPayload);
+      console.log('Analytics report email sent:', info.messageId);
+      return { success: true, messageId: info.messageId };
     } catch (error) {
       console.error('Email send error:', error);
       throw new Error(`Failed to send email: ${error.message}`);
@@ -377,7 +378,7 @@ class EmailService {
     );
 
     const mailOptions = {
-      from: process.env.RESEND_FROM || 'onboarding@resend.dev',
+      from: process.env.SMTP_USER,
       to: [employee.email],
       subject: `⚠️ Overdue Asset Return Notice - ${asset.name}`,
       html: `
@@ -448,8 +449,7 @@ class EmailService {
     };
 
     try {
-      const { data, error } = await this.resend.emails.send(mailOptions);
-      if (error) throw new Error(error.message);
+      const info = await this.transporter.sendMail(mailOptions);
       console.log(`Overdue allocation notification sent to ${employee.email} for asset ${asset.assetCode}`);
       return { success: true, email: employee.email };
     } catch (error) {
@@ -496,9 +496,15 @@ class EmailService {
    */
   async verifyConnection() {
     if (!this.isConfigured) {
-      return { success: false, message: 'RESEND_API_KEY not configured' };
+      return { success: false, message: 'SMTP_USER and SMTP_PASS not configured' };
     }
-    return { success: true, message: 'Email service ready' };
+    
+    try {
+      await this.transporter.verify();
+      return { success: true, message: 'Email service ready' };
+    } catch (error) {
+      return { success: false, message: `Connection failed: ${error.message}` };
+    }
   }
 }
 
