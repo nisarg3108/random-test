@@ -1,58 +1,77 @@
 import { Link } from 'react-router-dom';
-import { CalendarDays, BadgeIndianRupee, ClipboardList, MessagesSquare } from 'lucide-react';
+import { Calendar, BadgeIndianRupee, ClipboardList, MessageSquare, ArrowRight } from 'lucide-react';
 
 const shortcuts = [
   {
     to: '/employee/attendance',
     title: 'My Attendance',
-    description: 'View your attendance summary and monthly report.',
-    icon: CalendarDays,
+    description: 'View your attendance summary and monthly report',
+    icon: Calendar,
+    color: 'blue',
   },
   {
     to: '/employee/salary',
     title: 'My Salary',
-    description: 'See your salary structure and download payslips.',
+    description: 'See your salary structure and download payslips',
     icon: BadgeIndianRupee,
+    color: 'green',
   },
   {
     to: '/employee/leave-request',
     title: 'Leave Request',
-    description: 'Submit a new leave request and track its status.',
+    description: 'Submit a new leave request and track its status',
     icon: ClipboardList,
+    color: 'purple',
   },
   {
     to: '/communication/messages',
     title: 'Messages',
-    description: 'Check team updates and conversations.',
-    icon: MessagesSquare,
+    description: 'Check team updates and conversations',
+    icon: MessageSquare,
+    color: 'orange',
   },
 ];
 
+const getColorClasses = (color) => {
+  const colorMap = {
+    blue: { icon: 'text-blue-600', bg: 'bg-blue-100' },
+    green: { icon: 'text-green-600', bg: 'bg-green-100' },
+    purple: { icon: 'text-purple-600', bg: 'bg-purple-100' },
+    orange: { icon: 'text-orange-600', bg: 'bg-orange-100' },
+  };
+  return colorMap[color] || colorMap.blue;
+};
+
 const EmployeeHub = () => {
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-8">
-      <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 text-white shadow-xl">
-        <p className="text-sm uppercase tracking-[0.2em] text-slate-300">Employee Self-Service</p>
-        <h1 className="mt-3 text-4xl font-bold">Employee Hub</h1>
-        <p className="mt-3 max-w-2xl text-slate-300">
-          Use this page to reach your attendance, salary, leave, and communication tools without landing in admin workflows.
-        </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Employee Hub</h1>
+        <p className="text-gray-600 mt-1">Access your self-service tools for attendance, salary, leave, and communication</p>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {shortcuts.map(({ to, title, description, icon: Icon }) => (
-          <Link
-            key={to}
-            to={to}
-            className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-white group-hover:bg-slate-700">
-              <Icon className="h-5 w-5" />
-            </div>
-            <h2 className="mt-4 text-lg font-semibold text-slate-900">{title}</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
-          </Link>
-        ))}
+      {/* Quick Access Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {shortcuts.map(({ to, title, description, icon: Icon, color }) => {
+          const colorClasses = getColorClasses(color);
+          return (
+            <Link
+              key={to}
+              to={to}
+              className="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-all hover:shadow-md hover:border-gray-300"
+            >
+              <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${colorClasses.bg}`}>
+                <Icon className={`h-6 w-6 ${colorClasses.icon}`} />
+              </div>
+              <h2 className="mt-4 text-lg font-semibold text-gray-900">{title}</h2>
+              <p className="mt-2 text-sm text-gray-600 leading-5">{description}</p>
+              <div className="mt-4 flex items-center text-sm font-medium text-gray-600 group-hover:text-gray-900 transition-colors">
+                Access <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
