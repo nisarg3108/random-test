@@ -14,6 +14,7 @@ const TaskManagement = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const userRole = getUserRole();
+  const canAssignTasks = userRole === 'ADMIN' || userRole === 'MANAGER';
   const [formData, setFormData] = useState({
     employeeId: '',
     title: '',
@@ -24,8 +25,10 @@ const TaskManagement = () => {
 
   useEffect(() => {
     fetchTasks();
-    fetchEmployees();
-  }, []);
+    if (canAssignTasks) {
+      fetchEmployees();
+    }
+  }, [canAssignTasks]);
 
   const fetchTasks = async () => {
     try {
@@ -126,9 +129,6 @@ const TaskManagement = () => {
       </div>
     );
   }
-
-  // Check if user has permission to assign tasks
-  const canAssignTasks = userRole === 'ADMIN' || userRole === 'MANAGER';
 
   return (
     <Layout>

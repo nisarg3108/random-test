@@ -42,7 +42,7 @@ export const requirePermission = (permissionCode, options = {}) => {
         'PURCHASE_MANAGER': ['purchase'],
         'PROJECT_MANAGER': ['projects'],
         'HR_MANAGER': ['employees', 'hr'],
-        'MANAGER': ['tasks', 'employees']
+        'MANAGER': ['tasks', 'employee', 'employees']
       };
       
       // Check if user's role grants access to required permissions
