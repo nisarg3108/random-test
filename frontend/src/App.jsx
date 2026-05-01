@@ -57,6 +57,9 @@ import TaskManagement from './pages/employee/TaskManagement';
 import SalaryManagement from './pages/employee/SalaryManagement';
 import EmployeeHub from './pages/employee/EmployeeHub';
 
+// Self-Service (Common for all roles)
+import { MySalary, MyLeave, MyAttendance } from './pages/self-service';
+
 // Finance
 import FinanceDashboard from './pages/finance/FinanceDashboard';
 import ExpenseCategoryList from './pages/finance/ExpenseCategoryList';
@@ -264,6 +267,11 @@ function App() {
         <Route path="/employee/work-reports" element={<ProtectedRoute><WorkReports /></ProtectedRoute>} />
         <Route path="/employee/tasks" element={<ProtectedRoute><TaskManagement /></ProtectedRoute>} />
         <Route path="/hr/salary-management" element={<ProtectedRoute><SalaryManagement /></ProtectedRoute>} />
+        
+        {/* Self-Service Routes (Common for all roles) */}
+        <Route path="/my-salary" element={<ProtectedRoute><MySalary /></ProtectedRoute>} />
+        <Route path="/my-leave" element={<ProtectedRoute><MyLeave /></ProtectedRoute>} />
+        <Route path="/my-attendance" element={<ProtectedRoute><MyAttendance /></ProtectedRoute>} />
         
         {/* Finance Routes */}
         <Route path="/finance" element={<ProtectedRoute><FinanceDashboard /></ProtectedRoute>} />

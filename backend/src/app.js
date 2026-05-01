@@ -31,6 +31,7 @@ import leaveTypeRoutes from './modules/hr/leaveType.routes.js';
 import leaveRequestRoutes from './modules/hr/leaveRequest.routes.js';
 import employeeDashboardRoutes from './modules/hr/employee.dashboard.routes.js';
 import employeeHubRoutes from './modules/hr/employeeHub.routes.js';
+import selfServiceRoutes from './modules/hr/selfService.routes.js';
 import payrollRoutes from './modules/hr/payroll.routes.js';
 import disbursementRoutes from './modules/hr/disbursement.routes.js';
 import taskRoutes from './modules/hr/task.routes.js';
@@ -126,6 +127,8 @@ app.use('/api/payroll', requireAuth, requireModuleEntitlement('PAYROLL'), payrol
 app.use('/api/hr/disbursements', requireAuth, requireModuleEntitlement('PAYROLL'), disbursementRoutes);
 // Employee Hub: aggregated endpoints for quick-access features (available to any authenticated user)
 app.use('/api/employee-hub', requireAuth, employeeHubRoutes);
+// Self-Service: common features accessible to all authenticated users (salary, payslips, leave balance)
+app.use('/api/self-service', requireAuth, selfServiceRoutes);
 app.use('/api/tasks', requireAuth, requireModuleEntitlement('HR'), taskRoutes);
 app.use('/api/attendance', requireAuth, requireModuleEntitlement('HR'), attendanceRoutes);
 
