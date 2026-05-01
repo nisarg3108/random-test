@@ -1,31 +1,27 @@
-﻿import { Resend } from 'resend';
+import emailService from '../services/email.service.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Create Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// We're no longer using Resend, but we keep the structure for compatibility.
 
-const FROM_ADDRESS = process.env.RESEND_FROM || 'onboarding@resend.dev';
-
-if (process.env.RESEND_API_KEY) {
-  console.log(' Resend email service ready');
+if (process.env.SMTP_USER) {
+  console.log(' Email service ready');
 } else {
-  console.log(' Email service not configured: RESEND_API_KEY is missing');
+  console.log(' Email service not configured: SMTP_USER is missing');
 }
 
 /**
  * Send overdue bill notification
  */
 export const sendOverdueBillNotification = async (bill, vendor, recipients) => {
-  if (!process.env.RESEND_API_KEY) {
+  if (!process.env.SMTP_USER) {
     console.log('  Email not configured - skipping notification');
     return { success: false, message: 'Email not configured' };
   }
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
+    const result = await emailService.sendEmail({
       to: recipients,
       subject: `Overdue Bill Alert - ${bill.billNumber}`,
       html: `
@@ -50,9 +46,8 @@ export const sendOverdueBillNotification = async (bill, vendor, recipients) => {
       `
     });
 
-    if (error) throw new Error(error.message);
-    console.log(' Overdue notification sent:', data.id);
-    return { success: true, messageId: data.id };
+    console.log(' Overdue notification sent:', result.messageId);
+    return { success: true, messageId: result.messageId };
   } catch (error) {
     console.error(' Email sending failed:', error);
     return { success: false, error: error.message };
@@ -63,13 +58,12 @@ export const sendOverdueBillNotification = async (bill, vendor, recipients) => {
  * Send bill approval notification
  */
 export const sendBillApprovalNotification = async (bill, vendor, approver, recipients) => {
-  if (!process.env.RESEND_API_KEY) {
+  if (!process.env.SMTP_USER) {
     return { success: false, message: 'Email not configured' };
   }
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
+    const result = await emailService.sendEmail({
       to: recipients,
       subject: `Bill Approved - ${bill.billNumber}`,
       html: `
@@ -89,8 +83,7 @@ export const sendBillApprovalNotification = async (bill, vendor, approver, recip
       `
     });
 
-    if (error) throw new Error(error.message);
-    return { success: true, messageId: data.id };
+    return { success: true, messageId: result.messageId };
   } catch (error) {
     console.error(' Email sending failed:', error);
     return { success: false, error: error.message };
@@ -101,7 +94,7 @@ export const sendBillApprovalNotification = async (bill, vendor, approver, recip
  * Send payment confirmation notification
  */
 export const sendPaymentConfirmation = async (payment, vendor, bills, recipients) => {
-  if (!process.env.RESEND_API_KEY) {
+  if (!process.env.SMTP_USER) {
     return { success: false, message: 'Email not configured' };
   }
 
@@ -110,8 +103,7 @@ export const sendPaymentConfirmation = async (payment, vendor, bills, recipients
   ).join('');
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
+    const result = await emailService.sendEmail({
       to: recipients,
       subject: `Payment Processed - ${payment.paymentNumber}`,
       html: `
@@ -136,12 +128,11 @@ export const sendPaymentConfirmation = async (payment, vendor, bills, recipients
       `
     });
 
-    if (error) throw new Error(error.message);
-    return { success: true, messageId: data.id };
+    return { success: true, messageId: result.messageId };
   } catch (error) {
     console.error(' Email sending failed:', error);
     return { success: false, error: error.message };
   }
 };
 
-export default resend;
+export default emailService;

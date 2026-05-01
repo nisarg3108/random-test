@@ -34,7 +34,7 @@ class EmailService {
   /**
    * Send generic email
    */
-  async sendEmail({ to, cc, bcc, subject, html, text, tenantId }) {
+  async sendEmail({ to, cc, bcc, subject, html, text, tenantId, attachments }) {
     this.ensureConfigured();
 
     const finalTo = to;
@@ -47,7 +47,8 @@ class EmailService {
         ...(bcc ? { bcc: Array.isArray(bcc) ? bcc.join(', ') : bcc } : {}),
         subject,
         html: html || text,
-        text
+        text,
+        ...(attachments ? { attachments } : {})
       });
 
       console.log(`Email sent to ${to}: ${info.messageId}`);

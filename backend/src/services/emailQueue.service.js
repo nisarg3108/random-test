@@ -446,9 +446,9 @@ class EmailQueueService {
         return {
           healthy: false,
           configured: false,
-          message: 'Resend not configured',
+          message: 'SMTP Email not configured',
           details: {
-            resendApiKey: process.env.RESEND_API_KEY ? 'set' : 'not set'
+            smtpUser: process.env.SMTP_USER ? 'set' : 'not set'
           }
         };
       }
@@ -456,10 +456,9 @@ class EmailQueueService {
       return {
         healthy: true,
         configured: true,
-        message: 'Resend email service healthy',
+        message: 'SMTP email service healthy',
         details: {
-          resendApiKey: 'configured',
-          from: process.env.RESEND_FROM || 'onboarding@resend.dev'
+          smtpUser: 'configured'
         }
       };
     } catch (error) {

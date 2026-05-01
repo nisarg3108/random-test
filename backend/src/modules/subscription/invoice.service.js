@@ -1,6 +1,6 @@
 import PDFDocument from 'pdfkit';
 import prisma from '../../config/db.js';
-import { Resend } from 'resend';
+import emailService from '../../services/email.service.js';
 
 /**
  * Generate invoice PDF
@@ -162,9 +162,6 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
   console.log('[Invoice Service] Starting email send...');
   console.log('[Invoice Service] Payment ID:', payment.id);
   console.log('[Invoice Service] Tenant email:', payment.subscription?.tenant?.email);
-  
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const FROM_ADDRESS = process.env.RESEND_FROM || 'onboarding@resend.dev';
 
   const tenant = payment.subscription?.tenant;
   const recipientEmail = tenant?.email;
@@ -176,10 +173,9 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
   }
   
   console.log('[Invoice Service] Sending to:', recipientEmail);
-  // If RESEND_TO_OVERRIDE is set (used when domain not yet verified), send there instead
   const finalRecipient = process.env.RESEND_TO_OVERRIDE || recipientEmail;
   if (process.env.RESEND_TO_OVERRIDE) {
-    console.log('[Invoice Service] RESEND_TO_OVERRIDE active, redirecting to:', finalRecipient);
+    console.log('[Invoice Service] OVERRIDE active, redirecting to:', finalRecipient);
   }
   
   const invoiceNumber = payment.invoiceNumber || `INV-${payment.id.slice(0, 8).toUpperCase()}`;
@@ -190,7 +186,6 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
   });
 
   const mailOptions = {
-    from: FROM_ADDRESS,
     to: [finalRecipient],
     subject: `Invoice ${invoiceNumber} - Payment Confirmation`,
     html: `
@@ -344,19 +339,19 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
     attachments: [
       {
         filename: `invoice-${invoiceNumber}.pdf`,
-        content: pdfBuffer.toString('base64')
+        content: pdfBuffer,
+        contentType: 'application/pdf'
       }
     ]
   };
 
   try {
-    console.log('[Invoice Service] Attempting to send email via Resend...');
-    const { data, error: sendError } = await resend.emails.send(mailOptions);
-    if (sendError) throw new Error(sendError.message);
+    console.log('[Invoice Service] Attempting to send email via emailService...');
+    const result = await emailService.sendEmail(mailOptions);
     console.log(`[Invoice Service] ✅ Email sent successfully!`);
-    console.log(`[Invoice Service] Message ID: ${data.id}`);
+    console.log(`[Invoice Service] Message ID: ${result.messageId}`);
     console.log(`[Invoice Service] Recipient: ${recipientEmail}`);
-    return { success: true, messageId: data.id };
+    return { success: true, messageId: result.messageId };
   } catch (error) {
     console.error('[Invoice Service] ❌ Failed to send invoice email');
     console.error('[Invoice Service] Error:', error.message);
