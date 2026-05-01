@@ -1,6 +1,17 @@
 import prisma from '../../config/db.js';
 import integrationEventManager from '../integration/events/integrationEventManager.js';
 
+const parseDateInput = (value, fieldName) => {
+  if (value === undefined || value === null || value === '') return undefined;
+
+  const parsedDate = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(parsedDate.getTime())) {
+    throw new Error(`${fieldName} must be a valid date`);
+  }
+
+  return parsedDate;
+};
+
 // ==================== VENDORS ====================
 
 export const listVendors = async (tenantId, filters = {}) => {
@@ -334,6 +345,9 @@ export const createPurchaseOrder = async (data, tenantId, userId) => {
   // Generate unique PO number
   const poCount = await prisma.purchaseOrder.count({ where: { tenantId } });
   const poNumber = `PO-${String(poCount + 1).padStart(6, '0')}`;
+  const orderDate = parseDateInput(data.orderDate, 'Order date');
+  const expectedDeliveryDate = parseDateInput(data.expectedDeliveryDate, 'Expected delivery date');
+  const actualDeliveryDate = parseDateInput(data.actualDeliveryDate, 'Actual delivery date');
 
   // If created from requisition, mark requisition as converted
   if (data.requisitionId) {
@@ -346,6 +360,9 @@ export const createPurchaseOrder = async (data, tenantId, userId) => {
   return await prisma.purchaseOrder.create({
     data: {
       ...data,
+      ...(orderDate !== undefined ? { orderDate } : {}),
+      ...(expectedDeliveryDate !== undefined ? { expectedDeliveryDate } : {}),
+      ...(actualDeliveryDate !== undefined ? { actualDeliveryDate } : {}),
       poNumber,
       createdBy: userId,
       tenantId
@@ -382,6 +399,16 @@ export const updatePurchaseOrder = async (id, data, tenantId) => {
 
   // Prepare update data
   const updateData = { ...data };
+
+  if (data.orderDate !== undefined) {
+    updateData.orderDate = parseDateInput(data.orderDate, 'Order date');
+  }
+  if (data.expectedDeliveryDate !== undefined) {
+    updateData.expectedDeliveryDate = parseDateInput(data.expectedDeliveryDate, 'Expected delivery date');
+  }
+  if (data.actualDeliveryDate !== undefined) {
+    updateData.actualDeliveryDate = parseDateInput(data.actualDeliveryDate, 'Actual delivery date');
+  }
 
   // If items are being updated, recalculate all financial totals
   if (data.items && Array.isArray(data.items)) {

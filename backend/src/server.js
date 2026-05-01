@@ -14,27 +14,33 @@ import { assignPermissions } from './core/rbac/rolePermission.seed.js';
 
 import { seedInventoryWorkflow, seedFinanceExpenseWorkflow } from './core/workflow/workflow.seed.js';
 
+const seedRbacData = async () => {
+  console.log('🌱 Starting permission and role seeding...');
+
+  // 1) Seed permissions (safe upsert)
+  await seedPermissions();
+
+  // 2) Seed roles + permissions per tenant
+  const tenants = await prisma.tenant.findMany();
+
+  if (tenants.length === 0) {
+    console.log('⚠️ No tenants found. Skipping role seeding.');
+    return;
+  }
+
+  for (const tenant of tenants) {
+    await seedRoles(tenant.id);
+    await assignPermissions(tenant.id);
+  }
+
+  console.log('✅ RBAC seeding completed');
+};
+
 const startServer = async () => {
   try {
     // Seed workflows if needed (commented out - run manually with specific tenant IDs)
     // await seedInventoryWorkflow('YOUR_TENANT_ID');
     // await seedFinanceExpenseWorkflow('YOUR_TENANT_ID');
-    
-
-    // 1️⃣ Seed permissions (safe upsert)
-    await seedPermissions();
-
-    // 2️⃣ Seed roles + permissions per tenant
-    const tenants = await prisma.tenant.findMany();
-
-    if (tenants.length === 0) {
-      console.log('⚠️ No tenants found. Skipping role seeding.');
-    } else {
-      for (const tenant of tenants) {
-        await seedRoles(tenant.id);
-        await assignPermissions(tenant.id);
-      }
-    }
 
     // 3️⃣ Create HTTP server and initialize WebSocket
     const server = createServer(app);
@@ -61,6 +67,11 @@ const startServer = async () => {
 
     // 5️⃣ Initialize email queue processor
     emailQueueService.initialize();
+
+    // 6️⃣ Run RBAC seeding in background so API is available immediately
+    seedRbacData().catch((error) => {
+      console.error('❌ RBAC seeding failed:', error);
+    });
   } catch (error) {
     console.error('❌ Fatal error starting server:', error);
     process.exit(1);

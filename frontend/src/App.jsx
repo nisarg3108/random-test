@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getToken } from './store/auth.store';
 import Login from './auth/Login';
@@ -262,6 +262,9 @@ function App() {
         <Route path="/employee" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
         <Route path="/employee/dashboard" element={<ProtectedRoute><EmployeeDashboardNew /></ProtectedRoute>} />
         <Route path="/employee-hub" element={<ProtectedRoute><EmployeeHub /></ProtectedRoute>} />
+        <Route path="/my-attendance" element={<ProtectedRoute><Navigate to="/employee/attendance" replace /></ProtectedRoute>} />
+        <Route path="/my-salary" element={<ProtectedRoute><Navigate to="/employee/salary" replace /></ProtectedRoute>} />
+        <Route path="/my-leave" element={<ProtectedRoute><Navigate to="/employee/leave-request" replace /></ProtectedRoute>} />
         <Route path="/employee/leave-request" element={<ProtectedRoute><EmployeeLeaveRequest /></ProtectedRoute>} />
         <Route path="/employee/attendance" element={<ProtectedRoute><EmployeeAttendance /></ProtectedRoute>} />
         <Route path="/employee/salary" element={<ProtectedRoute><EmployeeSalary /></ProtectedRoute>} />

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Download, Loader2, BadgeIndianRupee, ReceiptText } from 'lucide-react';
+import { Download, BadgeIndianRupee, ReceiptText } from 'lucide-react';
+import Layout from '../../components/layout/Layout';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { employeeAPI } from '../../api/employee.api';
 import payrollAPI from '../../api/payrollAPI';
 
@@ -56,100 +58,138 @@ const EmployeeSalary = () => {
   const formatCurrency = (value) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(Number(value || 0));
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div>
-        <p className="text-sm font-medium text-slate-500">Employee Self-Service</p>
-        <h1 className="text-3xl font-bold text-slate-900">My Salary</h1>
-        <p className="text-slate-600 mt-2">View your salary structure and download your payslips.</p>
-      </div>
-
-      {loading && (
-        <div className="flex items-center justify-center rounded-2xl border border-slate-200 bg-white py-16">
-          <Loader2 className="h-6 w-6 animate-spin text-slate-500" />
+    <Layout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-primary-900">My Salary</h1>
+          <p className="text-primary-600 mt-1">View your salary structure and download your payslips</p>
         </div>
-      )}
 
-      {error && !loading && (
-        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-700">{error}</div>
-      )}
-
-      {!loading && profile && (
-        <>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-sm text-slate-500">Employee</p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">{profile.name}</p>
-              <p className="text-sm text-slate-500">{profile.employeeCode}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-sm text-slate-500">Designation</p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">{profile.designation || 'Employee'}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-sm text-slate-500">Salary Status</p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">{salary ? 'Available' : 'Not configured'}</p>
-            </div>
+        {loading && (
+          <div className="flex items-center justify-center h-64">
+            <LoadingSpinner />
           </div>
+        )}
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center gap-3">
-                <BadgeIndianRupee className="h-5 w-5 text-slate-700" />
-                <h2 className="text-lg font-semibold text-slate-900">Salary Structure</h2>
-              </div>
+        {error && !loading && (
+          <div className="modern-card-elevated p-6">
+            <div className="text-red-600">{error}</div>
+          </div>
+        )}
 
-              {salary ? (
-                <div className="mt-5 space-y-3 text-sm">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                    <span className="text-slate-500">Basic Salary</span>
-                    <span className="font-medium text-slate-900">{formatCurrency(salary.basicSalary)}</span>
+        {!loading && profile && (
+          <>
+            <div className="grid gap-6 md:grid-cols-3">
+              <div className="modern-card-elevated p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-primary-600">Employee</p>
+                    <p className="text-xl font-bold text-primary-900 mt-1">{profile.name}</p>
+                    <p className="text-sm text-primary-600">{profile.employeeCode}</p>
                   </div>
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                    <span className="text-slate-500">Net Salary</span>
-                    <span className="font-medium text-slate-900">{formatCurrency(salary.netSalary)}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-500">Effective From</span>
-                    <span className="font-medium text-slate-900">{salary.effectiveFrom ? new Date(salary.effectiveFrom).toLocaleDateString('en-IN') : 'N/A'}</span>
+                  <div className="p-3 rounded-lg bg-blue-50">
+                    <BadgeIndianRupee className="w-6 h-6 text-blue-600" />
                   </div>
                 </div>
-              ) : (
-                <p className="mt-5 text-sm text-slate-500">Your salary structure has not been set up yet.</p>
-              )}
+              </div>
+              
+              <div className="modern-card-elevated p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-primary-600">Designation</p>
+                    <p className="text-xl font-bold text-primary-900 mt-1">{profile.designation || 'Employee'}</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-green-50">
+                    <BadgeIndianRupee className="w-6 h-6 text-green-600" />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="modern-card-elevated p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-primary-600">Salary Status</p>
+                    <p className="text-xl font-bold text-primary-900 mt-1">{salary ? 'Available' : 'Not configured'}</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-purple-50">
+                    <ReceiptText className="w-6 h-6 text-purple-600" />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center gap-3">
-                <ReceiptText className="h-5 w-5 text-slate-700" />
-                <h2 className="text-lg font-semibold text-slate-900">Payslips</h2>
-              </div>
-
-              {payslips.length === 0 ? (
-                <p className="mt-5 text-sm text-slate-500">No payslips available yet.</p>
-              ) : (
-                <div className="mt-5 space-y-3">
-                  {payslips.map((payslip) => (
-                    <div key={payslip.id} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4">
-                      <div>
-                        <p className="font-medium text-slate-900">{payslip.payrollCycle?.name || 'Payslip'}</p>
-                        <p className="text-sm text-slate-500">{formatCurrency(payslip.netSalary)} · {payslip.status}</p>
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="modern-card-elevated">
+                <div className="px-6 py-4 border-b border-primary-200">
+                  <div className="flex items-center gap-3">
+                    <BadgeIndianRupee className="h-5 w-5 text-primary-700" />
+                    <h2 className="text-lg font-semibold text-primary-900">Salary Structure</h2>
+                  </div>
+                </div>
+                <div className="p-6">
+                  {salary ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between border-b border-primary-100 pb-3">
+                        <span className="text-primary-600">Basic Salary</span>
+                        <span className="font-semibold text-primary-900">{formatCurrency(salary.basicSalary)}</span>
                       </div>
-                      <button
-                        onClick={() => downloadPayslip(payslip)}
-                        className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-3 py-2 text-sm text-white hover:bg-slate-800"
-                      >
-                        <Download className="h-4 w-4" />
-                        Download
-                      </button>
+                      <div className="flex items-center justify-between border-b border-primary-100 pb-3">
+                        <span className="text-primary-600">Net Salary</span>
+                        <span className="font-semibold text-primary-900">{formatCurrency(salary.netSalary)}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-primary-600">Effective From</span>
+                        <span className="font-semibold text-primary-900">{salary.effectiveFrom ? new Date(salary.effectiveFrom).toLocaleDateString('en-IN') : 'N/A'}</span>
+                      </div>
                     </div>
-                  ))}
+                  ) : (
+                    <div className="text-center py-8">
+                      <BadgeIndianRupee className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <p className="text-primary-600">Your salary structure has not been set up yet.</p>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
+
+              <div className="modern-card-elevated">
+                <div className="px-6 py-4 border-b border-primary-200">
+                  <div className="flex items-center gap-3">
+                    <ReceiptText className="h-5 w-5 text-primary-700" />
+                    <h2 className="text-lg font-semibold text-primary-900">Payslips</h2>
+                  </div>
+                </div>
+                <div className="p-6">
+                  {payslips.length === 0 ? (
+                    <div className="text-center py-8">
+                      <ReceiptText className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <p className="text-primary-600">No payslips available yet.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {payslips.map((payslip) => (
+                        <div key={payslip.id} className="flex items-center justify-between p-4 rounded-lg bg-primary-50 hover:bg-primary-100 transition-colors">
+                          <div>
+                            <p className="font-medium text-primary-900">{payslip.payrollCycle?.name || 'Payslip'}</p>
+                            <p className="text-sm text-primary-600">{formatCurrency(payslip.netSalary)} · {payslip.status}</p>
+                          </div>
+                          <button
+                            onClick={() => downloadPayslip(payslip)}
+                            className="btn-modern btn-secondary flex items-center gap-2 text-sm"
+                          >
+                            <Download className="h-4 w-4" />
+                            Download
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </Layout>
   );
 };
 

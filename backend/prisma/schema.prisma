@@ -560,11 +560,15 @@ model LeaveType {
 
   name            String
   code            String
-  maxDays         Int
-  paid            Boolean
+  description     String?
+  maxDays         Int?
+  carryForward    Boolean @default(false)
+  paid            Boolean @default(true)
   requiresApproval Boolean @default(true)
+  isDeleted       Boolean @default(false)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   // Ã¢Å“â€¦ ADD THIS
   leaveRequests LeaveRequest[]

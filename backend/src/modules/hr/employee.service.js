@@ -143,10 +143,27 @@ export const getEmployeeByUserId = async (userId, tenantId) => {
   return prisma.employee.findFirst({
     where: {
       tenantId,
-      OR: [
-        { userId },
-        { id: userId }
-      ]
+      userId
+    },
+    include: {
+      department: true,
+      manager: true,
+      user: {
+        select: {
+          email: true,
+          status: true,
+          role: true
+        }
+      }
+    },
+  });
+};
+
+export const getEmployeeById = async (employeeId, tenantId) => {
+  return prisma.employee.findFirst({
+    where: {
+      tenantId,
+      id: employeeId
     },
     include: {
       department: true,

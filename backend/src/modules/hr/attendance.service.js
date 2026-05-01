@@ -206,10 +206,7 @@ export const clockOut = async (employeeId, tenantId, location = null) => {
   const checkOutTime = new Date();
   const workHours = (checkOutTime - timeTracking.checkInTime) / (1000 * 60 * 60);
 
-  // Minimum work hours check (prevent accidental early clock-out)
-  if (workHours < 0.5) {
-    throw new Error('Cannot clock out within 30 minutes of clock-in. Please contact HR if this is an error.');
-  }
+  // Allow early clock-out; policy enforcement should be handled by attendance status rules below.
 
   // Get employee's shift to calculate overtime
   const shiftAssignment = await prisma.shiftAssignment.findFirst({

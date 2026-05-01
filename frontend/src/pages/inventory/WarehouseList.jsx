@@ -61,8 +61,14 @@ export default function WarehouseList() {
           onChange={(e) => setFilters({ ...filters, search: e.target.value })}
         />
         <select 
-          value={filters.isActive} 
-          onChange={(e) => setFilters({ ...filters, isActive: e.target.value === 'true' })}
+          value={filters.isActive === null ? '' : String(filters.isActive)}
+          onChange={(e) => {
+            const { value } = e.target;
+            setFilters({
+              ...filters,
+              isActive: value === '' ? null : value === 'true'
+            });
+          }}
         >
           <option value="true">Active</option>
           <option value="false">Inactive</option>

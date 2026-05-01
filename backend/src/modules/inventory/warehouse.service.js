@@ -2,6 +2,23 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 class WarehouseService {
+  normalizeCapacity(value) {
+    if (value === undefined) {
+      return undefined;
+    }
+
+    if (value === null || value === '') {
+      return null;
+    }
+
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+      throw new Error('Capacity must be a valid number');
+    }
+
+    return parsed;
+  }
+
   /**
    * Create a new warehouse
    */
@@ -32,6 +49,8 @@ class WarehouseService {
       warehouseData.address = data.location;
       delete warehouseData.location;
     }
+
+    warehouseData.capacity = this.normalizeCapacity(warehouseData.capacity);
 
     return await prisma.warehouse.create({
       data: {
@@ -145,9 +164,12 @@ class WarehouseService {
       }
     }
 
+    const updateData = { ...data };
+    updateData.capacity = this.normalizeCapacity(updateData.capacity);
+
     return await prisma.warehouse.update({
       where: { id },
-      data,
+      data: updateData,
       include: {
         branch: true,
         stockItems: true

@@ -1,4 +1,20 @@
 import attendanceService from './attendance.service.js';
+import { getEmployeeById, getEmployeeByUserId } from './employee.service.js';
+
+const resolveEmployeeId = async (req, requestedEmployeeId) => {
+  const { userId, tenantId, role } = req.user;
+  const canImpersonate = ['ADMIN', 'HR', 'MANAGER'].includes(role);
+  const employee = canImpersonate && requestedEmployeeId
+    ? await getEmployeeById(requestedEmployeeId, tenantId)
+    : await getEmployeeByUserId(userId, tenantId);
+  if (!employee) {
+    const err = new Error('Employee profile not found');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  return employee.id;
+};
 
 // ============================================
 // CLOCK IN/OUT CONTROLLERS
@@ -9,7 +25,13 @@ export const clockIn = async (req, res) => {
     const { employeeId, location, isWorkFromHome } = req.body;
     const tenantId = req.user.tenantId;
 
-    const timeTracking = await attendanceService.clockIn(employeeId, tenantId, location, isWorkFromHome);
+    const resolvedEmployeeId = await resolveEmployeeId(req, employeeId);
+    const timeTracking = await attendanceService.clockIn(
+      resolvedEmployeeId,
+      tenantId,
+      location,
+      isWorkFromHome
+    );
 
     res.status(200).json({
       success: true,
@@ -30,7 +52,8 @@ export const clockOut = async (req, res) => {
     const { employeeId, location } = req.body;
     const tenantId = req.user.tenantId;
 
-    const timeTracking = await attendanceService.clockOut(employeeId, tenantId, location);
+    const resolvedEmployeeId = await resolveEmployeeId(req, employeeId);
+    const timeTracking = await attendanceService.clockOut(resolvedEmployeeId, tenantId, location);
 
     res.status(200).json({
       success: true,
@@ -51,7 +74,8 @@ export const getClockStatus = async (req, res) => {
     const { employeeId } = req.params;
     const tenantId = req.user.tenantId;
 
-    const status = await attendanceService.getClockStatus(employeeId, tenantId);
+    const resolvedEmployeeId = await resolveEmployeeId(req, employeeId);
+    const status = await attendanceService.getClockStatus(resolvedEmployeeId, tenantId);
 
     res.status(200).json({
       success: true,
@@ -59,7 +83,7 @@ export const getClockStatus = async (req, res) => {
     });
   } catch (error) {
     console.error('Get clock status error:', error);
-    res.status(500).json({
+    res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Failed to get clock status'
     });

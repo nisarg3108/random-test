@@ -117,14 +117,18 @@ app.use('/api/system-options', systemOptionsRoutes);
 app.use('/api/rbac', rbacRoutes);
 
 // HR Module Routes
-app.use('/api/employees', requireAuth, requireModuleEntitlement('HR'), employeeRoutes);
-app.use('/api/leave-types', requireAuth, requireModuleEntitlement('HR'), leaveTypeRoutes);
-app.use('/api/leave-requests', requireAuth, requireModuleEntitlement('HR'), leaveRequestRoutes);
+// Allow authenticated employees to access self-service endpoints; sensitive operations stay protected by RBAC.
+app.use('/api/employees', requireAuth, employeeRoutes);
+// Leave self-service must remain accessible for authenticated users even without HR module entitlement.
+// Sensitive operations are still protected by route-level RBAC permissions.
+app.use('/api/leave-types', requireAuth, leaveTypeRoutes);
+app.use('/api/leave-requests', requireAuth, leaveRequestRoutes);
 app.use('/api/employee', requireAuth, requireModuleEntitlement('HR'), employeeDashboardRoutes);
 app.use('/api/payroll', requireAuth, requireModuleEntitlement('PAYROLL'), payrollRoutes);
 app.use('/api/hr/disbursements', requireAuth, requireModuleEntitlement('PAYROLL'), disbursementRoutes);
 app.use('/api/tasks', requireAuth, requireModuleEntitlement('HR'), taskRoutes);
-app.use('/api/attendance', requireAuth, requireModuleEntitlement('HR'), attendanceRoutes);
+// Attendance self-service for employees; HR-only actions are still protected by route-level roles.
+app.use('/api/attendance', requireAuth, attendanceRoutes);
 
 // Finance Module Routes
 app.use('/api/expense-categories', requireAuth, requireModuleEntitlement('FINANCE'), expenseCategoryRoutes);
