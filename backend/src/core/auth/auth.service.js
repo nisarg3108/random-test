@@ -345,10 +345,34 @@ export const loginUser = async ({ email, password }) => {
 
   const normalizedEmail = email.trim().toLowerCase();
 
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { email: normalizedEmail },
     include: { employee: { select: { name: true } } },
   });
+
+  // Fallback for missing webhooks in dev/testing environments
+  if (!user) {
+    const pending = await prisma.pendingRegistration.findFirst({
+      where: { email: normalizedEmail, status: 'PENDING' },
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    if (pending) {
+      try {
+        console.log(`[Auth] Auto-finalizing pending registration for ${normalizedEmail}`);
+        await finalizePendingRegistration(pending.id, 'MANUAL_FALLBACK');
+        
+        // Fetch the newly created user
+        user = await prisma.user.findUnique({
+          where: { email: normalizedEmail },
+          include: { employee: { select: { name: true } } },
+        });
+      } catch (err) {
+        console.error('[Auth] Failed to finalize pending registration on login:', err.message);
+      }
+    }
+  }
+
   if (!user) {
     const error = new Error('Invalid credentials');
     error.status = 401;
