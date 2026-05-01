@@ -59,6 +59,9 @@ router.get('/payslips', authenticate, payrollController.getPayslips);
 // Get payslip by ID
 router.get('/payslips/:id', authenticate, payrollController.getPayslipById);
 
+// Download payslip PDF
+router.get('/payslips/:id/download', authenticate, payrollController.downloadPayslip);
+
 // Approve payslip
 router.post('/payslips/:id/approve', authenticate, payrollController.approvePayslip);
 

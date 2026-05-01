@@ -1,4 +1,5 @@
 import payrollService from './payroll.service.js';
+import exportService from '../../services/export.service.js';
 
 class PayrollController {
   // ==========================================
@@ -165,6 +166,42 @@ class PayrollController {
       res.json(payslip);
     } catch (error) {
       console.error('Get payslip error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async downloadPayslip(req, res) {
+    try {
+      const { tenantId } = req.user;
+      const { id } = req.params;
+
+      const payslip = await payrollService.getPayslipById(id, tenantId);
+      if (!payslip) return res.status(404).json({ error: 'Payslip not found' });
+
+      // Simple PDF layout: reuse export service generatePDF by passing a structured object
+      const pdfPayload = {
+        summary: {
+          employeeName: payslip.employee?.name,
+          employeeCode: payslip.employee?.employeeCode,
+          designation: payslip.employee?.designation,
+          payrollCycle: payslip.payrollCycle?.name,
+          paymentDate: payslip.payrollCycle?.paymentDate,
+          netSalary: payslip.netSalary,
+          grossSalary: payslip.grossSalary,
+          totalDeductions: payslip.totalDeductions
+        },
+        payslip
+      };
+
+      const pdfBuffer = await exportService.generatePDF(pdfPayload, { title: `Payslip - ${payslip.payslipNumber || id}` });
+
+      const filename = `payslip-${payslip.payslipNumber || id}.pdf`;
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+      res.setHeader('Content-Length', pdfBuffer.length);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Download payslip error:', error);
       res.status(500).json({ error: error.message });
     }
   }
