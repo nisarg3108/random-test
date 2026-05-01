@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
+    "start:deploy": "node scripts/deploy-start.js",
     "seed": "node prisma/seed.js",
     "verify:server": "node verify-server-and-migrations.js",
     "test:server": "node verify-server-and-migrations.js --run-tests",

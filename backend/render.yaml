@@ -4,7 +4,7 @@ services:
     runtime: node
     rootDir: backend
     buildCommand: npm install && npx prisma generate
-    startCommand: npx prisma migrate deploy && npm start
+    startCommand: npm run start:deploy
     envVars:
       - key: NODE_ENV
         value: production
@@ -26,6 +26,14 @@ services:
         value: onboarding@resend.dev  # ← Replace with a verified sender domain for production
       - key: SEED_KEY
         generateValue: true
+      - key: RUN_SEED_ON_DEPLOY
+        value: true
+      - key: SEED_RETRY_COUNT
+        value: 3
+      - key: SEED_RETRY_DELAY_MS
+        value: 10000
+      - key: SEED_ADMIN_EMAIL
+        value: bhavsarnisarg0@gmail.com
 
 databases:
   - name: ueorms-db

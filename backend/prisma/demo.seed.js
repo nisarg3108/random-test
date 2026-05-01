@@ -12,6 +12,7 @@ import {
 } from './enhanced-seed.js';
 
 const DEMO_PASSWORD = 'Demo@12345';
+const DEMO_ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'bhavsarnisarg0@gmail.com';
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const ALL_MODULE_KEYS = [
@@ -282,7 +283,7 @@ const seedOrganization = async (tenantId, passwordHash) => {
 
   const users = {
     admin: await prisma.user.upsert({
-      where: { email: 'bhavsarnisarg0@gmail.com' },
+      where: { email: DEMO_ADMIN_EMAIL },
       update: {
         password: passwordHash,
         role: 'ADMIN',
@@ -292,7 +293,7 @@ const seedOrganization = async (tenantId, passwordHash) => {
         managerId: null
       },
       create: {
-        email: 'bhavsarnisarg0@gmail.com',
+        email: DEMO_ADMIN_EMAIL,
         password: passwordHash,
         role: 'ADMIN',
         status: 'ACTIVE',
@@ -6242,7 +6243,7 @@ export const seedComprehensiveDemoData = async () => {
   console.log('✨ ========================================\n');
   console.log('📋 Demo Data Summary:');
   console.log(`   • Tenant: UEORMS Demo Tenant`);
-  console.log(`   • Admin Login: bhavsarnisarg0@gmail.com / Demo@12345`);
+  console.log(`   • Admin Login: ${DEMO_ADMIN_EMAIL} / Demo@12345`);
   console.log(`   • Total Employees: ${5 + additionalEmployees.length}`);
   console.log(`   • Goods Receipts: ${additionalGRs.length + 1}`);
   console.log(`   • Stock Movements: ${movements.length + 2}`);
