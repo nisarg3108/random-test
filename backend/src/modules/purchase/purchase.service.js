@@ -140,9 +140,58 @@ export const createRequisition = async (data, tenantId, userId) => {
 };
 
 export const updateRequisition = async (id, data, tenantId) => {
+  // Get current requisition to check its status
+  const currentRequisition = await prisma.purchaseRequisition.findFirst({
+    where: { id, tenantId }
+  });
+
+  if (!currentRequisition) {
+    throw new Error('Purchase requisition not found');
+  }
+
+  // Cannot edit if already converted to PO
+  if (currentRequisition.status === 'CONVERTED') {
+    throw new Error('Cannot edit requisition that has been converted to purchase order');
+  }
+
+  // Cannot edit if already rejected (must create new one)
+  if (currentRequisition.status === 'REJECTED') {
+    throw new Error('Cannot edit rejected requisition. Please create a new one.');
+  }
+
+  // Prepare update data
+  const updateData = { ...data };
+
+  // If items are being updated, recalculate total
+  if (data.items && Array.isArray(data.items)) {
+    let totalAmount = 0;
+    data.items.forEach(item => {
+      const itemTotal = (item.quantity || 0) * (item.estimatedPrice || 0);
+      totalAmount += itemTotal;
+    });
+    updateData.totalAmount = totalAmount;
+  }
+
+  // Prevent changing approval status through update (use approve/reject endpoints)
+  if (data.approvalStatus) {
+    throw new Error('Use the approve or reject endpoints to change approval status');
+  }
+
+  // Only allow certain field changes based on status
+  if (currentRequisition.approvalStatus === 'APPROVED') {
+    // Approved requisitions can only have notes and attachment updates
+    const allowedFields = ['notes', 'attachments'];
+    const requestedFields = Object.keys(updateData);
+    const invalidFields = requestedFields.filter(f => !allowedFields.includes(f));
+    
+    if (invalidFields.length > 0) {
+      throw new Error(`Cannot edit these fields on approved requisition: ${invalidFields.join(', ')}`);
+    }
+  }
+
   return await prisma.purchaseRequisition.update({
     where: { id, tenantId },
-    data
+    data: updateData
   });
 };
 
@@ -305,9 +354,79 @@ export const createPurchaseOrder = async (data, tenantId, userId) => {
 };
 
 export const updatePurchaseOrder = async (id, data, tenantId) => {
+  // Get current PO to check its status
+  const currentPO = await prisma.purchaseOrder.findFirst({
+    where: { id, tenantId },
+    include: { receipts: true }
+  });
+
+  if (!currentPO) {
+    throw new Error('Purchase order not found');
+  }
+
+  // Cannot edit if order has been shipped, received, or cancelled
+  const nonEditableStatuses = ['SHIPPED', 'RECEIVED', 'CANCELLED'];
+  if (nonEditableStatuses.includes(currentPO.status)) {
+    throw new Error(`Cannot edit purchase order with status: ${currentPO.status}`);
+  }
+
+  // Cannot edit if goods receipts exist (items already received)
+  if (currentPO.receipts && currentPO.receipts.length > 0) {
+    throw new Error('Cannot edit purchase order that has goods receipts');
+  }
+
+  // Prevent changing approval status through update (use approve endpoint)
+  if (data.approvalStatus) {
+    throw new Error('Use the approve endpoint to change approval status');
+  }
+
+  // Prepare update data
+  const updateData = { ...data };
+
+  // If items are being updated, recalculate all financial totals
+  if (data.items && Array.isArray(data.items)) {
+    let subtotal = 0;
+    data.items.forEach(item => {
+      const itemTotal = (item.quantity || 0) * (item.unitPrice || 0);
+      subtotal += itemTotal;
+    });
+
+    // Recalculate tax based on subtotal if tax rate provided
+    const taxAmount = data.taxRate ? subtotal * (data.taxRate / 100) : (data.taxAmount || 0);
+    const discountAmount = data.discountAmount || 0;
+    const shippingCost = data.shippingCost || 0;
+    const totalAmount = subtotal + taxAmount - discountAmount + shippingCost;
+
+    updateData.subtotal = subtotal;
+    updateData.taxAmount = taxAmount;
+    updateData.totalAmount = totalAmount;
+  } else {
+    // If only financial fields are updated, recalculate total
+    const subtotal = data.subtotal !== undefined ? data.subtotal : currentPO.subtotal;
+    const taxAmount = data.taxAmount !== undefined ? data.taxAmount : currentPO.taxAmount;
+    const discountAmount = data.discountAmount !== undefined ? data.discountAmount : currentPO.discountAmount;
+    const shippingCost = data.shippingCost !== undefined ? data.shippingCost : currentPO.shippingCost;
+    
+    if (data.subtotal !== undefined || data.taxAmount !== undefined || data.discountAmount !== undefined || data.shippingCost !== undefined) {
+      updateData.totalAmount = subtotal + taxAmount - discountAmount + shippingCost;
+    }
+  }
+
+  // Only allow certain field changes based on status
+  if (currentPO.status === 'SENT' || currentPO.status === 'CONFIRMED') {
+    // Sent/Confirmed orders can only have notes and shipping info updates
+    const allowedFields = ['notes', 'attachments', 'shippingAddress', 'shippingMethod', 'expectedDeliveryDate', 'trackingNumber'];
+    const requestedFields = Object.keys(updateData);
+    const invalidFields = requestedFields.filter(f => !allowedFields.includes(f));
+    
+    if (invalidFields.length > 0) {
+      throw new Error(`Cannot edit these fields on ${currentPO.status} purchase order: ${invalidFields.join(', ')}`);
+    }
+  }
+
   return await prisma.purchaseOrder.update({
     where: { id, tenantId },
-    data
+    data: updateData
   });
 };
 

@@ -77,9 +77,18 @@ export const deleteAssetCategory = async (id, tenantId) => {
 // ========================================
 
 export const createAsset = async (data, tenantId) => {
-  // Validate required category
+  // Validate required fields
   if (!data.categoryId) {
     throw new Error('Asset category is required');
+  }
+  if (!data.name) {
+    throw new Error('Asset name is required');
+  }
+  if (!data.purchaseDate) {
+    throw new Error('Purchase date is required');
+  }
+  if (!data.purchasePrice) {
+    throw new Error('Purchase price is required');
   }
 
   // Fetch category to get default values
@@ -96,26 +105,46 @@ export const createAsset = async (data, tenantId) => {
 
   // Generate asset code if not provided
   const assetCode = data.assetCode || `AST${Date.now()}`;
-  
-  // Map purchaseCost to purchasePrice if provided
-  const purchasePrice = data.purchasePrice || data.purchaseCost;
 
   // Apply category defaults if asset-specific values not provided
   const assetData = {
-    name: data.name,
-    assetTag: data.assetTag,
-    assetCode,
-    purchaseDate: data.purchaseDate,
-    purchasePrice,
     tenantId,
-    currentValue: purchasePrice,
-    depreciationMethod: data.depreciationMethod || category.defaultDepreciationMethod,
-    depreciationRate: data.depreciationRate !== undefined ? data.depreciationRate : category.defaultDepreciationRate,
-    usefulLife: data.usefulLife !== undefined ? data.usefulLife : category.defaultUsefulLife,
-    salvageValue: data.salvageValue,
-    category: {
-      connect: { id: data.categoryId }
-    }
+    categoryId: data.categoryId,
+    assetCode,
+    name: data.name,
+    description: data.description || null,
+    purchaseDate: new Date(data.purchaseDate),
+    purchasePrice: parseFloat(data.purchasePrice),
+    vendor: data.vendor || null,
+    invoiceNumber: data.invoiceNumber || null,
+    serialNumber: data.serialNumber || null,
+    model: data.model || null,
+    manufacturer: data.manufacturer || null,
+    location: data.location || null,
+    status: data.status || 'AVAILABLE',
+    condition: data.condition || 'GOOD',
+    depreciationMethod: data.depreciationMethod || category.defaultDepreciationMethod || null,
+    depreciationRate: data.depreciationRate !== undefined && data.depreciationRate !== null && data.depreciationRate !== '' 
+      ? parseFloat(data.depreciationRate) 
+      : category.defaultDepreciationRate || null,
+    usefulLife: data.usefulLife !== undefined && data.usefulLife !== null && data.usefulLife !== '' 
+      ? parseInt(data.usefulLife) 
+      : category.defaultUsefulLife || null,
+    salvageValue: data.salvageValue !== undefined && data.salvageValue !== null && data.salvageValue !== '' 
+      ? parseFloat(data.salvageValue) 
+      : 0,
+    totalExpectedUnits: data.totalExpectedUnits !== undefined && data.totalExpectedUnits !== null && data.totalExpectedUnits !== '' 
+      ? parseInt(data.totalExpectedUnits) 
+      : null,
+    unitsProducedToDate: 0,
+    currentValue: parseFloat(data.purchasePrice),
+    accumulatedDepreciation: 0,
+    warrantyExpiry: data.warrantyExpiry ? new Date(data.warrantyExpiry) : null,
+    insuranceExpiry: data.insuranceExpiry ? new Date(data.insuranceExpiry) : null,
+    insuranceProvider: data.insuranceProvider || null,
+    insurancePolicyNo: data.insurancePolicyNo || null,
+    notes: data.notes || null,
+    tags: data.tags || null,
   };
 
   const asset = await prisma.asset.create({
@@ -208,12 +237,57 @@ export const getAssetById = async (id, tenantId) => {
 };
 
 export const updateAsset = async (id, data, tenantId) => {
+  // Build update data object with only provided fields
+  const updateData = {
+    tenantId,
+  };
+
+  // Only include fields that are provided
+  if (data.name !== undefined) updateData.name = data.name;
+  if (data.description !== undefined) updateData.description = data.description || null;
+  if (data.categoryId !== undefined) updateData.categoryId = data.categoryId;
+  if (data.assetCode !== undefined) updateData.assetCode = data.assetCode;
+  if (data.purchaseDate !== undefined) updateData.purchaseDate = new Date(data.purchaseDate);
+  if (data.purchasePrice !== undefined) updateData.purchasePrice = parseFloat(data.purchasePrice);
+  if (data.vendor !== undefined) updateData.vendor = data.vendor || null;
+  if (data.invoiceNumber !== undefined) updateData.invoiceNumber = data.invoiceNumber || null;
+  if (data.serialNumber !== undefined) updateData.serialNumber = data.serialNumber || null;
+  if (data.model !== undefined) updateData.model = data.model || null;
+  if (data.manufacturer !== undefined) updateData.manufacturer = data.manufacturer || null;
+  if (data.location !== undefined) updateData.location = data.location || null;
+  if (data.status !== undefined) updateData.status = data.status;
+  if (data.condition !== undefined) updateData.condition = data.condition;
+  if (data.depreciationMethod !== undefined) updateData.depreciationMethod = data.depreciationMethod || null;
+  if (data.depreciationRate !== undefined && data.depreciationRate !== null && data.depreciationRate !== '') {
+    updateData.depreciationRate = parseFloat(data.depreciationRate);
+  } else if (data.depreciationRate === '' || data.depreciationRate === null) {
+    updateData.depreciationRate = null;
+  }
+  if (data.usefulLife !== undefined && data.usefulLife !== null && data.usefulLife !== '') {
+    updateData.usefulLife = parseInt(data.usefulLife);
+  } else if (data.usefulLife === '' || data.usefulLife === null) {
+    updateData.usefulLife = null;
+  }
+  if (data.salvageValue !== undefined && data.salvageValue !== null && data.salvageValue !== '') {
+    updateData.salvageValue = parseFloat(data.salvageValue);
+  } else if (data.salvageValue === '' || data.salvageValue === null) {
+    updateData.salvageValue = 0;
+  }
+  if (data.totalExpectedUnits !== undefined && data.totalExpectedUnits !== null && data.totalExpectedUnits !== '') {
+    updateData.totalExpectedUnits = parseInt(data.totalExpectedUnits);
+  } else if (data.totalExpectedUnits === '' || data.totalExpectedUnits === null) {
+    updateData.totalExpectedUnits = null;
+  }
+  if (data.warrantyExpiry !== undefined) updateData.warrantyExpiry = data.warrantyExpiry ? new Date(data.warrantyExpiry) : null;
+  if (data.insuranceExpiry !== undefined) updateData.insuranceExpiry = data.insuranceExpiry ? new Date(data.insuranceExpiry) : null;
+  if (data.insuranceProvider !== undefined) updateData.insuranceProvider = data.insuranceProvider || null;
+  if (data.insurancePolicyNo !== undefined) updateData.insurancePolicyNo = data.insurancePolicyNo || null;
+  if (data.notes !== undefined) updateData.notes = data.notes || null;
+  if (data.tags !== undefined) updateData.tags = data.tags || null;
+
   const asset = await prisma.asset.update({
     where: { id },
-    data: {
-      ...data,
-      tenantId,
-    },
+    data: updateData,
     include: {
       category: true,
     },

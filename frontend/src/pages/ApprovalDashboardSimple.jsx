@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Check, X, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useApprovalsStore } from '../store/approvals.store';
 import { getUserRole } from '../store/auth.store';
 import Sidebar from '../components/layout/Sidebar';
 import Header from '../components/layout/Header';
+import { getRequestTargetPath } from '../utils/requestNavigation';
 
 const ApprovalDashboardSimple = () => {
   const {
@@ -21,6 +23,7 @@ const ApprovalDashboardSimple = () => {
   const [activeTab, setActiveTab] = useState('pending');
   const userRole = getUserRole();
   const canApprove = ['ADMIN', 'MANAGER'].includes(userRole);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (canApprove) {
@@ -116,30 +119,39 @@ const ApprovalDashboardSimple = () => {
                         </p>
                       </div>
                       
-                      {approval.status === 'PENDING' && (
-                        <div className="flex space-x-2 ml-4">
-                          <button
-                            onClick={() => approveRequest(approval.id, '')}
-                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
-                          >
-                            <Check className="h-4 w-4 mr-1" />
-                            Approve
-                          </button>
-                          
-                          <button
-                            onClick={() => {
-                              const reason = prompt('Rejection reason (optional):');
-                              if (reason !== null) {
-                                rejectRequest(approval.id, reason);
-                              }
-                            }}
-                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
-                          >
-                            <X className="h-4 w-4 mr-1" />
-                            Reject
-                          </button>
-                        </div>
-                      )}
+                      <div className="flex space-x-2 ml-4">
+                        <button
+                          onClick={() => navigate(getRequestTargetPath(approval))}
+                          className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                        >
+                          Open Page
+                        </button>
+
+                        {approval.status === 'PENDING' && (
+                          <>
+                            <button
+                              onClick={() => approveRequest(approval.id, '')}
+                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+                            >
+                              <Check className="h-4 w-4 mr-1" />
+                              Approve
+                            </button>
+                            
+                            <button
+                              onClick={() => {
+                                const reason = prompt('Rejection reason (optional):');
+                                if (reason !== null) {
+                                  rejectRequest(approval.id, reason);
+                                }
+                              }}
+                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+                            >
+                              <X className="h-4 w-4 mr-1" />
+                              Reject
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))
@@ -155,15 +167,26 @@ const ApprovalDashboardSimple = () => {
               ) : (
                 myRequests.map((request) => (
                   <div key={request.id} className="bg-white border border-gray-200 rounded-lg p-6">
-                    <h3 className="font-medium text-gray-900">
-                      {request.module} - {request.action}
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Status: {request.status}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Submitted: {new Date(request.createdAt).toLocaleString()}
-                    </p>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-medium text-gray-900">
+                          {request.workflow?.module || request.module} - {request.workflow?.action || request.action}
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Status: {request.status}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Submitted: {new Date(request.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => navigate(getRequestTargetPath(request))}
+                        className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      >
+                        Open Page
+                      </button>
+                    </div>
                   </div>
                 ))
               )}

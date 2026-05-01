@@ -101,8 +101,10 @@ const PurchaseRequisitions = () => {
       setShowModal(false);
       resetForm();
       fetchRequisitions();
+      setError(''); // Clear any previous errors
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save requisition');
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to save requisition';
+      setError(errorMessage);
     }
   };
 
@@ -143,9 +145,11 @@ const PurchaseRequisitions = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchRequisitions();
+      setError('');
       alert('Successfully converted to purchase order!');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to convert requisition to purchase order');
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to convert requisition to purchase order';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -160,8 +164,10 @@ const PurchaseRequisitions = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchRequisitions();
+      setError('');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to delete requisition');
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to delete requisition';
+      setError(errorMessage);
     }
   };
 

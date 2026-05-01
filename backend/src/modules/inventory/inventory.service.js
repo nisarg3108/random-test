@@ -3,7 +3,7 @@ import { realTimeServer } from '../../core/realtime.js';
 import { logAudit } from '../../core/audit/audit.service.js';
 
 // Input validation helper
-const validateItemData = (data) => {
+export const validateItemData = (data) => {
   const { name, sku, price } = data;
   
   if (!name || typeof name !== 'string' || name.trim().length === 0) {

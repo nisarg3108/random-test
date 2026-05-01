@@ -3,10 +3,12 @@ import {
   Check, X, Clock, AlertCircle, Eye, Filter, 
   ChevronDown, User, Calendar, FileText 
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useApprovalsStore } from '../store/approvals.store';
 import { getUserRole, getUserFromToken } from '../store/auth.store';
 import Sidebar from '../components/layout/Sidebar';
 import Header from '../components/layout/Header';
+import { getRequestTargetPath } from '../utils/requestNavigation';
 
 const ApprovalDashboard = () => {
   const {
@@ -31,6 +33,7 @@ const ApprovalDashboard = () => {
   const userRole = getUserRole();
   const currentUser = getUserFromToken();
   const canApprove = ['ADMIN', 'MANAGER'].includes(userRole);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (canApprove) {
@@ -264,6 +267,13 @@ const ApprovalDashboard = () => {
 
                       <div className="flex space-x-2 ml-4">
                         <button
+                          onClick={() => navigate(getRequestTargetPath(approval))}
+                          className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                        >
+                          Open Page
+                        </button>
+
+                        <button
                           onClick={() => setSelectedApproval(approval)}
                           className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                         >
@@ -340,6 +350,13 @@ const ApprovalDashboard = () => {
                           </p>
                         </div>
                       </div>
+
+                      <button
+                        onClick={() => navigate(getRequestTargetPath(request))}
+                        className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      >
+                        Open Page
+                      </button>
                     </div>
                   </div>
                 ))

@@ -3,15 +3,34 @@ import prisma from '../../config/db.js';
 import emailService from '../../services/email.service.js';
 
 export const createEmployee = async (data, tenantId) => {
-  // Validate department exists if provided
-  if (data.departmentId) {
+  // Validate or create default department
+  let departmentId = data.departmentId;
+  
+  if (departmentId) {
     const department = await prisma.department.findFirst({
-      where: { id: data.departmentId, tenantId },
+      where: { id: departmentId, tenantId },
     });
     
     if (!department) {
       throw new Error('Department not found');
     }
+  } else {
+    // Use or create a default department
+    let defaultDept = await prisma.department.findFirst({
+      where: { tenantId },
+    });
+    
+    if (!defaultDept) {
+      defaultDept = await prisma.department.create({
+        data: {
+          tenantId,
+          name: 'General',
+          description: 'Default department'
+        }
+      });
+    }
+    
+    departmentId = defaultDept.id;
   }
 
   // Generate employee email if not provided
@@ -65,17 +84,12 @@ export const createEmployee = async (data, tenantId) => {
     joiningDate: data.joiningDate ? new Date(data.joiningDate) : new Date(),
     status: 'ACTIVE',
     tenantId,
-    user: {
-      connect: { id: user.id }
-    }
+    userId: user.id,
+    departmentId
   };
 
-  if (data.departmentId) {
-    employeeData.department = { connect: { id: data.departmentId } };
-  }
-
   if (data.managerId) {
-    employeeData.manager = { connect: { id: data.managerId } };
+    employeeData.managerId = data.managerId;
   }
 
   const employee = await prisma.employee.create({
@@ -154,6 +168,7 @@ export const deleteEmployee = async (employeeId, tenantId) => {
     select: {
       id: true,
       userId: true,
+      name: true
     }
   });
 
@@ -162,6 +177,7 @@ export const deleteEmployee = async (employeeId, tenantId) => {
   }
 
   await prisma.$transaction(async (tx) => {
+    // Delete related records
     await tx.notification.deleteMany({ where: { employeeId: employee.id } });
     await tx.workReport.deleteMany({ where: { employeeId: employee.id } });
     await tx.task.deleteMany({ where: { employeeId: employee.id } });
@@ -170,14 +186,27 @@ export const deleteEmployee = async (employeeId, tenantId) => {
     await tx.leaveRequest.deleteMany({ where: { employeeId: employee.id } });
     await tx.salaryStructure.deleteMany({ where: { employeeId: employee.id } });
     await tx.timeTracking.deleteMany({ where: { employeeId: employee.id } });
+    await tx.attendance.deleteMany({ where: { employeeId: employee.id } });
+    await tx.payslip.deleteMany({ where: { employeeId: employee.id } });
+    await tx.salaryDisbursement.deleteMany({ where: { employeeId: employee.id } });
+    await tx.shiftAssignment.deleteMany({ where: { employeeId: employee.id } });
+    await tx.overtimeRecord.deleteMany({ where: { employeeId: employee.id } });
+    await tx.attendanceReport.deleteMany({ where: { employeeId: employee.id } });
+    await tx.leaveIntegration.deleteMany({ where: { employeeId: employee.id } });
+    await tx.assetAllocation.deleteMany({ where: { employeeId: employee.id } });
+    await tx.projectMember.deleteMany({ where: { employeeId: employee.id } });
+    await tx.projectTimeLog.deleteMany({ where: { employeeId: employee.id } });
 
+    // Remove manager reference from other employees
     await tx.employee.updateMany({
       where: { managerId: employee.id },
       data: { managerId: null }
     });
 
+    // Delete employee
     await tx.employee.delete({ where: { id: employee.id } });
 
+    // Delete associated user account
     if (employee.userId) {
       await tx.userRole.deleteMany({ where: { userId: employee.userId } });
       await tx.user.delete({ where: { id: employee.userId } });

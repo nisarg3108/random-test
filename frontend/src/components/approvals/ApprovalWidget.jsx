@@ -3,6 +3,7 @@ import { Clock, Check, X, AlertCircle, ChevronRight } from 'lucide-react';
 import { useApprovalsStore } from '../../store/approvals.store';
 import { getUserRole } from '../../store/auth.store';
 import { useNavigate } from 'react-router-dom';
+import { getRequestTargetPath } from '../../utils/requestNavigation';
 
 const ApprovalWidget = ({ maxItems = 5, showActions = true }) => {
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ const ApprovalWidget = ({ maxItems = 5, showActions = true }) => {
     setProcessing(approvalId);
     await rejectRequest(approvalId, 'Quick rejection from dashboard');
     setProcessing(null);
+  };
+
+  const openRequestPage = (item) => {
+    navigate(getRequestTargetPath(item));
   };
 
   const formatActionData = (data) => {
@@ -133,6 +138,13 @@ const ApprovalWidget = ({ maxItems = 5, showActions = true }) => {
                     <p className="text-xs text-gray-500">
                       {new Date(item.createdAt).toLocaleDateString()}
                     </p>
+
+                    <button
+                      onClick={() => openRequestPage(item)}
+                      className="mt-2 text-xs font-medium text-blue-600 hover:text-blue-800"
+                    >
+                      Open Request Page
+                    </button>
                   </div>
 
                   {canApprove && item.status === 'PENDING' && showActions && (

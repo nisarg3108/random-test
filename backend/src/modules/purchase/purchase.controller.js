@@ -34,11 +34,36 @@ import {
   getVendorPerformance
 } from './purchase.service.js';
 
-const handleError = (error, next) => {
-  if (error?.code === 'P2025') {
-    error.message = 'Record not found';
+const handleError = (error, resOrNext, next) => {
+  // Backwards compatibility: if resOrNext is a function, it's the next parameter
+  const res = typeof resOrNext === 'function' ? null : resOrNext;
+  const nextFn = typeof resOrNext === 'function' ? resOrNext : next;
+  
+  // If no response object, just call next
+  if (!res) {
+    return nextFn(error);
   }
-  next(error);
+  
+  // Handle Prisma specific errors
+  if (error?.code === 'P2025') {
+    return res.status(404).json({ error: 'Record not found' });
+  }
+  
+  // Handle validation and business logic errors
+  if (error?.message?.includes('not found')) {
+    return res.status(404).json({ error: error.message });
+  }
+  
+  if (error?.message?.includes('Cannot') || error?.message?.includes('cannot')) {
+    return res.status(400).json({ error: error.message });
+  }
+  
+  if (error?.message?.includes('Use the')) {
+    return res.status(400).json({ error: error.message });
+  }
+  
+  // Pass to global error handler
+  nextFn(error);
 };
 
 // ==================== VENDORS ====================
@@ -125,10 +150,27 @@ export const createRequisitionController = async (req, res, next) => {
 
 export const updateRequisitionController = async (req, res, next) => {
   try {
+    // Validate required fields
+    if (!req.params.id) {
+      return res.status(400).json({ error: 'Requisition ID is required' });
+    }
+
+    // Validate items if being updated
+    if (req.body.items && Array.isArray(req.body.items)) {
+      for (const item of req.body.items) {
+        if (!item.itemName || item.quantity === undefined || item.estimatedPrice === undefined) {
+          return res.status(400).json({ error: 'Each item must have itemName, quantity, and estimatedPrice' });
+        }
+        if (item.quantity < 0 || item.estimatedPrice < 0) {
+          return res.status(400).json({ error: 'Quantity and price must be positive numbers' });
+        }
+      }
+    }
+
     const requisition = await updateRequisition(req.params.id, req.body, req.user.tenantId);
     res.json(requisition);
   } catch (error) {
-    handleError(error, next);
+    handleError(error, res, next);
   }
 };
 
@@ -194,6 +236,33 @@ export const getPurchaseOrderController = async (req, res, next) => {
 
 export const createPurchaseOrderController = async (req, res, next) => {
   try {
+    // Validate required fields
+    if (!req.body.vendorId) {
+      return res.status(400).json({ error: 'Vendor is required' });
+    }
+    if (!req.body.title) {
+      return res.status(400).json({ error: 'Purchase order title is required' });
+    }
+    if (!req.body.expectedDeliveryDate) {
+      return res.status(400).json({ error: 'Expected delivery date is required' });
+    }
+    if (!req.body.items || !Array.isArray(req.body.items) || req.body.items.length === 0) {
+      return res.status(400).json({ error: 'At least one item is required' });
+    }
+
+    // Validate items
+    for (const item of req.body.items) {
+      if (!item.itemName) {
+        return res.status(400).json({ error: 'Each item must have a name' });
+      }
+      if (!item.quantity || item.quantity <= 0) {
+        return res.status(400).json({ error: 'Each item must have a quantity greater than 0' });
+      }
+      if (item.unitPrice === undefined || item.unitPrice < 0) {
+        return res.status(400).json({ error: 'Each item must have a valid unit price' });
+      }
+    }
+
     const order = await createPurchaseOrder(req.body, req.user.tenantId, req.user.id);
     res.status(201).json(order);
   } catch (error) {
@@ -203,10 +272,41 @@ export const createPurchaseOrderController = async (req, res, next) => {
 
 export const updatePurchaseOrderController = async (req, res, next) => {
   try {
+    // Validate required fields
+    if (!req.params.id) {
+      return res.status(400).json({ error: 'Purchase Order ID is required' });
+    }
+
+    // Validate items if being updated
+    if (req.body.items && Array.isArray(req.body.items)) {
+      for (const item of req.body.items) {
+        if (!item.itemName || item.quantity === undefined || item.unitPrice === undefined) {
+          return res.status(400).json({ error: 'Each item must have itemName, quantity, and unitPrice' });
+        }
+        if (item.quantity < 0 || item.unitPrice < 0) {
+          return res.status(400).json({ error: 'Quantity and unit price must be positive numbers' });
+        }
+      }
+    }
+
+    // Validate financial fields if being updated
+    if (req.body.subtotal !== undefined && req.body.subtotal < 0) {
+      return res.status(400).json({ error: 'Subtotal cannot be negative' });
+    }
+    if (req.body.taxAmount !== undefined && req.body.taxAmount < 0) {
+      return res.status(400).json({ error: 'Tax amount cannot be negative' });
+    }
+    if (req.body.discountAmount !== undefined && req.body.discountAmount < 0) {
+      return res.status(400).json({ error: 'Discount amount cannot be negative' });
+    }
+    if (req.body.shippingCost !== undefined && req.body.shippingCost < 0) {
+      return res.status(400).json({ error: 'Shipping cost cannot be negative' });
+    }
+
     const order = await updatePurchaseOrder(req.params.id, req.body, req.user.tenantId);
     res.json(order);
   } catch (error) {
-    handleError(error, next);
+    handleError(error, res, next);
   }
 };
 
@@ -273,6 +373,24 @@ export const getGoodsReceiptController = async (req, res, next) => {
 
 export const createGoodsReceiptController = async (req, res, next) => {
   try {
+    // Validate required fields
+    if (!req.body.purchaseOrderId) {
+      return res.status(400).json({ error: 'Purchase order is required' });
+    }
+    if (!req.body.items || !Array.isArray(req.body.items) || req.body.items.length === 0) {
+      return res.status(400).json({ error: 'At least one item is required for the receipt' });
+    }
+
+    // Validate items structure
+    for (const item of req.body.items) {
+      if (!item.itemName) {
+        return res.status(400).json({ error: 'Each item must have a name' });
+      }
+      if (item.receivedQuantity === undefined || item.receivedQuantity < 0) {
+        return res.status(400).json({ error: 'Each item must have a valid received quantity' });
+      }
+    }
+
     const receipt = await createGoodsReceipt(req.body, req.user.tenantId, req.user.id);
     res.status(201).json(receipt);
   } catch (error) {

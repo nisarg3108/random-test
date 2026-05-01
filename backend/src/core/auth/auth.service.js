@@ -236,6 +236,21 @@ export const finalizePendingRegistration = async (pendingRegistrationId, provide
   const employeeCode = `EMP${Date.now()}`;
   const employeeName = pending.email.split('@')[0];
 
+  // 🔧 Ensure a default department exists for the tenant
+  let department = await prisma.department.findFirst({
+    where: { tenantId: tenant.id }
+  });
+
+  if (!department) {
+    department = await prisma.department.create({
+      data: {
+        tenantId: tenant.id,
+        name: 'Administration',
+        description: 'Default department for administrative staff'
+      }
+    });
+  }
+
   const employee = await prisma.employee.create({
     data: {
       employeeCode,
@@ -245,9 +260,8 @@ export const finalizePendingRegistration = async (pendingRegistrationId, provide
       joiningDate: new Date(),
       status: 'ACTIVE',
       tenantId: tenant.id,
-      user: {
-        connect: { id: user.id }
-      }
+      userId: user.id,
+      departmentId: department.id
     }
   });
 
@@ -346,6 +360,21 @@ export const registerUser = async ({
   const employeeCode = `EMP${Date.now()}`;
   const employeeName = normalizedEmail.split('@')[0];
 
+  // 🔧 Ensure a default department exists for the tenant
+  let department = await prisma.department.findFirst({
+    where: { tenantId: tenant.id }
+  });
+
+  if (!department) {
+    department = await prisma.department.create({
+      data: {
+        tenantId: tenant.id,
+        name: 'Administration',
+        description: 'Default department for administrative staff'
+      }
+    });
+  }
+
   const employee = await prisma.employee.create({
     data: {
       employeeCode,
@@ -355,9 +384,8 @@ export const registerUser = async ({
       joiningDate: new Date(),
       status: 'ACTIVE',
       tenantId: tenant.id,
-      user: {
-        connect: { id: user.id }
-      }
+      userId: user.id,
+      departmentId: department.id
     }
   });
 

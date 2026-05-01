@@ -2,6 +2,9 @@ import { apiClient } from './http';
 
 export const rolesAPI = {
   getRoles: () => apiClient.get('/rbac/roles'),
+  createRole: (data) => apiClient.post('/rbac/roles', data),
+  updateRole: (id, data) => apiClient.put(`/rbac/roles/${id}`, data),
+  deleteRole: (id) => apiClient.delete(`/rbac/roles/${id}`),
   getPermissions: () => apiClient.get('/rbac/permissions'),
   getMyPermissions: () => apiClient.get('/rbac/my-permissions'),
   getUserPermissions: (userId) => apiClient.get(`/rbac/users/${userId}/permissions`),

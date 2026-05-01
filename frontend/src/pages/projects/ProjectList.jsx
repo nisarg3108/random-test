@@ -100,19 +100,36 @@ const ProjectList = () => {
     setLoading(true);
 
     try {
+      // Validate required fields
+      if (!formData.projectName || !formData.projectName.trim()) {
+        throw new Error('Project name is required');
+      }
+      if (!formData.projectManager) {
+        throw new Error('Project manager is required');
+      }
+
       const projectData = {
         ...formData,
         estimatedBudget: parseFloat(formData.estimatedBudget) || 0,
       };
 
-      await projectAPI.createProject(projectData);
-      setShowModal(false);
-      resetForm();
-      loadProjects();
-      loadDashboard();
+      const response = await projectAPI.createProject(projectData);
+      
+      if (response.data) {
+        setShowModal(false);
+        resetForm();
+        loadProjects();
+        loadDashboard();
+      }
     } catch (err) {
-      setError(err.message || 'Failed to create project');
-    } finally {
+      // Extract error message from various response formats
+      const errorMessage = 
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        err.message ||
+        'Failed to create project';
+      
+      setError(errorMessage);
       setLoading(false);
     }
   };
@@ -390,165 +407,224 @@ const ProjectList = () => {
         {/* Create Project Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="modern-card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="sticky top-0 bg-white pb-4 border-b border-primary-200 mb-4">
-                <h2 className="text-xl font-bold text-primary-900">Create New Project</h2>
+            <div className="modern-card max-w-3xl w-full max-h-[95vh] overflow-y-auto">
+              {/* Modal Header */}
+              <div className="sticky top-0 bg-white pb-4 border-b border-primary-200 mb-6">
+                <h2 className="text-2xl font-bold text-primary-900">Create New Project</h2>
+                <p className="text-primary-600 text-sm mt-1">Fill in the project details below</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="form-label">Project Name *</label>
-                    <input
-                      type="text"
-                      name="projectName"
-                      value={formData.projectName}
-                      onChange={handleChange}
-                      required
-                      className="form-input-modern"
-                      placeholder="Enter project name"
-                    />
+              <form onSubmit={handleSubmit} className="space-y-6 px-6 pb-6">
+                {/* Error Message */}
+                {error && (
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <p className="text-red-700 font-medium">Creation Failed</p>
+                    <p className="text-red-600 text-sm mt-1">{error}</p>
+                  </div>
+                )}
+
+                {/* Section 1: Basic Information */}
+                <div className="space-y-4">
+                  <div className="pb-4 border-b border-primary-100">
+                    <h3 className="font-semibold text-primary-900 flex items-center">
+                      <span className="w-6 h-6 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center mr-2">1</span>
+                      Basic Information
+                    </h3>
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="form-label">Description</label>
-                    <textarea
-                      name="description"
-                      value={formData.description}
-                      onChange={handleChange}
-                      rows="3"
-                      className="form-input-modern"
-                      placeholder="Project description"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="form-label">Project Name *</label>
+                      <input
+                        type="text"
+                        name="projectName"
+                        value={formData.projectName}
+                        onChange={handleChange}
+                        required
+                        className="form-input-modern"
+                        placeholder="e.g., Website Redesign, Mobile App"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="form-label">Client Name</label>
+                      <input
+                        type="text"
+                        name="clientName"
+                        value={formData.clientName}
+                        onChange={handleChange}
+                        className="form-input-modern"
+                        placeholder="Client or company name"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="form-label">Project Type</label>
+                      <select
+                        name="type"
+                        value={formData.type}
+                        onChange={handleChange}
+                        className="form-input-modern"
+                      >
+                        <option value="CLIENT">Client Project</option>
+                        <option value="INTERNAL">Internal Project</option>
+                        <option value="R&D">Research & Development</option>
+                      </select>
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="form-label">Description</label>
+                      <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        rows="3"
+                        className="form-input-modern"
+                        placeholder="Provide a detailed description of the project..."
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 2: Team & Organization */}
+                <div className="space-y-4">
+                  <div className="pb-4 border-b border-primary-100">
+                    <h3 className="font-semibold text-primary-900 flex items-center">
+                      <span className="w-6 h-6 bg-green-500 text-white rounded-full text-xs flex items-center justify-center mr-2">2</span>
+                      Team & Organization
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="form-label">Project Manager *</label>
+                      <select
+                        name="projectManager"
+                        value={formData.projectManager}
+                        onChange={handleChange}
+                        required
+                        className="form-input-modern"
+                      >
+                        <option value="">Select Manager</option>
+                        {employees.map((emp) => (
+                          <option key={emp.id} value={emp.userId || emp.id}>
+                            {emp.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="form-label">Department</label>
+                      <select
+                        name="departmentId"
+                        value={formData.departmentId}
+                        onChange={handleChange}
+                        className="form-input-modern"
+                      >
+                        <option value="">Select Department</option>
+                        {departments.map((dept) => (
+                          <option key={dept.id} value={dept.id}>
+                            {dept.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 3: Timeline & Budget */}
+                <div className="space-y-4">
+                  <div className="pb-4 border-b border-primary-100">
+                    <h3 className="font-semibold text-primary-900 flex items-center">
+                      <span className="w-6 h-6 bg-purple-500 text-white rounded-full text-xs flex items-center justify-center mr-2">3</span>
+                      Timeline & Budget
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="form-label">Start Date</label>
+                      <input
+                        type="date"
+                        name="startDate"
+                        value={formData.startDate}
+                        onChange={handleChange}
+                        className="form-input-modern"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="form-label">End Date</label>
+                      <input
+                        type="date"
+                        name="endDate"
+                        value={formData.endDate}
+                        onChange={handleChange}
+                        className="form-input-modern"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="form-label">Estimated Budget</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-500">$</span>
+                        <input
+                          type="number"
+                          name="estimatedBudget"
+                          value={formData.estimatedBudget}
+                          onChange={handleChange}
+                          step="0.01"
+                          className="form-input-modern pl-8"
+                          placeholder="0.00"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="form-label">Priority</label>
+                      <select
+                        name="priority"
+                        value={formData.priority}
+                        onChange={handleChange}
+                        className="form-input-modern"
+                      >
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                        <option value="CRITICAL">Critical</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 4: Status & Additional Info */}
+                <div className="space-y-4">
+                  <div className="pb-4 border-b border-primary-100">
+                    <h3 className="font-semibold text-primary-900 flex items-center">
+                      <span className="w-6 h-6 bg-orange-500 text-white rounded-full text-xs flex items-center justify-center mr-2">4</span>
+                      Status & Additional Info
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="form-label">Status</label>
+                      <select
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        className="form-input-modern"
+                      >
+                        <option value="PLANNING">Planning</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="ON_HOLD">On Hold</option>
+                        <option value="COMPLETED">Completed</option>
+                      </select>
+                    </div>
                   </div>
 
                   <div>
-                    <label className="form-label">Client Name</label>
-                    <input
-                      type="text"
-                      name="clientName"
-                      value={formData.clientName}
-                      onChange={handleChange}
-                      className="form-input-modern"
-                      placeholder="Client name"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="form-label">Project Manager *</label>
-                    <select
-                      name="projectManager"
-                      value={formData.projectManager}
-                      onChange={handleChange}
-                      required
-                      className="form-input-modern"
-                    >
-                      <option value="">Select Manager</option>
-                      {employees.map((emp) => (
-                        <option key={emp.id} value={emp.userId || emp.id}>
-                          {emp.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="form-label">Department</label>
-                    <select
-                      name="departmentId"
-                      value={formData.departmentId}
-                      onChange={handleChange}
-                      className="form-input-modern"
-                    >
-                      <option value="">Select Department</option>
-                      {departments.map((dept) => (
-                        <option key={dept.id} value={dept.id}>
-                          {dept.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="form-label">Project Type</label>
-                    <select
-                      name="type"
-                      value={formData.type}
-                      onChange={handleChange}
-                      className="form-input-modern"
-                    >
-                      <option value="CLIENT">Client</option>
-                      <option value="INTERNAL">Internal</option>
-                      <option value="R&D">R&D</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="form-label">Status</label>
-                    <select
-                      name="status"
-                      value={formData.status}
-                      onChange={handleChange}
-                      className="form-input-modern"
-                    >
-                      <option value="PLANNING">Planning</option>
-                      <option value="IN_PROGRESS">In Progress</option>
-                      <option value="ON_HOLD">On Hold</option>
-                      <option value="COMPLETED">Completed</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="form-label">Priority</label>
-                    <select
-                      name="priority"
-                      value={formData.priority}
-                      onChange={handleChange}
-                      className="form-input-modern"
-                    >
-                      <option value="LOW">Low</option>
-                      <option value="MEDIUM">Medium</option>
-                      <option value="HIGH">High</option>
-                      <option value="CRITICAL">Critical</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="form-label">Start Date</label>
-                    <input
-                      type="date"
-                      name="startDate"
-                      value={formData.startDate}
-                      onChange={handleChange}
-                      className="form-input-modern"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="form-label">End Date</label>
-                    <input
-                      type="date"
-                      name="endDate"
-                      value={formData.endDate}
-                      onChange={handleChange}
-                      className="form-input-modern"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="form-label">Estimated Budget</label>
-                    <input
-                      type="number"
-                      name="estimatedBudget"
-                      value={formData.estimatedBudget}
-                      onChange={handleChange}
-                      step="0.01"
-                      className="form-input-modern"
-                      placeholder="0.00"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
                     <label className="form-label">Notes</label>
                     <textarea
                       name="notes"
@@ -556,27 +632,30 @@ const ProjectList = () => {
                       onChange={handleChange}
                       rows="2"
                       className="form-input-modern"
-                      placeholder="Additional notes"
+                      placeholder="Additional notes or remarks about the project..."
                     />
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-3 pt-4 border-t border-primary-200">
+                {/* Action Buttons */}
+                <div className="flex justify-end space-x-3 pt-6 border-t border-primary-200">
                   <button
                     type="button"
                     onClick={() => {
                       setShowModal(false);
                       resetForm();
                     }}
-                    className="btn-modern btn-secondary"
+                    className="px-6 py-2 rounded-lg font-medium text-primary-700 bg-primary-50 hover:bg-primary-100 transition"
+                    disabled={loading}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="btn-modern btn-primary"
+                    disabled={loading || !formData.projectName || !formData.projectManager}
+                    className="px-6 py-2 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition flex items-center"
                   >
+                    {loading && <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>}
                     {loading ? 'Creating...' : 'Create Project'}
                   </button>
                 </div>

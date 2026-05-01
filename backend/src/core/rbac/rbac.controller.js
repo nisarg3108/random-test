@@ -5,6 +5,244 @@ import { assignRoleToUser, seedRolesForTenant } from './permissions.seed.js';
 
 export class RBACController {
   /**
+   * Create a new role
+   */
+  static async createRole(req, res) {
+    try {
+      const { name, description, permissions } = req.body;
+      const tenantId = req.user?.tenantId;
+
+      if (!name || !tenantId) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Role name and tenant ID required' 
+        });
+      }
+
+      const existingRole = await prisma.role.findFirst({
+        where: { name, tenantId }
+      });
+
+      if (existingRole) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Role with this name already exists' 
+        });
+      }
+
+      const role = await prisma.role.create({
+        data: {
+          name,
+          tenantId
+        }
+      });
+
+      if (permissions && Array.isArray(permissions) && permissions.length > 0) {
+        const rolePermissions = permissions.map(permissionId => ({
+          roleId: role.id,
+          permissionId
+        }));
+
+        await prisma.rolePermission.createMany({
+          data: rolePermissions,
+          skipDuplicates: true
+        });
+      }
+
+      const createdRole = await prisma.role.findUnique({
+        where: { id: role.id },
+        include: {
+          permissions: {
+            include: {
+              permission: true
+            }
+          },
+          _count: {
+            select: { users: true }
+          }
+        }
+      });
+
+      res.status(201).json({ 
+        success: true, 
+        message: 'Role created successfully',
+        data: createdRole
+      });
+    } catch (error) {
+      console.error('Error creating role:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  }
+
+  /**
+   * Update an existing role
+   */
+  static async updateRole(req, res) {
+    try {
+      const { id } = req.params;
+      const { name, description, permissions } = req.body;
+      const tenantId = req.user?.tenantId;
+
+      if (!id || !tenantId) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Role ID and tenant ID required' 
+        });
+      }
+
+      const existingRole = await prisma.role.findFirst({
+        where: { id, tenantId }
+      });
+
+      if (!existingRole) {
+        return res.status(404).json({ 
+          success: false, 
+          error: 'Role not found' 
+        });
+      }
+
+      if (['ADMIN', 'MANAGER', 'USER'].includes(existingRole.name)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Cannot modify system roles' 
+        });
+      }
+
+      if (name && name !== existingRole.name) {
+        const nameExists = await prisma.role.findFirst({
+          where: { 
+            name, 
+            tenantId,
+            id: { not: id }
+          }
+        });
+
+        if (nameExists) {
+          return res.status(400).json({ 
+            success: false, 
+            error: 'Role with this name already exists' 
+          });
+        }
+
+        await prisma.role.update({
+          where: { id },
+          data: { name }
+        });
+      }
+
+      if (permissions && Array.isArray(permissions)) {
+        await prisma.rolePermission.deleteMany({
+          where: { roleId: id }
+        });
+
+        if (permissions.length > 0) {
+          const rolePermissions = permissions.map(permissionId => ({
+            roleId: id,
+            permissionId
+          }));
+
+          await prisma.rolePermission.createMany({
+            data: rolePermissions,
+            skipDuplicates: true
+          });
+        }
+      }
+
+      const updatedRole = await prisma.role.findUnique({
+        where: { id },
+        include: {
+          permissions: {
+            include: {
+              permission: true
+            }
+          },
+          _count: {
+            select: { users: true }
+          }
+        }
+      });
+
+      res.json({ 
+        success: true, 
+        message: 'Role updated successfully',
+        data: updatedRole
+      });
+    } catch (error) {
+      console.error('Error updating role:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  }
+
+  /**
+   * Delete a role
+   */
+  static async deleteRole(req, res) {
+    try {
+      const { id } = req.params;
+      const tenantId = req.user?.tenantId;
+
+      if (!id || !tenantId) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Role ID and tenant ID required' 
+        });
+      }
+
+      const role = await prisma.role.findFirst({
+        where: { id, tenantId },
+        include: {
+          _count: {
+            select: { users: true }
+          }
+        }
+      });
+
+      if (!role) {
+        return res.status(404).json({ 
+          success: false, 
+          error: 'Role not found' 
+        });
+      }
+
+      if (['ADMIN', 'MANAGER', 'USER'].includes(role.name)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Cannot delete system roles' 
+        });
+      }
+
+      await prisma.rolePermission.deleteMany({
+        where: { roleId: id }
+      });
+
+      await prisma.userRole.deleteMany({
+        where: { roleId: id }
+      });
+
+      await prisma.role.delete({
+        where: { id }
+      });
+
+      res.json({ 
+        success: true, 
+        message: 'Role deleted successfully'
+      });
+    } catch (error) {
+      console.error('Error deleting role:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  }
+
+  /**
    * Get all available roles
    */
   static async getRoles(req, res) {

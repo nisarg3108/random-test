@@ -30,10 +30,21 @@ import { logAudit } from '../../core/audit/audit.service.js';
 
 export const createProjectController = async (req, res, next) => {
   try {
-    const project = await createProject(req.body, req.user.tenantId, req.user.userId);
+    // Validate required fields
+    if (!req.body.projectName) {
+      return res.status(400).json({ error: 'Project name is required' });
+    }
+    if (!req.body.projectManager) {
+      return res.status(400).json({ error: 'Project manager is required' });
+    }
+    if (!req.body.startDate) {
+      return res.status(400).json({ error: 'Start date is required' });
+    }
+
+    const project = await createProject(req.body, req.user.tenantId, req.user.id);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'CREATE',
       entity: 'PROJECT',
@@ -76,7 +87,7 @@ export const updateProjectController = async (req, res, next) => {
     const project = await updateProject(req.params.id, req.body, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'UPDATE',
       entity: 'PROJECT',
@@ -94,7 +105,7 @@ export const deleteProjectController = async (req, res, next) => {
     const result = await deleteProject(req.params.id, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'DELETE',
       entity: 'PROJECT',
@@ -113,10 +124,10 @@ export const deleteProjectController = async (req, res, next) => {
 
 export const createMilestoneController = async (req, res, next) => {
   try {
-    const milestone = await createMilestone(req.body, req.user.tenantId, req.user.userId);
+    const milestone = await createMilestone(req.body, req.user.tenantId, req.user.id);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'CREATE',
       entity: 'PROJECT_MILESTONE',
@@ -143,7 +154,7 @@ export const updateMilestoneController = async (req, res, next) => {
     const milestone = await updateMilestone(req.params.id, req.body, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'UPDATE',
       entity: 'PROJECT_MILESTONE',
@@ -161,7 +172,7 @@ export const deleteMilestoneController = async (req, res, next) => {
     const result = await deleteMilestone(req.params.id, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'DELETE',
       entity: 'PROJECT_MILESTONE',
@@ -183,7 +194,7 @@ export const allocateResourceController = async (req, res, next) => {
     const resource = await allocateResource(req.body, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'CREATE',
       entity: 'PROJECT_RESOURCE',
@@ -210,7 +221,7 @@ export const updateResourceController = async (req, res, next) => {
     const resource = await updateResource(req.params.id, req.body, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'UPDATE',
       entity: 'PROJECT_RESOURCE',
@@ -228,7 +239,7 @@ export const deleteResourceController = async (req, res, next) => {
     const result = await deleteResource(req.params.id, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'DELETE',
       entity: 'PROJECT_RESOURCE',
@@ -247,10 +258,10 @@ export const deleteResourceController = async (req, res, next) => {
 
 export const createBudgetController = async (req, res, next) => {
   try {
-    const budget = await createBudgetEntry(req.body, req.user.tenantId, req.user.userId);
+    const budget = await createBudgetEntry(req.body, req.user.tenantId, req.user.id);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'CREATE',
       entity: 'PROJECT_BUDGET',
@@ -277,7 +288,7 @@ export const updateBudgetController = async (req, res, next) => {
     const budget = await updateBudgetEntry(req.params.id, req.body, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'UPDATE',
       entity: 'PROJECT_BUDGET',
@@ -295,7 +306,7 @@ export const deleteBudgetController = async (req, res, next) => {
     const result = await deleteBudgetEntry(req.params.id, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'DELETE',
       entity: 'PROJECT_BUDGET',
@@ -314,10 +325,10 @@ export const deleteBudgetController = async (req, res, next) => {
 
 export const logTimeController = async (req, res, next) => {
   try {
-    const timeLog = await logTime(req.body, req.user.tenantId, req.user.userId);
+    const timeLog = await logTime(req.body, req.user.tenantId, req.user.id);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'CREATE',
       entity: 'PROJECT_TIME_LOG',
@@ -351,7 +362,7 @@ export const updateTimeLogController = async (req, res, next) => {
     const timeLog = await updateTimeLog(req.params.id, req.body, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'UPDATE',
       entity: 'PROJECT_TIME_LOG',
@@ -369,7 +380,7 @@ export const deleteTimeLogController = async (req, res, next) => {
     const result = await deleteTimeLog(req.params.id, req.user.tenantId);
 
     await logAudit({
-      userId: req.user.userId,
+      userId: req.user.id,
       tenantId: req.user.tenantId,
       action: 'DELETE',
       entity: 'PROJECT_TIME_LOG',
@@ -388,7 +399,7 @@ export const deleteTimeLogController = async (req, res, next) => {
 
 export const getProjectDashboardController = async (req, res, next) => {
   try {
-    const dashboard = await getProjectDashboard(req.user.tenantId, req.user.userId);
+    const dashboard = await getProjectDashboard(req.user.tenantId, req.user.id);
     res.json(dashboard);
   } catch (err) {
     next(err);

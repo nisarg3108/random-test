@@ -74,20 +74,54 @@ export const assignManagerController = async (req, res, next) => {
 export const updateEmployeeController = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const employee = await prisma.employee.update({
-      where: { id, tenantId: req.user.tenantId },
-      data: req.body
+    const { firstName, lastName, email, phone, position, departmentId, joiningDate } = req.body;
+
+    const employee = await prisma.employee.findFirst({
+      where: { id, tenantId: req.user.tenantId }
     });
+
+    if (!employee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    const updateData = {};
+    if (firstName || lastName) {
+      updateData.name = `${firstName || employee.name.split(' ')[0]} ${lastName || employee.name.split(' ').slice(1).join(' ')}`;
+    }
+    if (email) updateData.email = email;
+    if (phone !== undefined) updateData.phone = phone;
+    if (position) updateData.designation = position;
+    if (departmentId) updateData.departmentId = departmentId;
+    if (joiningDate) updateData.joiningDate = new Date(joiningDate);
+
+    const updatedEmployee = await prisma.employee.update({
+      where: { id },
+      data: updateData,
+      include: {
+        department: true,
+        manager: true,
+        user: {
+          select: { email: true, status: true, role: true }
+        }
+      }
+    });
+
+    if (email && employee.userId) {
+      await prisma.user.update({
+        where: { id: employee.userId },
+        data: { email }
+      });
+    }
 
     await logAudit({
       userId: req.user.userId,
       tenantId: req.user.tenantId,
       action: 'UPDATE',
       entity: 'EMPLOYEE',
-      entityId: employee.id,
+      entityId: updatedEmployee.id,
     });
 
-    res.json(employee);
+    res.json(updatedEmployee);
   } catch (err) {
     next(err);
   }
@@ -104,10 +138,10 @@ export const deleteEmployeeController = async (req, res, next) => {
       tenantId: req.user.tenantId,
       action: 'DELETE',
       entity: 'EMPLOYEE',
-      entityId: deletedEmployee.id,
+      entityId: id,
     });
     
-    res.json({ message: 'Employee deleted successfully' });
+    res.json({ message: 'Employee deleted successfully', employee: deletedEmployee });
   } catch (err) {
     next(err);
   }

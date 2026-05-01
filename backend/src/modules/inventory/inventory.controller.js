@@ -4,6 +4,7 @@ import {
   getItem,
   updateItem,
   deleteItem,
+  validateItemData,
 } from './inventory.service.js';
 import prisma from '../../config/db.js';
 
@@ -38,6 +39,14 @@ export const createItemController = async (req, res, next) => {
         // If workflow exists but has no steps, create directly
         const item = await createItem(req.body, req.user.tenantId, req.user.userId);
         return res.status(201).json(item);
+      }
+
+      // Validate payload before creating a workflow request
+      try {
+        validateItemData(req.body);
+      } catch (validationError) {
+        console.log('Invalid payload for workflow request:', validationError.message);
+        return res.status(400).json({ error: validationError.message });
       }
 
       console.log('Creating workflow request for approval');

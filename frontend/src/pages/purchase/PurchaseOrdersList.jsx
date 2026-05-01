@@ -137,6 +137,40 @@ const PurchaseOrdersList = () => {
     e.preventDefault();
     const token = localStorage.getItem('ueorms_token');
 
+    // Validate required fields
+    if (!formData.vendorId) {
+      setError('Please select a vendor');
+      return;
+    }
+    if (!formData.title || !formData.title.trim()) {
+      setError('Purchase order title is required');
+      return;
+    }
+    if (!formData.expectedDeliveryDate) {
+      setError('Expected delivery date is required');
+      return;
+    }
+    if (!formData.items || formData.items.length === 0) {
+      setError('At least one item is required');
+      return;
+    }
+
+    // Validate items
+    for (const item of formData.items) {
+      if (!item.itemName || !item.itemName.trim()) {
+        setError('Each item must have a name');
+        return;
+      }
+      if (!item.quantity || item.quantity <= 0) {
+        setError('Each item must have a quantity greater than 0');
+        return;
+      }
+      if (item.unitPrice === undefined || item.unitPrice < 0) {
+        setError('Each item must have a valid unit price');
+        return;
+      }
+    }
+
     try {
       if (editing) {
         await axios.put(`${API_URL}/api/purchase/orders/${editing.id}`, formData, {
@@ -151,8 +185,10 @@ const PurchaseOrdersList = () => {
       setShowModal(false);
       resetForm();
       fetchOrders();
+      setError(''); // Clear any previous errors
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save purchase order');
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to save purchase order';
+      setError(errorMessage);
     }
   };
 
@@ -208,8 +244,10 @@ const PurchaseOrdersList = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchOrders();
+      setError('');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to delete purchase order');
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to delete purchase order';
+      setError(errorMessage);
     }
   };
 
@@ -413,6 +451,13 @@ const PurchaseOrdersList = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[calc(90vh-80px)] overflow-y-auto">
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  {error}
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-primary-700 mb-1">
@@ -457,11 +502,14 @@ const PurchaseOrdersList = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-primary-700 mb-1">Expected Delivery</label>
+                  <label className="block text-sm font-medium text-primary-700 mb-1">
+                    Expected Delivery <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="date"
                     value={formData.expectedDeliveryDate}
                     onChange={(e) => setFormData({ ...formData, expectedDeliveryDate: e.target.value })}
+                    required
                     className="input-modern"
                   />
                 </div>

@@ -115,13 +115,41 @@ const GoodsReceiptList = () => {
     e.preventDefault();
     const token = localStorage.getItem('ueorms_token');
 
+    // Validate required fields
+    if (!formData.purchaseOrderId) {
+      setError('Please select a purchase order');
+      return;
+    }
+    if (!formData.items || formData.items.length === 0) {
+      setError('Please add items to the receipt');
+      return;
+    }
+
+    // Validate items
+    for (const item of formData.items) {
+      if (!item.itemName || !item.itemName.trim()) {
+        setError('Each item must have a name');
+        return;
+      }
+      if (item.receivedQuantity === undefined || item.receivedQuantity < 0) {
+        setError('Each item must have a valid received quantity');
+        return;
+      }
+    }
+
     try {
+      const submitData = {
+        ...formData,
+        // Set receivedBy to a placeholder - backend will use logged-in user
+        receivedBy: formData.receivedBy || 'current-user'
+      };
+
       if (editing) {
-        await axios.put(`${API_URL}/api/purchase/receipts/${editing.id}`, formData, {
+        await axios.put(`${API_URL}/api/purchase/receipts/${editing.id}`, submitData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post(`${API_URL}/api/purchase/receipts`, formData, {
+        await axios.post(`${API_URL}/api/purchase/receipts`, submitData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
@@ -129,8 +157,10 @@ const GoodsReceiptList = () => {
       setShowModal(false);
       resetForm();
       fetchReceipts();
+      setError('');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save goods receipt');
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to save goods receipt';
+      setError(errorMessage);
     }
   };
 
@@ -370,9 +400,16 @@ const GoodsReceiptList = () => {
                   {editing ? 'Edit Goods Receipt' : 'New Goods Receipt'}
                 </h2>
               </div>
-              
+            
               <form onSubmit={handleSubmit} className="p-6">
                 <div className="space-y-6">
+                  {/* Error Message */}
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                      {error}
+                    </div>
+                  )}
+
                   {/* Basic Info */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>

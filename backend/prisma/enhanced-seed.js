@@ -525,11 +525,189 @@ export const seedAdditionalVendors = async (tenantId, users) => {
   return vendorsList;
 };
 
+/**
+ * Add multiple warehouses with different types and zones
+ * Expands from 1 main warehouse to 3+ warehouses with comprehensive stock data
+ */
+export const seedEnhancedWarehouses = async (tenantId, branch, users, items) => {
+  const warehouses = [];
+  
+  // Warehouse 1: Main Distribution Center
+  const warehouseData = [
+    {
+      code: 'WH-MAIN-001',
+      name: 'Main Distribution Center - Ahmedabad',
+      type: 'GENERAL',
+      address: 'Industrial Area, Warehouse Block A',
+      city: 'Ahmedabad',
+      state: 'Gujarat',
+      country: 'India',
+      postalCode: '380015',
+      capacity: 15000,
+      unit: 'SQFT',
+      phone: '+91-79-4000-0010',
+      items: [
+        { itemKey: 'laptop', qty: 45, reserved: 8, bin: 'A-01-01', zone: 'ELECTRONICS', reorderPt: 15 },
+        { itemKey: 'chair', qty: 85, reserved: 5, bin: 'B-03-02', zone: 'FURNITURE', reorderPt: 20 },
+        { itemKey: 'steelSheet', qty: 800, reserved: 150, bin: 'R-11-04', zone: 'RAW_MATERIALS', reorderPt: 100 },
+        { itemKey: 'widget', qty: 180, reserved: 30, bin: 'F-02-01', zone: 'FINISHED_GOODS', reorderPt: 40 }
+      ]
+    },
+    {
+      code: 'WH-SECONDARY-002',
+      name: 'Secondary Warehouse - Mumbai',
+      type: 'GENERAL',
+      address: 'Warehouse Complex B, Industrial Estate',
+      city: 'Mumbai',
+      state: 'Maharashtra',
+      country: 'India',
+      postalCode: '400069',
+      capacity: 10000,
+      unit: 'SQFT',
+      phone: '+91-22-5000-0020',
+      items: [
+        { itemKey: 'laptop', qty: 28, reserved: 5, bin: 'A-02-03', zone: 'ELECTRONICS', reorderPt: 10 },
+        { itemKey: 'chair', qty: 50, reserved: 3, bin: 'B-01-01', zone: 'FURNITURE', reorderPt: 15 },
+        { itemKey: 'widget', qty: 120, reserved: 20, bin: 'F-05-02', zone: 'FINISHED_GOODS', reorderPt: 30 }
+      ]
+    },
+    {
+      code: 'WH-COLD-003',
+      name: 'Cold Storage - Delhi',
+      type: 'COLD_STORAGE',
+      address: 'Cold Chain District, Warehouse C',
+      city: 'Delhi',
+      state: 'Delhi',
+      country: 'India',
+      postalCode: '110024',
+      capacity: 5000,
+      unit: 'SQFT',
+      phone: '+91-11-4000-0030',
+      items: [
+        { itemKey: 'steelSheet', qty: 300, reserved: 50, bin: 'C-01-01', zone: 'CLIMATE_CONTROLLED', reorderPt: 50 }
+      ]
+    },
+    {
+      code: 'WH-HAZMAT-004',
+      name: 'Hazmat Storage - Bangalore',
+      type: 'HAZARDOUS',
+      address: 'Secure Industrial Zone D',
+      city: 'Bangalore',
+      state: 'Karnataka',
+      country: 'India',
+      postalCode: '560037',
+      capacity: 3000,
+      unit: 'SQFT',
+      phone: '+91-80-5000-0040',
+      items: [
+        { itemKey: 'steelSheet', qty: 200, reserved: 30, bin: 'H-04-02', zone: 'SECURE_HAZMAT', reorderPt: 40 }
+      ]
+    }
+  ];
+
+  for (const whData of warehouseData) {
+    const warehouse = await upsertFirst(
+      prisma.warehouse,
+      { tenantId, code: whData.code },
+      {
+        tenantId,
+        branchId: branch.id,
+        code: whData.code,
+        name: whData.name,
+        type: whData.type,
+        address: whData.address,
+        city: whData.city,
+        state: whData.state,
+        country: whData.country,
+        postalCode: whData.postalCode,
+        capacity: whData.capacity,
+        unit: whData.unit,
+        managerId: users.admin.id,
+        phone: whData.phone,
+        isActive: true
+      }
+    );
+
+    // Add warehouse stock for each item
+    for (const stockData of whData.items) {
+      const item = items[stockData.itemKey];
+      if (item) {
+        await upsertFirst(
+          prisma.warehouseStock,
+          { warehouseId: warehouse.id, itemId: item.id },
+          {
+            tenantId,
+            warehouseId: warehouse.id,
+            itemId: item.id,
+            quantity: stockData.qty,
+            reservedQty: stockData.reserved,
+            availableQty: stockData.qty - stockData.reserved,
+            binLocation: stockData.bin,
+            zone: stockData.zone,
+            reorderPoint: stockData.reorderPt,
+            reorderQty: Math.ceil(stockData.reorderPt * 2.5),
+            minStock: Math.ceil(stockData.reorderPt * 0.8),
+            maxStock: stockData.qty + Math.ceil(stockData.qty * 0.3),
+            lastPurchasePrice: item.price * 0.9,
+            avgCost: item.price * 0.85
+          }
+        );
+      }
+    }
+
+    warehouses.push(warehouse);
+  }
+
+  // Add additional stock movements for all warehouses
+  const movementData = [
+    { whIdx: 0, itemKey: 'laptop', movNum: 'SM-2026-0010', type: 'IN', reason: 'PURCHASE', qty: 25, refId: 'PO-2026-0005', days: -5 },
+    { whIdx: 0, itemKey: 'chair', movNum: 'SM-2026-0011', type: 'IN', reason: 'PURCHASE', qty: 40, refId: 'PO-2026-0006', days: -4 },
+    { whIdx: 0, itemKey: 'widget', movNum: 'SM-2026-0012', type: 'OUT', reason: 'SALES', qty: 15, refId: 'SO-2026-0005', days: -3 },
+    { whIdx: 1, itemKey: 'laptop', movNum: 'SM-2026-0013', type: 'TRANSFER', reason: 'TRANSFER', qty: 10, refId: 'WH-MAIN-001', days: -2 },
+    { whIdx: 1, itemKey: 'widget', movNum: 'SM-2026-0014', type: 'OUT', reason: 'SALES', qty: 20, refId: 'SO-2026-0006', days: -1 },
+    { whIdx: 2, itemKey: 'steelSheet', movNum: 'SM-2026-0015', type: 'IN', reason: 'PURCHASE', qty: 100, refId: 'PO-2026-0007', days: -3 },
+    { whIdx: 3, itemKey: 'steelSheet', movNum: 'SM-2026-0016', type: 'IN', reason: 'PURCHASE', qty: 75, refId: 'PO-2026-0008', days: -2 }
+  ];
+
+  for (const movData of movementData) {
+    const warehouse = warehouses[movData.whIdx];
+    const item = items[movData.itemKey];
+
+    if (warehouse && item) {
+      await upsertFirst(
+        prisma.stockMovement,
+        { tenantId, movementNumber: movData.movNum },
+        {
+          tenantId,
+          movementNumber: movData.movNum,
+          type: movData.type,
+          reason: movData.reason,
+          itemId: item.id,
+          warehouseId: warehouse.id,
+          quantity: movData.qty,
+          referenceType: movData.type === 'TRANSFER' ? 'WAREHOUSE_TRANSFER' : (movData.reason === 'SALES' ? 'SALES_ORDER' : 'PURCHASE_ORDER'),
+          referenceId: movData.refId,
+          unitCost: item.price * 0.85,
+          totalCost: (item.price * 0.85) * movData.qty,
+          status: 'COMPLETED',
+          approvedBy: users.admin.id,
+          approvedAt: addDays(movData.days),
+          notes: `${movData.type} transaction for ${item.name}`,
+          createdBy: users.admin.id
+        }
+      );
+    }
+  }
+
+  return warehouses;
+};
+
 export default {
   seedAdditionalEmployees,
   seedAdditionalGoodsReceipts,
   seedWarehouseDispatchAndMovements,
   seedFinanceApprovals,
   seedEnhancedDocuments,
-  seedAdditionalVendors
+  seedAdditionalVendors,
+  seedEnhancedWarehouses
 };

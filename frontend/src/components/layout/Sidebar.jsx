@@ -47,8 +47,7 @@ const Sidebar = () => {
         { path: '/hr/salary-management', label: 'Salary Management', icon: DollarSign, moduleKey: 'PAYROLL' },
         { path: '/hr/leave-types', label: 'Leave Types', icon: Calendar, moduleKey: 'HR' },
         { path: '/hr/payroll', label: 'Payroll Dashboard', icon: DollarSign, moduleKey: 'PAYROLL' },
-        { path: '/hr/payroll/cycles', label: 'Payroll Cycles', icon: Calendar, moduleKey: 'PAYROLL' },
-        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle, moduleKey: 'HR' }
+        { path: '/hr/payroll/cycles', label: 'Payroll Cycles', icon: Calendar, moduleKey: 'PAYROLL' }
       );
     }
 
@@ -57,8 +56,7 @@ const Sidebar = () => {
       items.push(
         { path: '/hr/employees', label: 'Employees', icon: Users, moduleKey: 'HR' },
         { path: '/hr/attendance', label: 'Attendance', icon: Clock, moduleKey: 'HR' },
-        { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar, moduleKey: 'HR' },
-        { path: '/hr/approvals', label: 'Leave Approvals', icon: CheckCircle, moduleKey: 'HR' }
+        { path: '/hr/leave-requests', label: 'Leave Requests', icon: Calendar, moduleKey: 'HR' }
       );
     }
 
@@ -80,18 +78,12 @@ const Sidebar = () => {
         { path: '/finance', label: 'Finance Dashboard', icon: DollarSign, moduleKey: 'FINANCE' },
         { path: '/finance/expense-categories', label: 'Expense Categories', icon: FileText, moduleKey: 'FINANCE' },
         { path: '/finance/approvals', label: 'Finance Approvals', icon: CheckCircle, moduleKey: 'FINANCE' },
-        { path: '/accounting/ledger', label: 'General Ledger', icon: FileText, moduleKey: 'FINANCE' },
         { path: '/accounting/reports', label: 'Financial Reports', icon: BarChart3, moduleKey: 'FINANCE' }
       );
     }
 
     // Accountant specific items
     if (['ADMIN', 'FINANCE_MANAGER', 'ACCOUNTANT'].includes(role)) {
-      items.push(
-        { path: '/accounting/journal', label: 'Journal Entries', icon: FileText, moduleKey: 'FINANCE' },
-        { path: '/accounting/ledger', label: 'Ledger', icon: FileText, moduleKey: 'FINANCE' },
-        { path: '/accounting/charts', label: 'Chart of Accounts', icon: FileText, moduleKey: 'FINANCE' }
-      );
     }
 
     // Inventory Manager specific items

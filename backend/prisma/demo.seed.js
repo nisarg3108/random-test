@@ -8,7 +8,8 @@ import {
   seedWarehouseDispatchAndMovements,
   seedFinanceApprovals,
   seedEnhancedDocuments,
-  seedAdditionalVendors
+  seedAdditionalVendors,
+  seedEnhancedWarehouses
 } from './enhanced-seed.js';
 
 const DEMO_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'bhavsarnisarg0@gmail.com';
@@ -6632,7 +6633,7 @@ export const seedComprehensiveDemoData = async (targetTenantId = null) => {
   const { departments, users, employees } = await seedOrganization(tenant.id, passwordHash);
   
   console.log('🌱 Seeding branch, inventory, and manufacturing...');
-  const { warehouse, items } = await seedBranchInventoryAndManufacturing(tenant.id, departments, users);
+  const { branch, warehouse, items } = await seedBranchInventoryAndManufacturing(tenant.id, departments, users);
   
   console.log('🌱 Seeding HR and payroll...');
   const hr = await seedHRAndPayroll(tenant.id, employees, departments, users);
@@ -6671,27 +6672,31 @@ export const seedComprehensiveDemoData = async (targetTenantId = null) => {
   
   console.log('🚀 ENHANCING WITH COMPREHENSIVE TEST DATA...\n');
   
-  console.log('📊 [1/6] Adding more employees to each department (3-5 per dept)...');
+  console.log('📊 [1/7] Adding multiple warehouses with different types...');
+  const additionalWarehouses = await seedEnhancedWarehouses(tenant.id, branch, users, items);
+  console.log(`    ✓ Added ${additionalWarehouses.length} warehouses with comprehensive stock data`);
+  
+  console.log('📊 [2/7] Adding more employees to each department (3-5 per dept)...');
   const additionalEmployees = await seedAdditionalEmployees(tenant.id, departments, employees);
   console.log(`    ✓ Added ${additionalEmployees.length} employees across all departments`);
   
-  console.log('📦 [2/6] Adding goods receipt records with line items...');
+  console.log('📦 [3/7] Adding goods receipt records with line items...');
   const additionalGRs = await seedAdditionalGoodsReceipts(tenant.id, users, warehouse, items, finance.purchaseOrder);
   console.log(`    ✓ Added ${additionalGRs.length} goods receipt records`);
   
-  console.log('🚚 [3/6] Adding warehouse dispatch and stock movements...');
+  console.log('🚚 [4/7] Adding warehouse dispatch and stock movements...');
   const movements = await seedWarehouseDispatchAndMovements(tenant.id, users, warehouse, items);
   console.log(`    ✓ Added ${movements.length} warehouse dispatch/movement records`);
   
-  console.log('✅ [4/6] Adding finance approvals for POs, bills, and expenses...');
+  console.log('✅ [5/7] Adding finance approvals for POs, bills, and expenses...');
   const approvals = await seedFinanceApprovals(tenant.id, users, employees);
   console.log(`    ✓ Added ${approvals.length} approval workflow records`);
   
-  console.log('📄 [5/6] Adding comprehensive documents with folders and files...');
+  console.log('📄 [6/7] Adding comprehensive documents with folders and files...');
   const documents = await seedEnhancedDocuments(tenant.id, users, employees);
   console.log(`    ✓ Added ${documents.length} documents with organized folder structure`);
   
-  console.log('🏢 [6/6] Adding additional vendors with evaluation data...');
+  console.log('🏢 [7/7] Adding additional vendors with evaluation data...');
   const additionalVendors = await seedAdditionalVendors(tenant.id, users);
   console.log(`    ✓ Added ${additionalVendors.length} vendors with comprehensive data`);
 
@@ -6703,9 +6708,10 @@ export const seedComprehensiveDemoData = async (targetTenantId = null) => {
   console.log('📋 Demo Data Summary:');
   console.log(`   • Tenant: UEORMS Demo Tenant`);
   console.log(`   • Admin Login: ${DEMO_ADMIN_EMAIL} / ${DEMO_PASSWORD}`);
+  console.log(`   • Total Warehouses: ${1 + additionalWarehouses.length}`);
   console.log(`   • Total Employees: ${5 + additionalEmployees.length}`);
   console.log(`   • Goods Receipts: ${additionalGRs.length + 1}`);
-  console.log(`   • Stock Movements: ${movements.length + 2}`);
+  console.log(`   • Stock Movements: ${movements.length + 2 + 7}`); // +7 for enhanced warehouse movements
   console.log(`   • Finance Approvals: ${approvals.length}`);
   console.log(`   • Documents: ${documents.length}`);
   console.log(`   • Vendors: ${additionalVendors.length + 1}`);

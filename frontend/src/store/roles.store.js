@@ -19,7 +19,6 @@ export const useRolesStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await rolesAPI.getRoles();
-      // Backend returns { success: true, data: [...] }, apiClient wraps it in { data: response }
       const rolesData = response.data?.data || response.data || [];
       set({ roles: Array.isArray(rolesData) ? rolesData : [], loading: false });
     } catch (error) {
@@ -31,7 +30,6 @@ export const useRolesStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await rolesAPI.getPermissions();
-      // Backend returns { success: true, data: [...] }, apiClient wraps it in { data: response }
       const permissionsData = response.data?.data || response.data || [];
       set({ permissions: Array.isArray(permissionsData) ? permissionsData : [], loading: false });
     } catch (error) {
@@ -61,6 +59,57 @@ export const useRolesStore = create((set, get) => ({
     }
   },
 
+  createRole: async (roleData) => {
+    set({ loading: true, error: null, success: null });
+    try {
+      const response = await rolesAPI.createRole(roleData);
+      set({ 
+        loading: false,
+        success: 'Role created successfully'
+      });
+      get().fetchRoles();
+      return true;
+    } catch (error) {
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to create role';
+      set({ error: errorMsg, loading: false });
+      return false;
+    }
+  },
+
+  updateRole: async (roleId, roleData) => {
+    set({ loading: true, error: null, success: null });
+    try {
+      const response = await rolesAPI.updateRole(roleId, roleData);
+      set({ 
+        loading: false,
+        success: 'Role updated successfully'
+      });
+      get().fetchRoles();
+      return true;
+    } catch (error) {
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to update role';
+      set({ error: errorMsg, loading: false });
+      return false;
+    }
+  },
+
+  deleteRole: async (roleId) => {
+    set({ loading: true, error: null, success: null });
+    try {
+      await rolesAPI.deleteRole(roleId);
+      set({ 
+        loading: false,
+        success: 'Role deleted successfully'
+      });
+      get().fetchRoles();
+      return true;
+    } catch (error) {
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to delete role';
+      set({ error: errorMsg, loading: false });
+      return false;
+    }
+  },
+
   assignRole: async (userId, roleName) => {
     set({ loading: true, error: null, success: null });
     try {
@@ -69,7 +118,6 @@ export const useRolesStore = create((set, get) => ({
         loading: false,
         success: `Role ${roleName} assigned successfully`
       });
-      // Refresh users list
       get().fetchUsersWithRoles();
       return true;
     } catch (error) {
@@ -86,7 +134,6 @@ export const useRolesStore = create((set, get) => ({
         loading: false,
         success: `Role ${roleName} removed successfully`
       });
-      // Refresh users list
       get().fetchUsersWithRoles();
       return true;
     } catch (error) {
@@ -103,7 +150,6 @@ export const useRolesStore = create((set, get) => ({
         loading: false,
         success: 'Roles initialized successfully'
       });
-      // Refresh roles and permissions
       get().fetchRoles();
       get().fetchPermissions();
       return true;

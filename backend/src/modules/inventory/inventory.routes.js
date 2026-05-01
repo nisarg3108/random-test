@@ -34,13 +34,8 @@ router.get('/debug/workflow', requireAuth, async (req, res) => {
   }
 });
 
-// ADMIN and MANAGER can create items
-router.post(
-  '/',
-  requireAuth,
-  requireRole(['ADMIN', 'MANAGER']),
-  createItemController
-);
+// All authenticated users can submit create requests; controller handles workflow vs direct creation
+router.post('/', requireAuth, createItemController);
 
 // All users can view items
 router.get('/', requireAuth, listItemsController);
@@ -48,20 +43,10 @@ router.get('/', requireAuth, listItemsController);
 // All users can view single item
 router.get('/:id', requireAuth, getItemController);
 
-// ADMIN/MANAGER can update items
-router.put(
-  '/:id',
-  requireAuth,
-  requireRole(['ADMIN', 'MANAGER']),
-  updateItemController
-);
+// All authenticated users can submit update requests; controller handles workflow vs direct update
+router.put('/:id', requireAuth, updateItemController);
 
-// ADMIN and MANAGER can delete items
-router.delete(
-  '/:id',
-  requireAuth,
-  requireRole(['ADMIN', 'MANAGER']),
-  deleteItemController
-);
+// All authenticated users can submit delete requests; controller handles workflow vs direct delete
+router.delete('/:id', requireAuth, deleteItemController);
 
 export default router;
