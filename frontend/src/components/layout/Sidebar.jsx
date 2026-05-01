@@ -136,7 +136,6 @@ const Sidebar = () => {
       items.push(
         { path: '/purchase/vendors', label: 'Vendors', icon: Users, moduleKey: 'PURCHASE' },
         { path: '/purchase/orders', label: 'Purchase Orders', icon: ShoppingCart, moduleKey: 'PURCHASE' },
-        { path: '/purchase/requisitions', label: 'Requisitions', icon: FileText, moduleKey: 'PURCHASE' },
         { path: '/purchase/analytics', label: 'Purchase Analytics', icon: BarChart3, moduleKey: 'PURCHASE' }
       );
     }
