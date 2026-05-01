@@ -89,24 +89,33 @@ const ensureManagerRole = async (tenantId) => {
   });
 };
 
-const seedTenantAndSubscription = async () => {
-  // Check if the admin user already exists; if so, use their tenant
+const seedTenantAndSubscription = async (targetTenantId = null) => {
+  // Check if a specific tenant ID was provided
   let tenant;
-  const existingUser = await prisma.user.findUnique({
-    where: { email: DEMO_ADMIN_EMAIL },
-    include: { tenant: true }
-  });
-
-  if (existingUser && existingUser.tenant) {
-    console.log(`✓ Found existing user ${DEMO_ADMIN_EMAIL} in tenant ${existingUser.tenant.name}. Using existing tenant.`);
-    tenant = existingUser.tenant;
+  if (targetTenantId) {
+    tenant = await prisma.tenant.findUnique({ where: { id: targetTenantId } });
+    if (!tenant) {
+      throw new Error(`Tenant with ID ${targetTenantId} not found.`);
+    }
+    console.log(`✓ Using specified tenant: ${tenant.name} (${tenant.id})`);
   } else {
-    console.log(`✓ No existing user found. Creating new tenant for ${DEMO_ADMIN_EMAIL}.`);
-    tenant = await upsertFirst(
-      prisma.tenant,
-      { name: 'UEORMS Demo Tenant' },
-      { name: 'UEORMS Demo Tenant' }
-    );
+    // Check if the admin user already exists; if so, use their tenant
+    const existingUser = await prisma.user.findUnique({
+      where: { email: DEMO_ADMIN_EMAIL },
+      include: { tenant: true }
+    });
+
+    if (existingUser && existingUser.tenant) {
+      console.log(`✓ Found existing user ${DEMO_ADMIN_EMAIL} in tenant ${existingUser.tenant.name}. Using existing tenant.`);
+      tenant = existingUser.tenant;
+    } else {
+      console.log(`✓ No existing user found. Creating new tenant for ${DEMO_ADMIN_EMAIL}.`);
+      tenant = await upsertFirst(
+        prisma.tenant,
+        { name: 'UEORMS Demo Tenant' },
+        { name: 'UEORMS Demo Tenant' }
+      );
+    }
   }
 
   await upsertFirst(
@@ -6613,11 +6622,11 @@ const seedBaselineForExistingTenants = async (passwordHash) => {
   }
 };
 
-export const seedComprehensiveDemoData = async () => {
+export const seedComprehensiveDemoData = async (targetTenantId = null) => {
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
 
   console.log('🌱 Seeding tenant and subscription...');
-  const { tenant } = await seedTenantAndSubscription();
+  const { tenant } = await seedTenantAndSubscription(targetTenantId);
   
   console.log('🌱 Seeding organization, departments, and users...');
   const { departments, users, employees } = await seedOrganization(tenant.id, passwordHash);

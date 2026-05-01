@@ -336,11 +336,14 @@ const seedDefaultPipeline = async () => {
 };
 
 async function main() {
+  // Check for tenant ID from command line: node seed.js <tenantId>
+  const targetTenantId = process.argv[2] || null;
+  
   console.log('Seeding dynamic system options...');
   
   await seedPermissions();
   await seedPlans();
-  await seedComprehensiveDemoData();
+  await seedComprehensiveDemoData(targetTenantId);
   await seedSampleCRM();
   await seedDefaultPipeline();
   
