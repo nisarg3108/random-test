@@ -90,11 +90,24 @@ const ensureManagerRole = async (tenantId) => {
 };
 
 const seedTenantAndSubscription = async () => {
-  const tenant = await upsertFirst(
-    prisma.tenant,
-    { name: 'UEORMS Demo Tenant' },
-    { name: 'UEORMS Demo Tenant' }
-  );
+  // Check if the admin user already exists; if so, use their tenant
+  let tenant;
+  const existingUser = await prisma.user.findUnique({
+    where: { email: DEMO_ADMIN_EMAIL },
+    include: { tenant: true }
+  });
+
+  if (existingUser && existingUser.tenant) {
+    console.log(`✓ Found existing user ${DEMO_ADMIN_EMAIL} in tenant ${existingUser.tenant.name}. Using existing tenant.`);
+    tenant = existingUser.tenant;
+  } else {
+    console.log(`✓ No existing user found. Creating new tenant for ${DEMO_ADMIN_EMAIL}.`);
+    tenant = await upsertFirst(
+      prisma.tenant,
+      { name: 'UEORMS Demo Tenant' },
+      { name: 'UEORMS Demo Tenant' }
+    );
+  }
 
   await upsertFirst(
     prisma.companyConfig,
