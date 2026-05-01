@@ -33,7 +33,9 @@ const TaskManagement = () => {
   const fetchTasks = async () => {
     try {
       setError(null);
-      const response = await employeeAPI.getManagerTasks();
+      const response = canAssignTasks
+        ? await employeeAPI.getManagerTasks()
+        : await employeeAPI.getTasks();
       setTasks(response.data || []);
     } catch (err) {
       console.error('Failed to fetch tasks:', err);
