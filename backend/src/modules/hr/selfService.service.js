@@ -1,4 +1,4 @@
-import prisma from '../../config/database.js';
+import prisma from '../../config/db.js';
 import { getEmployeeByUserId } from './employee.service.js';
 import payrollService from './payroll.service.js';
 
