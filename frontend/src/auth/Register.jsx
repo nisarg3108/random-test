@@ -14,7 +14,7 @@ const Register = () => {
   const [plans, setPlans] = useState([]);
   const [selectedPlanId, setSelectedPlanId] = useState('');
   const [customModules, setCustomModules] = useState([]);
-  const [provider, setProvider] = useState('STRIPE');
+
   const [plansLoading, setPlansLoading] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -126,7 +126,7 @@ const Register = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register/checkout`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,21 +137,17 @@ const Register = () => {
           password: formData.password,
           planId: isCustomPlan ? undefined : selectedPlanId,
           customModules: isCustomPlan ? customModules : undefined,
-          provider
         }),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || 'Registration failed');
+        throw new Error(result.message || result.error || 'Registration failed');
       }
 
-      if (!result.redirectUrl) {
-        throw new Error('Missing payment redirect URL');
-      }
-
-      window.location.href = result.redirectUrl;
+      // Registration successful - redirect to login
+      window.location.href = '/login?registered=success';
     } catch (err) {
       setError(err.message);
     } finally {
@@ -178,22 +174,7 @@ const Register = () => {
             {/* Company Name */}
             <div>
               <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-1">
-            {/* Payment Provider */}
-            <div>
-              <label htmlFor="provider" className="block text-sm font-medium text-gray-700 mb-1">
-                Payment Provider
-              </label>
-              <select
-                id="provider"
-                name="provider"
-                value={provider}
-                onChange={(e) => setProvider(e.target.value)}
-                className="input-modern"
-              >
-                <option value="STRIPE">Stripe</option>
-                <option value="RAZORPAY">Razorpay</option>
-              </select>
-            </div>
+
 
                 Company Name
               </label>

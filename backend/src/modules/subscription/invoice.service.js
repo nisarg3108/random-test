@@ -17,16 +17,16 @@ export const generateInvoicePDF = async (payment) => {
 
       // Header
       doc.fontSize(20)
-         .fillColor('#1e40af')
-         .text('INVOICE', 50, 50);
+        .fillColor('#1e40af')
+        .text('INVOICE', 50, 50);
 
       doc.fontSize(10)
-         .fillColor('#6b7280')
-         .text('Your Company Name', 50, 80)
-         .text('Address Line 1', 50, 95)
-         .text('City, State ZIP', 50, 110)
-         .text('Email: billing@yourcompany.com', 50, 125)
-         .text('Phone: +1 (555) 123-4567', 50, 140);
+        .fillColor('#6b7280')
+        .text('Your Company Name', 50, 80)
+        .text('Address Line 1', 50, 95)
+        .text('City, State ZIP', 50, 110)
+        .text('Email: billing@yourcompany.com', 50, 125)
+        .text('Phone: +1 (555) 123-4567', 50, 140);
 
       // Invoice Details - Right Side
       const invoiceNumber = payment.invoiceNumber || `INV-${payment.id.slice(0, 8).toUpperCase()}`;
@@ -37,115 +37,115 @@ export const generateInvoicePDF = async (payment) => {
       });
 
       doc.fontSize(10)
-         .fillColor('#374151')
-         .text(`Invoice #: ${invoiceNumber}`, 350, 80, { width: 200, align: 'right' })
-         .text(`Date: ${invoiceDate}`, 350, 95, { width: 200, align: 'right' })
-         .text(`Status: ${payment.status}`, 350, 110, { width: 200, align: 'right' });
+        .fillColor('#374151')
+        .text(`Invoice #: ${invoiceNumber}`, 350, 80, { width: 200, align: 'right' })
+        .text(`Date: ${invoiceDate}`, 350, 95, { width: 200, align: 'right' })
+        .text(`Status: ${payment.status}`, 350, 110, { width: 200, align: 'right' });
 
       // Bill To Section
       doc.fontSize(12)
-         .fillColor('#1f2937')
-         .text('BILL TO:', 50, 180);
+        .fillColor('#1f2937')
+        .text('BILL TO:', 50, 180);
 
       const tenant = payment.subscription?.tenant;
       if (tenant) {
         doc.fontSize(10)
-           .fillColor('#374151')
-           .text(tenant.name || 'Tenant Name', 50, 200)
-           .text(tenant.email || '', 50, 215);
+          .fillColor('#374151')
+          .text(tenant.name || 'Tenant Name', 50, 200)
+          .text(tenant.email || '', 50, 215);
       }
 
       // Line separator
       doc.moveTo(50, 250)
-         .lineTo(550, 250)
-         .strokeColor('#e5e7eb')
-         .stroke();
+        .lineTo(550, 250)
+        .strokeColor('#e5e7eb')
+        .stroke();
 
       // Table Headers
       const tableTop = 270;
       doc.fontSize(10)
-         .fillColor('#6b7280')
-         .text('DESCRIPTION', 50, tableTop)
-         .text('QTY', 300, tableTop, { width: 50, align: 'center' })
-         .text('PRICE', 370, tableTop, { width: 80, align: 'right' })
-         .text('AMOUNT', 470, tableTop, { width: 80, align: 'right' });
+        .fillColor('#6b7280')
+        .text('DESCRIPTION', 50, tableTop)
+        .text('QTY', 300, tableTop, { width: 50, align: 'center' })
+        .text('PRICE', 370, tableTop, { width: 80, align: 'right' })
+        .text('AMOUNT', 470, tableTop, { width: 80, align: 'right' });
 
       // Line under headers
       doc.moveTo(50, tableTop + 15)
-         .lineTo(550, tableTop + 15)
-         .strokeColor('#e5e7eb')
-         .stroke();
+        .lineTo(550, tableTop + 15)
+        .strokeColor('#e5e7eb')
+        .stroke();
 
       // Table Content
       const plan = payment.subscription?.plan;
       const itemY = tableTop + 30;
-      
-      const description = plan 
+
+      const description = plan
         ? `${plan.name} - ${plan.billingCycle} Subscription`
         : 'Subscription Payment';
 
       doc.fontSize(10)
-         .fillColor('#1f2937')
-         .text(description, 50, itemY, { width: 230 })
-         .text('1', 300, itemY, { width: 50, align: 'center' })
-         .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 370, itemY, { width: 80, align: 'right' })
-         .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 470, itemY, { width: 80, align: 'right' });
+        .fillColor('#1f2937')
+        .text(description, 50, itemY, { width: 230 })
+        .text('1', 300, itemY, { width: 50, align: 'center' })
+        .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 370, itemY, { width: 80, align: 'right' })
+        .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 470, itemY, { width: 80, align: 'right' });
 
       // Subtotal, Tax, Total section
       const summaryTop = itemY + 60;
       doc.moveTo(350, summaryTop)
-         .lineTo(550, summaryTop)
-         .strokeColor('#e5e7eb')
-         .stroke();
+        .lineTo(550, summaryTop)
+        .strokeColor('#e5e7eb')
+        .stroke();
 
       doc.fontSize(10)
-         .fillColor('#6b7280')
-         .text('Subtotal:', 370, summaryTop + 15, { width: 80, align: 'right' })
-         .fillColor('#1f2937')
-         .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 470, summaryTop + 15, { width: 80, align: 'right' });
+        .fillColor('#6b7280')
+        .text('Subtotal:', 370, summaryTop + 15, { width: 80, align: 'right' })
+        .fillColor('#1f2937')
+        .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 470, summaryTop + 15, { width: 80, align: 'right' });
 
       doc.fontSize(10)
-         .fillColor('#6b7280')
-         .text('Tax (0%):', 370, summaryTop + 35, { width: 80, align: 'right' })
-         .fillColor('#1f2937')
-         .text(`${payment.currency} 0.00`, 470, summaryTop + 35, { width: 80, align: 'right' });
+        .fillColor('#6b7280')
+        .text('Tax (0%):', 370, summaryTop + 35, { width: 80, align: 'right' })
+        .fillColor('#1f2937')
+        .text(`${payment.currency} 0.00`, 470, summaryTop + 35, { width: 80, align: 'right' });
 
       // Total line
       doc.moveTo(350, summaryTop + 55)
-         .lineTo(550, summaryTop + 55)
-         .strokeColor('#1e40af')
-         .lineWidth(2)
-         .stroke();
+        .lineTo(550, summaryTop + 55)
+        .strokeColor('#1e40af')
+        .lineWidth(2)
+        .stroke();
 
       doc.fontSize(12)
-         .fillColor('#1e40af')
-         .text('TOTAL:', 370, summaryTop + 65, { width: 80, align: 'right' })
-         .fontSize(14)
-         .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 470, summaryTop + 65, { width: 80, align: 'right' });
+        .fillColor('#1e40af')
+        .text('TOTAL:', 370, summaryTop + 65, { width: 80, align: 'right' })
+        .fontSize(14)
+        .text(`${payment.currency} ${payment.amount.toFixed(2)}`, 470, summaryTop + 65, { width: 80, align: 'right' });
 
       // Payment Information
       const paymentInfoTop = summaryTop + 110;
       doc.fontSize(10)
-         .fillColor('#6b7280')
-         .text('Payment Method:', 50, paymentInfoTop)
-         .fillColor('#1f2937')
-         .text(payment.subscription?.provider || 'Manual', 150, paymentInfoTop);
+        .fillColor('#6b7280')
+        .text('Payment Method:', 50, paymentInfoTop)
+        .fillColor('#1f2937')
+        .text(payment.subscription?.provider || 'Manual', 150, paymentInfoTop);
 
       doc.fillColor('#6b7280')
-         .text('Payment Date:', 50, paymentInfoTop + 20)
-         .fillColor('#1f2937')
-         .text(invoiceDate, 150, paymentInfoTop + 20);
+        .text('Payment Date:', 50, paymentInfoTop + 20)
+        .fillColor('#1f2937')
+        .text(invoiceDate, 150, paymentInfoTop + 20);
 
       doc.fillColor('#6b7280')
-         .text('Transaction ID:', 50, paymentInfoTop + 40)
-         .fillColor('#1f2937')
-         .text(payment.providerPaymentId || payment.id, 150, paymentInfoTop + 40, { width: 300 });
+        .text('Transaction ID:', 50, paymentInfoTop + 40)
+        .fillColor('#1f2937')
+        .text(payment.providerPaymentId || payment.id, 150, paymentInfoTop + 40, { width: 300 });
 
       // Footer
       doc.fontSize(9)
-         .fillColor('#9ca3af')
-         .text('Thank you for your business!', 50, 700, { align: 'center', width: 500 })
-         .text('If you have any questions, please contact our support team.', 50, 715, { align: 'center', width: 500 });
+        .fillColor('#9ca3af')
+        .text('Thank you for your business!', 50, 700, { align: 'center', width: 500 })
+        .text('If you have any questions, please contact our support team.', 50, 715, { align: 'center', width: 500 });
 
       // Finalize PDF
       doc.end();
@@ -165,19 +165,19 @@ export const sendInvoiceEmail = async (payment, pdfBuffer) => {
 
   const tenant = payment.subscription?.tenant;
   const recipientEmail = tenant?.email;
-  
+
   if (!recipientEmail) {
     const error = new Error('No recipient email address provided');
     console.error('[Invoice Service] Error:', error.message);
     throw error;
   }
-  
+
   console.log('[Invoice Service] Sending to:', recipientEmail);
   const finalRecipient = process.env.RESEND_TO_OVERRIDE || recipientEmail;
   if (process.env.RESEND_TO_OVERRIDE) {
     console.log('[Invoice Service] OVERRIDE active, redirecting to:', finalRecipient);
   }
-  
+
   const invoiceNumber = payment.invoiceNumber || `INV-${payment.id.slice(0, 8).toUpperCase()}`;
   const invoiceDate = new Date(payment.createdAt).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -381,7 +381,7 @@ export const getInvoiceData = async (paymentId, tenantId) => {
   }
 
   const invoiceNumber = payment.invoiceNumber || `INV-${payment.id.slice(0, 8).toUpperCase()}`;
-  
+
   return {
     id: payment.id,
     invoiceNumber,
@@ -399,7 +399,7 @@ export const getInvoiceData = async (paymentId, tenantId) => {
     },
     items: [
       {
-        description: payment.subscription?.plan 
+        description: payment.subscription?.plan
           ? `${payment.subscription.plan.name} - ${payment.subscription.plan.billingCycle} Subscription`
           : 'Subscription Payment',
         quantity: 1,

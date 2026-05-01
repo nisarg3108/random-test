@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { loginApi } from '../api/auth.api';
 import { Mail, Lock, Eye, EyeOff, Github } from 'lucide-react';
 import { setToken } from '../store/auth.store';
@@ -8,6 +8,8 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 const Login = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const registeredSuccess = searchParams.get('registered') === 'success';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -90,6 +92,11 @@ const Login = () => {
           </div>
 
           {/* Form */}
+          {registeredSuccess && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+              ✅ Account created successfully! Please sign in with your credentials.
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
             <div>

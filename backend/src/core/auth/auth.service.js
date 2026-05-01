@@ -275,7 +275,9 @@ export const registerUser = async ({
     throw new Error('Missing required fields');
   }
 
-  const existingUser = await prisma.user.findUnique({ where: { email } });
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
   if (existingUser) {
     throw new Error('User already exists');
   }
@@ -293,27 +295,32 @@ export const registerUser = async ({
   // 3️⃣ Create Admin User under Tenant
   const user = await prisma.user.create({
     data: {
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       role: role || 'ADMIN',
       tenantId: tenant.id,
     },
   });
 
-  const { plan, items } = await resolvePlanAndItems({
-    planId,
-    customModules,
-    billingCycle
-  });
+  // 4️⃣ Create Subscription (best-effort - don't block registration if plan not found)
+  try {
+    const { plan, items } = await resolvePlanAndItems({
+      planId,
+      customModules,
+      billingCycle
+    });
 
-  await createSubscriptionForTenant({
-    tenantId: tenant.id,
-    plan,
-    items,
-    provider: provider || 'MANUAL'
-  });
+    await createSubscriptionForTenant({
+      tenantId: tenant.id,
+      plan,
+      items,
+      provider: provider || 'MANUAL'
+    });
 
-  await syncCompanyModulesFromSubscription(tenant.id);
+    await syncCompanyModulesFromSubscription(tenant.id);
+  } catch (planError) {
+    console.warn('Subscription setup skipped during registration:', planError.message);
+  }
 
   // 5️⃣ Generate JWT
   const token = signToken({
@@ -339,8 +346,10 @@ export const loginUser = async ({ email, password }) => {
     throw error;
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
+
   const user = await prisma.user.findUnique({
-    where: { email },
+    where: { email: normalizedEmail },
     include: { employee: { select: { name: true } } },
   });
   if (!user) {
