@@ -1,0 +1,531 @@
+﻿@startuml UEORMS_ER_CRM_and_Sales
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - CRM and Sales
+
+
+
+package "CRM and Sales" {
+  class Activity {
+  - id : String <<PK>>
+  - tenantId : String
+  - type : String
+  - subject : String
+  - description : String?
+  - status : String
+  - priority : String
+  - dueDate : DateTime?
+  - dueTime : String?
+  - reminderAt : DateTime?
+  - completedAt : DateTime?
+  - completedBy : String?
+  - assignedTo : String?
+  - createdBy : String
+  - customerId : String?
+  - contactId : String?
+  - leadId : String?
+  - dealId : String?
+  - outcome : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer?
+  - contact : Contact?
+  - lead : Lead?
+  - deal : Deal?
+  - communications : Communication[]
+  - assignee : User?
+  - creator : User
+  --
+  {static} @@index([tenantId, assignedTo])
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, dueDate])
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, dealId])
+  }
+  class Attachment {
+  - id : String <<PK>>
+  - tenantId : String
+  - fileName : String
+  - fileSize : Int
+  - mimeType : String
+  - fileUrl : String
+  - customerId : String?
+  - dealId : String?
+  - communicationId : String?
+  - uploadedBy : String
+  - createdAt : DateTime
+  - customer : Customer?
+  - deal : Deal?
+  - communication : Communication?
+  - uploader : User
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, dealId])
+  }
+  class Communication {
+  - id : String <<PK>>
+  - tenantId : String
+  - type : String
+  - subject : String?
+  - notes : String
+  - occurredAt : DateTime
+  - createdBy : String?
+  - customerId : String?
+  - contactId : String?
+  - leadId : String?
+  - direction : String?
+  - duration : Int?
+  - outcome : String?
+  - emailFrom : String?
+  - emailTo : String?
+  - emailCc : String?
+  - meetingLocation : String?
+  - meetingAttendees : String[]
+  - dealId : String?
+  - activityId : String?
+  - hasAttachments : Boolean
+  - attachmentCount : Int
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - customer : Customer?
+  - contact : Contact?
+  - lead : Lead?
+  - deal : Deal?
+  - activity : Activity?
+  - attachments : Attachment[]
+  - creator : User?
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, contactId])
+  {static} @@index([tenantId, leadId])
+  {static} @@index([tenantId, dealId])
+  {static} @@index([tenantId, occurredAt])
+  }
+  class Contact {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String
+  - name : String
+  - email : String?
+  - phone : String?
+  - title : String?
+  - status : String
+  - firstName : String?
+  - lastName : String?
+  - jobTitle : String?
+  - department : String?
+  - role : String?
+  - mobilePhone : String?
+  - workPhone : String?
+  - linkedinUrl : String?
+  - twitterHandle : String?
+  - isPrimary : Boolean
+  - ownerId : String?
+  - preferredChannel : String?
+  - lastContactDate : DateTime?
+  - birthday : DateTime?
+  - anniversary : DateTime?
+  - emailOptIn : Boolean
+  - smsOptIn : Boolean
+  - doNotCall : Boolean
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer
+  - communications : Communication[]
+  - leads : Lead[]
+  - activities : Activity[]
+  - owner : User?
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, email])
+  {static} @@index([tenantId, ownerId])
+  }
+  class Customer {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - industry : String?
+  - website : String?
+  - status : String
+  - notes : String?
+  - type : String?
+  - companySize : String?
+  - annualRevenue : Float?
+  - currencyCode : String?
+  - primaryEmail : String?
+  - primaryPhone : String?
+  - billingAddress : Json?
+  - shippingAddress : Json?
+  - ownerId : String?
+  - accountManager : String?
+  - category : String?
+  - source : String?
+  - firstContactDate : DateTime?
+  - lastContactDate : DateTime?
+  - preferredChannel : String?
+  - timezone : String?
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - contacts : Contact[]
+  - deals : Deal[]
+  - communications : Communication[]
+  - leads : Lead[]
+  - activities : Activity[]
+  - customerNotes : CustomerNote[]
+  - attachments : Attachment[]
+  - salesQuotations : SalesQuotation[]
+  - salesOrders : SalesOrder[]
+  - salesInvoices : SalesInvoice[]
+  - owner : User?
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, ownerId])
+  {static} @@index([tenantId, category])
+  }
+  class CustomerNote {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String
+  - title : String?
+  - content : String
+  - isPinned : Boolean
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer
+  - creator : User
+  --
+  {static} @@index([tenantId, customerId])
+  }
+  class Deal {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String
+  - name : String
+  - stage : String
+  - value : Float
+  - expectedCloseDate : DateTime?
+  - status : String
+  - notes : String?
+  - dealNumber : String? <<UQ>>
+  - pipelineId : String?
+  - stageOrder : Int?
+  - probability : Int?
+  - amount : Float
+  - currencyCode : String?
+  - discount : Float?
+  - tax : Float?
+  - total : Float?
+  - products : Json?
+  - ownerId : String?
+  - teamMembers : String[]
+  - createdDate : DateTime
+  - closedDate : DateTime?
+  - firstContactDate : DateTime?
+  - lastActivityDate : DateTime?
+  - competitors : String[]
+  - wonReason : String?
+  - lostReason : String?
+  - lostToCompetitor : String?
+  - leadId : String?
+  - source : String?
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer
+  - salesQuotations : SalesQuotation[]
+  - salesOrders : SalesOrder[]
+  - salesInvoices : SalesInvoice[]
+  - communications : Communication[]
+  - activities : Activity[]
+  - attachments : Attachment[]
+  - leadConverted : Lead[]
+  - owner : User?
+  - pipeline : Pipeline?
+  --
+  {static} @@index([tenantId, customerId])
+  {static} @@index([tenantId, stage])
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, ownerId])
+  {static} @@index([tenantId, expectedCloseDate])
+  }
+  class InvoicePayment {
+  - id : String <<PK>>
+  - tenantId : String
+  - invoiceId : String
+  - amount : Float
+  - paymentDate : DateTime
+  - paymentMethod : String?
+  - referenceNumber : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - invoice : SalesInvoice
+  }
+  class Lead {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - email : String?
+  - phone : String?
+  - company : String?
+  - source : String?
+  - status : String
+  - notes : String?
+  - customerId : String?
+  - contactId : String?
+  - firstName : String?
+  - lastName : String?
+  - jobTitle : String?
+  - leadScore : Int
+  - rating : String?
+  - priority : String?
+  - campaign : String?
+  - medium : String?
+  - referrer : String?
+  - budget : Float?
+  - timeline : String?
+  - authority : String?
+  - need : String?
+  - ownerId : String?
+  - assignedAt : DateTime?
+  - convertedAt : DateTime?
+  - conversionSource : String?
+  - dealId : String?
+  - firstContactDate : DateTime?
+  - lastContactDate : DateTime?
+  - lastActivityDate : DateTime?
+  - disqualifiedAt : DateTime?
+  - disqualifiedBy : String?
+  - disqualifiedReason : String?
+  - tags : String[]
+  - customFields : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - customer : Customer?
+  - contact : Contact?
+  - communications : Communication[]
+  - activities : Activity[]
+  - deal : Deal?
+  - owner : User?
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, ownerId])
+  {static} @@index([tenantId, leadScore])
+  {static} @@index([tenantId, source])
+  }
+  class Pipeline {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - isDefault : Boolean
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - stages : PipelineStage[]
+  - deals : Deal[]
+  --
+  {static} @@unique([tenantId, name])
+  {static} @@index([tenantId, isDefault])
+  }
+  class PipelineStage {
+  - id : String <<PK>>
+  - tenantId : String
+  - pipelineId : String
+  - name : String
+  - order : Int
+  - probability : Int
+  - color : String?
+  - isClosedWon : Boolean
+  - isClosedLost : Boolean
+  - daysInStage : Int?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - pipeline : Pipeline
+  --
+  {static} @@unique([pipelineId, name])
+  {static} @@unique([pipelineId, order])
+  {static} @@index([tenantId, pipelineId])
+  }
+  class SalesInvoice {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String?
+  - dealId : String?
+  - invoiceNumber : String?
+  - customerName : String
+  - customerEmail : String?
+  - orderId : String?
+  - issueDate : DateTime
+  - dueDate : DateTime?
+  - items : Json?
+  - subtotal : Float
+  - tax : Float
+  - discount : Float
+  - total : Float
+  - amountPaid : Float
+  - status : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - customer : Customer?
+  - deal : Deal?
+  - payments : InvoicePayment[]
+  }
+  class SalesOrder {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String?
+  - dealId : String?
+  - orderNumber : String?
+  - customerName : String
+  - customerEmail : String?
+  - quotationId : String?
+  - orderDate : DateTime
+  - expectedDelivery : DateTime?
+  - items : Json?
+  - subtotal : Float
+  - tax : Float
+  - discount : Float
+  - total : Float
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - customer : Customer?
+  - deal : Deal?
+  - tracking : SalesOrderTracking[]
+  }
+  class SalesOrderTracking {
+  - id : String <<PK>>
+  - tenantId : String
+  - salesOrderId : String
+  - status : String
+  - carrier : String?
+  - trackingNumber : String?
+  - location : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - order : SalesOrder
+  }
+  class SalesQuotation {
+  - id : String <<PK>>
+  - tenantId : String
+  - customerId : String?
+  - dealId : String?
+  - customerName : String
+  - customerEmail : String?
+  - title : String
+  - description : String?
+  - items : Json?
+  - subtotal : Float
+  - tax : Float
+  - discount : Float
+  - total : Float
+  - status : String
+  - validUntil : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - customer : Customer?
+  - deal : Deal?
+  }
+  class Tag {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - color : String?
+  - category : String?
+  - usageCount : Int
+  - createdAt : DateTime
+  --
+  {static} @@unique([tenantId, name, category])
+  {static} @@index([tenantId, category])
+  }
+}
+
+' Internal relationships for module: CRM and Sales
+SalesQuotation "1" --> "0..1" Customer : customer
+SalesQuotation "1" --> "0..1" Deal : deal
+SalesOrder "1" --> "0..1" Customer : customer
+SalesOrder "1" --> "0..1" Deal : deal
+SalesOrder "1" --> "*" SalesOrderTracking : tracking
+SalesInvoice "1" --> "0..1" Customer : customer
+SalesInvoice "1" --> "0..1" Deal : deal
+SalesInvoice "1" --> "*" InvoicePayment : payments
+InvoicePayment "1" --> "1" SalesInvoice : invoice
+SalesOrderTracking "1" --> "1" SalesOrder : order
+Customer "1" --> "*" Contact : contacts
+Customer "1" --> "*" Deal : deals
+Customer "1" --> "*" Communication : communications
+Customer "1" --> "*" Lead : leads
+Customer "1" --> "*" Activity : activities
+Customer "1" --> "*" CustomerNote : customerNotes
+Customer "1" --> "*" Attachment : attachments
+Customer "1" --> "*" SalesQuotation : salesQuotations
+Customer "1" --> "*" SalesOrder : salesOrders
+Customer "1" --> "*" SalesInvoice : salesInvoices
+Contact "1" --> "1" Customer : customer
+Contact "1" --> "*" Communication : communications
+Contact "1" --> "*" Lead : leads
+Contact "1" --> "*" Activity : activities
+Lead "1" --> "0..1" Customer : customer
+Lead "1" --> "0..1" Contact : contact
+Lead "1" --> "*" Communication : communications
+Lead "1" --> "*" Activity : activities
+Lead "1" --> "0..1" Deal : deal {LeadDeal}
+Deal "1" --> "1" Customer : customer
+Deal "1" --> "*" SalesQuotation : salesQuotations
+Deal "1" --> "*" SalesOrder : salesOrders
+Deal "1" --> "*" SalesInvoice : salesInvoices
+Deal "1" --> "*" Communication : communications
+Deal "1" --> "*" Activity : activities
+Deal "1" --> "*" Attachment : attachments
+Deal "1" --> "*" Lead : leadConverted {LeadDeal}
+Deal "1" --> "0..1" Pipeline : pipeline
+Communication "1" --> "0..1" Customer : customer
+Communication "1" --> "0..1" Contact : contact
+Communication "1" --> "0..1" Lead : lead
+Communication "1" --> "0..1" Deal : deal
+Communication "1" --> "0..1" Activity : activity
+Communication "1" --> "*" Attachment : attachments
+Pipeline "1" --> "*" PipelineStage : stages
+Pipeline "1" --> "*" Deal : deals
+PipelineStage "1" --> "1" Pipeline : pipeline
+Activity "1" --> "0..1" Customer : customer
+Activity "1" --> "0..1" Contact : contact
+Activity "1" --> "0..1" Lead : lead
+Activity "1" --> "0..1" Deal : deal
+Activity "1" --> "*" Communication : communications
+CustomerNote "1" --> "1" Customer : customer
+Attachment "1" --> "0..1" Customer : customer
+Attachment "1" --> "0..1" Deal : deal
+Attachment "1" --> "0..1" Communication : communication
+@enduml

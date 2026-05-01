@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:17:56.447Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="NAV-259" name="Reports and Audit (8)">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="UEORMS Navigation Module: Reports and Audit (8)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="259" value="Reports and Audit (8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="260" value="/audit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="36400" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="261" value="/reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="36760" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="262" value="/reports/custom" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="37120" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="263" value="/reports/financial/balance-sheet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="37480" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="264" value="/reports/financial/profit-loss" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="37840" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="265" value="/reports/hr/analytics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="38200" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="266" value="/reports/inventory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="38560" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="267" value="/reports/saved/:id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="38920" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="10159" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="260">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10160" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="261">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10161" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="262">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10162" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="263">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10163" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="264">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10164" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="265">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10165" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="266">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10166" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="259" target="267">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,76 +1,16 @@
-@startmindmap UEORMS_Full_Navigation_Chart
-title UEORMS Full Navigation Chart (Code-Verified, 111 Routes)
+﻿@startmindmap UEORMS_Navigation_Part_2
+title UEORMS Navigation Chart - Part 2: Routed Pages and Aliases
 
 skinparam monochrome false
 skinparam defaultFontName Courier
 
+
 * UEORMS Navigation Chart
-** Evidence Sources (Current System)
-*** frontend/src/App.jsx (exact route inventory)
-*** frontend/src/components/layout/Sidebar.jsx (role + module gated menus)
-*** frontend/src/pages/Dashboard.jsx (role to dashboard resolver)
-*** frontend/src/auth/Login.jsx (billing check and redirect)
-*** frontend/src/auth/ProtectedRoute.jsx (auth guard and redirect)
-*** report/old_project_report_extracted.txt (report intent context)
-
-** Entry and Access Flow
-*** Public Routes (6)
-**** /
-**** /login
-**** /register
-**** /forgot-password
-**** /accept-invite
-**** /theme-demo
-*** Login Processing
-**** Submit credentials -> loginApi
-**** Persist token
-**** Query /billing/subscription
-***** ACTIVE or unknown -> /dashboard
-***** NON_ACTIVE -> /subscription/billing
-*** Protected Route Guard
-**** if authenticated -> render target page
-**** if unauthenticated -> redirect to /
-
-** Dashboard Hub
-*** Route: /dashboard
-*** Role-to-dashboard mapping
-**** ADMIN -> AdminDashboard
-**** MANAGER -> ManagerDashboard
-**** HR_MANAGER -> HRManagerDashboard
-**** HR_STAFF -> HRStaffDashboard
-**** FINANCE_MANAGER -> FinanceManagerDashboard
-**** ACCOUNTANT -> AccountantDashboard
-**** INVENTORY_MANAGER -> InventoryManagerDashboard
-**** WAREHOUSE_STAFF -> WarehouseStaffDashboard
-**** SALES_MANAGER -> SalesManagerDashboard
-**** SALES_STAFF -> SalesStaffDashboard
-**** PURCHASE_MANAGER -> PurchaseManagerDashboard
-**** PROJECT_MANAGER -> ProjectManagerDashboard
-**** EMPLOYEE -> EmployeeDashboard
-**** USER -> UserDashboard
-
-** Sidebar Menu Resolution
-*** Input controls
-**** user.role
-**** company enabledModules
-**** duplicate path elimination (Map by path)
-*** Role-based menu segments
-**** HR roles -> HR, attendance, leave, payroll
-**** Finance roles -> finance, accounting, approvals
-**** Inventory roles -> inventory, warehouse, receipts, dispatch
-**** Sales roles -> CRM, sales orders, quotations, analytics
-**** Purchase roles -> vendors, orders, requisitions, analytics
-**** PM/Manager roles -> projects, tasks, approvals, reports
-**** EMPLOYEE -> self-service views
-**** USER -> basic inventory/docs/messages/notifications
-**** ADMIN -> role-management, roles, company, system-options, audit
-
 ** Routed Page Inventory (111 Total)
 *** Core Access (3)
 **** /dashboard
 **** /invite
 **** /users
-
 *** Inventory and Warehouse (9)
 **** /inventory
 **** /inventory/approvals
@@ -81,11 +21,9 @@ skinparam defaultFontName Courier
 **** /warehouse/receipts
 **** /warehouses
 **** /warehouses/dashboard
-
 *** Manufacturing (2)
 **** /manufacturing/boms
 **** /manufacturing/work-orders
-
 *** HR and Payroll (12)
 **** /hr
 **** /hr/approvals
@@ -99,14 +37,12 @@ skinparam defaultFontName Courier
 **** /hr/payroll/disbursements
 **** /hr/payroll/payslips/:id
 **** /hr/salary-management
-
 *** Employee Self-Service (5)
 **** /employee
 **** /employee/dashboard
 **** /employee/leave-request
 **** /employee/tasks
 **** /employee/work-reports
-
 *** Finance and Accounting (13)
 **** /accounting/chart-of-accounts
 **** /accounting/charts
@@ -121,7 +57,6 @@ skinparam defaultFontName Courier
 **** /finance/expense-claims
 **** /subscription/billing
 **** /subscription/pricing
-
 *** CRM and Sales (14)
 **** /crm
 **** /crm/communications
@@ -137,7 +72,6 @@ skinparam defaultFontName Courier
 **** /sales/orders
 **** /sales/quotations
 **** /sales/tracking
-
 *** Purchase and AP (9)
 **** /ap/aging
 **** /ap/bills
@@ -148,14 +82,12 @@ skinparam defaultFontName Courier
 **** /purchase/receipts
 **** /purchase/requisitions
 **** /purchase/vendors
-
 *** Projects and Timesheets (5)
 **** /projects
 **** /projects/:id
 **** /projects/timesheet/approvals
 **** /projects/timesheet/entry
 **** /projects/timesheet/my
-
 *** Assets and Documents (9)
 **** /assets
 **** /assets/:id/edit
@@ -166,19 +98,16 @@ skinparam defaultFontName Courier
 **** /assets/maintenance
 **** /assets/new
 **** /documents
-
 *** Communication (3)
 **** /communication/announcements
 **** /communication/channels
 **** /communication/messages
-
 *** Workflow and Approvals (5)
 **** /approval-dashboard
 **** /approval-queue
 **** /approvals
 **** /approvals/dashboard
 **** /workflows
-
 *** Reports and Audit (8)
 **** /audit
 **** /reports
@@ -188,7 +117,6 @@ skinparam defaultFontName Courier
 **** /reports/hr/analytics
 **** /reports/inventory
 **** /reports/saved/:id
-
 *** System and Admin Config (8)
 **** /company
 **** /company/setup
@@ -198,7 +126,6 @@ skinparam defaultFontName Courier
 **** /role-management
 **** /roles
 **** /system-options
-
 ** Route Alias Notes
 *** Same target component aliases
 **** /warehouse and /warehouses -> WarehouseList
@@ -207,30 +134,5 @@ skinparam defaultFontName Courier
 **** /accounting/journal and /accounting/journal-entry -> JournalEntry
 **** /subscription/pricing and /subscription/billing -> BillingDashboard
 **** /approval-dashboard and /approvals/dashboard -> ApprovalDashboardSimple
-
-** Backend API Alignment (Navigation Target Context)
-*** Core APIs
-**** /api/auth /api/users /api/invites /api/rbac
-**** /api/departments /api/company /api/branches
-**** /api/system-options /api/dashboard
-*** Domain APIs
-**** /api/inventory /api/items /api/warehouses /api/stock-movements
-**** /api/manufacturing
-**** /api/employees /api/leave-types /api/leave-requests /api/attendance /api/tasks /api/payroll
-**** /api/finance /api/accounting /api/expense-categories /api/expense-claims /api/finance-dashboard
-**** /api/crm /api/sales
-**** /api/purchase /api/ap
-**** /api/projects /api/timesheets
-**** /api/assets /api/asset-allocations /api/asset-maintenance /api/asset-depreciation
-**** /api/documents /api/communication
-**** /api/workflows /api/approvals /api/notifications /api/audit-logs
-**** /api/reports /api/reporting
-**** /api/data /api/integration
-**** /api/billing
-
-** Session Exit
-*** Sidebar Sign Out
-**** remove token
-**** redirect to /
 
 @endmindmap

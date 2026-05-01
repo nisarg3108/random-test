@@ -1,0 +1,72 @@
+@startmindmap UEORMS_Navigation_Part_2B
+title UEORMS Navigation Chart - Part 2B: Routed Pages (Purchase to Admin)
+
+skinparam monochrome false
+skinparam defaultFontName Courier
+
+* UEORMS Navigation Chart
+** Routed Page Inventory (111 Total)
+*** Purchase and AP (9)
+**** /ap/aging
+**** /ap/bills
+**** /ap/payments
+**** /purchase/analytics
+**** /purchase/evaluations
+**** /purchase/orders
+**** /purchase/receipts
+**** /purchase/requisitions
+**** /purchase/vendors
+*** Projects and Timesheets (5)
+**** /projects
+**** /projects/:id
+**** /projects/timesheet/approvals
+**** /projects/timesheet/entry
+**** /projects/timesheet/my
+*** Assets and Documents (9)
+**** /assets
+**** /assets/:id/edit
+**** /assets/allocations
+**** /assets/categories
+**** /assets/depreciation
+**** /assets/list
+**** /assets/maintenance
+**** /assets/new
+**** /documents
+*** Communication (3)
+**** /communication/announcements
+**** /communication/channels
+**** /communication/messages
+*** Workflow and Approvals (5)
+**** /approval-dashboard
+**** /approval-queue
+**** /approvals
+**** /approvals/dashboard
+**** /workflows
+*** Reports and Audit (8)
+**** /audit
+**** /reports
+**** /reports/custom
+**** /reports/financial/balance-sheet
+**** /reports/financial/profit-loss
+**** /reports/hr/analytics
+**** /reports/inventory
+**** /reports/saved/:id
+*** System and Admin Config (8)
+**** /company
+**** /company/setup
+**** /departments
+**** /notifications
+**** /permissions
+**** /role-management
+**** /roles
+**** /system-options
+** Route Alias Notes
+*** Same target component aliases
+**** /warehouse and /warehouses -> WarehouseList
+**** /accounting/charts and /accounting/chart-of-accounts -> ChartOfAccounts
+**** /accounting/ledger and /accounting/general-ledger -> GeneralLedger
+**** /accounting/journal and /accounting/journal-entry -> JournalEntry
+**** /subscription/pricing and /subscription/billing -> BillingDashboard
+**** /approval-dashboard and /approvals/dashboard -> ApprovalDashboardSimple
+
+@endmindmap

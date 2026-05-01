@@ -1,0 +1,26 @@
+@startuml UEORMS_State_10
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 10) Assets, Documents, and Communication
+
+[*] --> AssetRegistered
+AssetRegistered --> AssetAllocated : allocate asset
+AssetAllocated --> AssetOverdue : overdue trigger
+AssetAllocated --> AssetReturned : return asset
+AssetOverdue --> AssetReturned : return after reminder
+AssetReturned --> MaintenancePlanned : schedule maintenance
+MaintenancePlanned --> MaintenanceCompleted : complete maintenance
+MaintenanceCompleted --> DepreciationCalculated : run depreciation
+DepreciationCalculated --> DocumentDraft : upload/create document
+DocumentDraft --> VersionPublished : publish version
+VersionPublished --> Shared : share with permissions
+Shared --> ActivityTracked : record activity
+ActivityTracked --> ConversationOpen : open channel
+ConversationOpen --> MessageSent : send message/reaction
+MessageSent --> AnnouncementPublished : optional announcement
+MessageSent --> EmailQueued : queue email notification
+AnnouncementPublished --> EmailQueued
+EmailQueued --> AttachmentIndexed : upload/search files
+AttachmentIndexed --> [*]
+
+@enduml

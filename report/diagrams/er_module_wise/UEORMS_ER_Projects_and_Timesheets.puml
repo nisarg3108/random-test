@@ -1,0 +1,251 @@
+﻿@startuml UEORMS_ER_Projects_and_Timesheets
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Projects and Timesheets
+
+
+
+package "Projects and Timesheets" {
+  class Project {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectCode : String <<UQ>>
+  - projectName : String
+  - description : String?
+  - clientName : String?
+  - projectManager : String
+  - status : String
+  - priority : String
+  - type : String?
+  - startDate : DateTime?
+  - endDate : DateTime?
+  - actualStartDate : DateTime?
+  - actualEndDate : DateTime?
+  - estimatedBudget : Float
+  - actualCost : Float
+  - progressPercent : Float
+  - totalPlannedHours : Float
+  - totalActualHours : Float
+  - totalResourceCost : Float
+  - budgetVariance : Float
+  - scheduleVariance : Int
+  - utilizationPercent : Float
+  - healthScore : String
+  - riskLevel : String
+  - departmentId : String?
+  - teamMembers : Json?
+  - documentFolderId : String?
+  - financeAccountId : String?
+  - customFields : Json?
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - department : Department?
+  - members : ProjectMember[]
+  - milestones : ProjectMilestone[]
+  - resources : ProjectResource[]
+  - budgets : ProjectBudget[]
+  - timeLogs : ProjectTimeLog[]
+  --
+  {static} @@index([status, priority])
+  {static} @@index([projectManager])
+  {static} @@index([departmentId])
+  {static} @@index([healthScore])
+  }
+  class ProjectBudget {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - category : String
+  - description : String?
+  - plannedAmount : Float
+  - actualAmount : Float
+  - variance : Float
+  - budgetPeriod : String?
+  - transactionDate : DateTime
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  }
+  class ProjectMember {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - employeeId : String
+  - userId : String?
+  - role : String
+  - allocationPercent : Float
+  - startDate : DateTime
+  - endDate : DateTime?
+  - status : String
+  - hourlyRate : Float?
+  - permissions : Json?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  --
+  {static} @@index([projectId])
+  {static} @@index([employeeId])
+  {static} @@index([tenantId])
+  {static} @@index([status])
+  }
+  class ProjectMilestone {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - milestoneName : String
+  - description : String?
+  - status : String
+  - startDate : DateTime?
+  - dueDate : DateTime?
+  - completedDate : DateTime?
+  - progressPercent : Float
+  - assignedTo : String?
+  - deliverables : Json?
+  - isCriticalPath : Boolean
+  - isAutoScheduled : Boolean
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  - predecessors : ProjectMilestoneDependency[]
+  - successors : ProjectMilestoneDependency[]
+  }
+  class ProjectMilestoneDependency {
+  - id : String <<PK>>
+  - tenantId : String
+  - predecessorId : String
+  - successorId : String
+  - dependencyType : String
+  - lagDays : Int
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - predecessor : ProjectMilestone
+  - successor : ProjectMilestone
+  --
+  {static} @@unique([predecessorId, successorId])
+  {static} @@index([tenantId])
+  }
+  class ProjectResource {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - resourceType : String
+  - resourceName : String
+  - employeeId : String?
+  - allocationPercent : Float
+  - startDate : DateTime?
+  - endDate : DateTime?
+  - costPerUnit : Float
+  - units : Float
+  - totalCost : Float
+  - plannedHours : Float
+  - actualHours : Float
+  - availableHours : Float
+  - quantity : Float
+  - quantityUsed : Float
+  - quantityUnit : String
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  --
+  {static} @@index([resourceType])
+  {static} @@index([employeeId])
+  }
+  class ProjectTimeLog {
+  - id : String <<PK>>
+  - tenantId : String
+  - projectId : String
+  - employeeId : String
+  - timesheetId : String?
+  - logDate : DateTime
+  - hoursWorked : Float
+  - taskDescription : String
+  - milestoneId : String?
+  - billable : Boolean
+  - hourlyRate : Float?
+  - totalCost : Float?
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - project : Project
+  - timesheet : ProjectTimesheet?
+  --
+  {static} @@index([employeeId])
+  {static} @@index([projectId])
+  {static} @@index([timesheetId])
+  {static} @@index([status])
+  }
+  class ProjectTimesheet {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - weekStartDate : DateTime
+  - weekEndDate : DateTime
+  - status : String
+  - totalHours : Float
+  - billableHours : Float
+  - submittedAt : DateTime?
+  - submittedBy : String?
+  - approvedAt : DateTime?
+  - approvedBy : String?
+  - rejectedAt : DateTime?
+  - rejectedBy : String?
+  - rejectionReason : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - timeLogs : ProjectTimeLog[]
+  --
+  {static} @@unique([tenantId, employeeId, weekStartDate])
+  {static} @@index([employeeId])
+  {static} @@index([status])
+  {static} @@index([weekStartDate])
+  }
+}
+
+' Internal relationships for module: Projects and Timesheets
+Project "1" --> "*" ProjectMember : members
+Project "1" --> "*" ProjectMilestone : milestones
+Project "1" --> "*" ProjectResource : resources
+Project "1" --> "*" ProjectBudget : budgets
+Project "1" --> "*" ProjectTimeLog : timeLogs
+ProjectMember "1" --> "1" Project : project
+ProjectMilestone "1" --> "1" Project : project
+ProjectMilestone "1" --> "*" ProjectMilestoneDependency : predecessors {SuccessorDependencies}
+ProjectMilestone "1" --> "*" ProjectMilestoneDependency : successors {PredecessorDependencies}
+ProjectMilestoneDependency "1" --> "1" ProjectMilestone : predecessor {PredecessorDependencies}
+ProjectMilestoneDependency "1" --> "1" ProjectMilestone : successor {SuccessorDependencies}
+ProjectResource "1" --> "1" Project : project
+ProjectBudget "1" --> "1" Project : project
+ProjectTimeLog "1" --> "1" Project : project
+ProjectTimeLog "1" --> "0..1" ProjectTimesheet : timesheet
+ProjectTimesheet "1" --> "*" ProjectTimeLog : timeLogs
+@enduml

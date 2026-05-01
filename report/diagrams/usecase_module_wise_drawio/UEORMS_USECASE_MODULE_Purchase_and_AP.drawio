@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T06:38:25.276Z" agent="GPT-5.3-Codex" version="24.7.17" type="device">
+  <diagram id="purchase" name="08 Purchase and AP">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Purchase and Accounts Payable (UC79-UC92)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="UC79 Manage Vendors&lt;br&gt;UC80 Manage Purchase Requisitions&lt;br&gt;UC81 Approve/Reject Requisitions&lt;br&gt;UC82 Convert Requisition to PO&lt;br&gt;UC83 Manage Purchase Orders&lt;br&gt;UC84 Approve Purchase Orders&lt;br&gt;UC85 Manage Goods Receipts" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="UC86 Manage Supplier Evaluations&lt;br&gt;UC87 View Purchase Analytics&lt;br&gt;UC88 Manage AP Bills&lt;br&gt;UC89 Perform Three-Way Match&lt;br&gt;UC90 Approve/Reject AP Bills&lt;br&gt;UC91 Manage AP Payments&lt;br&gt;UC92 Generate Aging and Vendor Statements" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="380" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.918Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-8" name="06. Purchase and AP">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Purchase and AP" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="65" value="Vendor&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- vendorCode : String &lt;&lt;UQ&gt;&gt;&#xA;- name : String&#xA;- contactPerson : String?&#xA;- email : String?&#xA;- phone : String?&#xA;- address : String?&#xA;- city : String?&#xA;- state : String?&#xA;- country : String?&#xA;- postalCode : String?&#xA;- website : String?&#xA;- taxId : String?&#xA;- paymentTerms : String?&#xA;- creditLimit : Float?&#xA;- currency : String&#xA;- status : String&#xA;- category : String?&#xA;- bankName : String?&#xA;- accountNumber : String?&#xA;- swiftCode : String?&#xA;- rating : Float?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- purchaseRequisitions : PurchaseRequisition[]&#xA;- purchaseOrders : PurchaseOrder[]&#xA;- evaluations : SupplierEvaluation[]&#xA;- bills : APBill[]&#xA;- payments : Payment[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="444.96" width="187.2" height="349.92" as="geometry" />
+        </mxCell>
+        <mxCell id="66" value="PurchaseRequisition&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- requisitionNumber : String &lt;&lt;UQ&gt;&gt;&#xA;- requestedBy : String&#xA;- departmentId : String?&#xA;- vendorId : String?&#xA;- title : String&#xA;- description : String?&#xA;- priority : String&#xA;- requestedDate : DateTime&#xA;- requiredDate : DateTime&#xA;- status : String&#xA;- approvalStatus : String&#xA;- approvedBy : String?&#xA;- approvedAt : DateTime?&#xA;- rejectionReason : String?&#xA;- items : Json&#xA;- totalAmount : Float&#xA;- budgetCode : String?&#xA;- workflowId : String?&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- vendor : Vendor?&#xA;- purchaseOrders : PurchaseOrder[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="299.52" as="geometry" />
+        </mxCell>
+        <mxCell id="67" value="PurchaseOrder&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- poNumber : String &lt;&lt;UQ&gt;&gt;&#xA;- requisitionId : String?&#xA;- vendorId : String&#xA;- title : String&#xA;- description : String?&#xA;- orderDate : DateTime&#xA;- expectedDeliveryDate : DateTime&#xA;- actualDeliveryDate : DateTime?&#xA;- status : String&#xA;- items : Json&#xA;- subtotal : Float&#xA;- taxAmount : Float&#xA;- discountAmount : Float&#xA;- shippingCost : Float&#xA;- totalAmount : Float&#xA;- paymentTerms : String?&#xA;- paymentStatus : String&#xA;- paidAmount : Float&#xA;- shippingAddress : String?&#xA;- shippingMethod : String?&#xA;- trackingNumber : String?&#xA;- approvalStatus : String&#xA;- approvedBy : String?&#xA;- approvedAt : DateTime?&#xA;- workflowId : String?&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- internalNotes : String?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- vendor : Vendor&#xA;- requisition : PurchaseRequisition?&#xA;- receipts : GoodsReceipt[]&#xA;- bills : APBill[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="410.4" as="geometry" />
+        </mxCell>
+        <mxCell id="68" value="GoodsReceipt&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- receiptNumber : String &lt;&lt;UQ&gt;&gt;&#xA;- purchaseOrderId : String&#xA;- receivedDate : DateTime&#xA;- receivedBy : String&#xA;- items : Json&#xA;- status : String&#xA;- qualityStatus : String?&#xA;- warehouseLocation : String?&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- purchaseOrder : PurchaseOrder&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="188.64" as="geometry" />
+        </mxCell>
+        <mxCell id="69" value="SupplierEvaluation&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- vendorId : String&#xA;- evaluatedBy : String&#xA;- evaluationDate : DateTime&#xA;- evaluationPeriod : String?&#xA;- qualityRating : Float&#xA;- deliveryRating : Float&#xA;- priceRating : Float&#xA;- serviceRating : Float&#xA;- communicationRating : Float&#xA;- overallRating : Float&#xA;- onTimeDeliveryRate : Float?&#xA;- defectRate : Float?&#xA;- responseTime : String?&#xA;- strengths : String?&#xA;- weaknesses : String?&#xA;- recommendations : String?&#xA;- status : String&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- vendor : Vendor&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="269.28" as="geometry" />
+        </mxCell>
+        <mxCell id="70" value="APBill&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- billNumber : String &lt;&lt;UQ&gt;&gt;&#xA;- vendorId : String&#xA;- purchaseOrderId : String?&#xA;- billDate : DateTime&#xA;- dueDate : DateTime&#xA;- invoiceNumber : String?&#xA;- invoiceDate : DateTime?&#xA;- subtotal : Float&#xA;- taxAmount : Float&#xA;- discountAmount : Float&#xA;- shippingCost : Float&#xA;- totalAmount : Float&#xA;- paidAmount : Float&#xA;- balanceAmount : Float&#xA;- items : Json&#xA;- status : String&#xA;- approvalStatus : String&#xA;- matchedToPO : Boolean&#xA;- matchedToReceipt : Boolean&#xA;- threeWayMatched : Boolean&#xA;- paymentTerms : String?&#xA;- glPosted : Boolean&#xA;- glPostDate : DateTime?&#xA;- glJournalId : String?&#xA;- approvedBy : String?&#xA;- approvedAt : DateTime?&#xA;- notes : String?&#xA;- internalNotes : String?&#xA;- attachments : Json?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- vendor : Vendor&#xA;- purchaseOrder : PurchaseOrder?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="400.32" as="geometry" />
+        </mxCell>
+        <mxCell id="71" value="Payment&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- paymentNumber : String &lt;&lt;UQ&gt;&gt;&#xA;- vendorId : String&#xA;- paymentDate : DateTime&#xA;- amount : Float&#xA;- paymentMethod : String&#xA;- referenceNumber : String?&#xA;- bankAccount : String?&#xA;- status : String&#xA;- clearedDate : DateTime?&#xA;- allocations : Json&#xA;- glPosted : Boolean&#xA;- glPostDate : DateTime?&#xA;- glJournalId : String?&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- vendor : Vendor&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="249.12" as="geometry" />
+        </mxCell>
+        <mxCell id="295" value="purchaseRequisitions (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="65" target="66">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="296" value="purchaseOrders (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="65" target="67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="297" value="evaluations (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="65" target="69">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="298" value="bills (*) {VendorBills}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="65" target="70">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="299" value="payments (*) {VendorPayments}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="65" target="71">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="300" value="vendor (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="66" target="65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="301" value="purchaseOrders (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="66" target="67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="302" value="vendor (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="67" target="65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="303" value="requisition (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="67" target="66">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="304" value="receipts (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="67" target="68">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="305" value="bills (*) {POBills}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="67" target="70">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="306" value="purchaseOrder (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="68" target="67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="307" value="vendor (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="69" target="65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="308" value="vendor (1) {VendorBills}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="70" target="65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="309" value="purchaseOrder (0..1) {POBills}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="70" target="67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="310" value="vendor (1) {VendorPayments}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="71" target="65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

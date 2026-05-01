@@ -1,0 +1,293 @@
+﻿@startuml UEORMS_ER_Documents_and_Reports
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Documents and Reports
+
+
+
+
+package "Documents and Reports" {
+  class Document {
+  - id : String <<PK>>
+  - tenantId : String
+  - folderId : String?
+  - name : String
+  - description : String?
+  - fileName : String
+  - fileSize : Int
+  - mimeType : String
+  - storagePath : String
+  - storageProvider : String
+  - checksum : String?
+  - tags : String[]
+  - metadata : Json?
+  - version : Int
+  - isLatest : Boolean
+  - status : String
+  - isPublic : Boolean
+  - downloadCount : Int
+  - viewCount : Int
+  - isTemplate : Boolean
+  - templateId : String?
+  - createdBy : String
+  - updatedBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - folder : DocumentFolder?
+  - template : DocumentTemplate?
+  - versions : DocumentVersion[]
+  - shares : DocumentShare[]
+  - permissions : DocumentPermission[]
+  - activities : DocumentActivity[]
+  - comments : DocumentComment[]
+  --
+  {static} @@index([tenantId, folderId])
+  {static} @@index([tenantId, status])
+  {static} @@index([tenantId, isTemplate])
+  }
+  class DocumentActivity {
+  - id : String <<PK>>
+  - documentId : String?
+  - shareId : String?
+  - tenantId : String
+  - userId : String?
+  - action : String
+  - details : Json?
+  - ipAddress : String?
+  - userAgent : String?
+  - createdAt : DateTime
+  - document : Document?
+  - share : DocumentShare?
+  --
+  {static} @@index([documentId])
+  {static} @@index([shareId])
+  {static} @@index([tenantId, userId])
+  {static} @@index([createdAt])
+  }
+  class DocumentComment {
+  - id : String <<PK>>
+  - documentId : String
+  - userId : String
+  - content : String
+  - parentId : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - document : Document
+  - parent : DocumentComment?
+  - replies : DocumentComment[]
+  --
+  {static} @@index([documentId])
+  {static} @@index([userId])
+  }
+  class DocumentFolder {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - parentId : String?
+  - path : String
+  - color : String?
+  - icon : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - parent : DocumentFolder?
+  - children : DocumentFolder[]
+  - documents : Document[]
+  - permissions : DocumentFolderPermission[]
+  --
+  {static} @@unique([tenantId, parentId, name])
+  {static} @@index([tenantId, parentId])
+  }
+  class DocumentFolderPermission {
+  - id : String <<PK>>
+  - folderId : String
+  - userId : String?
+  - roleId : String?
+  - canView : Boolean
+  - canEdit : Boolean
+  - canDelete : Boolean
+  - canCreate : Boolean
+  - canManage : Boolean
+  - createdAt : DateTime
+  - folder : DocumentFolder
+  --
+  {static} @@unique([folderId, userId])
+  {static} @@unique([folderId, roleId])
+  {static} @@index([folderId])
+  {static} @@index([userId])
+  {static} @@index([roleId])
+  }
+  class DocumentPermission {
+  - id : String <<PK>>
+  - documentId : String
+  - userId : String?
+  - roleId : String?
+  - canView : Boolean
+  - canEdit : Boolean
+  - canDelete : Boolean
+  - canShare : Boolean
+  - canManage : Boolean
+  - createdAt : DateTime
+  - document : Document
+  --
+  {static} @@unique([documentId, userId])
+  {static} @@unique([documentId, roleId])
+  {static} @@index([documentId])
+  {static} @@index([userId])
+  {static} @@index([roleId])
+  }
+  class DocumentShare {
+  - id : String <<PK>>
+  - documentId : String
+  - shareType : String
+  - shareToken : String? <<UQ>>
+  - expiresAt : DateTime?
+  - password : String?
+  - maxDownloads : Int?
+  - downloadCount : Int
+  - sharedWith : String?
+  - canView : Boolean
+  - canDownload : Boolean
+  - canEdit : Boolean
+  - canShare : Boolean
+  - isActive : Boolean
+  - createdBy : String
+  - createdAt : DateTime
+  - document : Document
+  - activities : DocumentActivity[]
+  --
+  {static} @@index([documentId])
+  {static} @@index([shareToken])
+  {static} @@index([sharedWith])
+  }
+  class DocumentTemplate {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - category : String?
+  - fileName : String
+  - storagePath : String
+  - fileSize : Int
+  - mimeType : String
+  - fields : Json?
+  - usageCount : Int
+  - isActive : Boolean
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - documents : Document[]
+  --
+  {static} @@index([tenantId, category])
+  }
+  class DocumentVersion {
+  - id : String <<PK>>
+  - documentId : String
+  - versionNumber : Int
+  - fileName : String
+  - fileSize : Int
+  - storagePath : String
+  - checksum : String?
+  - changeLog : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - document : Document
+  --
+  {static} @@unique([documentId, versionNumber])
+  {static} @@index([documentId])
+  }
+  class Report {
+  - id : String <<PK>>
+  - tenantId : String
+  - templateId : String?
+  - name : String
+  - type : String
+  - parameters : Json?
+  - data : Json?
+  - generatedBy : String?
+  - generatedAt : DateTime
+  - createdAt : DateTime
+  - template : ReportTemplate?
+  --
+  {static} @@index([tenantId, type])
+  {static} @@index([generatedAt])
+  }
+  class ReportSchedule {
+  - id : String <<PK>>
+  - tenantId : String
+  - templateId : String
+  - name : String
+  - frequency : String
+  - recipients : Json
+  - isActive : Boolean
+  - lastRunAt : DateTime?
+  - nextRunAt : DateTime?
+  - createdBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@index([tenantId])
+  {static} @@index([nextRunAt])
+  }
+  class ReportTemplate {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - type : String
+  - category : String?
+  - description : String?
+  - isSystem : Boolean
+  - isActive : Boolean
+  - config : Json
+  - createdBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - reports : Report[]
+  --
+  {static} @@index([tenantId, type])
+  }
+}
+
+' Internal relationships for module: Documents and Reports
+DocumentFolder "1" --> "0..1" DocumentFolder : parent {FolderHierarchy}
+DocumentFolder "1" --> "*" DocumentFolder : children {FolderHierarchy}
+DocumentFolder "1" --> "*" Document : documents
+DocumentFolder "1" --> "*" DocumentFolderPermission : permissions
+Document "1" --> "0..1" DocumentFolder : folder
+Document "1" --> "0..1" DocumentTemplate : template
+Document "1" --> "*" DocumentVersion : versions
+Document "1" --> "*" DocumentShare : shares
+Document "1" --> "*" DocumentPermission : permissions
+Document "1" --> "*" DocumentActivity : activities
+Document "1" --> "*" DocumentComment : comments
+DocumentVersion "1" --> "1" Document : document
+DocumentTemplate "1" --> "*" Document : documents
+DocumentShare "1" --> "1" Document : document
+DocumentShare "1" --> "*" DocumentActivity : activities
+DocumentPermission "1" --> "1" Document : document
+DocumentFolderPermission "1" --> "1" DocumentFolder : folder
+DocumentActivity "1" --> "0..1" Document : document
+DocumentActivity "1" --> "0..1" DocumentShare : share
+DocumentComment "1" --> "1" Document : document
+DocumentComment "1" --> "0..1" DocumentComment : parent {CommentThread}
+DocumentComment "1" --> "*" DocumentComment : replies {CommentThread}
+ReportTemplate "1" --> "*" Report : reports
+Report "1" --> "0..1" ReportTemplate : template
+@enduml

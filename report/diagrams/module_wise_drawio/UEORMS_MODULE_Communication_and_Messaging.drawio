@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.921Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-12" name="10. Communication and Messaging">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Communication and Messaging" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="113" value="Conversation&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- type : String&#xA;- name : String?&#xA;- description : String?&#xA;- createdBy : String&#xA;- isArchived : Boolean&#xA;- lastMessageAt : DateTime?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- messages : Message[]&#xA;- participants : ConversationParticipant[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="114" value="ConversationParticipant&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- conversationId : String&#xA;- userId : String&#xA;- role : String&#xA;- isMuted : Boolean&#xA;- lastReadAt : DateTime?&#xA;- joinedAt : DateTime&#xA;- conversation : Conversation&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="118.08" as="geometry" />
+        </mxCell>
+        <mxCell id="115" value="Message&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- conversationId : String&#xA;- senderId : String&#xA;- content : String&#xA;- type : String&#xA;- attachments : Json?&#xA;- isEdited : Boolean&#xA;- isDeleted : Boolean&#xA;- mentionedUserIds : Json?&#xA;- replyToId : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- conversation : Conversation&#xA;- reactions : MessageReaction[]&#xA;- readReceipts : MessageReadReceipt[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="283.68" width="187.2" height="188.64" as="geometry" />
+        </mxCell>
+        <mxCell id="116" value="MessageReaction&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- messageId : String&#xA;- userId : String&#xA;- emoji : String&#xA;- createdAt : DateTime&#xA;- message : Message&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="192.96" width="187.2" height="97.92" as="geometry" />
+        </mxCell>
+        <mxCell id="117" value="MessageReadReceipt&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- messageId : String&#xA;- userId : String&#xA;- readAt : DateTime&#xA;- message : Message&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="182.88" width="187.2" height="87.84" as="geometry" />
+        </mxCell>
+        <mxCell id="118" value="Announcement&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- title : String&#xA;- content : String&#xA;- priority : String&#xA;- targetType : String&#xA;- targetIds : Json?&#xA;- attachments : Json?&#xA;- publishedBy : String&#xA;- publishedAt : DateTime&#xA;- expiresAt : DateTime?&#xA;- isPinned : Boolean&#xA;- isActive : Boolean&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- reads : AnnouncementRead[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="198.72" as="geometry" />
+        </mxCell>
+        <mxCell id="119" value="AnnouncementRead&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- announcementId : String&#xA;- userId : String&#xA;- readAt : DateTime&#xA;- announcement : Announcement&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="87.84" as="geometry" />
+        </mxCell>
+        <mxCell id="120" value="EmailTemplate&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- code : String&#xA;- subject : String&#xA;- body : String&#xA;- variables : Json?&#xA;- isSystem : Boolean&#xA;- isActive : Boolean&#xA;- createdBy : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="253.44" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="121" value="EmailLog&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- to : String&#xA;- cc : String?&#xA;- bcc : String?&#xA;- subject : String&#xA;- body : String&#xA;- templateId : String?&#xA;- status : String&#xA;- sentAt : DateTime?&#xA;- failedAt : DateTime?&#xA;- errorMessage : String?&#xA;- metadata : Json?&#xA;- createdAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="273.6" width="187.2" height="178.56" as="geometry" />
+        </mxCell>
+        <mxCell id="122" value="EmailQueue&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- to : String&#xA;- cc : String?&#xA;- bcc : String?&#xA;- subject : String&#xA;- body : String&#xA;- templateId : String?&#xA;- variables : Json?&#xA;- status : String&#xA;- priority : Int&#xA;- attempts : Int&#xA;- maxAttempts : Int&#xA;- scheduledAt : DateTime&#xA;- processingAt : DateTime?&#xA;- sentAt : DateTime?&#xA;- failedAt : DateTime?&#xA;- cancelledAt : DateTime?&#xA;- lastError : String?&#xA;- errorLog : Json?&#xA;- metadata : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="364.32" width="187.2" height="269.28" as="geometry" />
+        </mxCell>
+        <mxCell id="123" value="ChatChannel&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- description : String?&#xA;- type : String&#xA;- departmentId : String?&#xA;- projectId : String?&#xA;- createdBy : String&#xA;- isArchived : Boolean&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- members : ChatChannelMember[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="124" value="ChatChannelMember&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- channelId : String&#xA;- userId : String&#xA;- role : String&#xA;- isMuted : Boolean&#xA;- joinedAt : DateTime&#xA;- channel : ChatChannel&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="379" value="messages (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="113" target="115">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="380" value="participants (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="113" target="114">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="381" value="conversation (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="114" target="113">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="382" value="conversation (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="115" target="113">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="383" value="reactions (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="115" target="116">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="384" value="readReceipts (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="115" target="117">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="385" value="message (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="116" target="115">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="386" value="message (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="117" target="115">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="387" value="reads (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="118" target="119">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="388" value="announcement (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="119" target="118">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="389" value="members (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="123" target="124">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="390" value="channel (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="124" target="123">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

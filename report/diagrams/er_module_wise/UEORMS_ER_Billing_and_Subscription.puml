@@ -1,0 +1,181 @@
+﻿@startuml UEORMS_ER_Billing_and_Subscription
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+
+
+
+package "Billing and Subscription" {
+  class BillingEvent {
+  - id : String <<PK>>
+  - tenantId : String?
+  - subscriptionId : String?
+  - eventType : String
+  - provider : String
+  - providerEventId : String <<UQ>>
+  - status : String
+  - payload : Json
+  - processedAt : DateTime?
+  - errorMessage : String?
+  - createdAt : DateTime
+  --
+  {static} @@index([tenantId])
+  {static} @@index([subscriptionId])
+  {static} @@index([eventType])
+  {static} @@index([provider])
+  }
+  class CompanyConfig {
+  - id : String <<PK>>
+  - tenantId : String <<UQ>>
+  - companyName : String
+  - industry : String
+  - size : String
+  - country : String?
+  - currency : String?
+  - timezone : String?
+  - fiscalYear : String?
+  - workflowConfig : Json?
+  - enabledModules : Json?
+  - approvalLevels : Json?
+  - customFields : Json?
+  - businessRules : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  }
+  class PendingRegistration {
+  - id : String <<PK>>
+  - email : String
+  - passwordHash : String
+  - companyName : String
+  - planId : String?
+  - customModules : Json?
+  - billingCycle : String?
+  - provider : String
+  - amount : Float
+  - currency : String
+  - status : String
+  - tenantId : String?
+  - createdAt : DateTime
+  - completedAt : DateTime?
+  - expiresAt : DateTime?
+  --
+  {static} @@index([email])
+  {static} @@index([status])
+  {static} @@index([tenantId])
+  }
+  class Plan {
+  - id : String <<PK>>
+  - name : String <<UQ>>
+  - description : String?
+  - billingCycle : String
+  - currency : String
+  - basePrice : Float
+  - seatPrice : Float
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - modules : PlanModule[]
+  - subscriptions : Subscription[]
+  }
+  class PlanModule {
+  - id : String <<PK>>
+  - planId : String
+  - moduleKey : String
+  - price : Float
+  - included : Boolean
+  - createdAt : DateTime
+  - plan : Plan
+  --
+  {static} @@unique([planId, moduleKey])
+  }
+  class Subscription {
+  - id : String <<PK>>
+  - tenantId : String
+  - planId : String
+  - status : String
+  - startAt : DateTime
+  - currentPeriodStart : DateTime
+  - currentPeriodEnd : DateTime
+  - cancelAt : DateTime?
+  - canceledAt : DateTime?
+  - trialEndsAt : DateTime?
+  - provider : String?
+  - providerSubscriptionId : String?
+  - providerCustomerId : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - tenant : Tenant
+  - plan : Plan
+  - items : SubscriptionItem[]
+  - payments : SubscriptionPayment[]
+  --
+  {static} @@index([tenantId])
+  {static} @@index([planId])
+  }
+  class SubscriptionItem {
+  - id : String <<PK>>
+  - subscriptionId : String
+  - moduleKey : String
+  - quantity : Int
+  - unitPrice : Float
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - subscription : Subscription
+  --
+  {static} @@unique([subscriptionId, moduleKey])
+  }
+  class SubscriptionPayment {
+  - id : String <<PK>>
+  - subscriptionId : String
+  - tenantId : String
+  - amount : Float
+  - currency : String
+  - status : String
+  - paymentMethodId : String?
+  - providerPaymentId : String?
+  - invoiceNumber : String?
+  - description : String?
+  - scheduledFor : DateTime?
+  - attemptedAt : DateTime?
+  - succeededAt : DateTime?
+  - failedAt : DateTime?
+  - refundedAt : DateTime?
+  - failureCode : String?
+  - failureMessage : String?
+  - metadata : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - subscription : Subscription
+  --
+  {static} @@index([subscriptionId])
+  {static} @@index([tenantId])
+  {static} @@index([status])
+  }
+}
+
+' Internal relationships for module: Billing and Subscription
+Plan "1" --> "*" PlanModule : modules
+Plan "1" --> "*" Subscription : subscriptions
+PlanModule "1" --> "1" Plan : plan
+Subscription "1" --> "1" Plan : plan
+Subscription "1" --> "*" SubscriptionItem : items
+Subscription "1" --> "*" SubscriptionPayment : payments
+SubscriptionItem "1" --> "1" Subscription : subscription
+SubscriptionPayment "1" --> "1" Subscription : subscription
+@enduml

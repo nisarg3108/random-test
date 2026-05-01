@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:17:56.224Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="NAV-194" name="Finance and Accounting (13)">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="UEORMS Navigation Module: Finance and Accounting (13)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="194" value="Finance and Accounting (13)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="195" value="/accounting/chart-of-accounts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="18040" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="196" value="/accounting/charts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="18400" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="197" value="/accounting/general-ledger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="18760" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="198" value="/accounting/journal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="19120" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="199" value="/accounting/journal-entry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="19480" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="200" value="/accounting/ledger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="19840" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="201" value="/accounting/reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="20200" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="202" value="/finance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="20560" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="203" value="/finance/approvals" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="20920" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="204" value="/finance/expense-categories" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="21280" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="205" value="/finance/expense-claims" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="21640" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="206" value="/subscription/billing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="22000" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="207" value="/subscription/pricing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="22360" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="10094" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="195">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10095" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="196">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10096" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="197">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10097" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="198">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10098" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="199">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10099" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="200">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10100" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="201">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10101" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="202">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10102" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="203">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10103" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="204">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10104" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="205">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10105" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="206">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10106" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="194" target="207">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

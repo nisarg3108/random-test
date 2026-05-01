@@ -1,0 +1,33 @@
+﻿@startmindmap UEORMS_Navigation_Part_3
+title UEORMS Navigation Chart - Part 3: Backend Alignment and Session
+
+skinparam monochrome false
+skinparam defaultFontName Courier
+
+
+* UEORMS Navigation Chart
+** Backend API Alignment (Navigation Target Context)
+*** Core APIs
+**** /api/auth /api/users /api/invites /api/rbac
+**** /api/departments /api/company /api/branches
+**** /api/system-options /api/dashboard
+*** Domain APIs
+**** /api/inventory /api/items /api/warehouses /api/stock-movements
+**** /api/manufacturing
+**** /api/employees /api/leave-types /api/leave-requests /api/attendance /api/tasks /api/payroll
+**** /api/finance /api/accounting /api/expense-categories /api/expense-claims /api/finance-dashboard
+**** /api/crm /api/sales
+**** /api/purchase /api/ap
+**** /api/projects /api/timesheets
+**** /api/assets /api/asset-allocations /api/asset-maintenance /api/asset-depreciation
+**** /api/documents /api/communication
+**** /api/workflows /api/approvals /api/notifications /api/audit-logs
+**** /api/reports /api/reporting
+**** /api/data /api/integration
+**** /api/billing
+** Session Exit
+*** Sidebar Sign Out
+**** remove token
+**** redirect to /
+
+@endmindmap

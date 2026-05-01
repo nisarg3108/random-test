@@ -1,4 +1,6 @@
 import { createServer } from 'http';
+import https from 'https';
+import http from 'http';
 import app from './app.js';
 import { env } from './config/env.js';
 import prisma from './config/db.js';
@@ -69,3 +71,26 @@ startServer().catch((error) => {
   console.error('❌ Unhandled error:', error);
   process.exit(1);
 });
+
+// KeepAlive: Prevent Render free tier from sleeping (pings every 10 min)
+if (process.env.NODE_ENV === 'production' && process.env.RENDER_EXTERNAL_URL) {
+  const PING_URL = `${process.env.RENDER_EXTERNAL_URL}/api/health`;
+  const INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
+
+  const pingServer = () => {
+    const url = new URL(PING_URL);
+    const requester = url.protocol === 'https:' ? https : http;
+    requester.get(url.toString(), (res) => {
+      console.log(`[KeepAlive] Pinged ${PING_URL} → ${res.statusCode}`);
+    }).on('error', (err) => {
+      console.warn('[KeepAlive] Ping failed:', err.message);
+    });
+  };
+
+  // Start pinging after 1 minute delay (let server fully boot first)
+  setTimeout(() => {
+    pingServer();
+    setInterval(pingServer, INTERVAL_MS);
+    console.log('[KeepAlive] Self-ping started every 10 min (Render free tier)');
+  }, 60 * 1000);
+}

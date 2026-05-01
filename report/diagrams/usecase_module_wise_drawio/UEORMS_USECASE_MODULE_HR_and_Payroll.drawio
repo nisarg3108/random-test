@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T06:38:25.271Z" agent="GPT-5.3-Codex" version="24.7.17" type="device">
+  <diagram id="hr" name="04 HR and Payroll">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="HR and Payroll (UC30-UC47)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="UC30 Manage Employees&lt;br&gt;UC31 Assign Managers&lt;br&gt;UC32 Manage Leave Types&lt;br&gt;UC33 Submit Leave Request&lt;br&gt;UC34 Approve Leave Request&lt;br&gt;UC35 Clock In/Out&lt;br&gt;UC36 Manage Shifts&lt;br&gt;UC37 Manage Overtime Policies&lt;br&gt;UC38 Approve Overtime" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="560" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="UC39 Generate Attendance Reports&lt;br&gt;UC40 Manage Tasks and Work Reports&lt;br&gt;UC41 Manage Salary Components&lt;br&gt;UC42 Manage Tax Configuration&lt;br&gt;UC43 Run Payroll Cycle&lt;br&gt;UC44 Generate and Approve Payslips" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="680" y="140" width="560" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="UC45 Manage Disbursements&lt;br&gt;UC46 Reconcile Payroll Payments&lt;br&gt;UC47 Generate Payment Files" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="140" width="560" height="430" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

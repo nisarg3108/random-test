@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.920Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-11" name="09. Documents and Reports">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Documents and Reports" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="101" value="DocumentFolder&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- description : String?&#xA;- parentId : String?&#xA;- path : String&#xA;- color : String?&#xA;- icon : String?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- parent : DocumentFolder?&#xA;- children : DocumentFolder[]&#xA;- documents : Document[]&#xA;- permissions : DocumentFolderPermission[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="188.64" as="geometry" />
+        </mxCell>
+        <mxCell id="102" value="Document&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- folderId : String?&#xA;- name : String&#xA;- description : String?&#xA;- fileName : String&#xA;- fileSize : Int&#xA;- mimeType : String&#xA;- storagePath : String&#xA;- storageProvider : String&#xA;- checksum : String?&#xA;- tags : String[]&#xA;- metadata : Json?&#xA;- version : Int&#xA;- isLatest : Boolean&#xA;- status : String&#xA;- isPublic : Boolean&#xA;- downloadCount : Int&#xA;- viewCount : Int&#xA;- isTemplate : Boolean&#xA;- templateId : String?&#xA;- createdBy : String&#xA;- updatedBy : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- folder : DocumentFolder?&#xA;- template : DocumentTemplate?&#xA;- versions : DocumentVersion[]&#xA;- shares : DocumentShare[]&#xA;- permissions : DocumentPermission[]&#xA;- activities : DocumentActivity[]&#xA;- comments : DocumentComment[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="103" value="DocumentVersion&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- documentId : String&#xA;- versionNumber : Int&#xA;- fileName : String&#xA;- fileSize : Int&#xA;- storagePath : String&#xA;- checksum : String?&#xA;- changeLog : String?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- document : Document&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="243.36" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="104" value="DocumentTemplate&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- description : String?&#xA;- category : String?&#xA;- fileName : String&#xA;- storagePath : String&#xA;- fileSize : Int&#xA;- mimeType : String&#xA;- fields : Json?&#xA;- usageCount : Int&#xA;- isActive : Boolean&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- documents : Document[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="293.76" width="187.2" height="198.72" as="geometry" />
+        </mxCell>
+        <mxCell id="105" value="DocumentShare&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- documentId : String&#xA;- shareType : String&#xA;- shareToken : String? &lt;&lt;UQ&gt;&gt;&#xA;- expiresAt : DateTime?&#xA;- password : String?&#xA;- maxDownloads : Int?&#xA;- downloadCount : Int&#xA;- sharedWith : String?&#xA;- canView : Boolean&#xA;- canDownload : Boolean&#xA;- canEdit : Boolean&#xA;- canShare : Boolean&#xA;- isActive : Boolean&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- document : Document&#xA;- activities : DocumentActivity[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="313.92" width="187.2" height="218.88" as="geometry" />
+        </mxCell>
+        <mxCell id="106" value="DocumentPermission&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- documentId : String&#xA;- userId : String?&#xA;- roleId : String?&#xA;- canView : Boolean&#xA;- canEdit : Boolean&#xA;- canDelete : Boolean&#xA;- canShare : Boolean&#xA;- canManage : Boolean&#xA;- createdAt : DateTime&#xA;- document : Document&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="107" value="DocumentFolderPermission&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- folderId : String&#xA;- userId : String?&#xA;- roleId : String?&#xA;- canView : Boolean&#xA;- canEdit : Boolean&#xA;- canDelete : Boolean&#xA;- canCreate : Boolean&#xA;- canManage : Boolean&#xA;- createdAt : DateTime&#xA;- folder : DocumentFolder&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="108" value="DocumentActivity&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- documentId : String?&#xA;- shareId : String?&#xA;- tenantId : String&#xA;- userId : String?&#xA;- action : String&#xA;- details : Json?&#xA;- ipAddress : String?&#xA;- userAgent : String?&#xA;- createdAt : DateTime&#xA;- document : Document?&#xA;- share : DocumentShare?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="109" value="DocumentComment&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- documentId : String&#xA;- userId : String&#xA;- content : String&#xA;- parentId : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- document : Document&#xA;- parent : DocumentComment?&#xA;- replies : DocumentComment[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="138.24" as="geometry" />
+        </mxCell>
+        <mxCell id="110" value="ReportTemplate&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- type : String&#xA;- category : String?&#xA;- description : String?&#xA;- isSystem : Boolean&#xA;- isActive : Boolean&#xA;- config : Json&#xA;- createdBy : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- reports : Report[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="263.52" width="187.2" height="168.48" as="geometry" />
+        </mxCell>
+        <mxCell id="111" value="Report&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- templateId : String?&#xA;- name : String&#xA;- type : String&#xA;- parameters : Json?&#xA;- data : Json?&#xA;- generatedBy : String?&#xA;- generatedAt : DateTime&#xA;- createdAt : DateTime&#xA;- template : ReportTemplate?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="243.36" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="112" value="ReportSchedule&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- templateId : String&#xA;- name : String&#xA;- frequency : String&#xA;- recipients : Json&#xA;- isActive : Boolean&#xA;- lastRunAt : DateTime?&#xA;- nextRunAt : DateTime?&#xA;- createdBy : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="253.44" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="355" value="parent (0..1) {FolderHierarchy}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="101" target="101">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="356" value="children (*) {FolderHierarchy}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="101" target="101">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="357" value="documents (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="101" target="102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="358" value="permissions (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="101" target="107">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="359" value="folder (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="101">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="360" value="template (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="104">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="361" value="versions (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="103">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="362" value="shares (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="105">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="363" value="permissions (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="106">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="364" value="activities (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="108">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="365" value="comments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="102" target="109">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="366" value="document (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="103" target="102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="367" value="documents (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="104" target="102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="368" value="document (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="105" target="102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="369" value="activities (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="105" target="108">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="370" value="document (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="106" target="102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="371" value="folder (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="107" target="101">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="372" value="document (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="108" target="102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="373" value="share (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="108" target="105">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="374" value="document (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="109" target="102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="375" value="parent (0..1) {CommentThread}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="109" target="109">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="376" value="replies (*) {CommentThread}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="109" target="109">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="377" value="reports (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="110" target="111">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="378" value="template (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="111" target="110">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:17:55.997Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="NAV-158" name="Core Access (3)">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="UEORMS Navigation Module: Core Access (3)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="158" value="Core Access (3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="159" value="/dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="8680" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="160" value="/invite" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="9040" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="161" value="/users" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="9400" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="10058" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="158" target="159">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10059" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="158" target="160">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10060" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="158" target="161">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.867Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-3" name="01. Identity and Access">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Identity and Access" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d9d9d9;swimlaneFillColor=#ffffff;strokeColor=#666666;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="354.24" width="187.2" height="201.6" as="geometry" />
+        </mxCell>
+        <mxCell id="24a" value="- id: String&#xA;- email: String&#xA;- password: String&#xA;- role: String&#xA;- status: String&#xA;- tenantId: String&#xA;- departmentId: String&#xA;- managerId: String&#xA;- createdAt: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="24">
+          <mxGeometry y="26" width="260" height="134" as="geometry" />
+        </mxCell>
+        <mxCell id="24b" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;" vertex="1" parent="24">
+          <mxGeometry y="160" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="24c" value="+ getSession(): Session&#xA;+ login(): void&#xA;+ logout(): void&#xA;+ updateProfile(): void&#xA;+ changePassword(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="24">
+          <mxGeometry y="168" width="260" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="Role&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- name : String&#xA;- tenantId : String&#xA;- permissions : RolePermission[]&#xA;- users : UserRole[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="87.84" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="Permission&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- code : String &lt;&lt;UQ&gt;&gt;&#xA;- label : String&#xA;- roles : RolePermission[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="77.76" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="RolePermission&#xA;--------------------------------------------------&#xA;- roleId : String&#xA;- permissionId : String&#xA;- role : Role&#xA;- permission : Permission&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="77.76" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="UserRole&#xA;--------------------------------------------------&#xA;- userId : String&#xA;- roleId : String&#xA;- user : User&#xA;- role : Role&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="172.8" width="187.2" height="77.76" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="Department" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d9d9d9;swimlaneFillColor=#ffffff;strokeColor=#666666;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="144" as="geometry" />
+        </mxCell>
+        <mxCell id="29a" value="- id: String&#xA;- tenantId: String&#xA;- name: String&#xA;- description: String&#xA;- location: String&#xA;- managerId: String&#xA;- budget: Float&#xA;- status: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="29">
+          <mxGeometry y="26" width="260" height="114" as="geometry" />
+        </mxCell>
+        <mxCell id="29b" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;" vertex="1" parent="29">
+          <mxGeometry y="140" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="29c" value="+ getEmployees(): Employee[]&#xA;+ updateBudget(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="29">
+          <mxGeometry y="148" width="260" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="Tenant" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d9d9d9;swimlaneFillColor=#ffffff;strokeColor=#666666;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="253.44" width="187.2" height="129.6" as="geometry" />
+        </mxCell>
+        <mxCell id="33a" value="- id: String&#xA;- name: String&#xA;- createdAt: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="33">
+          <mxGeometry y="26" width="260" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="33b" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;" vertex="1" parent="33">
+          <mxGeometry y="80" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="33c" value="+ getUsers(): User[]&#xA;+ getConfig(): CompanyConfig&#xA;+ getSubscriptions(): Subscription[]&#xA;+ addUser(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="33">
+          <mxGeometry y="88" width="260" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="40" value="UserInvite&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- email : String&#xA;- role : String&#xA;- token : String &lt;&lt;UQ&gt;&gt;&#xA;- used : Boolean&#xA;- expiresAt : DateTime&#xA;- tenantId : String&#xA;- createdAt : DateTime&#xA;- tenant : Tenant&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="223.2" width="187.2" height="128.16" as="geometry" />
+        </mxCell>
+        <mxCell id="42" value="SystemOption&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- category : String&#xA;- key : String&#xA;- value : String&#xA;- label : String?&#xA;- tenantId : String?&#xA;- isActive : Boolean&#xA;- createdAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="213.12" width="187.2" height="118.08" as="geometry" />
+        </mxCell>
+        <mxCell id="64" value="PasswordReset&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- email : String&#xA;- otp : String&#xA;- expiresAt : DateTime&#xA;- used : Boolean&#xA;- createdAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="97.92" as="geometry" />
+        </mxCell>
+        <mxCell id="125" value="Branch&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- code : String&#xA;- name : String&#xA;- type : String&#xA;- address : String?&#xA;- city : String?&#xA;- state : String?&#xA;- country : String?&#xA;- postalCode : String?&#xA;- phone : String?&#xA;- email : String?&#xA;- managerId : String?&#xA;- isActive : Boolean&#xA;- isMainBranch : Boolean&#xA;- operatingHours : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- warehouses : Warehouse[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="228.96" as="geometry" />
+        </mxCell>
+        <mxCell id="151" value="tenant (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="24" target="33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="152" value="department (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="24" target="29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="153" value="roles (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="24" target="28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="164" value="permissions (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="25" target="27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="165" value="users (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="25" target="28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="166" value="roles (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="26" target="27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="167" value="role (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="27" target="25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="168" value="permission (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="27" target="26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="169" value="user (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="28" target="24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="170" value="role (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="28" target="25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="172" value="User (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="29" target="24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="178" value="users (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="33" target="24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="182" value="invites (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="33" target="40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="202" value="tenant (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="40" target="33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

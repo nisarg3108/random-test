@@ -1,0 +1,66 @@
+﻿@startmindmap UEORMS_Navigation_Part_1
+title UEORMS Navigation Chart - Part 1: Access and Navigation Foundations
+
+skinparam monochrome false
+skinparam defaultFontName Courier
+
+
+* UEORMS Navigation Chart
+** Evidence Sources (Current System)
+*** frontend/src/App.jsx (exact route inventory)
+*** frontend/src/components/layout/Sidebar.jsx (role + module gated menus)
+*** frontend/src/pages/Dashboard.jsx (role to dashboard resolver)
+*** frontend/src/auth/Login.jsx (billing check and redirect)
+*** frontend/src/auth/ProtectedRoute.jsx (auth guard and redirect)
+*** report/old_project_report_extracted.txt (report intent context)
+** Entry and Access Flow
+*** Public Routes (6)
+**** /
+**** /login
+**** /register
+**** /forgot-password
+**** /accept-invite
+**** /theme-demo
+*** Login Processing
+**** Submit credentials -> loginApi
+**** Persist token
+**** Query /billing/subscription
+***** ACTIVE or unknown -> /dashboard
+***** NON_ACTIVE -> /subscription/billing
+*** Protected Route Guard
+**** if authenticated -> render target page
+**** if unauthenticated -> redirect to /
+** Dashboard Hub
+*** Route: /dashboard
+*** Role-to-dashboard mapping
+**** ADMIN -> AdminDashboard
+**** MANAGER -> ManagerDashboard
+**** HR_MANAGER -> HRManagerDashboard
+**** HR_STAFF -> HRStaffDashboard
+**** FINANCE_MANAGER -> FinanceManagerDashboard
+**** ACCOUNTANT -> AccountantDashboard
+**** INVENTORY_MANAGER -> InventoryManagerDashboard
+**** WAREHOUSE_STAFF -> WarehouseStaffDashboard
+**** SALES_MANAGER -> SalesManagerDashboard
+**** SALES_STAFF -> SalesStaffDashboard
+**** PURCHASE_MANAGER -> PurchaseManagerDashboard
+**** PROJECT_MANAGER -> ProjectManagerDashboard
+**** EMPLOYEE -> EmployeeDashboard
+**** USER -> UserDashboard
+** Sidebar Menu Resolution
+*** Input controls
+**** user.role
+**** company enabledModules
+**** duplicate path elimination (Map by path)
+*** Role-based menu segments
+**** HR roles -> HR, attendance, leave, payroll
+**** Finance roles -> finance, accounting, approvals
+**** Inventory roles -> inventory, warehouse, receipts, dispatch
+**** Sales roles -> CRM, sales orders, quotations, analytics
+**** Purchase roles -> vendors, orders, requisitions, analytics
+**** PM/Manager roles -> projects, tasks, approvals, reports
+**** EMPLOYEE -> self-service views
+**** USER -> basic inventory/docs/messages/notifications
+**** ADMIN -> role-management, roles, company, system-options, audit
+
+@endmindmap

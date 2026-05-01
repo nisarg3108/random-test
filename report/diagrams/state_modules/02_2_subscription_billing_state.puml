@@ -1,0 +1,23 @@
+@startuml UEORMS_State_02
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 2) Subscription and Billing
+
+[*] --> PlanBrowsing
+PlanBrowsing --> TrialActive : start trial
+PlanBrowsing --> SubscriptionActive : paid start
+TrialActive --> SubscriptionActive : upgrade
+SubscriptionActive --> SubscriptionChanged : change plan
+SubscriptionChanged --> SubscriptionActive : cycle applied
+SubscriptionActive --> InvoiceGenerated : billing run
+InvoiceGenerated --> InvoiceSent : email invoice
+InvoiceSent --> PaymentPending : due window
+PaymentPending --> Paid : payment success
+PaymentPending --> Failed : payment failed
+Failed --> PaymentPending : retry
+Paid --> SubscriptionActive : continue service
+SubscriptionActive --> CancelRequested : request cancel
+CancelRequested --> Cancelled : term end
+Cancelled --> [*]
+
+@enduml

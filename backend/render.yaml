@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: ueorms-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate
+    startCommand: npx prisma migrate deploy && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ueorms-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRY
+        value: 7d
+      - key: FRONTEND_URL
+        value: https://your-app.vercel.app  # ← Update after Vercel deploy
+      - key: RESEND_API_KEY
+        sync: false  # ← Set manually in Render dashboard
+      - key: RESEND_FROM
+        value: onboarding@resend.dev
+      - key: SEED_KEY
+        generateValue: true
+
+databases:
+  - name: ueorms-db
+    databaseName: ueorms_db
+    user: ueorms_user
+    plan: free

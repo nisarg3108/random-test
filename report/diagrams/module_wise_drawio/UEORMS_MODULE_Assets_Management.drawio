@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.919Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-10" name="08. Assets Management">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Assets Management" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="96" value="AssetCategory&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- code : String&#xA;- description : String?&#xA;- defaultDepreciationMethod : String?&#xA;- defaultDepreciationRate : Float?&#xA;- defaultUsefulLife : Int?&#xA;- isActive : Boolean&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- assets : Asset[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="97" value="Asset&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- categoryId : String&#xA;- assetCode : String&#xA;- name : String&#xA;- description : String?&#xA;- purchaseDate : DateTime&#xA;- purchasePrice : Float&#xA;- vendor : String?&#xA;- invoiceNumber : String?&#xA;- serialNumber : String?&#xA;- model : String?&#xA;- manufacturer : String?&#xA;- location : String?&#xA;- status : String&#xA;- condition : String&#xA;- depreciationMethod : String?&#xA;- depreciationRate : Float?&#xA;- usefulLife : Int?&#xA;- salvageValue : Float?&#xA;- totalExpectedUnits : Int?&#xA;- unitsProducedToDate : Int?&#xA;- currentValue : Float?&#xA;- accumulatedDepreciation : Float?&#xA;- warrantyExpiry : DateTime?&#xA;- insuranceExpiry : DateTime?&#xA;- insuranceProvider : String?&#xA;- insurancePolicyNo : String?&#xA;- notes : String?&#xA;- tags : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- category : AssetCategory&#xA;- allocations : AssetAllocation[]&#xA;- maintenanceSchedules : AssetMaintenance[]&#xA;- depreciationRecords : AssetDepreciation[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="400.32" as="geometry" />
+        </mxCell>
+        <mxCell id="98" value="AssetAllocation&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- assetId : String&#xA;- employeeId : String&#xA;- allocatedDate : DateTime&#xA;- returnDate : DateTime?&#xA;- expectedReturnDate : DateTime?&#xA;- status : String&#xA;- purpose : String?&#xA;- allocatedBy : String?&#xA;- location : String?&#xA;- returnCondition : String?&#xA;- returnNotes : String?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- asset : Asset&#xA;- employee : Employee&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="218.88" as="geometry" />
+        </mxCell>
+        <mxCell id="99" value="AssetMaintenance&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- assetId : String&#xA;- maintenanceType : String&#xA;- scheduledDate : DateTime&#xA;- completedDate : DateTime?&#xA;- status : String&#xA;- statusBeforeMaintenance : String?&#xA;- description : String&#xA;- performedBy : String?&#xA;- cost : Float?&#xA;- conditionBefore : String?&#xA;- conditionAfter : String?&#xA;- nextMaintenanceDate : DateTime?&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- asset : Asset&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="228.96" as="geometry" />
+        </mxCell>
+        <mxCell id="100" value="AssetDepreciation&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- assetId : String&#xA;- period : DateTime&#xA;- year : Int&#xA;- month : Int&#xA;- openingValue : Float&#xA;- depreciationAmount : Float&#xA;- closingValue : Float&#xA;- accumulatedDepreciation : Float&#xA;- method : String&#xA;- rate : Float&#xA;- unitsProduced : Int?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- asset : Asset&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="198.72" as="geometry" />
+        </mxCell>
+        <mxCell id="346" value="assets (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="96" target="97">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="347" value="category (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="97" target="96">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="348" value="allocations (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="97" target="98">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="349" value="maintenanceSchedules (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="97" target="99">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="350" value="depreciationRecords (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="97" target="100">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="351" value="asset (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="98" target="97">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="353" value="asset (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="99" target="97">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="354" value="asset (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="100" target="97">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

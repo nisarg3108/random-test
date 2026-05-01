@@ -1,0 +1,21 @@
+@startuml UEORMS_State_03
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 3) Workflow, Audit, and Notifications
+
+[*] --> WorkflowConfigured
+WorkflowConfigured --> RequestSubmitted : submit request
+RequestSubmitted --> PendingApproval : route approval
+PendingApproval --> Approved : approve
+PendingApproval --> Rejected : reject
+Rejected --> RequestSubmitted : resubmit
+Approved --> AuditLogged : audit event
+Rejected --> AuditLogged : audit event
+AuditLogged --> NotificationQueued : enqueue notices
+NotificationQueued --> NotificationDelivered : delivered
+NotificationDelivered --> NotificationRead : mark read
+NotificationDelivered --> RealtimeStreamed : realtime push
+RealtimeStreamed --> NotificationRead
+NotificationRead --> [*]
+
+@enduml

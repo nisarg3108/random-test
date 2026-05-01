@@ -1,0 +1,278 @@
+@startuml UEORMS_Full_State_Transition_Module_Wise
+' UEORMS SaaS ERP - module-wise state transitions in one file
+top to bottom direction
+hide empty description
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #F8FBFF
+  BorderColor #355070
+  ArrowColor #355070
+  FontColor #1F2D3D
+}
+
+title UEORMS Full State Transition Diagram (Module-Wise, All-in-One)
+
+legend right
+  This diagram is organized as separate module state machines in one file.
+  Each module models its own lifecycle/state transitions.
+endlegend
+
+state "1) Access, Tenant, and Core Setup" as M01 {
+  [*] --> Guest
+  Guest --> Registered : register account
+  Guest --> RegisteredWithCheckout : register + checkout
+  Registered --> EmailVerified : verify email/otp
+  RegisteredWithCheckout --> EmailVerified : payment success
+  EmailVerified --> Authenticated : login
+  Authenticated --> PasswordResetPending : forgot password
+  PasswordResetPending --> Authenticated : otp verified + reset
+
+  Authenticated --> InvitePending : invite user
+  InvitePending --> ActiveUser : accept invite
+
+  ActiveUser --> RoleAssigned : assign role/permissions
+  RoleAssigned --> DepartmentAssigned : map department
+  DepartmentAssigned --> BranchAssigned : map branch
+  BranchAssigned --> CompanyConfigured : company setup
+  CompanyConfigured --> SystemConfigured : system options configured
+  SystemConfigured --> DashboardReady : role dashboard ready
+  DashboardReady --> Authenticated : continue session
+  Authenticated --> [*] : logout
+}
+
+state "2) Subscription and Billing" as M02 {
+  [*] --> PlanBrowsing
+  PlanBrowsing --> TrialActive : subscribe trial
+  PlanBrowsing --> SubscriptionActive : paid subscription start
+  TrialActive --> SubscriptionActive : upgrade
+  SubscriptionActive --> SubscriptionChanged : plan change
+  SubscriptionChanged --> SubscriptionActive : effective cycle start
+
+  SubscriptionActive --> InvoiceGenerated : billing cycle run
+  InvoiceGenerated --> InvoiceSent : email dispatch
+  InvoiceSent --> PaymentPending : due date open
+  PaymentPending --> Paid : payment success
+  PaymentPending --> Failed : payment failed
+  Failed --> PaymentPending : retry payment
+  Paid --> SubscriptionActive : continue entitlement
+
+  SubscriptionActive --> CancelRequested : cancel request
+  CancelRequested --> Cancelled : end of term
+  Cancelled --> [*]
+}
+
+state "3) Workflow, Audit, and Notifications" as M03 {
+  [*] --> WorkflowConfigured
+  WorkflowConfigured --> RequestSubmitted : submit request
+  RequestSubmitted --> PendingApproval : route to approver
+  PendingApproval --> Approved : approve
+  PendingApproval --> Rejected : reject
+  Rejected --> RequestSubmitted : resubmit
+
+  Approved --> AuditLogged : write audit event
+  Rejected --> AuditLogged : write audit event
+  AuditLogged --> NotificationQueued : enqueue notifications
+  NotificationQueued --> NotificationDelivered : push/email sent
+  NotificationDelivered --> NotificationRead : mark as read
+  NotificationDelivered --> RealtimeStreamed : realtime broadcast
+  RealtimeStreamed --> NotificationRead
+  NotificationRead --> [*]
+}
+
+state "4) HR and Payroll" as M04 {
+  [*] --> EmployeeDraft
+  EmployeeDraft --> EmployeeActive : onboard + assign manager
+  EmployeeActive --> LeaveRequested : submit leave
+  LeaveRequested --> LeaveApproved : approve leave
+  LeaveRequested --> LeaveRejected : reject leave
+  LeaveRejected --> LeaveRequested : resubmit leave
+
+  EmployeeActive --> ShiftAssigned : assign shift
+  ShiftAssigned --> ClockedIn : clock in
+  ClockedIn --> ClockedOut : clock out
+  ClockedOut --> AttendanceComputed : attendance job
+
+  AttendanceComputed --> OvertimePending : overtime flagged
+  OvertimePending --> OvertimeApproved : approve overtime
+  OvertimePending --> OvertimeRejected : reject overtime
+
+  OvertimeApproved --> PayrollReady : payroll inputs ready
+  AttendanceComputed --> PayrollReady : normal payroll path
+  PayrollReady --> PayrollCalculated : run payroll cycle
+  PayrollCalculated --> PayslipGenerated : generate payslips
+  PayslipGenerated --> PayslipApproved : approve payslips
+  PayslipApproved --> DisbursementPrepared : create disbursement batch
+  DisbursementPrepared --> PaymentFileGenerated : generate bank file
+  PaymentFileGenerated --> Disbursed : bank processed
+  Disbursed --> Reconciled : reconcile payroll payments
+  Reconciled --> [*]
+}
+
+state "5) Finance and Accounting" as M05 {
+  [*] --> ExpenseDraft
+  ExpenseDraft --> ExpenseSubmitted : submit claim
+  ExpenseSubmitted --> ExpenseApproved : approve claim
+  ExpenseSubmitted --> ExpenseRejected : reject claim
+  ExpenseRejected --> ExpenseDraft : edit and resubmit
+
+  ExpenseApproved --> JournalDraft : create journal
+  JournalDraft --> JournalPosted : post entry
+  JournalPosted --> LedgerUpdated : update general ledger
+  JournalPosted --> JournalReversed : reverse posted entry
+  JournalReversed --> LedgerUpdated
+  LedgerUpdated --> FinanceDashboardUpdated : refresh KPIs
+  FinanceDashboardUpdated --> [*]
+}
+
+state "6) Inventory and Manufacturing" as M06 {
+  [*] --> ItemDefined
+  ItemDefined --> WarehouseMapped : assign warehouse/bin rules
+  WarehouseMapped --> StockAvailable : opening/received stock
+
+  StockAvailable --> TransferRequested : transfer stock
+  TransferRequested --> TransferApproved : approve transfer
+  TransferRequested --> TransferCancelled : cancel transfer
+  TransferApproved --> StockInTransit : dispatch transfer
+  StockInTransit --> StockAvailable : receipt confirmed
+
+  StockAvailable --> BOMDraft : create BOM
+  BOMDraft --> BOMReleased : release BOM
+  BOMReleased --> WorkOrderCreated : create work order
+  WorkOrderCreated --> OperationsPlanned : define operations
+  OperationsPlanned --> MaterialsIssued : issue materials
+  MaterialsIssued --> ProductionCompleted : consume/complete
+  ProductionCompleted --> InventoryStatsUpdated : update KPIs
+  InventoryStatsUpdated --> [*]
+}
+
+state "7) CRM and Sales" as M07 {
+  [*] --> LeadCreated
+  LeadCreated --> LeadQualified : qualify lead
+  LeadQualified --> CustomerCreated : convert lead
+
+  CustomerCreated --> OpportunityOpen : create deal
+  OpportunityOpen --> QuotationDraft : create quotation
+  QuotationDraft --> QuotationSent : send quotation
+  QuotationSent --> QuotationAccepted : customer accepts
+  QuotationSent --> QuotationExpired : timeout/reject
+  QuotationExpired --> QuotationDraft : revise quotation
+
+  QuotationAccepted --> SalesOrderOpen : convert to order
+  SalesOrderOpen --> InvoiceGenerated : convert to invoice
+  InvoiceGenerated --> PaymentPending : await payment
+  PaymentPending --> PaymentReceived : payment posted
+  PaymentReceived --> OrderFulfilled : dispatch/delivery complete
+  OrderFulfilled --> AnalyticsUpdated : update sales analytics/forecast
+  AnalyticsUpdated --> [*]
+}
+
+state "8) Purchase and Accounts Payable" as M08 {
+  [*] --> VendorActive
+  VendorActive --> RequisitionDraft : create requisition
+  RequisitionDraft --> RequisitionSubmitted : submit requisition
+  RequisitionSubmitted --> RequisitionApproved : approve requisition
+  RequisitionSubmitted --> RequisitionRejected : reject requisition
+  RequisitionRejected --> RequisitionDraft : revise requisition
+
+  RequisitionApproved --> PODraft : convert to PO
+  PODraft --> POSubmitted : submit PO
+  POSubmitted --> POApproved : approve PO
+  POSubmitted --> PORejected : reject PO
+  PORejected --> PODraft : revise PO
+
+  POApproved --> GoodsReceiptPosted : post goods receipt
+  GoodsReceiptPosted --> BillDraft : create AP bill
+  BillDraft --> ThreeWayMatched : perform 3-way match
+  ThreeWayMatched --> BillApproved : approve AP bill
+  ThreeWayMatched --> BillRejected : reject AP bill
+  BillRejected --> BillDraft : correct and resubmit
+
+  BillApproved --> PaymentScheduled : schedule payment
+  PaymentScheduled --> PaymentProcessed : execute payment
+  PaymentProcessed --> VendorStatementUpdated : aging/statements updated
+  VendorStatementUpdated --> [*]
+}
+
+state "9) Projects and Timesheets" as M09 {
+  [*] --> ProjectPlanned
+  ProjectPlanned --> ProjectActive : approve baseline
+  ProjectActive --> MembersAssigned : assign team/capacity
+  MembersAssigned --> TimesheetDraft : log time
+  TimesheetDraft --> TimesheetSubmitted : submit timesheet
+  TimesheetSubmitted --> TimesheetApproved : approve timesheet
+  TimesheetSubmitted --> TimesheetRejected : reject timesheet
+  TimesheetRejected --> TimesheetDraft : fix and resubmit
+  TimesheetApproved --> ProgressUpdated : update milestone/resource/budget
+  ProgressUpdated --> ProjectDashboardUpdated : refresh dashboard
+  ProjectDashboardUpdated --> [*]
+}
+
+state "10) Assets, Documents, and Communication" as M10 {
+  [*] --> AssetRegistered
+  AssetRegistered --> AssetAllocated : allocate asset
+  AssetAllocated --> AssetOverdue : overdue monitor trigger
+  AssetAllocated --> AssetReturned : return asset
+  AssetOverdue --> AssetReturned : return after reminder
+
+  AssetReturned --> MaintenancePlanned : schedule maintenance
+  MaintenancePlanned --> MaintenanceCompleted : complete maintenance
+  MaintenanceCompleted --> DepreciationCalculated : run depreciation
+
+  DepreciationCalculated --> DocumentDraft : create/upload document
+  DocumentDraft --> VersionPublished : publish version/template
+  VersionPublished --> Shared : share with permissions
+  Shared --> ActivityTracked : view activity/stats
+
+  ActivityTracked --> ConversationOpen : open conversation/channel
+  ConversationOpen --> MessageSent : send message/reaction
+  MessageSent --> AnnouncementPublished : optional announcement
+  MessageSent --> EmailQueued : queue email notification
+  AnnouncementPublished --> EmailQueued
+  EmailQueued --> AttachmentIndexed : upload/search communication files
+  AttachmentIndexed --> [*]
+}
+
+state "11) Reports, Data Utilities, and Integration" as M11 {
+  [*] --> ReportRequestDraft
+  ReportRequestDraft --> ReportGenerated : generate standard/custom report
+  ReportGenerated --> ReportSaved : save report
+  ReportSaved --> ReportExported : export report
+  ReportSaved --> ReportScheduled : schedule recurring report
+
+  ReportExported --> DataImportPending : optional import operational data
+  ReportScheduled --> DataImportPending : optional import operational data
+  DataImportPending --> DataImported : import complete
+  DataImported --> DataExported : export operational data
+
+  DataExported --> SyncRequested : run cross-module sync
+  SyncRequested --> SyncRunning : integration worker running
+  SyncRunning --> SyncSucceeded : sync success
+  SyncRunning --> SyncFailed : sync failure
+  SyncFailed --> SyncRequested : retry sync
+  SyncSucceeded --> IntegrationMonitored : monitor status/config
+  IntegrationMonitored --> [*]
+}
+
+state "12) Platform Security and Reliability" as M12 {
+  [*] --> ServiceStarting
+  ServiceStarting --> ServiceHealthy : health checks passed
+  ServiceStarting --> Degraded : startup dependency issue
+
+  ServiceHealthy --> AccessControlCheck : incoming request
+  AccessControlCheck --> RequestHandled : auth/RBAC/rate-limit pass
+  AccessControlCheck --> SecurityEvent : auth or throttle failure
+
+  RequestHandled --> ServiceHealthy : metrics normal
+  RequestHandled --> IncidentDetected : alert threshold breached
+  IncidentDetected --> Degraded : reliability risk active
+
+  Degraded --> RecoveryInProgress : auto recovery
+  RecoveryInProgress --> ServiceHealthy : recovery succeeded
+  RecoveryInProgress --> ManualIntervention : recovery failed
+  ManualIntervention --> ServiceHealthy : operator resolved
+
+  SecurityEvent --> ServiceHealthy : event logged and monitored
+  ServiceHealthy --> [*] : maintenance shutdown
+}
+
+@enduml

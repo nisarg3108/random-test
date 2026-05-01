@@ -1,0 +1,19 @@
+@startuml UEORMS_State_05
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 5) Finance and Accounting
+
+[*] --> ExpenseDraft
+ExpenseDraft --> ExpenseSubmitted : submit claim
+ExpenseSubmitted --> ExpenseApproved : approve claim
+ExpenseSubmitted --> ExpenseRejected : reject claim
+ExpenseRejected --> ExpenseDraft : revise and resubmit
+ExpenseApproved --> JournalDraft : create journal
+JournalDraft --> JournalPosted : post entry
+JournalPosted --> LedgerUpdated : update ledger
+JournalPosted --> JournalReversed : reverse entry
+JournalReversed --> LedgerUpdated
+LedgerUpdated --> FinanceDashboardUpdated : refresh KPIs
+FinanceDashboardUpdated --> [*]
+
+@enduml

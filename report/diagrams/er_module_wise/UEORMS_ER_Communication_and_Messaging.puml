@@ -1,0 +1,241 @@
+﻿@startuml UEORMS_ER_Communication_and_Messaging
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Communication and Messaging
+
+
+
+package "Communication and Messaging" {
+  class Announcement {
+  - id : String <<PK>>
+  - tenantId : String
+  - title : String
+  - content : String
+  - priority : String
+  - targetType : String
+  - targetIds : Json?
+  - attachments : Json?
+  - publishedBy : String
+  - publishedAt : DateTime
+  - expiresAt : DateTime?
+  - isPinned : Boolean
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - reads : AnnouncementRead[]
+  --
+  {static} @@index([tenantId, isActive, publishedAt])
+  {static} @@index([tenantId, isPinned])
+  }
+  class AnnouncementRead {
+  - id : String <<PK>>
+  - announcementId : String
+  - userId : String
+  - readAt : DateTime
+  - announcement : Announcement
+  --
+  {static} @@unique([announcementId, userId])
+  {static} @@index([userId])
+  }
+  class ChatChannel {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - type : String
+  - departmentId : String?
+  - projectId : String?
+  - createdBy : String
+  - isArchived : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - members : ChatChannelMember[]
+  --
+  {static} @@index([tenantId, type, isArchived])
+  {static} @@index([departmentId])
+  {static} @@index([projectId])
+  }
+  class ChatChannelMember {
+  - id : String <<PK>>
+  - channelId : String
+  - userId : String
+  - role : String
+  - isMuted : Boolean
+  - joinedAt : DateTime
+  - channel : ChatChannel
+  --
+  {static} @@unique([channelId, userId])
+  {static} @@index([userId])
+  }
+  class Conversation {
+  - id : String <<PK>>
+  - tenantId : String
+  - type : String
+  - name : String?
+  - description : String?
+  - createdBy : String
+  - isArchived : Boolean
+  - lastMessageAt : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - messages : Message[]
+  - participants : ConversationParticipant[]
+  --
+  {static} @@index([tenantId, type])
+  {static} @@index([tenantId, lastMessageAt])
+  }
+  class ConversationParticipant {
+  - id : String <<PK>>
+  - conversationId : String
+  - userId : String
+  - role : String
+  - isMuted : Boolean
+  - lastReadAt : DateTime?
+  - joinedAt : DateTime
+  - conversation : Conversation
+  --
+  {static} @@unique([conversationId, userId])
+  {static} @@index([userId])
+  {static} @@index([conversationId])
+  }
+  class EmailLog {
+  - id : String <<PK>>
+  - tenantId : String
+  - to : String
+  - cc : String?
+  - bcc : String?
+  - subject : String
+  - body : String
+  - templateId : String?
+  - status : String
+  - sentAt : DateTime?
+  - failedAt : DateTime?
+  - errorMessage : String?
+  - metadata : Json?
+  - createdAt : DateTime
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([to])
+  {static} @@index([createdAt])
+  }
+  class EmailQueue {
+  - id : String <<PK>>
+  - tenantId : String
+  - to : String
+  - cc : String?
+  - bcc : String?
+  - subject : String
+  - body : String
+  - templateId : String?
+  - variables : Json?
+  - status : String
+  - priority : Int
+  - attempts : Int
+  - maxAttempts : Int
+  - scheduledAt : DateTime
+  - processingAt : DateTime?
+  - sentAt : DateTime?
+  - failedAt : DateTime?
+  - cancelledAt : DateTime?
+  - lastError : String?
+  - errorLog : Json?
+  - metadata : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@index([tenantId, status])
+  {static} @@index([status, scheduledAt])
+  {static} @@index([priority, scheduledAt])
+  {static} @@index([createdAt])
+  }
+  class EmailTemplate {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - subject : String
+  - body : String
+  - variables : Json?
+  - isSystem : Boolean
+  - isActive : Boolean
+  - createdBy : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, code])
+  {static} @@index([tenantId, isActive])
+  }
+  class Message {
+  - id : String <<PK>>
+  - conversationId : String
+  - senderId : String
+  - content : String
+  - type : String
+  - attachments : Json?
+  - isEdited : Boolean
+  - isDeleted : Boolean
+  - mentionedUserIds : Json?
+  - replyToId : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - conversation : Conversation
+  - reactions : MessageReaction[]
+  - readReceipts : MessageReadReceipt[]
+  --
+  {static} @@index([conversationId, createdAt])
+  {static} @@index([senderId])
+  }
+  class MessageReaction {
+  - id : String <<PK>>
+  - messageId : String
+  - userId : String
+  - emoji : String
+  - createdAt : DateTime
+  - message : Message
+  --
+  {static} @@unique([messageId, userId, emoji])
+  {static} @@index([messageId])
+  }
+  class MessageReadReceipt {
+  - id : String <<PK>>
+  - messageId : String
+  - userId : String
+  - readAt : DateTime
+  - message : Message
+  --
+  {static} @@unique([messageId, userId])
+  {static} @@index([messageId])
+  {static} @@index([userId])
+  }
+}
+
+' Internal relationships for module: Communication and Messaging
+Conversation "1" --> "*" Message : messages
+Conversation "1" --> "*" ConversationParticipant : participants
+ConversationParticipant "1" --> "1" Conversation : conversation
+Message "1" --> "1" Conversation : conversation
+Message "1" --> "*" MessageReaction : reactions
+Message "1" --> "*" MessageReadReceipt : readReceipts
+MessageReaction "1" --> "1" Message : message
+MessageReadReceipt "1" --> "1" Message : message
+Announcement "1" --> "*" AnnouncementRead : reads
+AnnouncementRead "1" --> "1" Announcement : announcement
+ChatChannel "1" --> "*" ChatChannelMember : members
+ChatChannelMember "1" --> "1" ChatChannel : channel
+@enduml

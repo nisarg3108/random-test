@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T06:38:25.249Z" agent="GPT-5.3-Codex" version="24.7.17" type="device">
+  <diagram id="access" name="01 Access and Core Setup">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Access, Tenant, and Core Setup (UC01-UC14)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="UC01 Register Account&lt;br&gt;UC02 Register + Checkout&lt;br&gt;UC03 Login&lt;br&gt;UC04 View Own Profile&lt;br&gt;UC05 Reset Password (OTP)&lt;br&gt;UC06 Invite User&lt;br&gt;UC07 Accept Invite" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="UC08 Manage Users&lt;br&gt;UC09 Manage Roles and Permissions&lt;br&gt;UC10 Manage Departments&lt;br&gt;UC11 Configure Company Setup&lt;br&gt;UC12 Manage Branches&lt;br&gt;UC13 Configure System Options&lt;br&gt;UC14 View Role-Based Dashboard" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="320" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

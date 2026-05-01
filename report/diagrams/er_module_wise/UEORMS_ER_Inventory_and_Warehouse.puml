@@ -1,0 +1,152 @@
+﻿@startuml UEORMS_ER_Inventory_and_Warehouse
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Inventory and Warehouse
+
+
+
+
+package "Inventory and Warehouse" {
+  class Item {
+  - id : String <<PK>>
+  - name : String
+  - sku : String
+  - price : Float
+  - quantity : Int
+  - description : String?
+  - category : String?
+  - tenantId : String
+  - createdAt : DateTime
+  - tenant : Tenant
+  --
+  {static} @@unique([sku, tenantId])
+  }
+  class LotBatch {
+  - id : String <<PK>>
+  - tenantId : String
+  - itemId : String
+  - lotNumber : String?
+  - batchNumber : String?
+  - serialNumber : String?
+  - manufacturingDate : DateTime?
+  - expiryDate : DateTime?
+  - quantity : Float
+  - remainingQty : Float
+  - supplier : String?
+  - purchaseOrderId : String?
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, lotNumber])
+  {static} @@index([tenantId, itemId])
+  {static} @@index([expiryDate])
+  }
+  class StockMovement {
+  - id : String <<PK>>
+  - tenantId : String
+  - movementNumber : String
+  - type : String
+  - reason : String?
+  - itemId : String
+  - fromWarehouseId : String?
+  - toWarehouseId : String?
+  - warehouseId : String?
+  - quantity : Float
+  - lotNumber : String?
+  - batchNumber : String?
+  - serialNumber : String?
+  - expiryDate : DateTime?
+  - referenceType : String?
+  - referenceId : String?
+  - unitCost : Float?
+  - totalCost : Float?
+  - status : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - notes : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - warehouse : Warehouse?
+  --
+  {static} @@unique([tenantId, movementNumber])
+  {static} @@index([tenantId, type, status])
+  {static} @@index([itemId])
+  {static} @@index([referenceType, referenceId])
+  }
+  class Warehouse {
+  - id : String <<PK>>
+  - tenantId : String
+  - branchId : String?
+  - code : String
+  - name : String
+  - type : String
+  - address : String?
+  - city : String?
+  - state : String?
+  - country : String?
+  - postalCode : String?
+  - capacity : Float?
+  - unit : String?
+  - managerId : String?
+  - phone : String?
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - branch : Branch?
+  - stockItems : WarehouseStock[]
+  - stockMovements : StockMovement[]
+  --
+  {static} @@unique([tenantId, code])
+  {static} @@index([tenantId, isActive])
+  }
+  class WarehouseStock {
+  - id : String <<PK>>
+  - tenantId : String
+  - warehouseId : String
+  - itemId : String
+  - quantity : Float
+  - reservedQty : Float
+  - availableQty : Float
+  - binLocation : String?
+  - zone : String?
+  - reorderPoint : Float?
+  - reorderQty : Float?
+  - minStock : Float?
+  - maxStock : Float?
+  - lastPurchasePrice : Float?
+  - avgCost : Float?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - warehouse : Warehouse
+  --
+  {static} @@unique([warehouseId, itemId])
+  {static} @@index([tenantId, itemId])
+  {static} @@index([warehouseId])
+  }
+}
+
+' Internal relationships for module: Inventory and Warehouse
+Warehouse "1" --> "*" WarehouseStock : stockItems
+Warehouse "1" --> "*" StockMovement : stockMovements
+WarehouseStock "1" --> "1" Warehouse : warehouse
+StockMovement "1" --> "0..1" Warehouse : warehouse
+@enduml

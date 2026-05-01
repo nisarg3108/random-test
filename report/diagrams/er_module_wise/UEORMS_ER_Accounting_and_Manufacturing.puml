@@ -1,0 +1,297 @@
+﻿@startuml UEORMS_ER_Accounting_and_Manufacturing
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Accounting and Manufacturing
+
+
+
+
+package "Accounting and Manufacturing" {
+  class BillOfMaterials {
+  - id : String <<PK>>
+  - tenantId : String
+  - bomNumber : String
+  - productId : String
+  - version : String
+  - name : String
+  - description : String?
+  - quantity : Float
+  - unit : String?
+  - materialCost : Float?
+  - laborCost : Float?
+  - overheadCost : Float?
+  - totalCost : Float?
+  - status : String
+  - isActive : Boolean
+  - isDefault : Boolean
+  - effectiveFrom : DateTime?
+  - effectiveTo : DateTime?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - items : BOMItem[]
+  - workOrders : WorkOrder[]
+  --
+  {static} @@unique([tenantId, bomNumber])
+  {static} @@index([tenantId, productId])
+  }
+  class BOMItem {
+  - id : String <<PK>>
+  - bomId : String
+  - itemId : String
+  - sequence : Int
+  - quantity : Float
+  - unit : String?
+  - warehouseId : String?
+  - unitCost : Float?
+  - totalCost : Float?
+  - alternativeItems : Json?
+  - scrapPercentage : Float?
+  - notes : String?
+  - createdAt : DateTime
+  - bom : BillOfMaterials
+  --
+  {static} @@index([bomId])
+  {static} @@index([itemId])
+  }
+  class ChartOfAccounts {
+  - id : String <<PK>>
+  - tenantId : String
+  - accountCode : String
+  - accountName : String
+  - accountType : String
+  - category : String?
+  - parentId : String?
+  - description : String?
+  - isActive : Boolean
+  - isSystem : Boolean
+  - normalBalance : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - parent : ChartOfAccounts?
+  - children : ChartOfAccounts[]
+  - journalEntries : JournalEntryLine[]
+  - ledgerEntries : LedgerEntry[]
+  --
+  {static} @@unique([tenantId, accountCode])
+  {static} @@index([tenantId, accountType])
+  }
+  class FiscalYear {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - startDate : DateTime
+  - endDate : DateTime
+  - isClosed : Boolean
+  - closedBy : String?
+  - closedAt : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, name])
+  {static} @@index([tenantId, startDate, endDate])
+  }
+  class JournalEntry {
+  - id : String <<PK>>
+  - tenantId : String
+  - entryNumber : String
+  - entryDate : DateTime
+  - postingDate : DateTime?
+  - type : String
+  - description : String
+  - referenceType : String?
+  - referenceId : String?
+  - status : String
+  - totalDebit : Float
+  - totalCredit : Float
+  - createdBy : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - postedBy : String?
+  - postedAt : DateTime?
+  - reversedBy : String?
+  - reversedAt : DateTime?
+  - reversingEntryId : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - lines : JournalEntryLine[]
+  --
+  {static} @@unique([tenantId, entryNumber])
+  {static} @@index([tenantId, status])
+  {static} @@index([entryDate])
+  }
+  class JournalEntryLine {
+  - id : String <<PK>>
+  - journalEntryId : String
+  - accountId : String
+  - lineNumber : Int
+  - description : String?
+  - debit : Float
+  - credit : Float
+  - departmentId : String?
+  - projectId : String?
+  - costCenter : String?
+  - createdAt : DateTime
+  - journalEntry : JournalEntry
+  - account : ChartOfAccounts
+  --
+  {static} @@index([journalEntryId])
+  {static} @@index([accountId])
+  }
+  class LedgerEntry {
+  - id : String <<PK>>
+  - tenantId : String
+  - accountId : String
+  - date : DateTime
+  - description : String
+  - debit : Float
+  - credit : Float
+  - balance : Float
+  - referenceType : String?
+  - referenceId : String?
+  - journalEntryId : String?
+  - createdAt : DateTime
+  - account : ChartOfAccounts
+  --
+  {static} @@index([tenantId, accountId, date])
+  {static} @@index([date])
+  }
+  class ProductionBatch {
+  - id : String <<PK>>
+  - tenantId : String
+  - workOrderId : String
+  - batchNumber : String
+  - productId : String
+  - quantity : Float
+  - unit : String?
+  - manufacturingDate : DateTime
+  - expiryDate : DateTime?
+  - qualityStatus : String
+  - qcBy : String?
+  - qcAt : DateTime?
+  - qcNotes : String?
+  - warehouseId : String?
+  - status : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  --
+  {static} @@unique([tenantId, batchNumber])
+  {static} @@index([tenantId, workOrderId])
+  {static} @@index([productId])
+  }
+  class WorkOrder {
+  - id : String <<PK>>
+  - tenantId : String
+  - workOrderNumber : String
+  - bomId : String
+  - productId : String
+  - plannedQty : Float
+  - producedQty : Float
+  - scrappedQty : Float
+  - scheduledStart : DateTime?
+  - scheduledEnd : DateTime?
+  - actualStart : DateTime?
+  - actualEnd : DateTime?
+  - warehouseId : String?
+  - workCenter : String?
+  - status : String
+  - priority : String
+  - estimatedCost : Float?
+  - actualCost : Float?
+  - salesOrderId : String?
+  - projectId : String?
+  - assignedTo : String?
+  - notes : String?
+  - createdBy : String
+  - completedBy : String?
+  - completedAt : DateTime?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - bom : BillOfMaterials
+  - operations : WorkOrderOperation[]
+  - materialUsage : WorkOrderMaterial[]
+  --
+  {static} @@unique([tenantId, workOrderNumber])
+  {static} @@index([tenantId, status])
+  {static} @@index([productId])
+  }
+  class WorkOrderMaterial {
+  - id : String <<PK>>
+  - workOrderId : String
+  - itemId : String
+  - plannedQty : Float
+  - issuedQty : Float
+  - consumedQty : Float
+  - returnedQty : Float
+  - warehouseId : String?
+  - unitCost : Float?
+  - totalCost : Float?
+  - status : String
+  - issuedBy : String?
+  - issuedAt : DateTime?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - workOrder : WorkOrder
+  --
+  {static} @@index([workOrderId])
+  {static} @@index([itemId])
+  }
+  class WorkOrderOperation {
+  - id : String <<PK>>
+  - workOrderId : String
+  - sequence : Int
+  - operationName : String
+  - description : String?
+  - workCenter : String?
+  - estimatedHours : Float?
+  - actualHours : Float?
+  - assignedTo : String?
+  - laborCost : Float?
+  - status : String
+  - startedAt : DateTime?
+  - completedAt : DateTime?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - workOrder : WorkOrder
+  --
+  {static} @@index([workOrderId])
+  }
+}
+
+' Internal relationships for module: Accounting and Manufacturing
+ChartOfAccounts "1" --> "0..1" ChartOfAccounts : parent {AccountHierarchy}
+ChartOfAccounts "1" --> "*" ChartOfAccounts : children {AccountHierarchy}
+ChartOfAccounts "1" --> "*" JournalEntryLine : journalEntries
+ChartOfAccounts "1" --> "*" LedgerEntry : ledgerEntries
+JournalEntry "1" --> "*" JournalEntryLine : lines
+JournalEntryLine "1" --> "1" JournalEntry : journalEntry
+JournalEntryLine "1" --> "1" ChartOfAccounts : account
+LedgerEntry "1" --> "1" ChartOfAccounts : account
+BillOfMaterials "1" --> "*" BOMItem : items
+BillOfMaterials "1" --> "*" WorkOrder : workOrders
+BOMItem "1" --> "1" BillOfMaterials : bom
+WorkOrder "1" --> "1" BillOfMaterials : bom
+WorkOrder "1" --> "*" WorkOrderOperation : operations
+WorkOrder "1" --> "*" WorkOrderMaterial : materialUsage
+WorkOrderOperation "1" --> "1" WorkOrder : workOrder
+WorkOrderMaterial "1" --> "1" WorkOrder : workOrder
+@enduml

@@ -1,0 +1,142 @@
+﻿@startuml UEORMS_ER_Workflow_and_Governance
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Workflow and Governance
+
+legend left
+  Visibility: - private attributes, + public operations
+  Multiplicity: "1", "0..1", "0..*", "*"
+  PK = Primary Key
+  UQ = Unique
+  Relationship label: field/property role name
+endlegend
+
+
+package "Workflow and Governance" {
+  class Approval {
+  - id : String <<PK>>
+  - workflowId : String
+  - workflowRequestId : String?
+  - workflowStepId : String?
+  - stepOrder : Int
+  - permission : String
+  - data : Json?
+  - tenantId : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - status : String
+  - comment : String?
+  - rejectionReason : String?
+  - createdAt : DateTime
+  - workflow : Workflow
+  - workflowRequest : WorkflowRequest?
+  - workflowStep : WorkflowStep?
+  }
+  class ApprovalMatrix {
+  - id : String <<PK>>
+  - tenantId : String
+  - module : String
+  - conditions : Json
+  - approvers : Json
+  - createdAt : DateTime
+  }
+  class AuditLog {
+  - id : String <<PK>>
+  - userId : String
+  - tenantId : String
+  - action : String
+  - entity : String
+  - entityId : String
+  - meta : Json?
+  - timestamp : DateTime
+  }
+  class CustomField {
+  - id : String <<PK>>
+  - tenantId : String
+  - module : String
+  - fieldName : String
+  - fieldType : String
+  - options : Json?
+  - required : Boolean
+  - createdAt : DateTime
+  }
+  class Notification {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - type : String
+  - title : String
+  - message : String
+  - isRead : Boolean
+  - createdAt : DateTime
+  - employee : Employee
+  }
+  class Workflow {
+  - id : String <<PK>>
+  - tenantId : String
+  - module : String
+  - action : String
+  - status : String
+  - steps : WorkflowStep[]
+  - approvals : Approval[]
+  - createdAt : DateTime
+  }
+  class WorkflowRequest {
+  - id : String <<PK>>
+  - tenantId : String
+  - workflowId : String?
+  - module : String
+  - action : String
+  - payload : Json
+  - status : String
+  - createdBy : String
+  - requestedBy : String?
+  - createdAt : DateTime
+  - approvals : Approval[]
+  }
+  class WorkflowStep {
+  - id : String <<PK>>
+  - workflowId : String
+  - stepOrder : Int
+  - permission : String
+  - workflow : Workflow
+  - approvals : Approval[]
+  }
+  class WorkflowTemplate {
+  - id : String <<PK>>
+  - name : String
+  - description : String
+  - industry : String
+  - module : String
+  - steps : Json
+  - isDefault : Boolean
+  - createdAt : DateTime
+  }
+}
+
+' Internal relationships for module: Workflow and Governance
+Workflow "1" --> "*" WorkflowStep : steps
+Workflow "1" --> "*" Approval : approvals
+WorkflowStep "1" --> "1" Workflow : workflow
+WorkflowStep "1" --> "*" Approval : approvals
+Approval "1" --> "1" Workflow : workflow
+Approval "1" --> "0..1" WorkflowRequest : workflowRequest
+Approval "1" --> "0..1" WorkflowStep : workflowStep
+WorkflowRequest "1" --> "*" Approval : approvals
+@enduml

@@ -1,0 +1,23 @@
+@startuml UEORMS_State_07
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 7) CRM and Sales
+
+[*] --> LeadCreated
+LeadCreated --> LeadQualified : qualify lead
+LeadQualified --> CustomerCreated : convert lead
+CustomerCreated --> OpportunityOpen : create deal
+OpportunityOpen --> QuotationDraft : create quotation
+QuotationDraft --> QuotationSent : send quote
+QuotationSent --> QuotationAccepted : accept quote
+QuotationSent --> QuotationExpired : reject/expire
+QuotationExpired --> QuotationDraft : revise quote
+QuotationAccepted --> SalesOrderOpen : convert to order
+SalesOrderOpen --> InvoiceGenerated : convert to invoice
+InvoiceGenerated --> PaymentPending : await payment
+PaymentPending --> PaymentReceived : payment posted
+PaymentReceived --> OrderFulfilled : dispatch complete
+OrderFulfilled --> AnalyticsUpdated : update analytics
+AnalyticsUpdated --> [*]
+
+@enduml

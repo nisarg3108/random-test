@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:17:56.186Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="NAV-188" name="Employee Self-Service (5)">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="UEORMS Navigation Module: Employee Self-Service (5)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="188" value="Employee Self-Service (5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="189" value="/employee" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="16600" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="190" value="/employee/dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="16960" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="191" value="/employee/leave-request" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="17320" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="192" value="/employee/tasks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="17680" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="193" value="/employee/work-reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="18040" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="10088" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="188" target="189">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10089" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="188" target="190">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10090" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="188" target="191">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10091" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="188" target="192">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10092" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="188" target="193">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

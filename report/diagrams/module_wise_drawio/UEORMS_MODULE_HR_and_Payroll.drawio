@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.916Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-6" name="04. HR and Payroll">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: HR and Payroll" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="44" value="Employee&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- userId : String &lt;&lt;UQ&gt;&gt;&#xA;- departmentId : String&#xA;- managerId : String?&#xA;- employeeCode : String&#xA;- name : String&#xA;- email : String&#xA;- phone : String?&#xA;- designation : String&#xA;- joiningDate : DateTime&#xA;- status : String&#xA;- createdAt : DateTime&#xA;- user : User&#xA;- department : Department&#xA;- manager : Employee?&#xA;- reports : Employee[]&#xA;- expenseClaims : ExpenseClaim[]&#xA;- LeaveRequest : LeaveRequest[]&#xA;- tasks : Task[]&#xA;- assignedTasks : Task[]&#xA;- salaryStructure : SalaryStructure?&#xA;- workReports : WorkReport[]&#xA;- notifications : Notification[]&#xA;- payslips : Payslip[]&#xA;- disbursements : SalaryDisbursement[]&#xA;- attendance : Attendance[]&#xA;- shiftAssignments : ShiftAssignment[]&#xA;- timeTracking : TimeTracking[]&#xA;- overtimeRecords : OvertimeRecord[]&#xA;- attendanceReports : AttendanceReport[]&#xA;- leaveIntegrations : LeaveIntegration[]&#xA;- assetAllocations : AssetAllocation[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="370.08" as="geometry" />
+        </mxCell>
+        <mxCell id="45" value="LeaveType&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- code : String&#xA;- maxDays : Int&#xA;- paid : Boolean&#xA;- requiresApproval : Boolean&#xA;- createdAt : DateTime&#xA;- leaveRequests : LeaveRequest[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="128.16" as="geometry" />
+        </mxCell>
+        <mxCell id="46" value="LeaveRequest&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- leaveTypeId : String&#xA;- startDate : DateTime&#xA;- endDate : DateTime&#xA;- reason : String&#xA;- status : String&#xA;- createdAt : DateTime&#xA;- employee : Employee&#xA;- leaveType : LeaveType&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="49" value="Task&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- assignedBy : String&#xA;- title : String&#xA;- description : String&#xA;- priority : String&#xA;- status : String&#xA;- dueDate : DateTime?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;- assigner : Employee&#xA;- reports : WorkReport[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="462.24" width="187.2" height="178.56" as="geometry" />
+        </mxCell>
+        <mxCell id="50" value="SalaryStructure&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String &lt;&lt;UQ&gt;&gt;&#xA;- basicSalary : Float&#xA;- allowances : Json&#xA;- deductions : Json&#xA;- netSalary : Float&#xA;- effectiveFrom : DateTime&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="401.76" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="51" value="WorkReport&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- taskId : String?&#xA;- title : String&#xA;- description : String&#xA;- workDate : DateTime&#xA;- hoursSpent : Float?&#xA;- attachments : Json?&#xA;- createdAt : DateTime&#xA;- employee : Employee&#xA;- task : Task?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="590.4" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="83" value="Attendance&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- date : DateTime&#xA;- checkIn : DateTime?&#xA;- checkOut : DateTime?&#xA;- status : String&#xA;- workHours : Float&#xA;- overtimeHours : Float&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="168.48" as="geometry" />
+        </mxCell>
+        <mxCell id="84" value="PayrollCycle&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- startDate : DateTime&#xA;- endDate : DateTime&#xA;- paymentDate : DateTime&#xA;- status : String&#xA;- totalGross : Float&#xA;- totalDeductions : Float&#xA;- totalNet : Float&#xA;- processedBy : String?&#xA;- processedAt : DateTime?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- payslips : Payslip[]&#xA;- disbursements : SalaryDisbursement[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="303.84" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="85" value="Payslip&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- payrollCycleId : String&#xA;- payslipNumber : String &lt;&lt;UQ&gt;&gt;&#xA;- basicSalary : Float&#xA;- allowances : Json?&#xA;- bonuses : Float&#xA;- overtime : Float&#xA;- grossSalary : Float&#xA;- taxDeductions : Float&#xA;- providentFund : Float&#xA;- insurance : Float&#xA;- otherDeductions : Json?&#xA;- totalDeductions : Float&#xA;- netSalary : Float&#xA;- workingDays : Int&#xA;- presentDays : Float&#xA;- absentDays : Float&#xA;- leaveDays : Int&#xA;- overtimeHours : Float&#xA;- status : String&#xA;- generatedAt : DateTime&#xA;- approvedBy : String?&#xA;- approvedAt : DateTime?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;- payrollCycle : PayrollCycle&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="434.88" width="187.2" height="339.84" as="geometry" />
+        </mxCell>
+        <mxCell id="86" value="TaxConfiguration&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- taxType : String&#xA;- slabs : Json&#xA;- deductionRules : Json?&#xA;- isActive : Boolean&#xA;- effectiveFrom : DateTime&#xA;- effectiveTo : DateTime?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="401.76" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="87" value="SalaryDisbursement&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- payrollCycleId : String&#xA;- employeeId : String&#xA;- amount : Float&#xA;- paymentMethod : String&#xA;- bankAccount : String?&#xA;- transactionRef : String?&#xA;- status : String&#xA;- paymentDate : DateTime?&#xA;- completedAt : DateTime?&#xA;- failureReason : String?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- payrollCycle : PayrollCycle&#xA;- employee : Employee&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="303.84" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="88" value="SalaryComponent&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- code : String&#xA;- type : String&#xA;- calculationType : String&#xA;- value : Float?&#xA;- formula : String?&#xA;- isTaxable : Boolean&#xA;- isActive : Boolean&#xA;- description : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="263.52" width="187.2" height="168.48" as="geometry" />
+        </mxCell>
+        <mxCell id="89" value="Shift&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- code : String&#xA;- startTime : String&#xA;- endTime : String&#xA;- breakDuration : Int&#xA;- workingDays : String&#xA;- isActive : Boolean&#xA;- description : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- shiftAssignments : ShiftAssignment[]&#xA;- overtimePolicies : OvertimePolicy[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="462.24" width="187.2" height="178.56" as="geometry" />
+        </mxCell>
+        <mxCell id="90" value="ShiftAssignment&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- shiftId : String&#xA;- assignedFrom : DateTime&#xA;- assignedTo : DateTime?&#xA;- status : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;- shift : Shift&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="401.76" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="91" value="TimeTracking&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- date : DateTime&#xA;- checkInTime : DateTime&#xA;- checkOutTime : DateTime?&#xA;- checkInLocation : String?&#xA;- checkOutLocation : String?&#xA;- workHours : Float&#xA;- breakHours : Float&#xA;- status : String&#xA;- isLate : Boolean&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="502.56" width="187.2" height="198.72" as="geometry" />
+        </mxCell>
+        <mxCell id="92" value="OvertimePolicy&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- shiftId : String?&#xA;- name : String&#xA;- code : String&#xA;- dailyThreshold : Float&#xA;- weeklyThreshold : Float&#xA;- monthlyThreshold : Float?&#xA;- overtimeRate : Float&#xA;- weekendRate : Float&#xA;- holidayRate : Float&#xA;- isActive : Boolean&#xA;- description : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- shift : Shift?&#xA;- overtimeRecords : OvertimeRecord[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="303.84" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="93" value="OvertimeRecord&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- overtimePolicyId : String&#xA;- date : DateTime&#xA;- overtimeHours : Float&#xA;- overtimeRate : Float&#xA;- overtimeAmount : Float&#xA;- reason : String?&#xA;- approvalStatus : String&#xA;- approvedBy : String?&#xA;- approvedAt : DateTime?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;- overtimePolicy : OvertimePolicy&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="293.76" width="187.2" height="198.72" as="geometry" />
+        </mxCell>
+        <mxCell id="94" value="AttendanceReport&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- reportDate : DateTime&#xA;- month : Int&#xA;- year : Int&#xA;- totalWorkingDays : Int&#xA;- presentDays : Int&#xA;- absentDays : Int&#xA;- leaveDays : Int&#xA;- halfDays : Int&#xA;- workFromHomeDays : Int&#xA;- totalWorkHours : Float&#xA;- totalOvertimeHours : Float&#xA;- attendancePercentage : Float&#xA;- status : String&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="239.04" as="geometry" />
+        </mxCell>
+        <mxCell id="95" value="LeaveIntegration&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- leaveRequestId : String&#xA;- employeeId : String&#xA;- leaveDate : DateTime&#xA;- status : String&#xA;- attendanceStatus : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- employee : Employee&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="138.24" as="geometry" />
+        </mxCell>
+        <mxCell id="209" value="manager (0..1) {EmployeeManager}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="210" value="reports (*) {EmployeeManager}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="212" value="LeaveRequest (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="46">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="213" value="tasks (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="214" value="assignedTasks (*) {TaskAssigner}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="215" value="salaryStructure (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="50">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="216" value="workReports (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="218" value="payslips (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="85">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="219" value="disbursements (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="87">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="220" value="attendance (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="83">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="221" value="shiftAssignments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="90">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="222" value="timeTracking (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="91">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="223" value="overtimeRecords (*) {EmployeeOvertime}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="93">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="224" value="attendanceReports (*) {EmployeeAttendanceReport}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="94">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="225" value="leaveIntegrations (*) {EmployeeLeaveIntegration}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="44" target="95">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="227" value="leaveRequests (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="45" target="46">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="228" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="46" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="229" value="leaveType (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="46" target="45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="233" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="49" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="234" value="assigner (1) {TaskAssigner}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="49" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="235" value="reports (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="49" target="51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="236" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="50" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="237" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="51" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="238" value="task (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="51" target="49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="328" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="83" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="329" value="payslips (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="84" target="85">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="330" value="disbursements (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="84" target="87">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="331" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="85" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="332" value="payrollCycle (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="85" target="84">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="333" value="payrollCycle (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="87" target="84">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="334" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="87" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="335" value="shiftAssignments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="89" target="90">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="336" value="overtimePolicies (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="89" target="92">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="337" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="90" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="338" value="shift (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="90" target="89">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="339" value="employee (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="91" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="340" value="shift (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="92" target="89">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="341" value="overtimeRecords (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="92" target="93">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="342" value="employee (1) {EmployeeOvertime}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="93" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="343" value="overtimePolicy (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="93" target="92">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="344" value="employee (1) {EmployeeAttendanceReport}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="94" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="345" value="employee (1) {EmployeeLeaveIntegration}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="95" target="44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

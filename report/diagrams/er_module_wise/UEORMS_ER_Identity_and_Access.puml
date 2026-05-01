@@ -1,0 +1,184 @@
+﻿@startuml UEORMS_ER_Identity_and_Access
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Identity and Access
+
+
+
+
+package "Identity and Access" {
+  class Branch {
+  - id : String <<PK>>
+  - tenantId : String
+  - code : String
+  - name : String
+  - type : String
+  - address : String?
+  - city : String?
+  - state : String?
+  - country : String?
+  - postalCode : String?
+  - phone : String?
+  - email : String?
+  - managerId : String?
+  - isActive : Boolean
+  - isMainBranch : Boolean
+  - operatingHours : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - warehouses : Warehouse[]
+  --
+  {static} @@unique([tenantId, code])
+  {static} @@index([tenantId, isActive])
+  }
+  class Department {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - description : String?
+  - location : String?
+  - managerId : String?
+  - budget : Float?
+  - status : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - employees : Employee[]
+  - User : User[]
+  - projects : Project[]
+  }
+  class PasswordReset {
+  - id : String <<PK>>
+  - email : String
+  - otp : String
+  - expiresAt : DateTime
+  - used : Boolean
+  - createdAt : DateTime
+  --
+  {static} @@index([email, otp])
+  }
+  class Permission {
+  - id : String <<PK>>
+  - code : String <<UQ>>
+  - label : String
+  - roles : RolePermission[]
+  }
+  class Role {
+  - id : String <<PK>>
+  - name : String
+  - tenantId : String
+  - permissions : RolePermission[]
+  - users : UserRole[]
+  --
+  {static} @@unique([name, tenantId])
+  }
+  class RolePermission {
+  - roleId : String
+  - permissionId : String
+  - role : Role
+  - permission : Permission
+  --
+  {static} @@id([roleId, permissionId])
+  }
+  class SystemOption {
+  - id : String <<PK>>
+  - category : String
+  - key : String
+  - value : String
+  - label : String?
+  - tenantId : String?
+  - isActive : Boolean
+  - createdAt : DateTime
+  --
+  {static} @@unique([category, key, tenantId], name: 'category_key_tenantId')
+  }
+  class Tenant {
+  - id : String <<PK>>
+  - name : String
+  - createdAt : DateTime
+  - users : User[]
+  - config : CompanyConfig?
+  - subscriptions : Subscription[]
+  - items : Item[]
+  - invites : UserInvite[]
+  - salesQuotations : SalesQuotation[]
+  - salesOrders : SalesOrder[]
+  - salesInvoices : SalesInvoice[]
+  - salesTrackings : SalesOrderTracking[]
+  }
+  class User {
+  - id : String <<PK>>
+  - email : String <<UQ>>
+  - password : String
+  - role : String
+  - status : String
+  - tenantId : String
+  - departmentId : String?
+  - managerId : String?
+  - tenant : Tenant
+  - department : Department?
+  - roles : UserRole[]
+  - employee : Employee?
+  - customersOwned : Customer[]
+  - contactsOwned : Contact[]
+  - leadsOwned : Lead[]
+  - dealsOwned : Deal[]
+  - communicationsCreated : Communication[]
+  - activitiesAssigned : Activity[]
+  - activitiesCreated : Activity[]
+  - customerNotesCreated : CustomerNote[]
+  - attachmentsUploaded : Attachment[]
+  - createdAt : DateTime
+  }
+  class UserInvite {
+  - id : String <<PK>>
+  - email : String
+  - role : String
+  - token : String <<UQ>>
+  - used : Boolean
+  - expiresAt : DateTime
+  - tenantId : String
+  - createdAt : DateTime
+  - tenant : Tenant
+  }
+  class UserRole {
+  - userId : String
+  - roleId : String
+  - user : User
+  - role : Role
+  --
+  {static} @@id([userId, roleId])
+  }
+}
+
+' Internal relationships for module: Identity and Access
+User "1" --> "1" Tenant : tenant
+User "1" --> "0..1" Department : department
+User "1" --> "*" UserRole : roles
+Role "1" --> "*" RolePermission : permissions
+Role "1" --> "*" UserRole : users
+Permission "1" --> "*" RolePermission : roles
+RolePermission "1" --> "1" Role : role
+RolePermission "1" --> "1" Permission : permission
+UserRole "1" --> "1" User : user
+UserRole "1" --> "1" Role : role
+Department "1" --> "*" User : User
+Tenant "1" --> "*" User : users
+Tenant "1" --> "*" UserInvite : invites
+UserInvite "1" --> "1" Tenant : tenant
+@enduml

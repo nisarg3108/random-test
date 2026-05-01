@@ -1,0 +1,26 @@
+@startuml UEORMS_State_13
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 12) Governance and Compliance
+
+[*] --> PolicyDraft
+PolicyDraft --> PolicyApproved : review approved
+PolicyDraft --> PolicyRejected : review rejected
+PolicyRejected --> PolicyDraft : update and resubmit
+
+PolicyApproved --> ControlMapped : map controls to modules
+ControlMapped --> EvidenceCollection : start evidence cycle
+EvidenceCollection --> ComplianceCheck : run compliance checks
+ComplianceCheck --> Compliant : all checks pass
+ComplianceCheck --> NonCompliant : findings detected
+
+NonCompliant --> RemediationPlanned : assign remediation
+RemediationPlanned --> RemediationInProgress : execute remediation
+RemediationInProgress --> RecheckPending : remediation complete
+RecheckPending --> ComplianceCheck : re-run checks
+
+Compliant --> AuditReady : compile audit package
+AuditReady --> AuditClosed : audit accepted
+AuditClosed --> [*]
+
+@enduml

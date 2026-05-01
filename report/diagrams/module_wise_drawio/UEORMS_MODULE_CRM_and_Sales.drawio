@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.917Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-7" name="05. CRM and Sales">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: CRM and Sales" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="SalesQuotation&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- customerId : String?&#xA;- dealId : String?&#xA;- customerName : String&#xA;- customerEmail : String?&#xA;- title : String&#xA;- description : String?&#xA;- items : Json?&#xA;- subtotal : Float&#xA;- tax : Float&#xA;- discount : Float&#xA;- total : Float&#xA;- status : String&#xA;- validUntil : DateTime?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- tenant : Tenant&#xA;- customer : Customer?&#xA;- deal : Deal?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="583.2" width="187.2" height="239.04" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="SalesOrder" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d9d9d9;swimlaneFillColor=#ffffff;strokeColor=#666666;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="643.68" width="187.2" height="201.6" as="geometry" />
+        </mxCell>
+        <mxCell id="36a" value="- id: String&#xA;- tenantId: String&#xA;- customerId: String&#xA;- orderNumber: String&#xA;- orderDate: DateTime&#xA;- expectedDelivery: DateTime&#xA;- subtotal: Float&#xA;- tax: Float&#xA;- total: Float&#xA;- status: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="36">
+          <mxGeometry y="26" width="260" height="144" as="geometry" />
+        </mxCell>
+        <mxCell id="36b" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;" vertex="1" parent="36">
+          <mxGeometry y="170" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="36c" value="+ updateOrderStatus(): void&#xA;+ placeOrder(): void&#xA;+ cancelOrder(): void&#xA;+ calculateTotal(): Float" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="36">
+          <mxGeometry y="178" width="260" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="37" value="SalesInvoice&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- customerId : String?&#xA;- dealId : String?&#xA;- invoiceNumber : String?&#xA;- customerName : String&#xA;- customerEmail : String?&#xA;- orderId : String?&#xA;- issueDate : DateTime&#xA;- dueDate : DateTime?&#xA;- items : Json?&#xA;- subtotal : Float&#xA;- tax : Float&#xA;- discount : Float&#xA;- total : Float&#xA;- amountPaid : Float&#xA;- status : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- tenant : Tenant&#xA;- customer : Customer?&#xA;- deal : Deal?&#xA;- payments : InvoicePayment[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="364.32" width="187.2" height="269.28" as="geometry" />
+        </mxCell>
+        <mxCell id="38" value="InvoicePayment&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- invoiceId : String&#xA;- amount : Float&#xA;- paymentDate : DateTime&#xA;- paymentMethod : String?&#xA;- referenceNumber : String?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- invoice : SalesInvoice&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="243.36" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="SalesOrderTracking&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- salesOrderId : String&#xA;- status : String&#xA;- carrier : String?&#xA;- trackingNumber : String?&#xA;- location : String?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- tenant : Tenant&#xA;- order : SalesOrder&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="421.92" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="53" value="Customer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d9d9d9;swimlaneFillColor=#ffffff;strokeColor=#666666;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="230.4" as="geometry" />
+        </mxCell>
+        <mxCell id="53a" value="- id: String&#xA;- tenantId: String&#xA;- name: String&#xA;- industry: String&#xA;- website: String&#xA;- status: String&#xA;- primaryEmail: String&#xA;- primaryPhone: String&#xA;- billingAddress: Json&#xA;- shippingAddress: Json&#xA;- ownerId: String&#xA;- createdAt: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="53">
+          <mxGeometry y="26" width="260" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="53b" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;" vertex="1" parent="53">
+          <mxGeometry y="200" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="53c" value="+ getContacts(): Contact[]&#xA;+ getDeals(): Deal[]&#xA;+ placeOrder(): void&#xA;+ updateStatus(): void&#xA;+ addNote(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="53">
+          <mxGeometry y="208" width="260" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="54" value="Contact&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- customerId : String&#xA;- name : String&#xA;- email : String?&#xA;- phone : String?&#xA;- title : String?&#xA;- status : String&#xA;- firstName : String?&#xA;- lastName : String?&#xA;- jobTitle : String?&#xA;- department : String?&#xA;- role : String?&#xA;- mobilePhone : String?&#xA;- workPhone : String?&#xA;- linkedinUrl : String?&#xA;- twitterHandle : String?&#xA;- isPrimary : Boolean&#xA;- ownerId : String?&#xA;- preferredChannel : String?&#xA;- lastContactDate : DateTime?&#xA;- birthday : DateTime?&#xA;- anniversary : DateTime?&#xA;- emailOptIn : Boolean&#xA;- smsOptIn : Boolean&#xA;- doNotCall : Boolean&#xA;- tags : String[]&#xA;- customFields : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- customer : Customer&#xA;- communications : Communication[]&#xA;- leads : Lead[]&#xA;- activities : Activity[]&#xA;- owner : User?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="390.24" as="geometry" />
+        </mxCell>
+        <mxCell id="55" value="Lead&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- email : String?&#xA;- phone : String?&#xA;- company : String?&#xA;- source : String?&#xA;- status : String&#xA;- notes : String?&#xA;- customerId : String?&#xA;- contactId : String?&#xA;- firstName : String?&#xA;- lastName : String?&#xA;- jobTitle : String?&#xA;- leadScore : Int&#xA;- rating : String?&#xA;- priority : String?&#xA;- campaign : String?&#xA;- medium : String?&#xA;- referrer : String?&#xA;- budget : Float?&#xA;- timeline : String?&#xA;- authority : String?&#xA;- need : String?&#xA;- ownerId : String?&#xA;- assignedAt : DateTime?&#xA;- convertedAt : DateTime?&#xA;- conversionSource : String?&#xA;- dealId : String?&#xA;- firstContactDate : DateTime?&#xA;- lastContactDate : DateTime?&#xA;- lastActivityDate : DateTime?&#xA;- disqualifiedAt : DateTime?&#xA;- disqualifiedBy : String?&#xA;- disqualifiedReason : String?&#xA;- tags : String[]&#xA;- customFields : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- customer : Customer?&#xA;- contact : Contact?&#xA;- communications : Communication[]&#xA;- activities : Activity[]&#xA;- deal : Deal?&#xA;- owner : User?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="586.08" width="187.2" height="491.04" as="geometry" />
+        </mxCell>
+        <mxCell id="56" value="Deal&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- customerId : String&#xA;- name : String&#xA;- stage : String&#xA;- value : Float&#xA;- expectedCloseDate : DateTime?&#xA;- status : String&#xA;- notes : String?&#xA;- dealNumber : String? &lt;&lt;UQ&gt;&gt;&#xA;- pipelineId : String?&#xA;- stageOrder : Int?&#xA;- probability : Int?&#xA;- amount : Float&#xA;- currencyCode : String?&#xA;- discount : Float?&#xA;- tax : Float?&#xA;- total : Float?&#xA;- products : Json?&#xA;- ownerId : String?&#xA;- teamMembers : String[]&#xA;- createdDate : DateTime&#xA;- closedDate : DateTime?&#xA;- firstContactDate : DateTime?&#xA;- lastActivityDate : DateTime?&#xA;- competitors : String[]&#xA;- wonReason : String?&#xA;- lostReason : String?&#xA;- lostToCompetitor : String?&#xA;- leadId : String?&#xA;- source : String?&#xA;- tags : String[]&#xA;- customFields : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- customer : Customer&#xA;- salesQuotations : SalesQuotation[]&#xA;- salesOrders : SalesOrder[]&#xA;- salesInvoices : SalesInvoice[]&#xA;- communications : Communication[]&#xA;- activities : Activity[]&#xA;- attachments : Attachment[]&#xA;- leadConverted : Lead[]&#xA;- owner : User?&#xA;- pipeline : Pipeline?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="586.08" width="187.2" height="491.04" as="geometry" />
+        </mxCell>
+        <mxCell id="57" value="Communication&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- type : String&#xA;- subject : String?&#xA;- notes : String&#xA;- occurredAt : DateTime&#xA;- createdBy : String?&#xA;- customerId : String?&#xA;- contactId : String?&#xA;- leadId : String?&#xA;- direction : String?&#xA;- duration : Int?&#xA;- outcome : String?&#xA;- emailFrom : String?&#xA;- emailTo : String?&#xA;- emailCc : String?&#xA;- meetingLocation : String?&#xA;- meetingAttendees : String[]&#xA;- dealId : String?&#xA;- activityId : String?&#xA;- hasAttachments : Boolean&#xA;- attachmentCount : Int&#xA;- tags : String[]&#xA;- customFields : Json?&#xA;- createdAt : DateTime&#xA;- customer : Customer?&#xA;- contact : Contact?&#xA;- lead : Lead?&#xA;- deal : Deal?&#xA;- activity : Activity?&#xA;- attachments : Attachment[]&#xA;- creator : User?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="58" value="Pipeline&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- description : String?&#xA;- isDefault : Boolean&#xA;- isActive : Boolean&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- stages : PipelineStage[]&#xA;- deals : Deal[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="233.28" width="187.2" height="138.24" as="geometry" />
+        </mxCell>
+        <mxCell id="59" value="PipelineStage&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- pipelineId : String&#xA;- name : String&#xA;- order : Int&#xA;- probability : Int&#xA;- color : String?&#xA;- isClosedWon : Boolean&#xA;- isClosedLost : Boolean&#xA;- daysInStage : Int?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- pipeline : Pipeline&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="263.52" width="187.2" height="168.48" as="geometry" />
+        </mxCell>
+        <mxCell id="60" value="Activity&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- type : String&#xA;- subject : String&#xA;- description : String?&#xA;- status : String&#xA;- priority : String&#xA;- dueDate : DateTime?&#xA;- dueTime : String?&#xA;- reminderAt : DateTime?&#xA;- completedAt : DateTime?&#xA;- completedBy : String?&#xA;- assignedTo : String?&#xA;- createdBy : String&#xA;- customerId : String?&#xA;- contactId : String?&#xA;- leadId : String?&#xA;- dealId : String?&#xA;- outcome : String?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- customer : Customer?&#xA;- contact : Contact?&#xA;- lead : Lead?&#xA;- deal : Deal?&#xA;- communications : Communication[]&#xA;- assignee : User?&#xA;- creator : User&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="329.76" as="geometry" />
+        </mxCell>
+        <mxCell id="61" value="CustomerNote&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- customerId : String&#xA;- title : String?&#xA;- content : String&#xA;- isPinned : Boolean&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- customer : Customer&#xA;- creator : User&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="62" value="Attachment&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- fileName : String&#xA;- fileSize : Int&#xA;- mimeType : String&#xA;- fileUrl : String&#xA;- customerId : String?&#xA;- dealId : String?&#xA;- communicationId : String?&#xA;- uploadedBy : String&#xA;- createdAt : DateTime&#xA;- customer : Customer?&#xA;- deal : Deal?&#xA;- communication : Communication?&#xA;- uploader : User&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="188.64" as="geometry" />
+        </mxCell>
+        <mxCell id="63" value="Tag&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- color : String?&#xA;- category : String?&#xA;- usageCount : Int&#xA;- createdAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="321.12" width="187.2" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="189" value="customer (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="35" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="190" value="deal (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="35" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="192" value="customer (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="36" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="193" value="deal (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="36" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="194" value="tracking (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="36" target="39">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="196" value="customer (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="37" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="197" value="deal (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="37" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="198" value="payments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="37" target="38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="199" value="invoice (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="38" target="37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="201" value="order (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="39" target="36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="240" value="contacts (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="241" value="deals (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="242" value="communications (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="243" value="leads (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="244" value="activities (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="245" value="customerNotes (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="61">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="246" value="attachments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="62">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="247" value="salesQuotations (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="248" value="salesOrders (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="249" value="salesInvoices (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="53" target="37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="251" value="customer (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="54" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="252" value="communications (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="54" target="57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="253" value="leads (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="54" target="55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="254" value="activities (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="54" target="60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="256" value="customer (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="55" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="257" value="contact (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="55" target="54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="258" value="communications (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="55" target="57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="259" value="activities (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="55" target="60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="260" value="deal (0..1) {LeadDeal}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="55" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="262" value="customer (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="263" value="salesQuotations (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="264" value="salesOrders (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="265" value="salesInvoices (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="266" value="communications (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="267" value="activities (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="268" value="attachments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="62">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="269" value="leadConverted (*) {LeadDeal}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="271" value="pipeline (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="56" target="58">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="272" value="customer (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="57" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="273" value="contact (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="57" target="54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="274" value="lead (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="57" target="55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="275" value="deal (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="57" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="276" value="activity (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="57" target="60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="277" value="attachments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="57" target="62">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="279" value="stages (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="58" target="59">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="280" value="deals (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="58" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="281" value="pipeline (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="59" target="58">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="282" value="customer (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="283" value="contact (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="284" value="lead (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="285" value="deal (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="286" value="communications (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="60" target="57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="289" value="customer (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="61" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="291" value="customer (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="62" target="53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="292" value="deal (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="62" target="56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="293" value="communication (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="62" target="57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.919Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-9" name="07. Projects and Timesheets">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Projects and Timesheets" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="75" value="Project&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- projectCode : String &lt;&lt;UQ&gt;&gt;&#xA;- projectName : String&#xA;- description : String?&#xA;- clientName : String?&#xA;- projectManager : String&#xA;- status : String&#xA;- priority : String&#xA;- type : String?&#xA;- startDate : DateTime?&#xA;- endDate : DateTime?&#xA;- actualStartDate : DateTime?&#xA;- actualEndDate : DateTime?&#xA;- estimatedBudget : Float&#xA;- actualCost : Float&#xA;- progressPercent : Float&#xA;- totalPlannedHours : Float&#xA;- totalActualHours : Float&#xA;- totalResourceCost : Float&#xA;- budgetVariance : Float&#xA;- scheduleVariance : Int&#xA;- utilizationPercent : Float&#xA;- healthScore : String&#xA;- riskLevel : String&#xA;- departmentId : String?&#xA;- teamMembers : Json?&#xA;- documentFolderId : String?&#xA;- financeAccountId : String?&#xA;- customFields : Json?&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- department : Department?&#xA;- members : ProjectMember[]&#xA;- milestones : ProjectMilestone[]&#xA;- resources : ProjectResource[]&#xA;- budgets : ProjectBudget[]&#xA;- timeLogs : ProjectTimeLog[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="450.72" as="geometry" />
+        </mxCell>
+        <mxCell id="76" value="ProjectMember&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- projectId : String&#xA;- employeeId : String&#xA;- userId : String?&#xA;- role : String&#xA;- allocationPercent : Float&#xA;- startDate : DateTime&#xA;- endDate : DateTime?&#xA;- status : String&#xA;- hourlyRate : Float?&#xA;- permissions : Json?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- project : Project&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="198.72" as="geometry" />
+        </mxCell>
+        <mxCell id="77" value="ProjectMilestone&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- projectId : String&#xA;- milestoneName : String&#xA;- description : String?&#xA;- status : String&#xA;- startDate : DateTime?&#xA;- dueDate : DateTime?&#xA;- completedDate : DateTime?&#xA;- progressPercent : Float&#xA;- assignedTo : String?&#xA;- deliverables : Json?&#xA;- isCriticalPath : Boolean&#xA;- isAutoScheduled : Boolean&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- project : Project&#xA;- predecessors : ProjectMilestoneDependency[]&#xA;- successors : ProjectMilestoneDependency[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="259.2" as="geometry" />
+        </mxCell>
+        <mxCell id="78" value="ProjectMilestoneDependency&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- predecessorId : String&#xA;- successorId : String&#xA;- dependencyType : String&#xA;- lagDays : Int&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- predecessor : ProjectMilestone&#xA;- successor : ProjectMilestone&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="138.24" as="geometry" />
+        </mxCell>
+        <mxCell id="79" value="ProjectResource&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- projectId : String&#xA;- resourceType : String&#xA;- resourceName : String&#xA;- employeeId : String?&#xA;- allocationPercent : Float&#xA;- startDate : DateTime?&#xA;- endDate : DateTime?&#xA;- costPerUnit : Float&#xA;- units : Float&#xA;- totalCost : Float&#xA;- plannedHours : Float&#xA;- actualHours : Float&#xA;- availableHours : Float&#xA;- quantity : Float&#xA;- quantityUsed : Float&#xA;- quantityUnit : String&#xA;- status : String&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- project : Project&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="269.28" as="geometry" />
+        </mxCell>
+        <mxCell id="80" value="ProjectBudget&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- projectId : String&#xA;- category : String&#xA;- description : String?&#xA;- plannedAmount : Float&#xA;- actualAmount : Float&#xA;- variance : Float&#xA;- budgetPeriod : String?&#xA;- transactionDate : DateTime&#xA;- notes : String?&#xA;- attachments : Json?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- project : Project&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="198.72" as="geometry" />
+        </mxCell>
+        <mxCell id="81" value="ProjectTimeLog&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- projectId : String&#xA;- employeeId : String&#xA;- timesheetId : String?&#xA;- logDate : DateTime&#xA;- hoursWorked : Float&#xA;- taskDescription : String&#xA;- milestoneId : String?&#xA;- billable : Boolean&#xA;- hourlyRate : Float?&#xA;- totalCost : Float?&#xA;- status : String&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- project : Project&#xA;- timesheet : ProjectTimesheet?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="313.92" width="187.2" height="218.88" as="geometry" />
+        </mxCell>
+        <mxCell id="82" value="ProjectTimesheet&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- employeeId : String&#xA;- weekStartDate : DateTime&#xA;- weekEndDate : DateTime&#xA;- status : String&#xA;- totalHours : Float&#xA;- billableHours : Float&#xA;- submittedAt : DateTime?&#xA;- submittedBy : String?&#xA;- approvedAt : DateTime?&#xA;- approvedBy : String?&#xA;- rejectedAt : DateTime?&#xA;- rejectedBy : String?&#xA;- rejectionReason : String?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- timeLogs : ProjectTimeLog[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="324" width="187.2" height="228.96" as="geometry" />
+        </mxCell>
+        <mxCell id="312" value="members (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="75" target="76">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="313" value="milestones (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="75" target="77">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="314" value="resources (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="75" target="79">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="315" value="budgets (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="75" target="80">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="316" value="timeLogs (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="75" target="81">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="317" value="project (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="76" target="75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="318" value="project (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="77" target="75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="319" value="predecessors (*) {SuccessorDependencies}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="77" target="78">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="320" value="successors (*) {PredecessorDependencies}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="77" target="78">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="321" value="predecessor (1) {PredecessorDependencies}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="78" target="77">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="322" value="successor (1) {SuccessorDependencies}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="78" target="77">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="323" value="project (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="79" target="75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="324" value="project (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="80" target="75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="325" value="project (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="81" target="75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="326" value="timesheet (0..1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="81" target="82">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="327" value="timeLogs (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="82" target="81">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

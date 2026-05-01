@@ -1,0 +1,247 @@
+﻿@startuml UEORMS_ER_Purchase_and_AP
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Purchase and AP
+
+
+
+package "Purchase and AP" {
+  class APBill {
+  - id : String <<PK>>
+  - tenantId : String
+  - billNumber : String <<UQ>>
+  - vendorId : String
+  - purchaseOrderId : String?
+  - billDate : DateTime
+  - dueDate : DateTime
+  - invoiceNumber : String?
+  - invoiceDate : DateTime?
+  - subtotal : Float
+  - taxAmount : Float
+  - discountAmount : Float
+  - shippingCost : Float
+  - totalAmount : Float
+  - paidAmount : Float
+  - balanceAmount : Float
+  - items : Json
+  - status : String
+  - approvalStatus : String
+  - matchedToPO : Boolean
+  - matchedToReceipt : Boolean
+  - threeWayMatched : Boolean
+  - paymentTerms : String?
+  - glPosted : Boolean
+  - glPostDate : DateTime?
+  - glJournalId : String?
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - notes : String?
+  - internalNotes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  - purchaseOrder : PurchaseOrder?
+  }
+  class GoodsReceipt {
+  - id : String <<PK>>
+  - tenantId : String
+  - receiptNumber : String <<UQ>>
+  - purchaseOrderId : String
+  - receivedDate : DateTime
+  - receivedBy : String
+  - items : Json
+  - status : String
+  - qualityStatus : String?
+  - warehouseLocation : String?
+  - notes : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - purchaseOrder : PurchaseOrder
+  }
+  class Payment {
+  - id : String <<PK>>
+  - tenantId : String
+  - paymentNumber : String <<UQ>>
+  - vendorId : String
+  - paymentDate : DateTime
+  - amount : Float
+  - paymentMethod : String
+  - referenceNumber : String?
+  - bankAccount : String?
+  - status : String
+  - clearedDate : DateTime?
+  - allocations : Json
+  - glPosted : Boolean
+  - glPostDate : DateTime?
+  - glJournalId : String?
+  - notes : String?
+  - attachments : Json?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  }
+  class PurchaseOrder {
+  - id : String <<PK>>
+  - tenantId : String
+  - poNumber : String <<UQ>>
+  - requisitionId : String?
+  - vendorId : String
+  - title : String
+  - description : String?
+  - orderDate : DateTime
+  - expectedDeliveryDate : DateTime
+  - actualDeliveryDate : DateTime?
+  - status : String
+  - items : Json
+  - subtotal : Float
+  - taxAmount : Float
+  - discountAmount : Float
+  - shippingCost : Float
+  - totalAmount : Float
+  - paymentTerms : String?
+  - paymentStatus : String
+  - paidAmount : Float
+  - shippingAddress : String?
+  - shippingMethod : String?
+  - trackingNumber : String?
+  - approvalStatus : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - workflowId : String?
+  - notes : String?
+  - attachments : Json?
+  - internalNotes : String?
+  - createdBy : String
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  - requisition : PurchaseRequisition?
+  - receipts : GoodsReceipt[]
+  - bills : APBill[]
+  }
+  class PurchaseRequisition {
+  - id : String <<PK>>
+  - tenantId : String
+  - requisitionNumber : String <<UQ>>
+  - requestedBy : String
+  - departmentId : String?
+  - vendorId : String?
+  - title : String
+  - description : String?
+  - priority : String
+  - requestedDate : DateTime
+  - requiredDate : DateTime
+  - status : String
+  - approvalStatus : String
+  - approvedBy : String?
+  - approvedAt : DateTime?
+  - rejectionReason : String?
+  - items : Json
+  - totalAmount : Float
+  - budgetCode : String?
+  - workflowId : String?
+  - notes : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor?
+  - purchaseOrders : PurchaseOrder[]
+  }
+  class SupplierEvaluation {
+  - id : String <<PK>>
+  - tenantId : String
+  - vendorId : String
+  - evaluatedBy : String
+  - evaluationDate : DateTime
+  - evaluationPeriod : String?
+  - qualityRating : Float
+  - deliveryRating : Float
+  - priceRating : Float
+  - serviceRating : Float
+  - communicationRating : Float
+  - overallRating : Float
+  - onTimeDeliveryRate : Float?
+  - defectRate : Float?
+  - responseTime : String?
+  - strengths : String?
+  - weaknesses : String?
+  - recommendations : String?
+  - status : String
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - vendor : Vendor
+  }
+  class Vendor {
+  - id : String <<PK>>
+  - tenantId : String
+  - vendorCode : String <<UQ>>
+  - name : String
+  - contactPerson : String?
+  - email : String?
+  - phone : String?
+  - address : String?
+  - city : String?
+  - state : String?
+  - country : String?
+  - postalCode : String?
+  - website : String?
+  - taxId : String?
+  - paymentTerms : String?
+  - creditLimit : Float?
+  - currency : String
+  - status : String
+  - category : String?
+  - bankName : String?
+  - accountNumber : String?
+  - swiftCode : String?
+  - rating : Float?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - purchaseRequisitions : PurchaseRequisition[]
+  - purchaseOrders : PurchaseOrder[]
+  - evaluations : SupplierEvaluation[]
+  - bills : APBill[]
+  - payments : Payment[]
+  }
+}
+
+' Internal relationships for module: Purchase and AP
+Vendor "1" --> "*" PurchaseRequisition : purchaseRequisitions
+Vendor "1" --> "*" PurchaseOrder : purchaseOrders
+Vendor "1" --> "*" SupplierEvaluation : evaluations
+Vendor "1" --> "*" APBill : bills {VendorBills}
+Vendor "1" --> "*" Payment : payments {VendorPayments}
+PurchaseRequisition "1" --> "0..1" Vendor : vendor
+PurchaseRequisition "1" --> "*" PurchaseOrder : purchaseOrders
+PurchaseOrder "1" --> "1" Vendor : vendor
+PurchaseOrder "1" --> "0..1" PurchaseRequisition : requisition
+PurchaseOrder "1" --> "*" GoodsReceipt : receipts
+PurchaseOrder "1" --> "*" APBill : bills {POBills}
+GoodsReceipt "1" --> "1" PurchaseOrder : purchaseOrder
+SupplierEvaluation "1" --> "1" Vendor : vendor
+APBill "1" --> "1" Vendor : vendor {VendorBills}
+APBill "1" --> "0..1" PurchaseOrder : purchaseOrder {POBills}
+Payment "1" --> "1" Vendor : vendor {VendorPayments}
+@enduml

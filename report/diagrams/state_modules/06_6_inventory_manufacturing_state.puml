@@ -1,0 +1,23 @@
+@startuml UEORMS_State_06
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 6) Inventory and Manufacturing
+
+[*] --> ItemDefined
+ItemDefined --> WarehouseMapped : assign warehouse
+WarehouseMapped --> StockAvailable : stock posted
+StockAvailable --> TransferRequested : request transfer
+TransferRequested --> TransferApproved : approve transfer
+TransferRequested --> TransferCancelled : cancel transfer
+TransferApproved --> StockInTransit : dispatch transfer
+StockInTransit --> StockAvailable : receipt confirmed
+StockAvailable --> BOMDraft : create BOM
+BOMDraft --> BOMReleased : release BOM
+BOMReleased --> WorkOrderCreated : create work order
+WorkOrderCreated --> OperationsPlanned : define operations
+OperationsPlanned --> MaterialsIssued : issue materials
+MaterialsIssued --> ProductionCompleted : consume and complete
+ProductionCompleted --> InventoryStatsUpdated : update KPIs
+InventoryStatsUpdated --> [*]
+
+@enduml

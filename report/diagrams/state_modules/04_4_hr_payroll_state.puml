@@ -1,0 +1,30 @@
+@startuml UEORMS_State_04
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 4) HR and Payroll
+
+[*] --> EmployeeDraft
+EmployeeDraft --> EmployeeActive : onboard employee
+EmployeeActive --> LeaveRequested : submit leave
+LeaveRequested --> LeaveApproved : approve leave
+LeaveRequested --> LeaveRejected : reject leave
+LeaveRejected --> LeaveRequested : resubmit
+EmployeeActive --> ShiftAssigned : assign shift
+ShiftAssigned --> ClockedIn : clock in
+ClockedIn --> ClockedOut : clock out
+ClockedOut --> AttendanceComputed : compute attendance
+AttendanceComputed --> OvertimePending : overtime detected
+OvertimePending --> OvertimeApproved : approve overtime
+OvertimePending --> OvertimeRejected : reject overtime
+AttendanceComputed --> PayrollReady : normal payroll path
+OvertimeApproved --> PayrollReady : approved overtime path
+PayrollReady --> PayrollCalculated : run payroll cycle
+PayrollCalculated --> PayslipGenerated : generate payslips
+PayslipGenerated --> PayslipApproved : approve payslips
+PayslipApproved --> DisbursementPrepared : prepare batch
+DisbursementPrepared --> PaymentFileGenerated : generate file
+PaymentFileGenerated --> Disbursed : bank processed
+Disbursed --> Reconciled : reconcile payments
+Reconciled --> [*]
+
+@enduml

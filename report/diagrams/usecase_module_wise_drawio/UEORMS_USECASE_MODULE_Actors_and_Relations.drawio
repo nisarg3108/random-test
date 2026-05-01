@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T06:38:25.277Z" agent="GPT-5.3-Codex" version="24.7.17" type="device">
+  <diagram id="actors" name="12 Actors and Relations">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Actors and Key include/extend Relations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef4ff;strokeColor=#6c8ebf;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="40" width="1720" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="Internal Actors:&lt;br&gt;Guest, Authenticated User, Tenant Admin, Manager, HR Manager, HR Staff, Employee, Finance Manager, Accountant, Inventory Manager, Warehouse Staff, Sales Manager, Sales Staff, Purchase Manager, Project Manager" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="140" width="840" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="External Actors:&lt;br&gt;Auditor, Payment Gateway (Stripe/Razorpay), Email Service, Banking System, Integration Worker, Realtime Gateway" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#ffffff;strokeColor=#2f4f6f;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="980" y="140" width="840" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="Include examples:&lt;br&gt;UC02 includes UC15&lt;br&gt;UC08 includes UC06&lt;br&gt;UC88 includes UC89&lt;br&gt;UC109 includes UC110&lt;br&gt;&lt;br&gt;Extend examples:&lt;br&gt;UC45 extends UC46 and UC47&lt;br&gt;UC80 extends UC81 and UC82&lt;br&gt;UC114 extends UC116 and UC117&lt;br&gt;UC118 extends UC120" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;fillColor=#fff8e1;strokeColor=#d6b656;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="100" y="420" width="1720" height="270" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

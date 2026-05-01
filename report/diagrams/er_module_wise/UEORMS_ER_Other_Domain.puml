@@ -1,0 +1,54 @@
+﻿@startuml UEORMS_ER_Other_Domain
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Other Domain
+
+
+
+package "Other Domain" {
+  class ExpenseCategory {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - active : Boolean
+  - createdAt : DateTime
+  - expenseClaims : ExpenseClaim[]
+  }
+  class ExpenseClaim {
+  - id : String <<PK>>
+  - tenantId : String
+  - employeeId : String
+  - categoryId : String
+  - title : String
+  - amount : Float
+  - description : String?
+  - receiptUrl : String?
+  - expenseDate : DateTime
+  - status : String
+  - createdAt : DateTime
+  - employee : Employee
+  - category : ExpenseCategory
+  }
+}
+
+' Internal relationships for module: Other Domain
+ExpenseCategory "1" --> "*" ExpenseClaim : expenseClaims
+ExpenseClaim "1" --> "1" ExpenseCategory : category
+@enduml

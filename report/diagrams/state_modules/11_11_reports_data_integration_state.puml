@@ -1,0 +1,23 @@
+@startuml UEORMS_State_11
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 11) Reports, Data Utilities, and Integration
+
+[*] --> ReportRequestDraft
+ReportRequestDraft --> ReportGenerated : generate report
+ReportGenerated --> ReportSaved : save report
+ReportSaved --> ReportExported : export report
+ReportSaved --> ReportScheduled : schedule report
+ReportExported --> DataImportPending : optional import
+ReportScheduled --> DataImportPending : optional import
+DataImportPending --> DataImported : import complete
+DataImported --> DataExported : export operational data
+DataExported --> SyncRequested : cross-module sync
+SyncRequested --> SyncRunning : integration worker running
+SyncRunning --> SyncSucceeded : sync success
+SyncRunning --> SyncFailed : sync failure
+SyncFailed --> SyncRequested : retry
+SyncSucceeded --> IntegrationMonitored : monitor status/config
+IntegrationMonitored --> [*]
+
+@enduml

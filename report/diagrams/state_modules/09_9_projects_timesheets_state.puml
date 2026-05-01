@@ -1,0 +1,18 @@
+@startuml UEORMS_State_09
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 9) Projects and Timesheets
+
+[*] --> ProjectPlanned
+ProjectPlanned --> ProjectActive : approve baseline
+ProjectActive --> MembersAssigned : assign resources
+MembersAssigned --> TimesheetDraft : log time
+TimesheetDraft --> TimesheetSubmitted : submit timesheet
+TimesheetSubmitted --> TimesheetApproved : approve timesheet
+TimesheetSubmitted --> TimesheetRejected : reject timesheet
+TimesheetRejected --> TimesheetDraft : fix and resubmit
+TimesheetApproved --> ProgressUpdated : update milestones/budgets
+ProgressUpdated --> ProjectDashboardUpdated : refresh dashboard
+ProjectDashboardUpdated --> [*]
+
+@enduml

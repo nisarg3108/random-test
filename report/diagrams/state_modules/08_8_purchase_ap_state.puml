@@ -1,0 +1,28 @@
+@startuml UEORMS_State_08
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 8) Purchase and Accounts Payable
+
+[*] --> VendorActive
+VendorActive --> RequisitionDraft : create requisition
+RequisitionDraft --> RequisitionSubmitted : submit requisition
+RequisitionSubmitted --> RequisitionApproved : approve requisition
+RequisitionSubmitted --> RequisitionRejected : reject requisition
+RequisitionRejected --> RequisitionDraft : revise requisition
+RequisitionApproved --> PODraft : convert to PO
+PODraft --> POSubmitted : submit PO
+POSubmitted --> POApproved : approve PO
+POSubmitted --> PORejected : reject PO
+PORejected --> PODraft : revise PO
+POApproved --> GoodsReceiptPosted : goods receipt
+GoodsReceiptPosted --> BillDraft : create AP bill
+BillDraft --> ThreeWayMatched : perform 3-way match
+ThreeWayMatched --> BillApproved : approve bill
+ThreeWayMatched --> BillRejected : reject bill
+BillRejected --> BillDraft : correct and resubmit
+BillApproved --> PaymentScheduled : schedule payment
+PaymentScheduled --> PaymentProcessed : execute payment
+PaymentProcessed --> VendorStatementUpdated : update aging/statement
+VendorStatementUpdated --> [*]
+
+@enduml

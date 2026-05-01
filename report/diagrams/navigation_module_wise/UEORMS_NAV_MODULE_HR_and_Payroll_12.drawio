@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:17:56.163Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="NAV-175" name="HR and Payroll (12)">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="UEORMS Navigation Module: HR and Payroll (12)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="175" value="HR and Payroll (12)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="176" value="/hr" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="12640" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="177" value="/hr/approvals" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="13000" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="178" value="/hr/attendance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="13360" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="179" value="/hr/employees" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="13720" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="180" value="/hr/leave-requests" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="14080" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="181" value="/hr/leave-types" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="14440" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="182" value="/hr/payroll" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="14800" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="183" value="/hr/payroll/cycles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="15160" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="184" value="/hr/payroll/cycles/:id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="15520" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="185" value="/hr/payroll/disbursements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="15880" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="186" value="/hr/payroll/payslips/:id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="16240" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="187" value="/hr/salary-management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="16600" y="162" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="10075" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="176">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10076" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="177">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10077" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="178">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10078" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="179">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10079" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="180">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10080" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="181">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10081" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="182">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10082" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="183">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10083" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="184">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10084" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="185">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10085" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="186">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10086" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=none;strokeColor=#999999;html=1;" edge="1" parent="1" source="175" target="187">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,25 @@
+@startuml UEORMS_State_12_Single
+top to bottom direction
+hide empty description
+title UEORMS State Transition - Module 12
+
+[*] --> Startup
+Startup --> Healthy : checks pass
+Startup --> Degraded : checks fail
+
+Healthy --> AccessCheck : request arrives
+AccessCheck --> Processed : pass auth/rbac/limit
+AccessCheck --> SecurityEvent : denied or throttled
+
+Processed --> Healthy : normal metrics
+Processed --> Degraded : incident detected
+
+Degraded --> Recovering : auto recovery
+Recovering --> Healthy : recovered
+Recovering --> ManualFix : auto recovery failed
+ManualFix --> Healthy : operator fixed
+
+SecurityEvent --> Healthy : event logged
+Healthy --> [*] : maintenance shutdown
+
+@enduml

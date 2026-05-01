@@ -403,7 +403,7 @@ UC80 .> UC21 : <<include>>
 UC88 .> UC21 : <<include>>
 UC97 .> UC21 : <<include>>
 UC23 .> UC22 : <<include>>
-UC24 .> UC22 : <<include>>        
+UC24 .> UC22 : <<include>>
 UC43 .> UC44 : <<include>>
 UC43 .> UC45 : <<include>>
 UC45 .> UC46 : <<extend>>

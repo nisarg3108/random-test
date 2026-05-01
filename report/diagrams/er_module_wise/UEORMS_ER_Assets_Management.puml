@@ -1,0 +1,154 @@
+﻿@startuml UEORMS_ER_Assets_Management
+left to right direction
+hide circle
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FFFFFF
+  HeaderBackgroundColor #D9D9D9
+  BorderColor #666666
+  FontColor #111111
+  AttributeFontColor #111111
+  StereotypeFontColor #333333
+}
+
+title UEORMS ER Diagram - Assets Management
+
+
+
+
+package "Assets Management" {
+  class Asset {
+  - id : String <<PK>>
+  - tenantId : String
+  - categoryId : String
+  - assetCode : String
+  - name : String
+  - description : String?
+  - purchaseDate : DateTime
+  - purchasePrice : Float
+  - vendor : String?
+  - invoiceNumber : String?
+  - serialNumber : String?
+  - model : String?
+  - manufacturer : String?
+  - location : String?
+  - status : String
+  - condition : String
+  - depreciationMethod : String?
+  - depreciationRate : Float?
+  - usefulLife : Int?
+  - salvageValue : Float?
+  - totalExpectedUnits : Int?
+  - unitsProducedToDate : Int?
+  - currentValue : Float?
+  - accumulatedDepreciation : Float?
+  - warrantyExpiry : DateTime?
+  - insuranceExpiry : DateTime?
+  - insuranceProvider : String?
+  - insurancePolicyNo : String?
+  - notes : String?
+  - tags : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - category : AssetCategory
+  - allocations : AssetAllocation[]
+  - maintenanceSchedules : AssetMaintenance[]
+  - depreciationRecords : AssetDepreciation[]
+  --
+  {static} @@unique([tenantId, assetCode])
+  }
+  class AssetAllocation {
+  - id : String <<PK>>
+  - tenantId : String
+  - assetId : String
+  - employeeId : String
+  - allocatedDate : DateTime
+  - returnDate : DateTime?
+  - expectedReturnDate : DateTime?
+  - status : String
+  - purpose : String?
+  - allocatedBy : String?
+  - location : String?
+  - returnCondition : String?
+  - returnNotes : String?
+  - notes : String?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - asset : Asset
+  - employee : Employee
+  }
+  class AssetCategory {
+  - id : String <<PK>>
+  - tenantId : String
+  - name : String
+  - code : String
+  - description : String?
+  - defaultDepreciationMethod : String?
+  - defaultDepreciationRate : Float?
+  - defaultUsefulLife : Int?
+  - isActive : Boolean
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - assets : Asset[]
+  --
+  {static} @@unique([tenantId, code])
+  }
+  class AssetDepreciation {
+  - id : String <<PK>>
+  - tenantId : String
+  - assetId : String
+  - period : DateTime
+  - year : Int
+  - month : Int
+  - openingValue : Float
+  - depreciationAmount : Float
+  - closingValue : Float
+  - accumulatedDepreciation : Float
+  - method : String
+  - rate : Float
+  - unitsProduced : Int?
+  - notes : String?
+  - createdAt : DateTime
+  - asset : Asset
+  --
+  {static} @@unique([tenantId, assetId, year, month])
+  }
+  class AssetMaintenance {
+  - id : String <<PK>>
+  - tenantId : String
+  - assetId : String
+  - maintenanceType : String
+  - scheduledDate : DateTime
+  - completedDate : DateTime?
+  - status : String
+  - statusBeforeMaintenance : String?
+  - description : String
+  - performedBy : String?
+  - cost : Float?
+  - conditionBefore : String?
+  - conditionAfter : String?
+  - nextMaintenanceDate : DateTime?
+  - notes : String?
+  - attachments : Json?
+  - createdAt : DateTime
+  - updatedAt : DateTime
+  - asset : Asset
+  }
+}
+
+' Internal relationships for module: Assets Management
+AssetCategory "1" --> "*" Asset : assets
+Asset "1" --> "1" AssetCategory : category
+Asset "1" --> "*" AssetAllocation : allocations
+Asset "1" --> "*" AssetMaintenance : maintenanceSchedules
+Asset "1" --> "*" AssetDepreciation : depreciationRecords
+AssetAllocation "1" --> "1" Asset : asset
+AssetMaintenance "1" --> "1" Asset : asset
+AssetDepreciation "1" --> "1" Asset : asset
+@enduml

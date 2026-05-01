@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.913Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-4" name="02. Billing and Subscription">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Billing and Subscription" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="CompanyConfig&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String &lt;&lt;UQ&gt;&gt;&#xA;- companyName : String&#xA;- industry : String&#xA;- size : String&#xA;- country : String?&#xA;- currency : String?&#xA;- timezone : String?&#xA;- fiscalYear : String?&#xA;- workflowConfig : Json?&#xA;- enabledModules : Json?&#xA;- approvalLevels : Json?&#xA;- customFields : Json?&#xA;- businessRules : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- tenant : Tenant&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="Plan&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- name : String &lt;&lt;UQ&gt;&gt;&#xA;- description : String?&#xA;- billingCycle : String&#xA;- currency : String&#xA;- basePrice : Float&#xA;- seatPrice : Float&#xA;- isActive : Boolean&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- modules : PlanModule[]&#xA;- subscriptions : Subscription[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="158.4" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="PlanModule&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- planId : String&#xA;- moduleKey : String&#xA;- price : Float&#xA;- included : Boolean&#xA;- createdAt : DateTime&#xA;- plan : Plan&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="Subscription&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- planId : String&#xA;- status : String&#xA;- startAt : DateTime&#xA;- currentPeriodStart : DateTime&#xA;- currentPeriodEnd : DateTime&#xA;- cancelAt : DateTime?&#xA;- canceledAt : DateTime?&#xA;- trialEndsAt : DateTime?&#xA;- provider : String?&#xA;- providerSubscriptionId : String?&#xA;- providerCustomerId : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- tenant : Tenant&#xA;- plan : Plan&#xA;- items : SubscriptionItem[]&#xA;- payments : SubscriptionPayment[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="228.96" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="SubscriptionItem&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- subscriptionId : String&#xA;- moduleKey : String&#xA;- quantity : Int&#xA;- unitPrice : Float&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- subscription : Subscription&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="213.12" width="187.2" height="118.08" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="SubscriptionPayment&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- subscriptionId : String&#xA;- tenantId : String&#xA;- amount : Float&#xA;- currency : String&#xA;- status : String&#xA;- paymentMethodId : String?&#xA;- providerPaymentId : String?&#xA;- invoiceNumber : String?&#xA;- description : String?&#xA;- scheduledFor : DateTime?&#xA;- attemptedAt : DateTime?&#xA;- succeededAt : DateTime?&#xA;- failedAt : DateTime?&#xA;- refundedAt : DateTime?&#xA;- failureCode : String?&#xA;- failureMessage : String?&#xA;- metadata : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- subscription : Subscription&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="344.16" width="187.2" height="249.12" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="BillingEvent&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String?&#xA;- subscriptionId : String?&#xA;- eventType : String&#xA;- provider : String&#xA;- providerEventId : String &lt;&lt;UQ&gt;&gt;&#xA;- status : String&#xA;- payload : Json&#xA;- processedAt : DateTime?&#xA;- errorMessage : String?&#xA;- createdAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="148.32" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="PendingRegistration&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- email : String&#xA;- passwordHash : String&#xA;- companyName : String&#xA;- planId : String?&#xA;- customModules : Json?&#xA;- billingCycle : String?&#xA;- provider : String&#xA;- amount : Float&#xA;- currency : String&#xA;- status : String&#xA;- tenantId : String?&#xA;- createdAt : DateTime&#xA;- completedAt : DateTime?&#xA;- expiresAt : DateTime?&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="188.64" as="geometry" />
+        </mxCell>
+        <mxCell id="142" value="modules (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="17" target="18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="143" value="subscriptions (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="17" target="19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="144" value="plan (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="18" target="17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="146" value="plan (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="19" target="17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="147" value="items (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="19" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="148" value="payments (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="19" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="149" value="subscription (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="20" target="19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="150" value="subscription (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="21" target="19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,75 @@
+@startmindmap UEORMS_Navigation_Part_2A
+title UEORMS Navigation Chart - Part 2A: Routed Pages (Core to CRM)
+
+skinparam monochrome false
+skinparam defaultFontName Courier
+
+* UEORMS Navigation Chart
+** Routed Page Inventory (111 Total)
+*** Core Access (3)
+**** /dashboard
+**** /invite
+**** /users
+*** Inventory and Warehouse (9)
+**** /inventory
+**** /inventory/approvals
+**** /inventory-dashboard
+**** /stock-movements
+**** /warehouse
+**** /warehouse/dispatch
+**** /warehouse/receipts
+**** /warehouses
+**** /warehouses/dashboard
+*** Manufacturing (2)
+**** /manufacturing/boms
+**** /manufacturing/work-orders
+*** HR and Payroll (12)
+**** /hr
+**** /hr/approvals
+**** /hr/attendance
+**** /hr/employees
+**** /hr/leave-requests
+**** /hr/leave-types
+**** /hr/payroll
+**** /hr/payroll/cycles
+**** /hr/payroll/cycles/:id
+**** /hr/payroll/disbursements
+**** /hr/payroll/payslips/:id
+**** /hr/salary-management
+*** Employee Self-Service (5)
+**** /employee
+**** /employee/dashboard
+**** /employee/leave-request
+**** /employee/tasks
+**** /employee/work-reports
+*** Finance and Accounting (13)
+**** /accounting/chart-of-accounts
+**** /accounting/charts
+**** /accounting/general-ledger
+**** /accounting/journal
+**** /accounting/journal-entry
+**** /accounting/ledger
+**** /accounting/reports
+**** /finance
+**** /finance/approvals
+**** /finance/expense-categories
+**** /finance/expense-claims
+**** /subscription/billing
+**** /subscription/pricing
+*** CRM and Sales (14)
+**** /crm
+**** /crm/communications
+**** /crm/contacts
+**** /crm/customers
+**** /crm/customers/:id
+**** /crm/deals/:id
+**** /crm/leads
+**** /crm/leads/:id
+**** /crm/pipeline
+**** /sales/analytics
+**** /sales/invoices
+**** /sales/orders
+**** /sales/quotations
+**** /sales/tracking
+
+@endmindmap

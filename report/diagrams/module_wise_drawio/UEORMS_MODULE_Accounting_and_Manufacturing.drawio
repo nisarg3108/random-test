@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-26T05:15:00.922Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="MOD-14" name="12. Accounting and Manufacturing">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1716" pageHeight="1404" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Module: Accounting and Manufacturing" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="14.4" y="14.4" width="864" height="28.8" as="geometry" />
+        </mxCell>
+        <mxCell id="130" value="ChartOfAccounts&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- accountCode : String&#xA;- accountName : String&#xA;- accountType : String&#xA;- category : String?&#xA;- parentId : String?&#xA;- description : String?&#xA;- isActive : Boolean&#xA;- isSystem : Boolean&#xA;- normalBalance : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- parent : ChartOfAccounts?&#xA;- children : ChartOfAccounts[]&#xA;- journalEntries : JournalEntryLine[]&#xA;- ledgerEntries : LedgerEntry[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="84.96" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="131" value="JournalEntry&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- entryNumber : String&#xA;- entryDate : DateTime&#xA;- postingDate : DateTime?&#xA;- type : String&#xA;- description : String&#xA;- referenceType : String?&#xA;- referenceId : String?&#xA;- status : String&#xA;- totalDebit : Float&#xA;- totalCredit : Float&#xA;- createdBy : String&#xA;- approvedBy : String?&#xA;- approvedAt : DateTime?&#xA;- postedBy : String?&#xA;- postedAt : DateTime?&#xA;- reversedBy : String?&#xA;- reversedAt : DateTime?&#xA;- reversingEntryId : String?&#xA;- attachments : Json?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- lines : JournalEntryLine[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="84.96" width="187.2" height="279.36" as="geometry" />
+        </mxCell>
+        <mxCell id="132" value="JournalEntryLine&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- journalEntryId : String&#xA;- accountId : String&#xA;- lineNumber : Int&#xA;- description : String?&#xA;- debit : Float&#xA;- credit : Float&#xA;- departmentId : String?&#xA;- projectId : String?&#xA;- costCenter : String?&#xA;- createdAt : DateTime&#xA;- journalEntry : JournalEntry&#xA;- account : ChartOfAccounts&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1032.48" y="84.96" width="187.2" height="168.48" as="geometry" />
+        </mxCell>
+        <mxCell id="133" value="LedgerEntry&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- accountId : String&#xA;- date : DateTime&#xA;- description : String&#xA;- debit : Float&#xA;- credit : Float&#xA;- balance : Float&#xA;- referenceType : String?&#xA;- referenceId : String?&#xA;- journalEntryId : String?&#xA;- createdAt : DateTime&#xA;- account : ChartOfAccounts&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="263.52" width="187.2" height="168.48" as="geometry" />
+        </mxCell>
+        <mxCell id="134" value="FiscalYear&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- name : String&#xA;- startDate : DateTime&#xA;- endDate : DateTime&#xA;- isClosed : Boolean&#xA;- closedBy : String?&#xA;- closedAt : DateTime?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="84.96" width="187.2" height="138.24" as="geometry" />
+        </mxCell>
+        <mxCell id="135" value="BillOfMaterials&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- bomNumber : String&#xA;- productId : String&#xA;- version : String&#xA;- name : String&#xA;- description : String?&#xA;- quantity : Float&#xA;- unit : String?&#xA;- materialCost : Float?&#xA;- laborCost : Float?&#xA;- overheadCost : Float?&#xA;- totalCost : Float?&#xA;- status : String&#xA;- isActive : Boolean&#xA;- isDefault : Boolean&#xA;- effectiveFrom : DateTime?&#xA;- effectiveTo : DateTime?&#xA;- createdBy : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- items : BOMItem[]&#xA;- workOrders : WorkOrder[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="38.88" y="84.96" width="187.2" height="269.28" as="geometry" />
+        </mxCell>
+        <mxCell id="136" value="BOMItem&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- bomId : String&#xA;- itemId : String&#xA;- sequence : Int&#xA;- quantity : Float&#xA;- unit : String?&#xA;- warehouseId : String?&#xA;- unitCost : Float?&#xA;- totalCost : Float?&#xA;- alternativeItems : Json?&#xA;- scrapPercentage : Float?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- bom : BillOfMaterials&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="84.96" width="187.2" height="178.56" as="geometry" />
+        </mxCell>
+        <mxCell id="137" value="WorkOrder&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- workOrderNumber : String&#xA;- bomId : String&#xA;- productId : String&#xA;- plannedQty : Float&#xA;- producedQty : Float&#xA;- scrappedQty : Float&#xA;- scheduledStart : DateTime?&#xA;- scheduledEnd : DateTime?&#xA;- actualStart : DateTime?&#xA;- actualEnd : DateTime?&#xA;- warehouseId : String?&#xA;- workCenter : String?&#xA;- status : String&#xA;- priority : String&#xA;- estimatedCost : Float?&#xA;- actualCost : Float?&#xA;- salesOrderId : String?&#xA;- projectId : String?&#xA;- assignedTo : String?&#xA;- notes : String?&#xA;- createdBy : String&#xA;- completedBy : String?&#xA;- completedAt : DateTime?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- bom : BillOfMaterials&#xA;- operations : WorkOrderOperation[]&#xA;- materialUsage : WorkOrderMaterial[]&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="436.32" y="434.88" width="187.2" height="339.84" as="geometry" />
+        </mxCell>
+        <mxCell id="138" value="WorkOrderOperation&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- workOrderId : String&#xA;- sequence : Int&#xA;- operationName : String&#xA;- description : String?&#xA;- workCenter : String?&#xA;- estimatedHours : Float?&#xA;- actualHours : Float?&#xA;- assignedTo : String?&#xA;- laborCost : Float?&#xA;- status : String&#xA;- startedAt : DateTime?&#xA;- completedAt : DateTime?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- workOrder : WorkOrder&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="833.76" y="303.84" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="139" value="WorkOrderMaterial&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- workOrderId : String&#xA;- itemId : String&#xA;- plannedQty : Float&#xA;- issuedQty : Float&#xA;- consumedQty : Float&#xA;- returnedQty : Float&#xA;- warehouseId : String?&#xA;- unitCost : Float?&#xA;- totalCost : Float?&#xA;- status : String&#xA;- issuedBy : String?&#xA;- issuedAt : DateTime?&#xA;- notes : String?&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;- workOrder : WorkOrder&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="635.04" y="303.84" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="140" value="ProductionBatch&#xA;--------------------------------------------------&#xA;- id : String &lt;&lt;PK&gt;&gt;&#xA;- tenantId : String&#xA;- workOrderId : String&#xA;- batchNumber : String&#xA;- productId : String&#xA;- quantity : Float&#xA;- unit : String?&#xA;- manufacturingDate : DateTime&#xA;- expiryDate : DateTime?&#xA;- qualityStatus : String&#xA;- qcBy : String?&#xA;- qcAt : DateTime?&#xA;- qcNotes : String?&#xA;- warehouseId : String?&#xA;- status : String&#xA;- createdAt : DateTime&#xA;- updatedAt : DateTime&#xA;--------------------------------------------------&#xA;+ create(): void&#xA;+ update(): void&#xA;+ delete(): void" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=4;fontSize=8;strokeColor=#666666;fillColor=#ffffff;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="237.6" y="303.84" width="187.2" height="208.8" as="geometry" />
+        </mxCell>
+        <mxCell id="397" value="parent (0..1) {AccountHierarchy}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="130" target="130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="398" value="children (*) {AccountHierarchy}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="130" target="130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="399" value="journalEntries (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="130" target="132">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="400" value="ledgerEntries (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="130" target="133">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="401" value="lines (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="131" target="132">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="402" value="journalEntry (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="132" target="131">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="403" value="account (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="132" target="130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="404" value="account (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="133" target="130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="405" value="items (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="135" target="136">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="406" value="workOrders (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="135" target="137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="407" value="bom (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="136" target="135">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="408" value="bom (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="137" target="135">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="409" value="operations (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="137" target="138">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="410" value="materialUsage (*)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="137" target="139">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="411" value="workOrder (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="138" target="137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="412" value="workOrder (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=open;endFill=0;strokeColor=#666666;html=1;fontSize=8;strokeWidth=1;" edge="1" parent="1" source="139" target="137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

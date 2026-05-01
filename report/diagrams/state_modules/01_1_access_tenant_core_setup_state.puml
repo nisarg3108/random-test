@@ -1,0 +1,25 @@
+@startuml UEORMS_State_01
+top to bottom direction
+hide empty description
+title UEORMS State Transition - 1) Access, Tenant, and Core Setup
+
+[*] --> Guest
+Guest --> Registered : register account
+Guest --> RegisteredWithCheckout : register + checkout
+Registered --> EmailVerified : verify email/otp
+RegisteredWithCheckout --> EmailVerified : payment success
+EmailVerified --> Authenticated : login
+Authenticated --> PasswordResetPending : forgot password
+PasswordResetPending --> Authenticated : otp verified + reset
+Authenticated --> InvitePending : invite user
+InvitePending --> ActiveUser : accept invite
+ActiveUser --> RoleAssigned : assign role/permissions
+RoleAssigned --> DepartmentAssigned : assign department
+DepartmentAssigned --> BranchAssigned : assign branch
+BranchAssigned --> CompanyConfigured : configure company
+CompanyConfigured --> SystemConfigured : configure options
+SystemConfigured --> DashboardReady : load role dashboard
+DashboardReady --> Authenticated : continue session
+Authenticated --> [*] : logout
+
+@enduml
