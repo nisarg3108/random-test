@@ -15,6 +15,7 @@ export const employeeAPI = {
   // Salary Information
   getSalary: () => apiClient.get('/employees/salary'),
   createSalaryStructure: (data) => apiClient.post('/employees/salary-structure', data),
+  getPayslips: (params) => apiClient.get('/payroll/payslips', { params }),
 
   // Work Reports
   createWorkReport: (data) => apiClient.post('/employees/work-reports', data),

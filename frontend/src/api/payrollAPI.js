@@ -29,6 +29,7 @@ const payrollAPI = {
   // ==========================================
   getPayslips: (params) => apiClient.get('/payroll/payslips', { params }),
   getPayslip: (id) => apiClient.get(`/payroll/payslips/${id}`),
+  downloadPayslip: (id) => apiClient.get(`/payroll/payslips/${id}/download`, { responseType: 'blob' }),
   approvePayslip: (id) => apiClient.post(`/payroll/payslips/${id}/approve`),
 
   // ==========================================

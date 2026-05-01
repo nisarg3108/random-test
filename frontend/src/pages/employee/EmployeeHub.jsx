@@ -1,64 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { CalendarDays, BadgeIndianRupee, ClipboardList, MessagesSquare } from 'lucide-react';
 
-export default function EmployeeHub() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const shortcuts = [
+  {
+    to: '/employee/attendance',
+    title: 'My Attendance',
+    description: 'View your attendance summary and monthly report.',
+    icon: CalendarDays,
+  },
+  {
+    to: '/employee/salary',
+    title: 'My Salary',
+    description: 'See your salary structure and download payslips.',
+    icon: BadgeIndianRupee,
+  },
+  {
+    to: '/employee/leave-request',
+    title: 'Leave Request',
+    description: 'Submit a new leave request and track its status.',
+    icon: ClipboardList,
+  },
+  {
+    to: '/communication/messages',
+    title: 'Messages',
+    description: 'Check team updates and conversations.',
+    icon: MessagesSquare,
+  },
+];
 
-  useEffect(() => {
-    fetch('/api/employee-hub', { credentials: 'include' })
-      .then(res => res.json())
-      .then(d => { setData(d); setLoading(false); })
-      .catch(err => { setError(err.message); setLoading(false); });
-  }, []);
-
-  if (loading) return <div className="p-6">Loading...</div>;
-  if (error) return <div className="p-6">Error: {error}</div>;
-
-  const { profile, payslips = [], leaveRequests = [], summary = {} } = data || {};
-
+const EmployeeHub = () => {
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Employee Hub</h2>
+    <div className="max-w-6xl mx-auto p-6 space-y-8">
+      <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 text-white shadow-xl">
+        <p className="text-sm uppercase tracking-[0.2em] text-slate-300">Employee Self-Service</p>
+        <h1 className="mt-3 text-4xl font-bold">Employee Hub</h1>
+        <p className="mt-3 max-w-2xl text-slate-300">
+          Use this page to reach your attendance, salary, leave, and communication tools without landing in admin workflows.
+        </p>
+      </div>
 
-      <section className="mb-6">
-        <h3 className="text-lg font-medium">Profile</h3>
-        {profile ? (
-          <div className="mt-2 text-sm text-slate-700">
-            <div>{profile.name} ({profile.employeeCode})</div>
-            <div>{profile.designation}</div>
-            <div>{profile.email}</div>
-          </div>
-        ) : <div className="mt-2 text-sm text-slate-500">No profile found</div>}
-      </section>
-
-      <section className="mb-6">
-        <h3 className="text-lg font-medium">Payslips ({summary.payslipCount || payslips.length})</h3>
-        <ul className="mt-2 space-y-2 text-sm">
-          {payslips.map(p => (
-            <li key={p.id} className="flex items-center justify-between">
-              <div>{p.payslipNumber} - {p.payrollCycle?.name} - Net: {p.netSalary}</div>
-              <a className="text-blue-600 hover:underline" href={`/api/payroll/payslips/${p.id}/download`} target="_blank" rel="noreferrer">Download</a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mb-6">
-        <h3 className="text-lg font-medium">Leave Requests ({summary.leaveRequestCount || leaveRequests.length})</h3>
-        <ul className="mt-2 space-y-2 text-sm">
-          {leaveRequests.map(l => (
-            <li key={l.id}>{l.leaveType?.name} • {new Date(l.startDate).toLocaleDateString()} - {l.status}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section>
-        <h3 className="text-lg font-medium">Quick Actions</h3>
-        <div className="mt-2">
-          <a className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md" href="/employee/leave-request">Request Leave</a>
-        </div>
-      </section>
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {shortcuts.map(({ to, title, description, icon: Icon }) => (
+          <Link
+            key={to}
+            to={to}
+            className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-white group-hover:bg-slate-700">
+              <Icon className="h-5 w-5" />
+            </div>
+            <h2 className="mt-4 text-lg font-semibold text-slate-900">{title}</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+          </Link>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default EmployeeHub;

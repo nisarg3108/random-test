@@ -64,10 +64,11 @@ const Sidebar = () => {
     }
 
     // Employee self-service
-    if (role === 'EMPLOYEE') {
+    if (['EMPLOYEE', 'USER'].includes(role)) {
       items.push(
-        { path: '/hr/attendance', label: 'My Attendance', icon: Clock, moduleKey: 'HR' },
-        { path: '/hr/leave-requests', label: 'My Leaves', icon: Calendar, moduleKey: 'HR' },
+        { path: '/employee/attendance', label: 'My Attendance', icon: Clock, moduleKey: 'HR' },
+        { path: '/employee/leave-request', label: 'My Leaves', icon: Calendar, moduleKey: 'HR' },
+        { path: '/employee/salary', label: 'My Salary', icon: DollarSign, moduleKey: 'PAYROLL' },
         { path: '/employee/tasks', label: 'My Tasks', icon: Target, moduleKey: 'PROJECTS' },
         { path: '/employee/work-reports', label: 'Work Reports', icon: ClipboardList, moduleKey: 'PROJECTS' },
         { path: '/communication/messages', label: 'Messages', icon: MessageSquare, moduleKey: 'COMMUNICATION' },

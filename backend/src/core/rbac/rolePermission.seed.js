@@ -71,6 +71,7 @@ export const assignPermissions = async (tenantId) => {
       perm.code === 'leave.view.own' ||
       perm.code === 'leaveType.view' ||
       perm.code === 'leave.request' ||
+      perm.code === 'payroll.view.own' ||
       perm.code === 'crm.customer.view' ||
       perm.code === 'crm.contact.view' ||
       perm.code === 'crm.lead.create' ||

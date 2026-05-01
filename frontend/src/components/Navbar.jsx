@@ -14,13 +14,19 @@ const Navbar = () => {
         Dashboard
       </a>
 
-      {role === 'EMPLOYEE' && (
+      {(role === 'EMPLOYEE' || role === 'USER') && (
         <>
           <a href="/employee" style={{ marginRight: '15px' }}>
             My Dashboard
           </a>
           <a href="/employee/leave-request" style={{ marginRight: '15px' }}>
             Request Leave
+          </a>
+          <a href="/employee/attendance" style={{ marginRight: '15px' }}>
+            Attendance
+          </a>
+          <a href="/employee/salary" style={{ marginRight: '15px' }}>
+            Salary
           </a>
         </>
       )}

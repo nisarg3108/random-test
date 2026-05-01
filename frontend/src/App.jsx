@@ -52,13 +52,12 @@ import {
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
 import EmployeeDashboardNew from './pages/employee/EmployeeDashboardNew';
 import EmployeeLeaveRequest from './pages/employee/EmployeeLeaveRequest';
+import EmployeeAttendance from './pages/employee/EmployeeAttendance';
+import EmployeeSalary from './pages/employee/EmployeeSalary';
 import WorkReports from './pages/employee/WorkReports';
 import TaskManagement from './pages/employee/TaskManagement';
 import SalaryManagement from './pages/employee/SalaryManagement';
 import EmployeeHub from './pages/employee/EmployeeHub';
-
-// Self-Service (Common for all roles)
-import { MySalary, MyLeave, MyAttendance } from './pages/self-service';
 
 // Finance
 import FinanceDashboard from './pages/finance/FinanceDashboard';
@@ -264,14 +263,11 @@ function App() {
         <Route path="/employee/dashboard" element={<ProtectedRoute><EmployeeDashboardNew /></ProtectedRoute>} />
         <Route path="/employee-hub" element={<ProtectedRoute><EmployeeHub /></ProtectedRoute>} />
         <Route path="/employee/leave-request" element={<ProtectedRoute><EmployeeLeaveRequest /></ProtectedRoute>} />
+        <Route path="/employee/attendance" element={<ProtectedRoute><EmployeeAttendance /></ProtectedRoute>} />
+        <Route path="/employee/salary" element={<ProtectedRoute><EmployeeSalary /></ProtectedRoute>} />
         <Route path="/employee/work-reports" element={<ProtectedRoute><WorkReports /></ProtectedRoute>} />
         <Route path="/employee/tasks" element={<ProtectedRoute><TaskManagement /></ProtectedRoute>} />
         <Route path="/hr/salary-management" element={<ProtectedRoute><SalaryManagement /></ProtectedRoute>} />
-        
-        {/* Self-Service Routes (Common for all roles) */}
-        <Route path="/my-salary" element={<ProtectedRoute><MySalary /></ProtectedRoute>} />
-        <Route path="/my-leave" element={<ProtectedRoute><MyLeave /></ProtectedRoute>} />
-        <Route path="/my-attendance" element={<ProtectedRoute><MyAttendance /></ProtectedRoute>} />
         
         {/* Finance Routes */}
         <Route path="/finance" element={<ProtectedRoute><FinanceDashboard /></ProtectedRoute>} />
