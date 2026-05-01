@@ -141,7 +141,7 @@ export const getAvailablePlansController = async (req, res) => {
  */
 export const getPublicPlansController = async (_req, res) => {
   try {
-    const plans = await prisma.plan.findMany({
+    let plans = await prisma.plan.findMany({
       where: { isActive: true },
       include: { modules: true },
       orderBy: [
@@ -149,6 +149,29 @@ export const getPublicPlansController = async (_req, res) => {
         { name: 'asc' }
       ]
     });
+
+    if (plans.length === 0) {
+      const defaultPlan = await prisma.plan.create({
+        data: {
+          name: 'Starter Monthly',
+          description: 'Basic features for small teams.',
+          billingCycle: 'MONTHLY',
+          currency: 'USD',
+          basePrice: 49.00,
+          seatPrice: 5.00,
+          isActive: true,
+          modules: {
+            create: [
+              { moduleKey: 'HR', included: true, price: 0 },
+              { moduleKey: 'INVENTORY', included: true, price: 0 },
+              { moduleKey: 'CRM', included: true, price: 0 }
+            ]
+          }
+        },
+        include: { modules: true }
+      });
+      plans = [defaultPlan];
+    }
 
     res.json({
       plans: plans.map((plan) => ({

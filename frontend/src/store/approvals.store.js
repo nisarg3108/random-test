@@ -18,7 +18,14 @@ export const useApprovalsStore = create((set, get) => ({
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      if (!response.ok) throw new Error('Failed to fetch approvals');
+      if (!response.ok) {
+        if (response.status === 403) {
+          // Gracefully handle missing module entitlement
+          set({ approvals: [], loading: false, error: null });
+          return;
+        }
+        throw new Error('Failed to fetch approvals');
+      }
       
       const data = await response.json();
       set({ approvals: data, loading: false });
@@ -36,7 +43,13 @@ export const useApprovalsStore = create((set, get) => ({
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      if (!response.ok) throw new Error('Failed to fetch requests');
+      if (!response.ok) {
+        if (response.status === 403) {
+          set({ myRequests: [], loading: false, error: null });
+          return;
+        }
+        throw new Error('Failed to fetch requests');
+      }
       
       const data = await response.json();
       set({ myRequests: data, loading: false });

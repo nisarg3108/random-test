@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import prisma from '../../config/db.js';
 import { signToken } from '../../shared/utils/jwt.js';
 import { syncCompanyModulesFromSubscription } from '../../modules/subscription/subscription.utils.js';
+import emailService from '../../services/email.service.js';
 
 const DEFAULT_PLAN_NAME = process.env.DEFAULT_PLAN || 'Starter Monthly';
 const DEFAULT_CUSTOM_MODULE_PRICE = Number(process.env.CUSTOM_MODULE_TEST_PRICE || 10);
@@ -232,6 +233,34 @@ export const finalizePendingRegistration = async (pendingRegistrationId, provide
     }
   });
 
+  const employeeCode = `EMP${Date.now()}`;
+  const employeeName = pending.email.split('@')[0];
+
+  const employee = await prisma.employee.create({
+    data: {
+      employeeCode,
+      name: employeeName,
+      email: pending.email,
+      designation: 'Administrator',
+      joiningDate: new Date(),
+      status: 'ACTIVE',
+      tenantId: tenant.id,
+      user: {
+        connect: { id: user.id }
+      }
+    }
+  });
+
+  await prisma.notification.create({
+    data: {
+      tenantId: tenant.id,
+      employeeId: employee.id,
+      type: 'SYSTEM',
+      title: 'Welcome to the Team!',
+      message: `Welcome ${employeeName}! Your employee code is ${employeeCode}.`
+    }
+  });
+
   const { plan, items } = await resolvePlanAndItems({
     planId: pending.planId,
     customModules: pending.customModules,
@@ -256,6 +285,16 @@ export const finalizePendingRegistration = async (pendingRegistrationId, provide
       completedAt: new Date()
     }
   });
+
+  try {
+    await emailService.sendWelcomeEmail({
+      email: pending.email,
+      name: employeeName,
+      employeeCode
+    }, 'Your chosen password at registration');
+  } catch (error) {
+    console.error('Failed to send welcome email:', error);
+  }
 
   return subscription;
 };
@@ -304,6 +343,34 @@ export const registerUser = async ({
     },
   });
 
+  const employeeCode = `EMP${Date.now()}`;
+  const employeeName = normalizedEmail.split('@')[0];
+
+  const employee = await prisma.employee.create({
+    data: {
+      employeeCode,
+      name: employeeName,
+      email: normalizedEmail,
+      designation: 'Administrator',
+      joiningDate: new Date(),
+      status: 'ACTIVE',
+      tenantId: tenant.id,
+      user: {
+        connect: { id: user.id }
+      }
+    }
+  });
+
+  await prisma.notification.create({
+    data: {
+      tenantId: tenant.id,
+      employeeId: employee.id,
+      type: 'SYSTEM',
+      title: 'Welcome to the Team!',
+      message: `Welcome ${employeeName}! Your employee code is ${employeeCode}.`
+    }
+  });
+
   const { plan, items } = await resolvePlanAndItems({
     planId,
     customModules,
@@ -318,6 +385,16 @@ export const registerUser = async ({
   });
 
   await syncCompanyModulesFromSubscription(tenant.id);
+
+  try {
+    await emailService.sendWelcomeEmail({
+      email: normalizedEmail,
+      name: employeeName,
+      employeeCode
+    }, password);
+  } catch (error) {
+    console.error('Failed to send welcome email:', error);
+  }
 
   // 5️⃣ Generate JWT
   const token = signToken({

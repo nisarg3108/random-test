@@ -27,15 +27,20 @@ class EmailService {
 
   ensureConfigured() {
     if (!this.isConfigured) {
-      throw new Error('Email service not configured. Please set SMTP_USER and SMTP_PASS in your .env file.');
+      console.warn('⚠️  Email service not configured. Please set SMTP_USER and SMTP_PASS in your .env file to enable real emails. Running in mock mode.');
+      return false;
     }
+    return true;
   }
 
   /**
    * Send generic email
    */
   async sendEmail({ to, cc, bcc, subject, html, text, tenantId, attachments }) {
-    this.ensureConfigured();
+    if (!this.ensureConfigured()) {
+      console.log(`[MOCK EMAIL] To: ${to}, Subject: ${subject}`);
+      return { success: true, messageId: `mock-id-${Date.now()}` };
+    }
 
     const finalTo = to;
 
@@ -63,7 +68,10 @@ class EmailService {
    * Send template email
    */
   async sendTemplateEmail(to, templateId, variables, tenantId) {
-    this.ensureConfigured();
+    if (!this.ensureConfigured()) {
+      console.log(`[MOCK EMAIL] To: ${to}, Template: ${templateId}`);
+      return { success: true, messageId: `mock-id-${Date.now()}` };
+    }
     
     // For now, just send a basic email - template system can be enhanced later
     const subject = variables.subject || 'Notification';
@@ -73,7 +81,10 @@ class EmailService {
   }
 
   async sendWelcomeEmail(employeeData, defaultPassword) {
-    this.ensureConfigured();
+    if (!this.ensureConfigured()) {
+      console.log(`[MOCK EMAIL] Welcome email to: ${employeeData.email}`);
+      return;
+    }
     
     const { email, name, employeeCode } = employeeData;
     
@@ -113,7 +124,10 @@ class EmailService {
   }
 
   async sendPasswordResetOTP(email, otp, name) {
-    this.ensureConfigured();
+    if (!this.ensureConfigured()) {
+      console.log(`[MOCK EMAIL] Password reset OTP to: ${email}`);
+      return;
+    }
     
     const mailOptions = {
       from: process.env.SMTP_USER,
@@ -156,7 +170,10 @@ class EmailService {
    * Send analytics report email
    */
   async sendAnalyticsReport(to, analyticsData, options = {}) {
-    this.ensureConfigured();
+    if (!this.ensureConfigured()) {
+      console.log(`[MOCK EMAIL] Analytics report to: ${to}`);
+      return { success: true, messageId: `mock-id-${Date.now()}` };
+    }
     
     try {
       const {
@@ -278,7 +295,11 @@ class EmailService {
    * Schedule recurring analytics reports
    */
   async scheduleReport(tenantId, schedule, recipients, options = {}) {
-    this.ensureConfigured();
+    if (!this.ensureConfigured()) {
+      console.log(`[MOCK EMAIL] Scheduled report for tenant: ${tenantId}`);
+      // return mock schedule
+      return { success: true, jobKey: `${tenantId}-${schedule}`, schedule: this.getCronExpression(schedule) };
+    }
     
     const jobKey = `${tenantId}-${schedule}`;
 
@@ -362,7 +383,10 @@ class EmailService {
    * Send overdue allocation notification to employee
    */
   async sendOverdueAllocationNotification(allocationData) {
-    this.ensureConfigured();
+    if (!this.ensureConfigured()) {
+      console.log(`[MOCK EMAIL] Overdue allocation to: ${allocationData.employee.email}`);
+      return { success: true, email: allocationData.employee.email };
+    }
     
     const { 
       employee, 
