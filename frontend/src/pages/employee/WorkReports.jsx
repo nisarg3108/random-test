@@ -46,7 +46,12 @@ const WorkReports = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await employeeAPI.createWorkReport(formData);
+      const hoursValue = formData.hoursSpent === '' ? null : Number(formData.hoursSpent);
+      const payload = {
+        ...formData,
+        hoursSpent: Number.isFinite(hoursValue) ? hoursValue : null
+      };
+      await employeeAPI.createWorkReport(payload);
       setShowForm(false);
       setFormData({
         title: '',
