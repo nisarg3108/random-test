@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { employeeAPI } from '../../api/employee.api.js';
 import { getUserRole } from '../../store/auth.store.js';
-import { Plus, Users, Calendar, AlertCircle, CheckCircle, Clock, AlertTriangle, Edit } from 'lucide-react';
+import { Plus, Users, Calendar, AlertCircle, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import Layout from '../../components/layout/Layout.jsx';
 
 const TaskManagement = () => {
@@ -89,6 +89,24 @@ const TaskManagement = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleTaskStatusUpdate = async (taskId, status) => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      await employeeAPI.updateTaskStatus(taskId, status);
+      setTasks(prev => prev.map(task => (
+        task.id === taskId ? { ...task, status } : task
+      )));
+      setSuccess('Task status updated successfully!');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      console.error('Failed to update task status:', err);
+      setError(err.response?.data?.message || 'Failed to update task status. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -374,6 +392,16 @@ const TaskManagement = () => {
                           {getStatusIcon(task.status)}
                           <span>{task.status.replace('_', ' ')}</span>
                         </div>
+                        <select
+                          value={task.status}
+                          onChange={(e) => handleTaskStatusUpdate(task.id, e.target.value)}
+                          className="text-xs border border-primary-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                          disabled={submitting}
+                        >
+                          <option value="PENDING">Pending</option>
+                          <option value="IN_PROGRESS">In Progress</option>
+                          <option value="COMPLETED">Completed</option>
+                        </select>
                       </div>
                       <p className="text-sm text-primary-600 mt-2">{task.description}</p>
                       <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
